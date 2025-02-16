@@ -804,14 +804,14 @@ Phone Number:</textarea>
         // Función para manejar el envío del formulario
 // Configuración de precios
 // Configuración mejorada de PayPal
-const PRECIO_BASE = 19.90;
+const PRECIO_BASE = 0.01;
 let precioTotal = PRECIO_BASE;
 
 function actualizarPrecio() {
     const parche = document.getElementById('parche').value.trim().length > 0;
     const dorsal = document.getElementById('dorsal').value.trim().length > 0;
     
-    precioTotal = PRECIO_BASE + (parche ? 1 : 0) + (dorsal ? 2 : 0);
+    precioTotal = PRECIO_BASE + (parche ? 0.01 : 0) + (dorsal ? 0.01 : 0);
     
     document.getElementById('precioDisplay').textContent = precioTotal.toFixed(2) + '€';
     document.getElementById('precioTotal').value = precioTotal.toFixed(2);
