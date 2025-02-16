@@ -701,7 +701,7 @@
         <h2>Realizar Pedido Personalizado</h2>
         <div id="formStatus" class="status-message"></div>
         
-        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST">
+        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
@@ -759,6 +759,9 @@ Postal Code:
 Phone Number:</textarea>
                 </div>
             </div>
+
+            <input type="hidden" name="_autoresponse" value="Gracias por tu pedido. Hemos recibido tu imagen adjunta.">
+
             <!-- Sección de cálculo de precio -->
             <div class="precio-final" style="margin: 2rem 0; text-align: center;">
                 <h3 style="color: var(--azul-acento); margin-bottom: 1rem;">
@@ -767,11 +770,7 @@ Phone Number:</textarea>
                 <p style="opacity: 0.8;">Base: 19.90€ + Parche (1€) + Dorsal (2€)</p>
             </div>
             <!-- Botón de pago -->
-            <button type="submit" class="boton-pago" id="submitBtn">
-                <i class="fab fa-paypal"></i> 
-                <span id="buttonText">Pagar con Paypal</span>
-                <div id="spinner" class="loading-spinner"></div>
-            </button>
+            <div id="paypal-button-container" style="margin: 2rem 0;"></div>
         </form>
     </div>
 </section>
@@ -786,7 +785,7 @@ Phone Number:</textarea>
         </footer>
     </div>
 
-    <script src="https://www.paypal.com/sdk/js?client-id=TCXRERNXSVF32&currency=EUR"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AdkRfVknFlXg0oANLr47NlJTQ-9fpQ3C969KhA4QxE0AXpLLeZ3Yg1IQizP81SQvYivQVj_wd18e1Pwd&currency=EUR"></script>
     <script>
         document.querySelectorAll('.boton-seccion').forEach(boton => {
             boton.addEventListener('click', function() {
@@ -804,73 +803,64 @@ Phone Number:</textarea>
         });
         // Función para manejar el envío del formulario
 // Configuración de precios
+// Configuración mejorada de PayPal
 const PRECIO_BASE = 19.90;
-let extras = {
-    parche: false,
-    dorsal: false
-};
+let precioTotal = PRECIO_BASE;
 
-// Calcular precio total
-function calcularPrecio() {
-    let total = PRECIO_BASE;
-    if(extras.parche) total += 1;
-    if(extras.dorsal) total += 2;
+function actualizarPrecio() {
+    const parche = document.getElementById('parche').value.trim().length > 0;
+    const dorsal = document.getElementById('dorsal').value.trim().length > 0;
     
-    document.getElementById('precioDisplay').textContent = total.toFixed(2) + '€';
-    document.getElementById('precioTotal').value = total.toFixed(2);
-    return total;
+    precioTotal = PRECIO_BASE + (parche ? 1 : 0) + (dorsal ? 2 : 0);
+    
+    document.getElementById('precioDisplay').textContent = precioTotal.toFixed(2) + '€';
+    document.getElementById('precioTotal').value = precioTotal.toFixed(2);
 }
 
-// Actualizar extras cuando cambian los campos
-document.getElementById('parche').addEventListener('input', function(e) {
-    extras.parche = e.target.value.trim() !== '';
-    calcularPrecio();
-});
-
-document.getElementById('dorsal').addEventListener('input', function(e) {
-    extras.dorsal = e.target.value.trim() !== '';
-    calcularPrecio();
-});
-
-// Integración PayPal
+document.getElementById('parche').addEventListener('input', actualizarPrecio);
+document.getElementById('dorsal').addEventListener('input', actualizarPrecio);
 paypal.Buttons({
     style: {
-        color: 'blue',
-        shape: 'pill',
-        label: 'pay'
+        layout: 'vertical',
+        color: 'gold',
+        shape: 'rect',
+        label: 'checkout'
     },
 
     createOrder: function(data, actions) {
-        if(!validarFormulario()) {
-            alert('Por favor complete todos los campos requeridos');
-            return false;
+        if (!validarFormulario()) {
+            alert('❗ Complete todos los campos requeridos');
+            return;
         }
         
         return actions.order.create({
             purchase_units: [{
                 amount: {
-                    value: calcularPrecio().toFixed(2)
+                    value: precioTotal.toFixed(2),
+                    currency_code: 'EUR'
                 }
             }]
         });
     },
 
     onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-            document.getElementById('paymentStatus').value = 'Completado';
-            
-            // Enviar formulario
-            fetch(document.getElementById('pedidoForm').action, {
+    return actions.order.capture().then(function(details) {
+        const form = document.getElementById('pedidoForm');
+        const formData = new FormData(form);
+        
+        // Añade el archivo manualmente
+        const inputFile = document.getElementById('imagenProducto');
+        if(inputFile.files[0]) {
+            formData.append('imagenProducto', inputFile.files[0]);
+        }     
+            fetch(form.action, {
                 method: 'POST',
-                body: new FormData(document.getElementById('pedidoForm')),
-                headers: {
-                    'Accept': 'application/json'
-                }
+                body: formData
             }).then(response => {
-                if(response.ok) {
+                if (response.ok) {
                     document.getElementById('formStatus').innerHTML = `
                         <div class="status-message success">
-                            ✅ Pago y pedido completados correctamente
+                            ✅ Pedido completado! ID de pago: ${details.id}
                         </div>
                     `;
                     document.getElementById('pedidoForm').reset();
@@ -882,24 +872,28 @@ paypal.Buttons({
     onError: function(err) {
         document.getElementById('formStatus').innerHTML = `
             <div class="status-message error">
-                ❌ Error en el proceso de pago: ${err.message}
+                ❌ Error en el pago: ${err.message}
             </div>
         `;
     }
 }).render('#paypal-button-container');
 
-// Función de validación
 function validarFormulario() {
-    let isValid = true;
-    document.querySelectorAll('[required]').forEach(field => {
-        if(!field.value.trim()) {
-            field.style.borderColor = '#e74c3c';
-            isValid = false;
+    const archivo = document.getElementById('imagenProducto').files[0];
+    if (!archivo) {
+        alert('Debes subir una imagen del producto');
+        return false;
+    }
+    let valido = true;
+    document.querySelectorAll('[required]').forEach(campo => {
+        if (!campo.value.trim()) {
+            campo.style.borderColor = '#e74c3c';
+            valido = false;
         } else {
-            field.style.borderColor = '#2a5ba8';
+            campo.style.borderColor = '#2a5ba8';
         }
     });
-    return isValid;
+    return valido;
 }
 </script>
 </body>
