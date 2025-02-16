@@ -402,25 +402,32 @@
             box-shadow: 0 5px 15px rgba(0, 48, 135, 0.3);
         }
 
-        .status-message {
-            padding: 15px;
-            margin: 1rem 0;
-            border-radius: 8px;
-            text-align: center;
-            display: none;
+        #formStatus {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        padding: 15px 25px;
+        border-radius: 10px;
+        font-size: 1rem;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        min-width: 300px;
+        text-align: center;
+}
+
+        #formStatus.success {
+            background: #4CAF50;
+            border: 1px solid #45a049;
+            color: white;
         }
 
-        .status-message.success {
-            background: rgba(46, 204, 113, 0.2);
-            border: 1px solid #2ecc71;
-            color: #2ecc71;
-        }
-
-        .status-message.error {
-            background: rgba(231, 76, 60, 0.2);
-            border: 1px solid #e74c3c;
-            color: #e74c3c;
-        }
+        #formStatus.error {
+        background: #f44336;
+        border: 1px solid #d32f2f;
+        color: white;
+}
 
         .loading-spinner {
             display: none;
@@ -431,6 +438,12 @@
             border-top-color: #fff;
             animation: spin 1s ease-in-out infinite;
         }
+        .badge-premium {
+    z-index: 1000; /* Mantener igual */
+}
+#formStatus {
+    z-index: 9999; /* Mayor que todos los demás elementos */
+}
 
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -491,34 +504,13 @@
                 padding: 12px 20px;
                 font-size: 1rem;
             }
+            #formStatus {
+                width: 90%;
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
             
         }
-        /* Añade estos estilos */
-        .status-message {
-    padding: 15px;
-    margin: 1rem 0;
-    border-radius: 10px;
-    text-align: center;
-    display: none;
-    font-size: 1.1rem;
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    min-width: 300px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-}
-
-.status-message.success {
-    background: #4CAF50;
-    border: 1px solid #45a049;
-    color: white;
-}
-
-.status-message i {
-    margin-right: 10px;
-}
 
 /* Añade animación de icono */
 @keyframes iconPop {
@@ -526,27 +518,6 @@
     80% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
-
-.status-message i {
-    animation: iconPop 0.5s ease-out;
-}
-
-.status-message.error {
-    background: rgba(231, 76, 60, 0.2);
-    border: 1px solid #e74c3c;
-    color: #e74c3c;
-}
-
-.loading-spinner {
-    display: none;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-}
-
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
@@ -888,18 +859,14 @@ onApprove: function(data, actions) {
             if (response.ok) {
                 // Mostrar notificación verde con animación
                 const notificacion = document.getElementById('formStatus');
-                notificacion.innerHTML = `
-                    <div class="status-message success animate__animated animate__fadeInUp">
-                        <i class="fas fa-check-circle"></i>
-                        ¡Pago completado! ID: ${details.id}
-                    </div>`;
-                
+                notificacion.className = 'status-message success animate__animated animate__fadeInUp';
+                notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ¡Pago completado! ID: ${details.id}`;
                 notificacion.style.display = 'block';
                 
                 // Ocultar después de 5 segundos
                 setTimeout(() => {
-                    notificacion.style.display = 'none';
-                }, 5000);
+                notificacion.style.opacity = '1';
+            }, 100);
 
                 form.reset();
             }
@@ -911,11 +878,9 @@ onApprove: function(data, actions) {
 },
 
     onError: function(err) {
-        document.getElementById('formStatus').innerHTML = `
-            <div class="status-message error">
-                ❌ Error en el pago: ${err.message}
-            </div>
-        `;
+        document.getElementById('formStatus').className = 'status-message error';
+        document.getElementById('formStatus').innerHTML = `❌ Error en el pago: ${err.message}`;
+        document.getElementById('formStatus').style.display = 'block';
     }
 }).render('#paypal-button-container');
 
