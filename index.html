@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camisetazo - Tienda Deportiva Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --azul-primario: #0a1f3d;
+            --azul-secundario: #1a3b6d;
+            --azul-acento: #2a5ba8;
+            --negro-mate: #0d0d0d;
+            --degradado-fondo: linear-gradient(135deg, var(--negro-mate) 30%, var(--azul-primario) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--degradado-fondo);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            opacity: 0.1;
+            z-index: -1;
+            animation: moverFondo 20s linear infinite;
+        }
+
+        @keyframes moverFondo {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .contenedor-principal {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .logo {
+            width: 200px;
+            filter: drop-shadow(0 0 15px rgba(42, 91, 168, 0.4));
+            animation: pulse 3s 1;
+            border-radius: 50%;
+            margin: 20px auto;
+        }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 1rem 0 0.5rem;
+            color: #e0e0e0;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--azul-acento);
+            transform: scaleX(0);
+            animation: subrayar-titulo 1.5s ease-in-out 1s forwards;
+            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
+        }
+
+        @keyframes subrayar-titulo {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .navegacion {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .boton-seccion {
+            background: transparent;
+            border: 2px solid var(--azul-acento);
+            color: white;
+            font-size: 1.1rem;
+            padding: 12px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boton-seccion.activo {
+            background: var(--azul-acento);
+            box-shadow: 0 0 25px rgba(42, 91, 168, 0.5);
+        }
+
+        .boton-seccion:hover {
+            transform: translateY(-3px);
+        }
+
+        .seccion {
+            display: none;
+            animation: aparecer 0.6s ease forwards;
+        }
+
+        .seccion.activa {
+            display: block;
+        }
+
+        .grid-enlaces {
+            display: grid;
+            gap: 1.5rem;
+            perspective: 1000px;
+        }
+
+        .card-enlace {
+            background: rgba(10, 31, 61, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(42, 91, 168, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: aparecer 0.5s ease forwards;
+        }
+
+        .card-enlace:nth-child(1) { animation-delay: 0.2s; }
+        .card-enlace:nth-child(2) { animation-delay: 0.4s; }
+        .card-enlace:nth-child(3) { animation-delay: 0.6s; }
+        .card-enlace:nth-child(4) { animation-delay: 0.8s; }
+        .card-enlace:nth-child(5) { animation-delay: 1.0s; }
+        .card-enlace:nth-child(6) { animation-delay: 1.2s; }
+        .card-enlace:nth-child(7) { animation-delay: 1.4s; }
+        .card-enlace:nth-child(8) { animation-delay: 1.6s; }
+        .card-enlace:nth-child(9) { animation-delay: 1.8s; }
+        .card-enlace:nth-child(10) { animation-delay: 2.0s; }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-enlace:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .enlace-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            width: 100%;
+        }
+
+        .imagen-previa {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            margin-right: 1.5rem;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .card-enlace:hover .imagen-previa {
+            transform: scale(1.1);
+        }
+
+        .quienes-somos {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(10, 31, 61, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(42, 91, 168, 0.3);
+        }
+
+        .quienes-somos h2 {
+            font-size: 2.3em;
+            margin-bottom: 2rem;
+            color: var(--azul-acento);
+            text-align: center;
+        }
+
+        .quienes-somos p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .garantias {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .garantia-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .garantia-card:hover {
+            background: rgba(42, 91, 168, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .marcas-colaboradoras {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+            opacity: 0.8;
+        }
+
+        .marca-item {
+            width: 120px;
+            filter: grayscale(1);
+            transition: all 0.3s ease;
+        }
+
+        .marca-item:hover {
+            filter: grayscale(0);
+            transform: scale(1.1);
+        }
+
+        .badge-premium {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--azul-acento);
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 0 25px rgba(42, 91, 168, 0.4);
+            animation: flotar 3s ease-in-out infinite;
+            z-index: 1000;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(42, 91, 168, 0.3);
+        }
+
+        .redes-sociales {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .redes-sociales a {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.8rem;
+            transition: all 0.3s;
+        }
+
+        .redes-sociales a:hover {
+            color: var(--azul-acento);
+            transform: translateY(-5px);
+        }
+
+        /* Estilos para la sección de pedidos */
+        .formulario-pedido {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: rgba(10, 31, 61, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(42, 91, 168, 0.3);
+        }
+
+        .formulario-pedido h2 {
+            text-align: center;
+            color: var(--azul-acento);
+            margin-bottom: 2rem;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--azul-acento);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
+        }
+
+        .file-upload {
+            border: 2px dashed var(--azul-acento);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #4a90e2;
+            background: rgba(42, 91, 168, 0.1);
+        }
+
+        .upload-area {
+            cursor: pointer;
+        }
+
+        .upload-area i {
+            font-size: 2.5rem;
+            color: var(--azul-acento);
+            margin-bottom: 1rem;
+        }
+
+        .boton-pago {
+            background: #003087;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .boton-pago:hover {
+            background: #00205b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 48, 135, 0.3);
+        }
+
+        .status-message {
+            padding: 15px;
+            margin: 1rem 0;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+        }
+
+        .status-message.error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .garantias {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .garantia-card {
+                padding: 1rem;
+            }
+
+            .garantia-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .garantia-card p {
+                font-size: 0.9rem;
+            }
+
+            .quienes-somos {
+                padding: 1.5rem;
+            }
+
+            .quienes-somos h2 {
+                font-size: 1.8rem;
+            }
+
+            .quienes-somos p {
+                font-size: 1rem;
+            }
+
+            .card-enlace {
+                padding: 1rem;
+            }
+
+            .imagen-previa {
+                width: 50px;
+                height: 50px;
+            }
+
+            .enlace-btn {
+                font-size: 1rem;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .formulario-pedido {
+                padding: 1.5rem;
+            }
+
+            .boton-pago {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+        }
+        /* Añade estos estilos */
+.status-message {
+    padding: 15px;
+    margin: 1rem 0;
+    border-radius: 8px;
+    text-align: center;
+    display: none;
+}
+
+.status-message.success {
+    background: rgba(46, 204, 113, 0.2);
+    border: 1px solid #2ecc71;
+    color: #2ecc71;
+}
+
+.status-message.error {
+    background: rgba(231, 76, 60, 0.2);
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+}
+
+.loading-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+    </style>
+</head>
+<body>
+    <div class="contenedor-principal">
+        <div class="badge-premium">
+            <a href="https://www.instagram.com/direct/t/17846283129150996" 
+               target="_blank" 
+               style="color: white; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-shopping-cart"></i>
+                Compra ahora
+            </a>
+        </div>
+
+        <header>
+            <img src="logo.png" alt="Logo Camisetazo" class="logo">
+            <h1 class="animate__animated animate__fadeIn">CAMISETAZO</h1>
+            
+            <nav class="navegacion">
+                <button class="boton-seccion activo" data-seccion="tienda">Tienda</button>
+                <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
+                <button class="boton-seccion" data-seccion="pedidos">Pedidos</button>
+            </nav>
+        </header>
+
+        <!-- Sección Tienda -->
+        <section id="tienda" class="seccion activa">
+            <div class="grid-enlaces">
+                <div class="card-enlace">
+                    <img src="camfut.png" alt="Camisetas" class="imagen-previa">
+                    <a href="https://2020soccer.x.yupoo.com/albums" class="enlace-btn">
+                        <span>Camisetas Fútbol ⚽</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="zap.png" alt="Zapatillas" class="imagen-previa">
+                    <a href="https://eu1688.x.yupoo.com/albums" class="enlace-btn">
+                        <span>Zapatillas 👟</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="nba.png" alt="NBA" class="imagen-previa">
+                    <a href="https://x.yupoo.com/photos/05941188/albums" class="enlace-btn">
+                        <span>NBA 🏀</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="airpods.png" alt="AirPods" class="imagen-previa">
+                    <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="enlace-btn">
+                        <span>AirPods 🎧</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="botfut.png" alt="Botas Fútbol" class="imagen-previa">
+                    <a href="https://zuqiuliu.x.yupoo.com" class="enlace-btn">
+                        <span>Botas Fútbol ⚽</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="f1.png" alt="F1" class="imagen-previa">
+                    <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="enlace-btn">
+                        <span>F1 🏎️</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="ps4.png" alt="Mandos PS4" class="imagen-previa">
+                    <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="enlace-btn">
+                        <span>Mandos PS4 🎮</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="nfl.png" alt="NFL" class="imagen-previa">
+                    <a href="https://nfl-world.x.yupoo.com/" class="enlace-btn">
+                        <span>NFL 🏈</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="mlb.png" alt="MLB" class="imagen-previa">
+                    <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="enlace-btn">
+                        <span>MLB ⚾</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="nhl.png" alt="NHL" class="imagen-previa">
+                    <a href="https://nhl-world.x.yupoo.com/" class="enlace-btn">
+                        <span>NHL 🏑</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+<!-- Sección Quiénes Somos -->
+<section id="quienes-somos" class="seccion">
+    <div class="quienes-somos animate__animated animate__fadeIn" style="text-align: center;">
+        <h2>Nuestra Historia</h2>
+        
+        <p style="max-width: 800px; margin: 0 auto 2rem; line-height: 1.7;">
+            En Camisetazo nos apasiona conectar a los verdaderos amantes del deporte con artículos premium de las mejores marcas. Nos especializamos en ofrecer productos de alta calidad y artículos exclusivos que permiten vivir la emoción del deporte al mejor precio. Combinamos nuestro conocimiento experto con un servicio personalizado para garantizar que cada compra supere tus expectativas:
+        </p>
+
+        <!-- Casilla Instagram -->
+        <div class="garantia-card" style="max-width: 500px; margin: 2rem auto;">
+            <i class="fab fa-instagram" style="font-size: 2.5rem; color: #E1306C; margin-bottom: 1rem;"></i>
+            <h3>Síguenos en Instagram</h3>
+            <a href="https://www.instagram.com/camisetazo._/" target="_blank" 
+               style="color: var(--azul-acento); text-decoration: none; font-weight: 600;
+                      display: inline-block; margin: 0.5rem 0;">
+                @camisetazo._ ➔
+            </a>
+            <p style="margin-top: 0.5rem; opacity: 0.9;">Novedades diarias | Ofertas exclusivas</p>
+        </div>
+
+        <!-- Grid 2x2 -->
+        <div class="garantias" style="grid-template-columns: repeat(2, 1fr); max-width: 1000px; margin: 0 auto;">
+            <!-- Casilla 1 -->
+            <div class="garantia-card">
+                <i class="fas fa-shield-alt" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>Garantía de Pago</h3>
+                <p>Transacciones seguras con protección al comprador</p>
+            </div>
+            
+            <!-- Casilla 2 -->
+            <div class="garantia-card">
+                <i class="fas fa-shipping-fast" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>Envío Gratuito Express</h3>
+                <p>Entrega en 7-14 días con seguimiento del paquete</p>
+            </div>
+            
+            <!-- Casilla 3 -->
+            <div class="garantia-card">
+                <i class="fas fa-users" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>Comunidad</h3>
+                <p>+100 clientes satisfechos</p>
+                <div style="color: #ffd700; margin-top: 0.5rem;">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <!-- Casilla 4 -->
+            <div class="garantia-card">
+                <i class="fas fa-headset" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h4>Atención al cliente</h4>
+                <p>Obtén respuestas rápidas con nuestro servicio de atención al cliente</p>
+            </div>
+        </div>
+</section>
+<!-- Nueva sección de Pedidos -->
+<section id="pedidos" class="seccion">
+    <div class="formulario-pedido">
+        <h2>Realizar Pedido Personalizado</h2>
+        <div id="formStatus" class="status-message"></div>
+        
+        <form action="https://formsubmit.co/camisetazocontacto@gmail.com" method="POST">
+            
+            <!-- Campos requeridos por Formspree -->
+            <input type="hidden" name="_language" value="es">
+            <input type="hidden" name="_subject" value="Nuevo pedido de Camisetazo">
+            <input type="hidden" name="_template" value="table">
+            
+            <!-- Campos del formulario -->
+            <div class="input-group">
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="_replyto" required placeholder="ejemplo@correo.com">
+            </div>
+        
+            <!-- Subir imagen -->
+            <div class="input-group">
+                <label for="enlaceImagen">Enlace a la imagen (Google Drive, Dropbox, etc.):</label>
+                <input type="url" id="enlaceImagen" name="enlaceImagen" required placeholder="https://drive.google.com/...">
+            </div>
+        
+            <!-- Campos de información -->
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="talla">Talla:</label>
+                    <input type="text" id="talla" name="talla" required placeholder="Ej: M, 42, etc.">
+                </div>
+                <div class="input-group">
+                    <label for="usuario">Usuario Instagram:</label>
+                    <input type="text" id="usuario" name="usuario" required placeholder="Ej: @roberto_carlos03">
+                </div>
+                <div class="input-group">
+                    <label for="parche">Descripción del parche: (opcional)</label>
+                    <input type="text" id="parche" name="parche" placeholder="Ej: La Liga, Champions League, Eurocopa, etc.">
+                </div>
+                <div class="input-group">
+                    <label for="dorsal">Dorsal: (opcional)</label>
+                    <input type="text" id="dorsal" name="dorsal" placeholder="Ej: Name: Roberto Carlos, Number: 3">
+                </div>
+                <div class="input-group">
+                    <label for="direccion">Dirección completa:</label>
+                    <textarea id="direccion" name="direccion" required rows="7">Contact Name:
+Address Line:
+City:
+State:
+Country:
+Postal Code:
+Phone Number:</textarea>
+                </div>
+            </div>
+            <!-- Botón de pago -->
+            <button type="submit" class="boton-pago" id="submitBtn">
+                <i class="fab fa-paypal"></i> 
+                <span id="buttonText">Realizar Pedido</span>
+                <div id="spinner" class="loading-spinner"></div>
+            </button>
+        </form>
+    </div>
+</section>
+        <footer>
+            <div class="redes-sociales">
+                <a href="https://www.instagram.com/camisetazo._/"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@camisetazo"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <p style="margin-top: 2rem; opacity: 0.8; font-size: 0.9rem;">
+                © 2025 Camisetazo. Todos los derechos reservados
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelectorAll('.boton-seccion').forEach(boton => {
+            boton.addEventListener('click', function() {
+                document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
+                document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+                
+                const seccionId = this.dataset.seccion;
+                this.classList.add('activo');
+                document.getElementById(seccionId).classList.add('activa');
+            });
+        });
+
+        window.addEventListener('load', () => {
+            document.querySelector('h1').classList.add('animate__fadeIn');
+        });
+        // Añade este JavaScript antes del cierre
+        document.getElementById('formPedido').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner = document.getElementById('spinner');
+    const buttonText = document.getElementById('buttonText');
+    const statusMessage = document.getElementById('formStatus');
+
+    // Mostrar estado de carga
+    submitBtn.disabled = true;
+    buttonText.textContent = 'Enviando...';
+    spinner.style.display = 'block';
+    statusMessage.style.display = 'none';
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            statusMessage.textContent = '✅ Pedido enviado. Te responderemos lo antes posible.';
+            statusMessage.classList.add('success');
+            form.reset();
+        } else {
+            throw new Error(data.error || 'Error en el envío');
+        }
+    } catch (error) {
+        statusMessage.textContent = `❌ Error: ${error.message}`;
+        statusMessage.classList.add('error');
+    } finally {
+        statusMessage.style.display = 'block';
+        submitBtn.disabled = false;
+        buttonText.textContent = 'Enviar Pedido';
+        spinner.style.display = 'none';
+        
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+        }, 5000);
+    }
+});
+    </script>
+</body>
+</html>
