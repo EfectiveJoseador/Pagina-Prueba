@@ -701,7 +701,7 @@
         <h2>Realizar Pedido Personalizado</h2>
         <div id="formStatus" class="status-message"></div>
         
-        <form id="pedidoForm" onsubmit="return handleSubmit(event)">
+        <form action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" enctype="multipart/form-data">
             
             <!-- Campos requeridos por Formspree -->
             <input type="hidden" name="_language" value="es">
@@ -725,6 +725,10 @@
             <!-- Campos de información -->
             <div class="input-grid">
                 <div class="input-group">
+                    <label for="link">Producto link: (opcional)</label>
+                    <input type=url id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
+                </div>
+                <div class="input-group">
                     <label for="talla">Talla:</label>
                     <input type="text" id="talla" name="talla" required placeholder="Ej: M, 42, etc.">
                 </div>
@@ -733,11 +737,11 @@
                     <input type="text" id="usuario" name="usuario" required placeholder="Ej: @roberto_carlos03">
                 </div>
                 <div class="input-group">
-                    <label for="parche">Descripción del parche: (opcional)</label>
+                    <label for="parche">Descripción del parche: (opcional / +1€)</label>
                     <input type="text" id="parche" name="parche" placeholder="Ej: La Liga, Champions League, Eurocopa, etc.">
                 </div>
                 <div class="input-group">
-                    <label for="dorsal">Dorsal: (opcional)</label>
+                    <label for="dorsal">Dorsal: (opcional / +2€)</label>
                     <input type="text" id="dorsal" name="dorsal" placeholder="Ej: Name: Roberto Carlos, Number: 3">
                 </div>
                 <div class="input-group">
@@ -754,7 +758,7 @@ Phone Number:</textarea>
             <!-- Botón de pago -->
             <button type="submit" class="boton-pago" id="submitBtn">
                 <i class="fab fa-paypal"></i> 
-                <span id="buttonText">Pagar con PayPal</span>
+                <span id="buttonText">Pagar con Paypal</span>
                 <div id="spinner" class="loading-spinner"></div>
             </button>
         </form>
@@ -786,7 +790,6 @@ Phone Number:</textarea>
         window.addEventListener('load', () => {
             document.querySelector('h1').classList.add('animate__fadeIn');
         });
-        // Añade este JavaScript antes del cierre
         // Función para manejar el envío del formulario
 async function handleSubmit(event) {
     event.preventDefault();
