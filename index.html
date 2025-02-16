@@ -403,19 +403,21 @@
         }
 
         #formStatus {
-        display: none;
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1000;
-        padding: 15px 25px;
-        border-radius: 10px;
-        font-size: 1rem;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        min-width: 300px;
-        text-align: center;
-}
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            min-width: 300px;
+            text-align: center;
+            opacity: 1 !important; 
+            pointer-events: none;
+        }
 
         #formStatus.success {
             background: #4CAF50;
@@ -524,6 +526,7 @@
     </style>
 </head>
 <body>
+    <div id="formStatus"></div>
     <div class="contenedor-principal">
         <div class="badge-premium">
             <a href="https://www.instagram.com/direct/t/17846283129150996" 
@@ -693,7 +696,6 @@
 <section id="pedidos" class="seccion">
     <div class="formulario-pedido">
         <h2>Realizar Pedido Personalizado</h2>
-        <div id="formStatus" class="status-message"></div>
         
         <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_captcha" value="false">
@@ -838,7 +840,7 @@ paypal.Buttons({
     },
 
     // Modifica la sección onApprove en el script de PayPal
-onApprove: function(data, actions) {
+    onApprove: function(data, actions) {
     return actions.order.capture().then(function(details) {
         const form = document.getElementById('pedidoForm');
         const formData = new FormData(form);
@@ -857,16 +859,15 @@ onApprove: function(data, actions) {
         })
         .then(response => {
             if (response.ok) {
-                // Mostrar notificación verde con animación
                 const notificacion = document.getElementById('formStatus');
-                notificacion.className = 'status-message success animate__animated animate__fadeInUp';
+                notificacion.className = 'success animate__animated animate__fadeIn';
                 notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ¡Pago completado! ID: ${details.id}`;
                 notificacion.style.display = 'block';
                 
                 // Ocultar después de 5 segundos
                 setTimeout(() => {
-                notificacion.style.opacity = '1';
-            }, 100);
+                    notificacion.style.display = 'none';
+                }, 5000);
 
                 form.reset();
             }
@@ -877,11 +878,17 @@ onApprove: function(data, actions) {
     });
 },
 
-    onError: function(err) {
-        document.getElementById('formStatus').className = 'status-message error';
-        document.getElementById('formStatus').innerHTML = `❌ Error en el pago: ${err.message}`;
-        document.getElementById('formStatus').style.display = 'block';
-    }
+onError: function(err) {
+    const notificacion = document.getElementById('formStatus');
+    notificacion.className = 'error animate__animated animate__shakeX';
+    notificacion.innerHTML = `❌ Error en el pago: ${err.message}`;
+    notificacion.style.display = 'block';
+    
+    // Ocultar después de 5 segundos
+    setTimeout(() => {
+        notificacion.style.display = 'none';
+    }, 5000);
+}  // <-- Aquí faltaba cerrar la llave del método onError
 }).render('#paypal-button-container');
 
 function validarFormulario() {
