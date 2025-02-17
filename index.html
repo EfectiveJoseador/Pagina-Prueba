@@ -837,7 +837,7 @@
                 <div class="input-group">
                     <label for="versionJugador">Versión Jugador:</label>
                     <button type="button" id="versionJugador" class="boton-extra">
-                        <span>ACTIVAR</span>
+                        <span id="textoVersionJugador">DESACTIVADO</span>
                     </button>
                 </div>
                 <div class="input-group">
@@ -960,13 +960,21 @@ Phone Number:</textarea>
     dorsalInput.addEventListener('input', actualizarPrecio);
     // En el evento click del botón de versión jugador
     versionJugadorButton.addEventListener('click', function () {
-    this.classList.toggle('activo');
+    this.classList.toggle('activo'); // Alternar la clase 'activo'
+    
+    // Actualizar el texto del botón
+    const textoVersionJugador = document.getElementById('textoVersionJugador');
+    if (this.classList.contains('activo')) {
+        textoVersionJugador.textContent = 'ACTIVADO';
+    } else {
+        textoVersionJugador.textContent = 'DESACTIVADO';
+    }
     
     // Actualizar el valor del campo oculto
     const versionJugadorEstado = document.getElementById('versionJugadorEstado');
     versionJugadorEstado.value = this.classList.contains('activo') ? 'Sí' : 'No';
     
-    actualizarPrecio();
+    actualizarPrecio(); // Actualizar el precio
 });
 
     // Inicializar el precio
