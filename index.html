@@ -758,13 +758,33 @@
     <div class="formulario-pedido">
         <h2>Realizar Pedido</h2>
         <form id="pedidoForm" action="https://formsubmit.co/camisetazocontacto@gmail.com" method="POST" enctype="multipart/form-data">
+
+        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
             <input type="hidden" name="payment_status" id="paymentStatus">
-            <input type="hidden" name="_autoresponse" value="Gracias por tu pedido. Hemos recibido tu imagen adjunta.">
+
+            <!-- Campos requeridos por Formspree -->
+            <input type="hidden" name="_language" value="es">
+            <input type="hidden" name="_subject" value="Nuevo pedido de Camisetazo">
+            <input type="hidden" name="_template" value="table">
 
             <!-- Campos del formulario -->
+
+            <!-- Subir imagen -->
+            <div class="input-group">
+                <label for="imagenProducto">Sube la imagen del producto:</label>
+                <div class="file-upload">
+                    <input type="file" id="imagenProducto" name="imagenProducto" accept="image/*" required>
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p id="fileName">Arrastra o haz clic para subir</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campos de información -->
             <div class="input-grid">
                 <div class="input-group">
                     <label for="emailPaypal">Correo de PayPal:</label>
@@ -772,7 +792,7 @@
                 </div>
                 <div class="input-group">
                     <label for="link">Producto link: (opcional)</label>
-                    <input type="url" id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
+                    <input type=url id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
                 </div>
                 <div class="input-group">
                     <label for="talla">Talla:</label>
@@ -856,12 +876,12 @@ Phone Number:</textarea>
             });
     
             // Configuración de precios y PayPal
-            const PRECIO_BASE = 0.01;
+            const PRECIO_BASE = 19.90;
             const EXTRAS = {
                 parche: 1.00,
                 dorsal: 2.00
             };
-
+    
             const parcheInput = document.getElementById('parche');
             const dorsalInput = document.getElementById('dorsal');
             const precioDisplay = document.getElementById('precioDisplay');
@@ -869,27 +889,27 @@ Phone Number:</textarea>
             const dorsalPrecio = document.getElementById('dorsal-precio');
             const paypalButton = document.getElementById('paypalButton');
             const pedidoForm = document.getElementById('pedidoForm');
-
+    
             // Funciones
             function actualizarPrecio() {
                 let total = PRECIO_BASE;
                 const tieneParche = parcheInput.value.trim().length > 0;
                 const tieneDorsal = dorsalInput.value.trim().length > 0;
-
+    
                 parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
                 dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
                 total += tieneParche ? EXTRAS.parche : 0;
                 total += tieneDorsal ? EXTRAS.dorsal : 0;
-
+    
                 precioDisplay.textContent = total.toFixed(2);
                 return total;
             }
-
+    
             function limpiarFormulario() {
                 pedidoForm.reset();
                 actualizarPrecio();
             }
-
+    
             function mostrarExito(mensaje) {
                 const notificacion = document.getElementById('formStatus');
                 notificacion.className = 'success animate__animated animate__fadeIn';
@@ -897,7 +917,7 @@ Phone Number:</textarea>
                 notificacion.style.display = 'block';
                 setTimeout(() => notificacion.style.display = 'none', 5000);
             }
-
+    
             // Evento PayPal
             paypalButton.addEventListener('click', function(event) {
                 event.preventDefault();
@@ -919,7 +939,7 @@ Phone Number:</textarea>
                 limpiarFormulario();
                 mostrarExito('Te contactaremos por Instagram para confirmar tu pedido.');
             });
-
+    
             // Inicialización
             actualizarPrecio();
             parcheInput.addEventListener('input', actualizarPrecio);
