@@ -866,10 +866,11 @@ Phone Number:</textarea>
             <div id="paso2" style="display: none;">
                 <div class="instruccion-pago">
                     <h3>✅ Paso final:</h3>
-                    <p>1. Completa el pago en la ventana de PayPal que se abrió</p>
-                    <p>2. Vuelve aquí y envía el formulario</p>
-                    <button type="submit" class="boton-pago">
-                        <i class="fas fa-check"></i> Confirmar Pedido
+                    <p>1. Verifica que el pago se completó en PayPal</p>
+                    <p>2. Revisa tu email de PayPal</p>
+                    <p>3. Confirma aquí:</p>
+                    <button type="button" class="boton-pago" onclick="confirmarPago()">
+                        <i class="fas fa-check"></i> ¡Ya pagué! Enviar pedido
                     </button>
                 </div>
             </div>
@@ -965,9 +966,8 @@ function iniciarPago(event) {
     // Actualizar el precio antes de generar el enlace
     const total = actualizarPrecio();
     const usuario = document.getElementById('usuario').value;
-    const emailPaypal = 'camisetazo'; // Tu email de PayPal[monto]?currencyCode=EUR
+    const emailPaypal = 'camisetazo';
 
-    // Generar enlace de pago personalizado con el monto correcto
     // Generar enlace de pago personalizado
     const paypalLink = `https://www.paypal.me/camisetazo/${total}?currencyCode=EUR`
 
@@ -983,11 +983,32 @@ function iniciarPago(event) {
 // Actualizar el botón de PayPal para usar la función correcta
 document.getElementById('paypalButton').addEventListener('click', iniciarPago);
 // Verificar si la ventana se cerró
+// Modificar este código en el script
+let pagoConfirmado = false;
+
+// Modificar el interval para verificación
 setInterval(() => {
-    if (ventanaPayPal && ventanaPayPal.closed) {
-        document.getElementById('paymentStatus').value = 'completado';
+    if (ventanaPayPal && ventanaPayPal.closed && !pagoConfirmado) {
+        mostrarExito('Verifica tu email de PayPal y luego envía el formulario');
+        document.getElementById('paymentStatus').value = 'pendiente_verificacion';
+        pagoConfirmado = true;
     }
 }, 1000);
+
+// Modificar el event listener del formulario
+document.getElementById('pedidoForm').addEventListener('submit', function(e) {
+    if (document.getElementById('paymentStatus').value !== 'completado') {
+        e.preventDefault();
+        mostrarError('⚠️ Primero completa el proceso de pago en PayPal');
+    }
+});
+
+// Añadir esta función para confirmación manual
+function confirmarPago() {
+    document.getElementById('paymentStatus').value = 'completado';
+    mostrarExito('¡Pago confirmado! Enviando pedido...');
+    setTimeout(() => document.getElementById('pedidoForm').submit(), 2000);
+}
 
 // Sistema de notificaciones
 function mostrarExito(mensaje) {
