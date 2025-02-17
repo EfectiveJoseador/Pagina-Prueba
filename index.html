@@ -964,11 +964,12 @@ function iniciarPago(event) {
         return;
     }
 
+    // Actualizar el precio antes de generar el enlace
     const total = actualizarPrecio();
     const usuario = document.getElementById('usuario').value;
     const emailPaypal = 'camisetazocontacto@gmail.com'; // Tu email de PayPal
     
-    // Generar enlace de pago personalizado
+    // Generar enlace de pago personalizado con el monto correcto
     const paypalLink = `https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=${emailPaypal}&flow=friends&useraction=commit`;
     
     // Abrir ventana de PayPal
@@ -977,6 +978,10 @@ function iniciarPago(event) {
     // Mostrar paso 2
     document.getElementById('paso1').style.display = 'none';
     document.getElementById('paso2').style.display = 'block';
+}
+
+// Actualizar el botón de PayPal para usar la función correcta
+document.getElementById('paypalButton').addEventListener('click', iniciarPago);
 }
 
 // Verificar si la ventana se cerró
