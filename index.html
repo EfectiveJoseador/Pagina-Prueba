@@ -776,12 +776,17 @@
             <div class="input-group">
                 <label for="imagenProducto">Sube la imagen del producto:</label>
                 <div class="file-upload">
-                    <input type="file" id="imagenProducto" name="imagenProducto" accept="image/*" required>
+                    <input type="file" id="imagenProducto" name="imagenProducto" accept="image/*">
                     <div class="upload-area">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <p id="fileName">Arrastra o haz clic para subir</p>
                     </div>
                 </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="link">Producto link: (opcional)</label>
+                <input type="url" id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
             </div>
 
             <!-- Campos de información -->
@@ -789,10 +794,6 @@
                 <div class="input-group">
                     <label for="emailPaypal">Correo de PayPal: ¡IMPORTANTE!</label>
                     <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com">
-                </div>
-                <div class="input-group">
-                    <label for="link">Producto link: (opcional)</label>
-                    <input type=url id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
                 </div>
                 <div class="input-group">
                     <label for="talla">Talla:</label>
@@ -954,12 +955,18 @@ Phone Number:</textarea>
         event.preventDefault(); // Evitar el envío automático del formulario
         const total = actualizarPrecio();
         const emailPaypal = document.getElementById('emailPaypal').value.trim();
+        const imagenProducto = document.getElementById('imagenProducto').files[0];
+        const link = document.getElementById('link').value.trim();
 
         // Validar el correo de PayPal
         if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
             alert("Por favor, ingresa un correo válido.");
             return;
         }
+        if (!imagenProducto && !link) {
+        alert("Por favor, sube una imagen o proporciona un enlace del producto.");
+        return;
+    }
 
         // Abrir la ventana de PayPal
         abrirPayPal(total);
