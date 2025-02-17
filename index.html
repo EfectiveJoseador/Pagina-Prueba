@@ -784,7 +784,7 @@
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
-            <input type="hidden" name="versionJugador" id="versionJugadorEstado" value="0">
+            <input type="hidden" name="versionJugador" id="versionJugadorEstado" value="No">
 
             <!-- Campos requeridos por Formspree -->
             <input type="hidden" name="_language" value="es">
@@ -958,10 +958,16 @@ Phone Number:</textarea>
     // Eventos para actualizar el precio
     parcheInput.addEventListener('input', actualizarPrecio);
     dorsalInput.addEventListener('input', actualizarPrecio);
+    // En el evento click del botón de versión jugador
     versionJugadorButton.addEventListener('click', function () {
-        this.classList.toggle('activo');
-        actualizarPrecio();
-    });
+    this.classList.toggle('activo');
+    
+    // Actualizar el valor del campo oculto
+    const versionJugadorEstado = document.getElementById('versionJugadorEstado');
+    versionJugadorEstado.value = this.classList.contains('activo') ? 'Sí' : 'No';
+    
+    actualizarPrecio();
+});
 
     // Inicializar el precio
     actualizarPrecio();
