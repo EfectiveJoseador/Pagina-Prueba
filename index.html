@@ -967,11 +967,11 @@ function iniciarPago(event) {
     // Actualizar el precio antes de generar el enlace
     const total = actualizarPrecio();
     const usuario = document.getElementById('usuario').value;
-    const emailPaypal = 'camisetazo'; // Tu email de PayPal
+    const emailPaypal = 'camisetazo'; // Tu email de PayPal[monto]?currencyCode=EUR
 
     // Generar enlace de pago personalizado con el monto correcto
     // Generar enlace de pago personalizado
-    const paypalLink = `https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=${emailPaypal}&flow=friends&useraction=commit`;
+    const paypalLink = `https://www.paypal.me/camisetazo/${total}?currencyCode=EUR
 
     // Abrir ventana de PayPal
     ventanaPayPal = window.open(paypalLink, 'PagoPayPal', 'width=600,height=800');
