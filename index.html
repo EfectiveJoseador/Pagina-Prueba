@@ -787,6 +787,10 @@
             <!-- Campos de información -->
             <div class="input-grid">
                 <div class="input-group">
+                    <label for="emailPaypal">Correo de PayPal:</label>
+                    <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com">
+                </div>
+                <div class="input-group">
                     <label for="link">Producto link: (opcional)</label>
                     <input type=url id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
                 </div>
@@ -822,58 +826,34 @@ Phone Number:</textarea>
 
             <!-- Sección de cálculo de precio -->
             <div class="calculadora-precio">
-                    <h3>Desglose del Precio</h3>
-
-                    <div class="detalle-precio">
-                        <span>Precio Base:</span>
-                        <span>19.90€</span>
-                    </div>
-
-                    <div class="detalle-precio">
-                        <span>
-                            Parche personalizado
-                            <span class="badge-extra">+1€</span>
-                        </span>
-                        <span id="parche-precio">0.00€</span>
-                    </div>
-
-                    <div class="detalle-precio">
-                        <span>
-                            Dorsal personalizado
-                            <span class="badge-extra">+2€</span>
-                        </span>
-                        <span id="dorsal-precio">0.00€</span>
-                    </div>
-
-                    <div class="total-container">
-                        <div>Total a Pagar</div>
-                        <div class="precio-total">
-                            <span class="moneda">€</span>
-                            <span id="precioDisplay">19.90</span>
-                        </div>
+                <h3>Desglose del Precio</h3>
+                <div class="detalle-precio">
+                    <span>Precio Base:</span>
+                    <span>19.90€</span>
+                </div>
+                <div class="detalle-precio">
+                    <span>Parche personalizado <span class="badge-extra">+1€</span></span>
+                    <span id="parche-precio">0.00€</span>
+                </div>
+                <div class="detalle-precio">
+                    <span>Dorsal personalizado <span class="badge-extra">+2€</span></span>
+                    <span id="dorsal-precio">0.00€</span>
+                </div>
+                <div class="total-container">
+                    <div>Total a Pagar</div>
+                    <div class="precio-total">
+                        <span class="moneda">€</span>
+                        <span id="precioDisplay">19.90</span>
                     </div>
                 </div>
+            </div>
             <!-- Botón de pago -->
             <div id="paso1">
-            <a id="paypalButton" 
-                   href="#" 
-                   class="boton-pago"
-                   rel="noopener noreferrer"
+                <button id="paypalButton" class="boton-pago">
                     <i class="fab fa-paypal"></i> Pagar con PayPal
-                </a> 
+                </button>
                 <p class="nota-pago">* Por favor selecciona la opción 'Enviar a amigos y familiares'</p>
             </div>
-            <div id="paso2" style="display: none;">
-                <div class="instruccion-pago">
-                    <h3>✅ Paso final:</h3>
-                    <p>1. Completa el pago en la ventana de PayPal que se abrió</p>
-                    <p>2. Vuelve aquí y envía el formulario</p>
-                    <button type="submit" class="boton-pago">
-                        <i class="fas fa-check"></i> Confirmar Pedido
-                    </button>
-                </div>
-            </div>
-            <input type="hidden" name="payment_status" id="paymentStatus" value="pendiente">
         </form>
     </div>
 </section>
@@ -888,232 +868,97 @@ Phone Number:</textarea>
         </footer>
     </div>
     <script>
-        document.querySelectorAll('.boton-seccion').forEach(boton => {
-            boton.addEventListener('click', function() {
-                document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
-                document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+        // Configuración de precios
+        const PRECIO_BASE = 19.90;
+        const EXTRAS = {
+            parche: 1.00,
+            dorsal: 2.00
+        };
 
-                const seccionId = this.dataset.seccion;
-                this.classList.add('activo');
-                document.getElementById(seccionId).classList.add('activa');
-            });
+        // Elementos del DOM
+        const parcheInput = document.getElementById('parche');
+        const dorsalInput = document.getElementById('dorsal');
+        const precioDisplay = document.getElementById('precioDisplay');
+        const parchePrecio = document.getElementById('parche-precio');
+        const dorsalPrecio = document.getElementById('dorsal-precio');
+        const paypalButton = document.getElementById('paypalButton');
+        const pedidoForm = document.getElementById('pedidoForm');
+        const emailPaypalInput = document.getElementById('emailPaypal');
+
+        // Función para validar el correo de PayPal
+        function validarEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        // Actualizar precios en tiempo real
+        function actualizarPrecio() {
+            let total = PRECIO_BASE;
+
+            const tieneParche = parcheInput.value.trim().length > 0;
+            const tieneDorsal = dorsalInput.value.trim().length > 0;
+
+            parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
+            dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
+
+            total += tieneParche ? EXTRAS.parche : 0;
+            total += tieneDorsal ? EXTRAS.dorsal : 0;
+
+            precioDisplay.textContent = total.toFixed(2);
+            return total;
+        }
+
+        // Función para limpiar el formulario
+        function limpiarFormulario() {
+            pedidoForm.reset();
+            actualizarPrecio(); // Restablecer el precio
+        }
+
+        // Función para mostrar notificaciones
+        function mostrarExito(mensaje) {
+            const notificacion = document.getElementById('formStatus');
+            notificacion.className = 'success animate__animated animate__fadeIn';
+            notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
+            notificacion.style.display = 'block';
+            setTimeout(() => notificacion.style.display = 'none', 5000);
+        }
+
+        // Función para mostrar errores
+        function mostrarError(mensaje) {
+            const notificacion = document.getElementById('formStatus');
+            notificacion.className = 'error animate__animated animate__shakeX';
+            notificacion.innerHTML = `❌ ${mensaje}`;
+            notificacion.style.display = 'block';
+            setTimeout(() => notificacion.style.display = 'none', 5000);
+        }
+
+        // Iniciar proceso de pago
+        paypalButton.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const total = actualizarPrecio();
+            const emailPaypal = emailPaypalInput.value.trim();
+
+            if (!emailPaypal || !validarEmail(emailPaypal)) {
+                mostrarError('Por favor, ingresa un correo de PayPal válido.');
+                return;
+            }
+
+            // Abrir ventana de PayPal
+            const paypalLink = `https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=camisetazocontacto@gmail.com&flow=friends&useraction=commit`;
+            window.open(paypalLink, '_blank');
+
+            // Limpiar el formulario
+            limpiarFormulario();
+
+            // Mostrar notificación de éxito
+            mostrarExito('Si tu pedido se ha realizado correctamente, te contactaremos por Instagram para confirmarlo.');
         });
 
-        window.addEventListener('load', () => {
-            document.querySelector('h1').classList.add('animate__fadeIn');
-        });
-        // Función para manejar el envío del formulario
-// Configuración de precios
-// Configuración mejorada de PayPal
-// Configuración de precios
-const PRECIO_BASE = 0.01;
-const EXTRAS = {
-    parche: 0.01,
-    dorsal: 0.01
-};
-
-// Elementos del DOM
-const parcheInput = document.getElementById('parche');
-const dorsalInput = document.getElementById('dorsal');
-const precioDisplay = document.getElementById('precioDisplay');
-const parchePrecio = document.getElementById('parche-precio');
-const dorsalPrecio = document.getElementById('dorsal-precio');
-const paypalButton = document.getElementById('paypalButton');
-
-// Actualizar precios en tiempo real
-function actualizarPrecio() {
-    let total = PRECIO_BASE;
-
-    // Calcular extras
-    const tieneParche = parcheInput.value.trim().length > 0;
-    const tieneDorsal = dorsalInput.value.trim().length > 0;
-
-    parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
-    dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
-
-    total += tieneParche ? EXTRAS.parche : 0;
-    total += tieneDorsal ? EXTRAS.dorsal : 0;
-
-    precioDisplay.textContent = total.toFixed(2);
-    return total;
-}
-
-// Validar formulario
-function validarFormulario() {
-    const usuario = document.getElementById('usuario').value.trim();
-    const direccion = document.getElementById('direccion').value.trim();
-    const talla = document.getElementById('talla').value.trim();
-    const imagenProducto = document.getElementById('imagenProducto').files[0];
-
-    if (!usuario || !direccion || !talla || !imagenProducto) {
-        return false;
-    }
-    return true;
-}
-
-// Generar enlace de pago
-let ventanaPayPal = null;
-
-function iniciarPago(event) {
-    event.preventDefault();
-
-    if (!validarFormulario()) {
-        mostrarError('Complete todos los campos requeridos');
-        return;
-    }
-
-    // Actualizar el precio antes de generar el enlace
-    const total = actualizarPrecio();
-    const usuario = document.getElementById('usuario').value;
-    const emailPaypal = 'camisetazo'; // Tu email de PayPal[monto]?currencyCode=EUR
-
-    // Generar enlace de pago personalizado con el monto correcto
-    // Generar enlace de pago personalizado
-    const paypalLink = `https://www.paypal.me/camisetazo/${total}?currencyCode=EUR`
-
-    // Abrir ventana de PayPal
-    ventanaPayPal = window.open(paypalLink, 'PagoPayPal', 'width=600,height=800');
-
-    // Mostrar paso 2
-    document.getElementById('paso1').style.display = 'none';
-    document.getElementById('paso2').style.display = 'block';
-    document.getElementById('paypalButton').addEventListener('click', iniciarPago);
-}
-
-// Actualizar el botón de PayPal para usar la función correcta
-document.getElementById('paypalButton').addEventListener('click', iniciarPago);
-// Verificar si la ventana se cerró
-setInterval(() => {
-    if (ventanaPayPal && ventanaPayPal.closed) {
-        document.getElementById('paymentStatus').value = 'completado';
-    }
-}, 1000);
-
-// Sistema de notificaciones
-function mostrarExito(mensaje) {
-document.querySelectorAll('.boton-seccion').forEach(boton => {
-    boton.addEventListener('click', function() {
-        document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
-        document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
-        
-        const seccionId = this.dataset.seccion;
-        this.classList.add('activo');
-        document.getElementById(seccionId).classList.add('activa');
-    });
-});
-
-window.addEventListener('load', () => {
-    document.querySelector('h1').classList.add('animate__fadeIn');
-});
-
-// Configuración de precios
-// Configuración de precios
-const PRECIO_BASE = 0.01;
-const EXTRAS = {
-    parche: 1.00,
-    dorsal: 2.00
-};
-
-// Elementos del DOM
-const parcheInput = document.getElementById('parche');
-const dorsalInput = document.getElementById('dorsal');
-const precioDisplay = document.getElementById('precioDisplay');
-const parchePrecio = document.getElementById('parche-precio');
-const dorsalPrecio = document.getElementById('dorsal-precio');
-let ventanaPayPal = null;
-
-// Actualizar precios en tiempo real
-function actualizarPrecio() {
-    let total = PRECIO_BASE;
-    
-    const tieneParche = parcheInput.value.trim().length > 0;
-    const tieneDorsal = dorsalInput.value.trim().length > 0;
-
-    parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
-    dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
-
-    total += tieneParche ? EXTRAS.parche : 0;
-    total += tieneDorsal ? EXTRAS.dorsal : 0;
-
-    precioDisplay.textContent = total.toFixed(2);
-    return total;
-}
-
-// Validar formulario
-function validarFormulario() {
-    const camposRequeridos = [
-        document.getElementById('usuario').value.trim(),
-        document.getElementById('direccion').value.trim(),
-        document.getElementById('talla').value.trim(),
-        document.getElementById('imagenProducto').files[0]
-    ];
-    return camposRequeridos.every(campo => !!campo);
-}
-
-// Iniciar proceso de pago
-function iniciarPago(event) {
-    event.preventDefault();
-    
-    if (!validarFormulario()) {
-        mostrarError('Complete todos los campos requeridos');
-        return;
-    }
-
-    const total = actualizarPrecio();
-    const emailPaypal = 'camisetazocontacto@gmail.com';
-    const returnUrl = encodeURIComponent(window.location.href); // URL de retorno
-
-    const paypalLink = `https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=${emailPaypal}&flow=friends&useraction=commit&return=${returnUrl}`;
-    
-    ventanaPayPal = window.open(paypalLink, 'PagoPayPal', 'width=600,height=800');
-    
-    document.getElementById('paso1').style.display = 'none';
-    document.getElementById('paso2').style.display = 'block';
-}
-
-// Verificar cierre de ventana PayPal
-setInterval(() => {
-    if (ventanaPayPal && ventanaPayPal.closed) {
-        document.getElementById('paymentStatus').value = 'completado';
-        mostrarExito('Pago completado correctamente. Ahora puedes enviar el formulario.');
-    }
-}, 1000);
-
-// Sistema de notificaciones
-function mostrarExito(mensaje) {
-    const notificacion = document.getElementById('formStatus');
-    notificacion.className = 'success animate__animated animate__fadeIn';
-    notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
-    notificacion.style.display = 'block';
-    setTimeout(() => notificacion.style.display = 'none', 5000);
-}
-
-function mostrarError(mensaje) {
-    const notificacion = document.getElementById('formStatus');
-    notificacion.className = 'error animate__animated animate__shakeX';
-    notificacion.innerHTML = `❌ ${mensaje}`;
-    notificacion.style.display = 'block';
-    setTimeout(() => notificacion.style.display = 'none', 5000);
-}
-
-// Event listeners
-parcheInput.addEventListener('input', actualizarPrecio);
-dorsalInput.addEventListener('input', actualizarPrecio);
-document.getElementById('paypalButton').addEventListener('click', iniciarPago);
-
-// Validar antes de enviar el formulario
-document.getElementById('pedidoForm').addEventListener('submit', function(event) {
-    const paymentStatus = document.getElementById('paymentStatus').value;
-    
-    if (paymentStatus !== 'completado') {
-        event.preventDefault();
-        mostrarError('Por favor, complete el pago antes de enviar el formulario.');
-    }
-});
-
-// Inicialización
-actualizarPrecio();
-}
-</script>
+        // Inicialización
+        actualizarPrecio();
+        parcheInput.addEventListener('input', actualizarPrecio);
+        dorsalInput.addEventListener('input', actualizarPrecio);
+    </script>
 </body>
 </html>
