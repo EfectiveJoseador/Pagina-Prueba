@@ -787,7 +787,7 @@
             <!-- Campos de información -->
             <div class="input-grid">
                 <div class="input-group">
-                    <label for="emailPaypal">Correo de PayPal:</label>
+                    <label for="emailPaypal">Correo de PayPal: ¡IMPORTANTE!</label>
                     <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com">
                 </div>
                 <div class="input-group">
@@ -799,7 +799,7 @@
                     <input type="text" id="talla" name="talla" required placeholder="Ej: M, 42, etc.">
                 </div>
                 <div class="input-group">
-                    <label for="usuario">Usuario Instagram:</label>
+                    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
                     <input type="text" id="usuario" name="usuario" required placeholder="Ej: @roberto_carlos03">
                 </div>
                 <div class="input-group">
@@ -850,12 +850,15 @@ Phone Number:</textarea>
 
             <!-- Botón de pago -->
             <div id="paso1">
-                <p class="nota-pago">* Por favor selecciona la opción 'Enviar a amigos y familiares.'</p>
-                <p class="nota-pago">* Añade en asunto del pago tu @ de Instagram para una mejor verificación de pago.'</p>
-                <button type="button" id="paypalButton" class="boton-pago">
+                <p class="nota-pago">
+                    * Por favor selecciona la opción 'Enviar a amigos y familiares.' <br>
+                    * Añade tu @ de Instagram en el asunto del pago para agilizar la verificación.
+                </p>
+                <br>
+                <button type="button" id="paypalButton" class="boton-pago" style="margin-top: 10px;">
                     <i class="fab fa-paypal"></i> Pagar con PayPal
                 </button>
-            </div>
+            </div>         
         </form>
     </div>
 </section>
