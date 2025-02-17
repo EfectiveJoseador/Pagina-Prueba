@@ -763,7 +763,6 @@
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
-            <input type="hidden" name="payment_status" id="paymentStatus">
 
             <!-- Campos requeridos por Formspree -->
             <input type="hidden" name="_language" value="es">
@@ -947,6 +946,7 @@ Phone Number:</textarea>
 
     // Función para enviar el formulario al servidor
     function enviarFormulario() {
+        document.getElementById('precioTotal').value = actualizarPrecio().toFixed(2);
         pedidoForm.submit(); // Enviar el formulario al servidor
     }
 
