@@ -467,6 +467,24 @@
             border: 1px solid #45a049;
             color: white;
         }
+        .nota-pago {
+    text-align: center;
+    margin-top: 1rem;
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.instruccion-pago {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.instruccion-pago p {
+    margin: 1rem 0;
+}
 
         #formStatus.error {
         background: #f44336;
@@ -738,7 +756,8 @@
 <!-- Nueva sección de Pedidos -->
 <section id="pedidos" class="seccion">
     <div class="formulario-pedido">
-        <h2>Realizar Pedido Personalizado</h2>
+        <h2>Realizar Pedido</h2>
+        <form id="pedidoForm" action="https://formsubmit.co/camisetazocontacto@gmail.com" method="POST" enctype="multipart/form-data">
         
         <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_captcha" value="false">
@@ -835,6 +854,7 @@ Phone Number:</textarea>
                     </div>
                 </div>
             <!-- Botón de pago -->
+            <div id="paso1">
             <a id="paypalButton" 
                    href="https://www.paypal.com/paypalme/camisetazo" 
                    class="boton-pago"
@@ -842,7 +862,20 @@ Phone Number:</textarea>
                    rel="noopener noreferrer"
                    onclick="validarYGenerarPago(event)">
                     <i class="fab fa-paypal"></i> Pagar con PayPal
-                </a>
+                </a> 
+                <p class="nota-pago">* Por favor selecciona la opción 'Enviar a amigos y familiares'</p>
+            </div>
+            <div id="paso2" style="display: none;">
+                <div class="instruccion-pago">
+                    <h3>✅ Paso final:</h3>
+                    <p>1. Completa el pago en la ventana de PayPal que se abrió</p>
+                    <p>2. Vuelve aquí y envía el formulario</p>
+                    <button type="submit" class="boton-pago">
+                        <i class="fas fa-check"></i> Confirmar Pedido
+                    </button>
+                </div>
+            </div>
+            <input type="hidden" name="payment_status" id="paymentStatus" value="pendiente">
         </form>
     </div>
 </section>
@@ -921,7 +954,9 @@ function validarFormulario() {
 }
 
 // Generar enlace de pago
-function validarYGenerarPago(event) {
+let ventanaPayPal = null;
+
+function iniciarPago(event) {
     event.preventDefault();
     
     if (!validarFormulario()) {
@@ -931,12 +966,25 @@ function validarYGenerarPago(event) {
 
     const total = actualizarPrecio();
     const usuario = document.getElementById('usuario').value;
+    const emailPaypal = 'camisetazocontacto@gmail.com'; // Tu email de PayPal
     
-    const paypalLink = `https://www.paypal.me/camisetazo/${total}?currencyCode=EUR&description=${encodeURIComponent(`Pedido de ${usuario} - Camisetazo`)}`;
+    // Generar enlace de pago personalizado
+    const paypalLink = `https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=${emailPaypal}&flow=friends&useraction=commit`;
     
-    window.open(paypalLink, '_blank');
-    mostrarExito('Redirigiendo a PayPal...');
+    // Abrir ventana de PayPal
+    ventanaPayPal = window.open(paypalLink, 'PagoPayPal', 'width=600,height=800');
+    
+    // Mostrar paso 2
+    document.getElementById('paso1').style.display = 'none';
+    document.getElementById('paso2').style.display = 'block';
 }
+
+// Verificar si la ventana se cerró
+setInterval(() => {
+    if (ventanaPayPal && ventanaPayPal.closed) {
+        document.getElementById('paymentStatus').value = 'completado';
+    }
+}, 1000);
 
 // Sistema de notificaciones
 function mostrarExito(mensaje) {
