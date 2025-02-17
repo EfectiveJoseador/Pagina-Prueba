@@ -996,46 +996,39 @@ Phone Number:</textarea>
                     <p>Por favor ingresa el email asociado a tu cuenta PayPal:</p>
                     <input type="email" id="paypalEmail" placeholder="tucuenta@paypal.com" style="padding: 8px; width: 80%; margin: 10px;">
                     <br>
-                    <button onclick="verificarEmail()" 
+                    <button onclick="window.opener.pagoVerificado = true; window.close();" 
                             style="padding: 10px 20px; background: #003087; color: white; border: none; cursor: pointer;">
                         Confirmar Pago
                     </button>
-                    <p id="errorEmail" style="color: red; margin-top: 10px; display: none;">Por favor, ingresa un email válido.</p>
-                    <script>
-                        function verificarEmail() {
-                            const email = document.getElementById('paypalEmail').value;
-                            if (email && email.includes('@')) {
-                                window.opener.pagoVerificado = true;
-                                window.close();
-                            } else {
-                                document.getElementById('errorEmail').style.display = 'block';
-                            }
-                        }
                 </body>
                 </html>
             `);
         }
     
-         // Event listener para el botón de PayPal
-         document.getElementById('paypalButton').addEventListener('click', function(e) {
+        // Event listener para el botón de PayPal
+        document.getElementById('paypalButton').addEventListener('click', function(e) {
             e.preventDefault();
+    
             if (!validarFormulario()) {
                 mostrarError('Complete todos los campos requeridos');
                 return;
             }
+    
             const total = actualizarPrecio();
-            const ventanaPayPal = abrirPayPal(total);
+            window.open(`https://www.paypal.com/paypalme/camisetazo/${total}EUR`, '_blank');
+    
+            // Mostrar verificación después de 5 segundos
             setTimeout(() => {
                 verificarPago();
                 document.getElementById('paso1').style.display = 'none';
                 document.getElementById('paso2').style.display = 'block';
             }, 5000);
         });
-
+    
         // Event listeners para actualizar el precio
         parcheInput.addEventListener('input', actualizarPrecio);
         dorsalInput.addEventListener('input', actualizarPrecio);
-
+    
         // Event listeners para cambiar de sección
         document.querySelectorAll('.boton-seccion').forEach(boton => {
             boton.addEventListener('click', function() {
@@ -1043,7 +1036,7 @@ Phone Number:</textarea>
                 cambiarSeccion(seccionId);
             });
         });
-
+    
         // Inicialización
         actualizarPrecio();
         cambiarSeccion('tienda'); // Mostrar la sección de tienda por defecto
