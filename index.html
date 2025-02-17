@@ -48,7 +48,50 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
+        /* Calculadora profesional */
+        .calculadora-precio {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
+        .detalle-precio {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .total-container {
+            background: var(--azul-acento);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .precio-total {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .moneda {
+            font-size: 1.2rem;
+            vertical-align: super;
+        }
+
+        .badge-extra {
+            background: #28a745;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
         .contenedor-principal {
             max-width: 1200px;
             margin: 0 auto;
@@ -759,14 +802,47 @@ Phone Number:</textarea>
             <input type="hidden" name="_autoresponse" value="Gracias por tu pedido. Hemos recibido tu imagen adjunta.">
 
             <!-- Sección de cálculo de precio -->
-            <div class="precio-final" style="margin: 2rem 0; text-align: center;">
-                <h3 style="color: var(--azul-acento); margin-bottom: 1rem;">
-                    Precio Total: <span id="precioDisplay">19.90€</span>
-                </h3>
-                <p style="opacity: 0.8;">Base: 19.90€ + Parche (1€) + Dorsal (2€)</p>
-            </div>
+            <div class="calculadora-precio">
+                    <h3>Desglose del Precio</h3>
+                    
+                    <div class="detalle-precio">
+                        <span>Precio Base:</span>
+                        <span>19.90€</span>
+                    </div>
+                    
+                    <div class="detalle-precio">
+                        <span>
+                            Parche personalizado
+                            <span class="badge-extra">+1€</span>
+                        </span>
+                        <span id="parche-precio">0.00€</span>
+                    </div>
+                    
+                    <div class="detalle-precio">
+                        <span>
+                            Dorsal personalizado
+                            <span class="badge-extra">+2€</span>
+                        </span>
+                        <span id="dorsal-precio">0.00€</span>
+                    </div>
+                    
+                    <div class="total-container">
+                        <div>Total a Pagar</div>
+                        <div class="precio-total">
+                            <span class="moneda">€</span>
+                            <span id="precioDisplay">19.90</span>
+                        </div>
+                    </div>
+                </div>
             <!-- Botón de pago -->
-            <div id="paypal-button-container" style="margin: 2rem 0;"></div>
+            <a id="paypalButton" 
+                   href="#" 
+                   class="boton-pago"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   onclick="validarYGenerarPago(event)">
+                    <i class="fab fa-paypal"></i> Pagar con PayPal
+                </a>
         </form>
     </div>
 </section>
@@ -780,8 +856,6 @@ Phone Number:</textarea>
             </p>
         </footer>
     </div>
-
-    <script src="https://www.paypal.com/sdk/js?client-id=AZnQf3a-4gMS38LBCXeXJ9wr2TnpmSHK8g-BA_Lxl8w8xZ5ORZGMppCPGppvda_ZZLDhKI5QZipoRxnO&currency=EUR"></script>
     <script>
         document.querySelectorAll('.boton-seccion').forEach(boton => {
             boton.addEventListener('click', function() {
@@ -800,114 +874,76 @@ Phone Number:</textarea>
         // Función para manejar el envío del formulario
 // Configuración de precios
 // Configuración mejorada de PayPal
-const PRECIO_BASE = 0.01;
-let precioTotal = PRECIO_BASE;
+const PRECIO_BASE = 19.90;
+        const EXTRAS = {
+            parche: 1.00,
+            dorsal: 2.00
+        };
 
-function actualizarPrecio() {
-    const parche = document.getElementById('parche').value.trim().length > 0;
-    const dorsal = document.getElementById('dorsal').value.trim().length > 0;
-    
-    precioTotal = PRECIO_BASE + (parche ? 0.01 : 0) + (dorsal ? 0.01 : 0);
-    
-    document.getElementById('precioDisplay').textContent = precioTotal.toFixed(2) + '€';
-    document.getElementById('precioTotal').value = precioTotal.toFixed(2);
-}
+        // Elementos del DOM
+        const parcheInput = document.getElementById('parche');
+        const dorsalInput = document.getElementById('dorsal');
+        const precioDisplay = document.getElementById('precioDisplay');
+        const parchePrecio = document.getElementById('parche-precio');
+        const dorsalPrecio = document.getElementById('dorsal-precio');
 
-document.getElementById('parche').addEventListener('input', actualizarPrecio);
-document.getElementById('dorsal').addEventListener('input', actualizarPrecio);
-paypal.Buttons({
-    style: {
-        layout: 'vertical',
-        color: 'gold',
-        shape: 'rect',
-        label: 'checkout'
-    },
+        // Actualizar precios en tiempo real
+        function actualizarPrecio() {
+            let total = PRECIO_BASE;
+            
+            // Calcular extras
+            const tieneParche = parcheInput.value.trim().length > 0;
+            const tieneDorsal = dorsalInput.value.trim().length > 0;
 
-    createOrder: function(data, actions) {
-        if (!validarFormulario()) {
-            alert('❗ Complete todos los campos requeridos');
-            return;
+            parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
+            dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
+
+            total += tieneParche ? EXTRAS.parche : 0;
+            total += tieneDorsal ? EXTRAS.dorsal : 0;
+
+            precioDisplay.textContent = total.toFixed(2);
+            return total;
         }
+
+        // Generar enlace de pago
+        function validarYGenerarPago(event) {
+            event.preventDefault();
+            
+            if (!validarFormulario()) {
+                mostrarError('Complete todos los campos requeridos');
+                return;
+            }
+
+            const total = actualizarPrecio();
+            const usuario = document.getElementById('usuario').value;
+            
+            const paypalLink = `https://www.paypal.me/camisetazo/${total}?currencyCode=EUR&description=${encodeURIComponent(`Pedido de ${usuario} - Camisetazo`)}`;
+            
+            window.open(paypalLink, '_blank');
+            mostrarExito('Redirigiendo a PayPal...');
+        }
+
+        // Sistema de notificaciones
+        function mostrarExito(mensaje) {
+            const notificacion = document.getElementById('formStatus');
+            notificacion.className = 'success animate__animated animate__fadeIn';
+            notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
+            notificacion.style.display = 'block';
+        }
+
+        function mostrarError(mensaje) {
+            const notificacion = document.getElementById('formStatus');
+            notificacion.className = 'error animate__animated animate__shakeX';
+            notificacion.innerHTML = `❌ ${mensaje}`;
+            notificacion.style.display = 'block';
+        }
+
+        // Event listeners
+        parcheInput.addEventListener('input', actualizarPrecio);
+        dorsalInput.addEventListener('input', actualizarPrecio);
         
-        return actions.order.create({
-            purchase_units: [{
-                amount: {
-                    value: precioTotal.toFixed(2),
-                    currency_code: 'EUR'
-                }
-            }]
-        });
-    },
-
-    // Modifica la sección onApprove en el script de PayPal
-    onApprove: function(data, actions) {
-    return actions.order.capture().then(function(details) {
-        const form = document.getElementById('pedidoForm');
-        const formData = new FormData(form);
-        const inputFile = document.getElementById('imagenProducto');
-
-        if(inputFile.files[0]) {
-            formData.append('imagenProducto', inputFile.files[0]);
-        }
-
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                const notificacion = document.getElementById('formStatus');
-                notificacion.className = 'success animate__animated animate__fadeIn';
-                notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ¡Pago completado! ID: ${details.id}`;
-                notificacion.style.display = 'block';
-                
-                // Ocultar después de 5 segundos
-                setTimeout(() => {
-                    notificacion.style.display = 'none';
-                }, 5000);
-
-                form.reset();
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-},
-
-onError: function(err) {
-    const notificacion = document.getElementById('formStatus');
-    notificacion.className = 'error animate__animated animate__shakeX';
-    notificacion.innerHTML = `❌ Error en el pago: ${err.message}`;
-    notificacion.style.display = 'block';
-    
-    // Ocultar después de 5 segundos
-    setTimeout(() => {
-        notificacion.style.display = 'none';
-    }, 5000);
-}  // <-- Aquí faltaba cerrar la llave del método onError
-}).render('#paypal-button-container');
-
-function validarFormulario() {
-    const archivo = document.getElementById('imagenProducto').files[0];
-    if (!archivo) {
-        alert('Debes subir una imagen del producto');
-        return false;
-    }
-    let valido = true;
-    document.querySelectorAll('[required]').forEach(campo => {
-        if (!campo.value.trim()) {
-            campo.style.borderColor = '#e74c3c';
-            valido = false;
-        } else {
-            campo.style.borderColor = '#2a5ba8';
-        }
-    });
-    return valido;
-}
-</script>
+        // Inicializar calculadora
+        actualizarPrecio();
+    </script>
 </body>
 </html>
