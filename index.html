@@ -843,97 +843,85 @@ Phone Number:</textarea>
         </footer>
     </div>
     <script>
-        // Configuración de precios
-        const PRECIO_BASE = 19.90;
-        const EXTRAS = {
-            parche: 1.00,
-            dorsal: 2.00
-        };
-
-        // Elementos del DOM
-        const parcheInput = document.getElementById('parche');
-        const dorsalInput = document.getElementById('dorsal');
-        const precioDisplay = document.getElementById('precioDisplay');
-        const parchePrecio = document.getElementById('parche-precio');
-        const dorsalPrecio = document.getElementById('dorsal-precio');
-        const paypalButton = document.getElementById('paypalButton');
-        const pedidoForm = document.getElementById('pedidoForm');
-        const emailPaypalInput = document.getElementById('emailPaypal');
-
-        // Función para validar el correo de PayPal
-        function validarEmail(email) {
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return regex.test(email);
-        }
-
-        // Actualizar precios en tiempo real
-        function actualizarPrecio() {
-            let total = PRECIO_BASE;
-
-            const tieneParche = parcheInput.value.trim().length > 0;
-            const tieneDorsal = dorsalInput.value.trim().length > 0;
-
-            parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
-            dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
-
-            total += tieneParche ? EXTRAS.parche : 0;
-            total += tieneDorsal ? EXTRAS.dorsal : 0;
-
-            precioDisplay.textContent = total.toFixed(2);
-            return total;
-        }
-
-        // Función para limpiar el formulario
-        function limpiarFormulario() {
-            pedidoForm.reset();
-            actualizarPrecio(); // Restablecer el precio
-        }
-
-        // Función para mostrar notificaciones
-        function mostrarExito(mensaje) {
-            const notificacion = document.getElementById('formStatus');
-            notificacion.className = 'success animate__animated animate__fadeIn';
-            notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
-            notificacion.style.display = 'block';
-            setTimeout(() => notificacion.style.display = 'none', 5000);
-        }
-
-        // Función para mostrar errores
-        function mostrarError(mensaje) {
-            const notificacion = document.getElementById('formStatus');
-            notificacion.className = 'error animate__animated animate__shakeX';
-            notificacion.innerHTML = `❌ ${mensaje}`;
-            notificacion.style.display = 'block';
-            setTimeout(() => notificacion.style.display = 'none', 5000);
-        }
-
-        // Iniciar proceso de pago
-        paypalButton.addEventListener('click', function (event) {
-            event.preventDefault(); // Evitar el envío del formulario
-
-            const total = actualizarPrecio();
-            const emailPaypal = emailPaypalInput.value.trim();
-
-            if (!emailPaypal || !validarEmail(emailPaypal)) {
-                mostrarError('Por favor, ingresa un correo de PayPal válido.');
-                return;
+        // Manejo de pestañas
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.boton-seccion').forEach(boton => {
+                boton.addEventListener('click', function() {
+                    // Remover clases activas
+                    document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
+                    document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+    
+                    // Activar la sección correspondiente
+                    const seccionId = this.dataset.seccion;
+                    this.classList.add('activo');
+                    document.getElementById(seccionId).classList.add('activa');
+                });
+            });
+    
+            // Configuración de precios y PayPal
+            const PRECIO_BASE = 19.90;
+            const EXTRAS = {
+                parche: 1.00,
+                dorsal: 2.00
+            };
+    
+            const parcheInput = document.getElementById('parche');
+            const dorsalInput = document.getElementById('dorsal');
+            const precioDisplay = document.getElementById('precioDisplay');
+            const parchePrecio = document.getElementById('parche-precio');
+            const dorsalPrecio = document.getElementById('dorsal-precio');
+            const paypalButton = document.getElementById('paypalButton');
+            const pedidoForm = document.getElementById('pedidoForm');
+    
+            // Funciones
+            function actualizarPrecio() {
+                let total = PRECIO_BASE;
+                const tieneParche = parcheInput.value.trim().length > 0;
+                const tieneDorsal = dorsalInput.value.trim().length > 0;
+    
+                parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
+                dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
+                total += tieneParche ? EXTRAS.parche : 0;
+                total += tieneDorsal ? EXTRAS.dorsal : 0;
+    
+                precioDisplay.textContent = total.toFixed(2);
+                return total;
             }
-
-            // Abrir ventana de PayPal
-            const paypalLink = `https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=camisetazocontacto@gmail.com&flow=friends&useraction=commit`;
-            window.open(paypalLink, '_blank');
-
-            // Limpiar el formulario
-            limpiarFormulario();
-
-            // Mostrar notificación de éxito
-            mostrarExito('Si tu pedido se ha realizado correctamente, te contactaremos por Instagram para confirmarlo.');
+    
+            function limpiarFormulario() {
+                pedidoForm.reset();
+                actualizarPrecio();
+            }
+    
+            function mostrarExito(mensaje) {
+                const notificacion = document.getElementById('formStatus');
+                notificacion.className = 'success animate__animated animate__fadeIn';
+                notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
+                notificacion.style.display = 'block';
+                setTimeout(() => notificacion.style.display = 'none', 5000);
+            }
+    
+            // Evento PayPal
+            paypalButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                const total = actualizarPrecio();
+                const emailPaypal = document.getElementById('emailPaypal').value.trim();
+    
+                if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
+                    alert("Por favor, ingresa un correo válido.");
+                    return;
+                }
+    
+                window.open(`https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=camisetazocontacto@gmail.com`, '_blank');
+                limpiarFormulario();
+                mostrarExito('Te contactaremos por Instagram para confirmar tu pedido.');
+            });
+    
+            // Inicialización
+            actualizarPrecio();
+            parcheInput.addEventListener('input', actualizarPrecio);
+            dorsalInput.addEventListener('input', actualizarPrecio);
         });
-
-        // Inicialización
-        actualizarPrecio();
-        parcheInput.addEventListener('input', actualizarPrecio);
-        dorsalInput.addEventListener('input', actualizarPrecio);
     </script>
 </body>
 </html>
