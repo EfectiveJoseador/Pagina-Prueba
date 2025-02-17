@@ -1007,7 +1007,8 @@ window.addEventListener('load', () => {
 });
 
 // Configuración de precios
-const PRECIO_BASE = 19.90;
+// Configuración de precios
+const PRECIO_BASE = 0.01;
 const EXTRAS = {
     parche: 1.00,
     dorsal: 2.00
@@ -1060,8 +1061,9 @@ function iniciarPago(event) {
 
     const total = actualizarPrecio();
     const emailPaypal = 'camisetazocontacto@gmail.com';
-    
-    const paypalLink = `https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=${emailPaypal}&flow=friends&useraction=commit`;
+    const returnUrl = encodeURIComponent(window.location.href); // URL de retorno
+
+    const paypalLink = `https://www.paypal.com/sendmoney?amount=${total}&currency=EUR&recipient=${emailPaypal}&flow=friends&useraction=commit&return=${returnUrl}`;
     
     ventanaPayPal = window.open(paypalLink, 'PagoPayPal', 'width=600,height=800');
     
@@ -1073,6 +1075,7 @@ function iniciarPago(event) {
 setInterval(() => {
     if (ventanaPayPal && ventanaPayPal.closed) {
         document.getElementById('paymentStatus').value = 'completado';
+        mostrarExito('Pago completado correctamente. Ahora puedes enviar el formulario.');
     }
 }, 1000);
 
@@ -1082,7 +1085,7 @@ function mostrarExito(mensaje) {
     notificacion.className = 'success animate__animated animate__fadeIn';
     notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
     notificacion.style.display = 'block';
-    setTimeout(() => notificacion.style.display = 'none', 3000);
+    setTimeout(() => notificacion.style.display = 'none', 5000);
 }
 
 function mostrarError(mensaje) {
@@ -1090,18 +1093,27 @@ function mostrarError(mensaje) {
     notificacion.className = 'error animate__animated animate__shakeX';
     notificacion.innerHTML = `❌ ${mensaje}`;
     notificacion.style.display = 'block';
-    setTimeout(() => notificacion.style.display = 'none', 3000);
+    setTimeout(() => notificacion.style.display = 'none', 5000);
 }
 
 // Event listeners
 parcheInput.addEventListener('input', actualizarPrecio);
 dorsalInput.addEventListener('input', actualizarPrecio);
 document.getElementById('paypalButton').addEventListener('click', iniciarPago);
-}
+
+// Validar antes de enviar el formulario
+document.getElementById('pedidoForm').addEventListener('submit', function(event) {
+    const paymentStatus = document.getElementById('paymentStatus').value;
+    
+    if (paymentStatus !== 'completado') {
+        event.preventDefault();
+        mostrarError('Por favor, complete el pago antes de enviar el formulario.');
+    }
+});
+
 // Inicialización
 actualizarPrecio();
+}
 </script>
 </body>
 </html>
-he hecho el pago tal y como dice pero en el correo me pone: payment_status	
-pendiente, y no me ha saltado ninguna notificacion verde en la pagina
