@@ -188,6 +188,27 @@
             gap: 1.5rem;
             perspective: 1000px;
         }
+        .boton-extra {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--azul-acento);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+        }
+
+        .boton-extra.activo {
+            background: var(--azul-acento);
+            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
+        }
+
+        .boton-extra:hover {
+            transform: translateY(-2px);
+        }
 
         .card-enlace {
             background: rgba(10, 31, 61, 0.7);
@@ -763,6 +784,7 @@
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
+            <input type="hidden" name="versionJugador" id="versionJugadorEstado" value="0">
 
             <!-- Campos requeridos por Formspree -->
             <input type="hidden" name="_language" value="es">
@@ -811,6 +833,12 @@
                     <input type="text" id="dorsal" name="dorsal" placeholder="Ej: Name: Roberto Carlos, Number: 3">
                 </div>
                 <div class="input-group">
+                    <label for="versionJugador">Versión Jugador (opcional / +3€)</label>
+                    <button type="button" id="versionJugador" class="boton-extra">
+                        <span>ACTIVAR</span>
+                    </button>
+                </div>
+                <div class="input-group">
                     <label for="direccion">Dirección completa:</label>
                     <textarea id="direccion" name="direccion" required rows="7">Contact Name:
 Address Line:
@@ -838,6 +866,10 @@ Phone Number:</textarea>
                 <div class="detalle-precio">
                     <span>Dorsal personalizado <span class="badge-extra">+2€</span></span>
                     <span id="dorsal-precio">0.00€</span>
+                </div>
+                <div class="detalle-precio">
+                    <span>Versión Jugador <span class="badge-extra">+3€</span></span>
+                    <span id="versionJugador-precio">0.00€</span>
                 </div>
                 <div class="total-container">
                     <div>Total a Pagar</div>
@@ -883,33 +915,41 @@ Phone Number:</textarea>
     // Configuración de precios
     const PRECIO_BASE = 0.01;
     const EXTRAS = {
-        parche: 1.00,
-        dorsal: 2.00
-    };
+    parche: 0.01,
+    dorsal: 0.01,
+    versionJugador: 0.01 // Nuevo extra
+};
 
-    // Elementos del DOM
-    const parcheInput = document.getElementById('parche');
-    const dorsalInput = document.getElementById('dorsal');
-    const precioDisplay = document.getElementById('precioDisplay');
-    const parchePrecio = document.getElementById('parche-precio');
-    const dorsalPrecio = document.getElementById('dorsal-precio');
-    const paypalButton = document.getElementById('paypalButton');
-    const pedidoForm = document.getElementById('pedidoForm');
+// Elementos del DOM
+const versionJugadorButton = document.getElementById('versionJugador');
+const versionJugadorPrecio = document.getElementById('versionJugador-precio');
 
-    // Función para actualizar el precio en tiempo real
-    function actualizarPrecio() {
-        let total = PRECIO_BASE;
-        const tieneParche = parcheInput.value.trim().length > 0;
-        const tieneDorsal = dorsalInput.value.trim().length > 0;
+// Función para actualizar el precio en tiempo real
+function actualizarPrecio() {
+    let total = PRECIO_BASE;
+    const tieneParche = parcheInput.value.trim().length > 0;
+    const tieneDorsal = dorsalInput.value.trim().length > 0;
+    const tieneVersionJugador = versionJugadorButton.classList.contains('activo');
 
-        parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
-        dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
-        total += tieneParche ? EXTRAS.parche : 0;
-        total += tieneDorsal ? EXTRAS.dorsal : 0;
+    parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
+    dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
+    versionJugadorPrecio.textContent = tieneVersionJugador ? `${EXTRAS.versionJugador.toFixed(2)}€` : '0.00€';
 
-        precioDisplay.textContent = total.toFixed(2);
-        return total;
-    }
+    total += tieneParche ? EXTRAS.parche : 0;
+    total += tieneDorsal ? EXTRAS.dorsal : 0;
+    total += tieneVersionJugador ? EXTRAS.versionJugador : 0;
+
+    precioDisplay.textContent = total.toFixed(2);
+    return total;
+}
+
+// Evento para activar/desactivar la versión jugador
+versionJugadorButton.addEventListener('click', function () {
+    this.classList.toggle('activo');
+    const versionJugadorEstado = document.getElementById('versionJugadorEstado');
+    versionJugadorEstado.value = this.classList.contains('activo') ? '1' : '0';
+    actualizarPrecio();
+});
 
     // Función para abrir la ventana de PayPal
     function abrirPayPal(total) {
