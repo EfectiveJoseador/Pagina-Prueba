@@ -966,28 +966,33 @@ Phone Number:</textarea>
     actualizarPrecio();
 
     // Función para abrir la ventana de PayPal
-    function abrirPayPal(total) {
-        const width = 600;
-        const height = 800;
-        const left = (window.innerWidth - width) / 2;
-        const top = (window.innerHeight - height) / 2;
-        const ventanaPayPal = window.open(
-            `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
-            'PagoPayPal',
-            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
-        );
+    // Función para abrir la ventana de PayPal
+function abrirPayPal(total) {
+    const width = 600;
+    const height = 800;
+    const left = (window.innerWidth - width) / 2;
+    const top = (window.innerHeight - height) / 2;
 
-        // Verificar si la ventana de PayPal se ha cerrado
-        const intervalo = setInterval(() => {
-            if (ventanaPayPal.closed) {
-                clearInterval(intervalo); // Detener el intervalo
-                mostrarExito('Pago completado. Te contactaremos por Instagram para confirmar tu pedido.');
-                enviarFormulario(); // Enviar el formulario al servidor
-            }
-        }, 500); // Verificar cada 500ms
+    // Construir la URL de PayPal con el monto correcto
+    const urlPayPal = `https://www.paypal.com/paypalme/camisetazo?amount=${total}&currency=EUR`;
 
-        return ventanaPayPal;
-    }
+    const ventanaPayPal = window.open(
+        urlPayPal,
+        'PagoPayPal',
+        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+    );
+
+    // Verificar si la ventana de PayPal se ha cerrado
+    const intervalo = setInterval(() => {
+        if (ventanaPayPal.closed) {
+            clearInterval(intervalo); // Detener el intervalo
+            mostrarExito('Pago completado. Te contactaremos por Instagram para confirmar tu pedido.');
+            enviarFormulario(); // Enviar el formulario al servidor
+        }
+    }, 500); // Verificar cada 500ms
+
+    return ventanaPayPal;
+}
 
     // Función para mostrar notificaciones de éxito
     function mostrarExito(mensaje) {
