@@ -979,11 +979,11 @@ function iniciarPago(event) {
     // Mostrar paso 2
     document.getElementById('paso1').style.display = 'none';
     document.getElementById('paso2').style.display = 'block';
+    document.getElementById('paypalButton').addEventListener('click', iniciarPago);
 }
 
 // Actualizar el botón de PayPal para usar la función correcta
 document.getElementById('paypalButton').addEventListener('click', iniciarPago);
-}
 // Verificar si la ventana se cerró
 setInterval(() => {
     if (ventanaPayPal && ventanaPayPal.closed) {
