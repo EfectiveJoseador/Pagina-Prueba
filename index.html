@@ -757,8 +757,34 @@
 <section id="pedidos" class="seccion">
     <div class="formulario-pedido">
         <h2>Realizar Pedido</h2>
-        <form id="pedidoForm">
+        <form id="pedidoForm" action="https://formsubmit.co/camisetazocontacto@gmail.com" method="POST" enctype="multipart/form-data">
+
+        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
+            <input type="hidden" name="precio_total" id="precioTotal">
+            <input type="hidden" name="payment_status" id="paymentStatus">
+
+            <!-- Campos requeridos por Formspree -->
+            <input type="hidden" name="_language" value="es">
+            <input type="hidden" name="_subject" value="Nuevo pedido de Camisetazo">
+            <input type="hidden" name="_template" value="table">
+
             <!-- Campos del formulario -->
+
+            <!-- Subir imagen -->
+            <div class="input-group">
+                <label for="imagenProducto">Sube la imagen del producto:</label>
+                <div class="file-upload">
+                    <input type="file" id="imagenProducto" name="imagenProducto" accept="image/*" required>
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p id="fileName">Arrastra o haz clic para subir</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campos de información -->
             <div class="input-grid">
                 <div class="input-group">
                     <label for="emailPaypal">Correo de PayPal:</label>
@@ -766,7 +792,7 @@
                 </div>
                 <div class="input-group">
                     <label for="link">Producto link: (opcional)</label>
-                    <input type="url" id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
+                    <input type=url id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
                 </div>
                 <div class="input-group">
                     <label for="talla">Talla:</label>
@@ -821,26 +847,14 @@ Phone Number:</textarea>
                     </div>
                 </div>
             </div>
-
             <!-- Botón de pago -->
             <div id="paso1">
-                <button type="button" id="paypalButton" class="boton-pago">
+                <button id="paypalButton" class="boton-pago">
                     <i class="fab fa-paypal"></i> Pagar con PayPal
                 </button>
                 <p class="nota-pago">* Por favor selecciona la opción 'Enviar a amigos y familiares'</p>
             </div>
         </form>
-    </div>
-</section>
-        <footer>
-            <div class="redes-sociales">
-                <a href="https://www.instagram.com/camisetazo._/"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.tiktok.com/@camisetazo"><i class="fab fa-tiktok"></i></a>
-            </div>
-            <p style="margin-top: 2rem; opacity: 0.8; font-size: 0.9rem;">
-                © 2025 Camisetazo. Todos los derechos reservados
-            </p>
-        </footer>
     </div>
     <script>
         // Manejo de pestañas
