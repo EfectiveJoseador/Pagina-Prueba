@@ -828,12 +828,14 @@
                     <label for="parche">Descripción del parche: (opcional / +1€)</label>
                     <input type="text" id="parche" name="parche" placeholder="Ej: La Liga, Champions League, Eurocopa, etc.">
                 </div>
+                
                 <div class="input-group">
                     <label for="dorsal">Dorsal: (opcional / +2€)</label>
                     <input type="text" id="dorsal" name="dorsal" placeholder="Ej: Name: Roberto Carlos, Number: 3">
                 </div>
+                
                 <div class="input-group">
-                    <label for="versionJugador">Versión Jugador (opcional / +3€)</label>
+                    <label for="versionJugador">Versión Jugador:</label>
                     <button type="button" id="versionJugador" class="boton-extra">
                         <span>ACTIVAR</span>
                     </button>
@@ -913,43 +915,55 @@ Phone Number:</textarea>
     });
 
     // Configuración de precios
-    const PRECIO_BASE = 0.01;
+     const PRECIO_BASE = 0.01;
     const EXTRAS = {
-    parche: 0.01,
-    dorsal: 0.01,
-    versionJugador: 0.01 // Nuevo extra
-};
+        parche: 0.01,
+        dorsal: 0.01,
+        versionJugador: 0.01
+    };
 
-// Elementos del DOM
-const versionJugadorButton = document.getElementById('versionJugador');
-const versionJugadorPrecio = document.getElementById('versionJugador-precio');
+    // Elementos del DOM
+    const parcheInput = document.getElementById('parche');
+    const dorsalInput = document.getElementById('dorsal');
+    const versionJugadorButton = document.getElementById('versionJugador');
+    const precioDisplay = document.getElementById('precioDisplay');
+    const parchePrecio = document.getElementById('parche-precio');
+    const dorsalPrecio = document.getElementById('dorsal-precio');
+    const versionJugadorPrecio = document.getElementById('versionJugador-precio');
 
-// Función para actualizar el precio en tiempo real
-function actualizarPrecio() {
-    let total = PRECIO_BASE;
-    const tieneParche = parcheInput.value.trim().length > 0;
-    const tieneDorsal = dorsalInput.value.trim().length > 0;
-    const tieneVersionJugador = versionJugadorButton.classList.contains('activo');
+    // Función para actualizar el precio en tiempo real
+    function actualizarPrecio() {
+        let total = PRECIO_BASE;
 
-    parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
-    dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
-    versionJugadorPrecio.textContent = tieneVersionJugador ? `${EXTRAS.versionJugador.toFixed(2)}€` : '0.00€';
+        // Verificar si los extras están activos
+        const tieneParche = parcheInput.value.trim().length > 0;
+        const tieneDorsal = dorsalInput.value.trim().length > 0;
+        const tieneVersionJugador = versionJugadorButton.classList.contains('activo');
 
-    total += tieneParche ? EXTRAS.parche : 0;
-    total += tieneDorsal ? EXTRAS.dorsal : 0;
-    total += tieneVersionJugador ? EXTRAS.versionJugador : 0;
+        // Actualizar los precios de los extras
+        parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
+        dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
+        versionJugadorPrecio.textContent = tieneVersionJugador ? `${EXTRAS.versionJugador.toFixed(2)}€` : '0.00€';
 
-    precioDisplay.textContent = total.toFixed(2);
-    return total;
-}
+        // Calcular el total
+        total += tieneParche ? EXTRAS.parche : 0;
+        total += tieneDorsal ? EXTRAS.dorsal : 0;
+        total += tieneVersionJugador ? EXTRAS.versionJugador : 0;
 
-// Evento para activar/desactivar la versión jugador
-versionJugadorButton.addEventListener('click', function () {
-    this.classList.toggle('activo');
-    const versionJugadorEstado = document.getElementById('versionJugadorEstado');
-    versionJugadorEstado.value = this.classList.contains('activo') ? '1' : '0';
+        // Mostrar el total
+        precioDisplay.textContent = total.toFixed(2);
+    }
+
+    // Eventos para actualizar el precio
+    parcheInput.addEventListener('input', actualizarPrecio);
+    dorsalInput.addEventListener('input', actualizarPrecio);
+    versionJugadorButton.addEventListener('click', function () {
+        this.classList.toggle('activo');
+        actualizarPrecio();
+    });
+
+    // Inicializar el precio
     actualizarPrecio();
-});
 
     // Función para abrir la ventana de PayPal
     function abrirPayPal(total) {
