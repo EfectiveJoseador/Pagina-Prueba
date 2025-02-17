@@ -952,6 +952,7 @@ Phone Number:</textarea>
 
         // Mostrar el total
         precioDisplay.textContent = total.toFixed(2);
+        return total;
     }
 
     // Eventos para actualizar el precio
@@ -967,20 +968,16 @@ Phone Number:</textarea>
 
     // Función para abrir la ventana de PayPal
     // Función para abrir la ventana de PayPal
-function abrirPayPal(total) {
-    const width = 600;
-    const height = 800;
-    const left = (window.innerWidth - width) / 2;
-    const top = (window.innerHeight - height) / 2;
-
-    // Construir la URL de PayPal con el monto correcto
-    const urlPayPal = `https://www.paypal.com/paypalme/camisetazo?amount=${total}&currency=EUR`;
-
-    const ventanaPayPal = window.open(
-        urlPayPal,
-        'PagoPayPal',
-        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
-    );
+    function abrirPayPal(total) {
+        const width = 600;
+        const height = 800;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        const ventanaPayPal = window.open(
+            `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
+            'PagoPayPal',
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
 
     // Verificar si la ventana de PayPal se ha cerrado
     const intervalo = setInterval(() => {
