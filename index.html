@@ -675,7 +675,7 @@
                target="_blank" 
                style="color: white; text-decoration: none; display: flex; align-items: center; gap: 10px;">
                 <i class="fas fa-thumbs-up"></i>
-                Compra fácil y rápido
+                Compra con confianza
             </a>
         </div>
 
@@ -952,8 +952,8 @@ Phone Number:</textarea>
     // Nuevas variables y configuración
     document.addEventListener('DOMContentLoaded', function (){
     let unidades = 1;
-    const PRECIOS_BASE = {1: 19.90, 2: 0.01, 3: 54.90, 5: 84.90};
-    const EXTRAS = {parche: 0.01, dorsal: 0.01, versionJugador: 0.01};
+    const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
+    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3};
 
     // Función para crear unidades dinámicas
     function crearUnidad(numeroUnidad) {
@@ -1067,68 +1067,7 @@ function actualizarPrecio() {
     document.getElementById('precioDisplay').textContent = total.toFixed(2);
     document.getElementById('precioTotal').value = total.toFixed(2);
 }
-function abrirPayPal(total) {
-        const width = 600;
-        const height = 800;
-        const left = (window.innerWidth - width) / 2;
-        const top = (window.innerHeight - height) / 2;
-        const ventanaPayPal = window.open(
-            `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
-            'PagoPayPal',
-            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
-        );
 
-    // Verificar si la ventana de PayPal se ha cerrado
-    const intervalo = setInterval(() => {
-        if (ventanaPayPal.closed) {
-            clearInterval(intervalo); // Detener el intervalo
-            mostrarExito('Pago completado. Te contactaremos por Instagram para confirmar tu pedido.');
-            enviarFormulario(); // Enviar el formulario al servidor
-        }
-    }, 500); // Verificar cada 500ms
-
-    return ventanaPayPal;
-}
-paypalButton.addEventListener('click', function (event) {
-        event.preventDefault(); // Evitar el envío automático del formulario
-        const total = actualizarPrecio();
-        const emailPaypal = document.getElementById('emailPaypal').value.trim();
-        const imagenProducto = document.getElementById('imagenProducto').files[0];
-        const link = document.getElementById('link').value.trim();
-
-        // Validar el correo de PayPal
-        if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
-            alert("Por favor, ingresa un correo válido.");
-            return;
-        }
-        if (!imagenProducto && !link) {
-        alert("Por favor, sube una imagen o proporciona un enlace del producto.");
-        return;
-    }
-
-        // Abrir la ventana de PayPal
-        abrirPayPal(total);
-    });
-paypalButton.addEventListener('click', function (event) {
-        event.preventDefault(); // Evitar el envío automático del formulario
-        const total = actualizarPrecio();
-        const emailPaypal = document.getElementById('emailPaypal').value.trim();
-        const imagenProducto = document.getElementById('imagenProducto').files[0];
-        const link = document.getElementById('link').value.trim();
-
-        // Validar el correo de PayPal
-        if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
-            alert("Por favor, ingresa un correo válido.");
-            return;
-        }
-        if (!imagenProducto && !link) {
-        alert("Por favor, sube una imagen o proporciona un enlace del producto.");
-        return;
-    }
-
-        // Abrir la ventana de PayPal
-        abrirPayPal(total);
-    });
 // Manejar versión jugador en unidades dinámicas
 function configurarEventosUnidades() {
         // Manejar versión jugador
