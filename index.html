@@ -865,9 +865,17 @@
                     <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com">
                 </div>
                 <div class="input-group">
-                    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
-                    <input type="text" id="usuario" name="usuario" required placeholder="Ej: @roberto_carlos03">
-                </div>
+    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
+    <input 
+        type="text" 
+        id="usuario" 
+        name="usuario" 
+        required 
+        placeholder="Ej: @roberto_carlos03"
+        pattern="^@[A-Za-z0-9_.]{1,30}$"
+        title="Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres)."
+    >
+</div>
                 <div class="input-group">
                     <label for="direccion">Dirección completa:</label>
                     <textarea id="direccion" name="direccion" required rows="7">Contact Name:
