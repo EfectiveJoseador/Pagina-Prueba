@@ -1150,6 +1150,13 @@ Phone Number:</textarea>
             alert("Por favor, ingresa un correo válido de PayPal.");
             return;
         }
+        const usuarioInstagram = document.getElementById('usuario').value.trim();
+    
+        // Validar el usuario de Instagram
+        if (!usuarioInstagram || !/^@[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
+            alert("Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres).");
+            return;
+        }
         
         // Validar que al menos haya una imagen subida para cada unidad
         const unidades = document.querySelectorAll('.unidad');
