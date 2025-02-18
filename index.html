@@ -936,166 +936,134 @@ Phone Number:</textarea>
 </footer>
     </div>
     <script>
+    document.addEventListener('DOMContentLoaded', function () {
     // Manejo de pestañas
     document.querySelectorAll('.boton-seccion').forEach(boton => {
         boton.addEventListener('click', function () {
-            // Remover clases activas
             document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
             document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
-
-            // Activar la sección correspondiente
-            const seccionId = this.dataset.seccion;
             this.classList.add('activo');
-            document.getElementById(seccionId).classList.add('activa');
+            document.getElementById(this.dataset.seccion).classList.add('activa');
         });
     });
-    // Nuevas variables y configuración
-    document.addEventListener('DOMContentLoaded', function (){
+
     let unidades = 1;
     const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
     const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3};
 
-    // Función para crear unidades dinámicas
     function crearUnidad(numeroUnidad) {
         return `
             <div class="unidad">
                 <h4>Unidad ${numeroUnidad}</h4>
                 <div class="input-group">
                     <label>Imagen del producto:</label>
-                    <div class="file-upload">
-                        <input type="file" name="imagenProducto[]" accept="image/*" required>
-                        <div class="upload-area">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Arrastra o haz clic para subir</p>
-                        </div>
-                    </div>
+                    <input type="file" name="imagenProducto[]" accept="image/*" required>
                 </div>
-                
                 <div class="input-group">
                     <label>Enlace del producto (opcional):</label>
                     <input type="url" name="link[]" placeholder="Ej: https://...">
                 </div>
-                
                 <div class="input-group">
                     <label>Parche:</label>
-                    <input type="text" name="parche[]" placeholder="Ej: La Liga, Champions..." class="input-parche">
+                    <input type="text" name="parche[]" class="input-parche">
                 </div>
-                
                 <div class="input-group">
                     <label>Dorsal:</label>
-                    <input type="text" name="dorsal[]" placeholder="Ej: Nombre: ... Número: ..." class="input-dorsal">
+                    <input type="text" name="dorsal[]" class="input-dorsal">
                 </div>
-
-                <div class="input-group">
-                    <label>Talla:</label>
-                    <input type="text" name="talla[]" required placeholder="Ej: M, 42, etc.">
-                </div>
-                
                 <div class="input-group">
                     <label>Versión Jugador:</label>
-                    <button type="button" class="boton-version-jugador">
-                        <span>DESACTIVADO</span>
-                    </button>
+                    <button type="button" class="boton-version-jugador"><span>DESACTIVADO</span></button>
                     <input type="hidden" name="versionJugador[]" value="No">
                 </div>
             </div>
         `;
     }
 
-// Manejar cambio de unidades
-document.querySelectorAll('.boton-unidad').forEach(boton => {
-        boton.addEventListener('click', function() {
+    function actualizarPrecio() {
+        let precioBase = PRECIOS_BASE[unidades] || 0;
+        let total = precioBase;
+        let parches = 0, dorsales = 0, versiones = 0;
+
+        document.querySelectorAll('.unidad').forEach(unidad => {
+            if (unidad.querySelector('[name="parche[]"]').value.trim()) parches++;
+            if (unidad.querySelector('[name="dorsal[]"]').value.trim()) dorsales++;
+            if (unidad.querySelector('[name="versionJugador[]"]').value === 'Sí') versiones++;
+        });
+
+        total += (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + (versiones * EXTRAS.versionJugador);
+        document.getElementById('precioDisplay').textContent = total.toFixed(2);
+        document.getElementById('precioTotal').value = total.toFixed(2);
+        return total;
+    }
+
+    function configurarEventosUnidades() {
+        document.querySelectorAll('.boton-version-jugador').forEach(boton => {
+            boton.addEventListener('click', function() {
+                const hiddenInput = this.nextElementSibling;
+                this.classList.toggle('activo');
+                hiddenInput.value = this.classList.contains('activo') ? 'Sí' : 'No';
+                this.querySelector('span').textContent = hiddenInput.value === 'Sí' ? 'ACTIVADO' : 'DESACTIVADO';
+                actualizarPrecio();
+            });
+        });
+    }
+
+    document.querySelectorAll('.boton-unidad').forEach(boton => {
+        boton.addEventListener('click', function () {
             unidades = parseInt(this.dataset.unidades);
-            
-            // Actualizar botones
             document.querySelectorAll('.boton-unidad').forEach(b => b.classList.remove('activo'));
             this.classList.add('activo');
-            
-            // Generar unidades
-            const contenedor = document.getElementById('contenedorUnidades');
-            contenedor.innerHTML = '';
-            for(let i = 1; i <= unidades; i++) {
-                contenedor.innerHTML += crearUnidad(i);
-            }
-            
-            // Actualizar precios
+            document.getElementById('contenedorUnidades').innerHTML = Array.from({length: unidades}, (_, i) => crearUnidad(i + 1)).join('');
             actualizarPrecio();
             configurarEventosUnidades();
         });
     });
 
-// Nueva función de cálculo de precio
-function actualizarPrecio() {
-    let precioBase = PRECIOS_BASE[unidades];
-    let total = precioBase;
-    let parches = 0;
-    let dorsales = 0;
-    let versiones = 0;
+    function abrirPayPal(total) {
+        const width = 600, height = 800;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        const ventanaPayPal = window.open(
+            `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
+            'PagoPayPal',
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
 
-    // Calcular extras para cada unidad
-    document.querySelectorAll('.unidad').forEach(unidad => {
-        const parche = unidad.querySelector('[name="parche[]"]').value.trim();
-        const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
-        const version = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
+        const intervalo = setInterval(() => {
+            if (ventanaPayPal.closed) {
+                clearInterval(intervalo);
+                mostrarExito('Pago completado. Te contactaremos por Instagram para confirmar tu pedido.');
+                enviarFormulario();
+            }
+        }, 500);
 
-        if(parche) parches++;
-        if(dorsal) dorsales++;
-        if(version) versiones++;
+        return ventanaPayPal;
+    }
+
+    function mostrarExito(mensaje) {
+        const notificacion = document.getElementById('formStatus');
+        notificacion.className = 'success';
+        notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
+        notificacion.style.display = 'block';
+        setTimeout(() => notificacion.style.display = 'none', 5000);
+    }
+
+    function enviarFormulario() {
+        document.getElementById('precioTotal').value = actualizarPrecio().toFixed(2);
+        document.getElementById('pedidoForm').submit();
+    }
+
+    document.getElementById('paypalButton').addEventListener('click', function (event) {
+        event.preventDefault();
+        const total = actualizarPrecio();
+        abrirPayPal(total);
     });
 
-    // Calcular totales
-    const totalParches = parches * 1;
-    const totalDorsales = dorsales * 2;
-    const totalVersiones = versiones * 3;
-    
-    total += totalParches + totalDorsales + totalVersiones;
-
-    // Actualizar display
-    document.getElementById('cantidad-unidades').textContent = unidades;
-    document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
-    document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
-    
-    document.getElementById('cantidad-parches').textContent = parches;
-    document.getElementById('total-parches').textContent = totalParches.toFixed(2);
-    
-    document.getElementById('cantidad-dorsales').textContent = dorsales;
-    document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
-    
-    document.getElementById('cantidad-versiones').textContent = versiones;
-    document.getElementById('total-versiones').textContent = totalVersiones.toFixed(2);
-    
-    document.getElementById('precioDisplay').textContent = total.toFixed(2);
-    document.getElementById('precioTotal').value = total.toFixed(2);
-}
-
-// Manejar versión jugador en unidades dinámicas
-function configurarEventosUnidades() {
-        // Manejar versión jugador
-        document.querySelectorAll('.boton-version-jugador').forEach(boton => {
-            boton.addEventListener('click', function() {
-                const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
-                this.classList.toggle('activo');
-                const activo = this.classList.contains('activo');
-                this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-                hiddenInput.value = activo ? 'Sí' : 'No';
-                actualizarPrecio();
-            });
-        });
-
-        // Eventos para inputs
-        document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
-            input.addEventListener('input', actualizarPrecio);
-        });
-    }
-    document.querySelector('.boton-unidad.activo').click();
-    configurarEventosUnidades();
-// Actualizar precio al cambiar cualquier input
-document.addEventListener('input', function(e) {
-    if(e.target.matches('[name="parche[]"], [name="dorsal[]"]')) {
-        actualizarPrecio();
-    }
+    document.querySelector('.boton-unidad.activo')?.click();
+    actualizarPrecio();
 });
-});
+
 </script>
 </body>
 </html>
