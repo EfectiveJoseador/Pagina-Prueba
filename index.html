@@ -144,46 +144,6 @@
             from { transform: scaleX(0); }
             to { transform: scaleX(1); }
         }
-        /* Nuevos estilos para el selector de unidades */
-        .selector-unidades {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-
-        .boton-unidad {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--azul-acento);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .boton-unidad.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-
-        /* Contenedor de unidades */
-        .contenedor-unidades {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .unidad {
-            background: rgba(10, 31, 61, 0.7);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .unidad h4 {
-            margin-bottom: 1rem;
-            color: var(--azul-acento);
-        }
 
         .navegacion {
             display: flex;
@@ -229,43 +189,23 @@
             perspective: 1000px;
         }
         .boton-extra {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid var(--azul-acento);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: block;
-        width: 100%;
-        text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--azul-acento);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
         }
 
         .boton-extra.activo {
             background: var(--azul-acento);
             box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
         }
-                .boton-version-jugador {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--azul-acento);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-align: center;
-            margin-top: 10px;
-        }
 
-        .boton-version-jugador.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-
-        .boton-version-jugador:hover {
-            transform: translateY(-2px);
-        }
         .boton-extra:hover {
             transform: translateY(-2px);
         }
@@ -671,11 +611,11 @@
     <div id="formStatus"></div>
     <div class="contenedor-principal">
         <div class="badge-premium">
-            <a
+            <a href="https://www.instagram.com/direct/t/17846283129150996" 
                target="_blank" 
                style="color: white; text-decoration: none; display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-thumbs-up"></i>
-                Compra con confianza
+                <i class="fas fa-shopping-cart"></i>
+                Compra ahora
             </a>
         </div>
 
@@ -838,26 +778,38 @@
 <section id="pedidos" class="seccion">
     <div class="formulario-pedido">
         <h2>Realizar Pedido</h2>
+        <form id="pedidoForm" action="https://formsubmit.co/camisetazocontacto@gmail.com" method="POST" enctype="multipart/form-data">
+
         <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
-
-            <div class="selector-unidades">
-                <button type="button" class="boton-unidad activo" data-unidades="1">1 Unidad</button>
-                <button type="button" class="boton-unidad" data-unidades="2">2 Unidades</button>
-                <button type="button" class="boton-unidad" data-unidades="3">3 Unidades</button>
-                <button type="button" class="boton-unidad" data-unidades="5">5 Unidades</button>
-            </div>
+            <input type="hidden" name="versionJugador" id="versionJugadorEstado" value="No">
 
             <!-- Campos requeridos por Formspree -->
             <input type="hidden" name="_language" value="es">
             <input type="hidden" name="_subject" value="Nuevo pedido de Camisetazo">
             <input type="hidden" name="_template" value="table">
-        <div class="contenedor-unidades" id="contenedorUnidades"></div>
+
             <!-- Campos del formulario -->
 
             <!-- Subir imagen -->
+            <div class="input-group">
+                <label for="imagenProducto">Sube la imagen del producto:</label>
+                <div class="file-upload">
+                    <input type="file" id="imagenProducto" name="imagenProducto" accept="image/*">
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p id="fileName">Arrastra o haz clic para subir</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="link">Producto link: (opcional)</label>
+                <input type="url" id="link" name="link" placeholder="Ej: https://2020soccer.x.yupoo.com/albums/...">
+            </div>
+
             <!-- Campos de información -->
             <div class="input-grid">
                 <div class="input-group">
@@ -865,17 +817,29 @@
                     <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com">
                 </div>
                 <div class="input-group">
-    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
-    <input 
-        type="text" 
-        id="usuario" 
-        name="usuario" 
-        required 
-        placeholder="Ej: @roberto_carlos03"
-        pattern="^@[A-Za-z0-9_.]{1,30}$"
-        title="Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres)."
-    >
-</div>
+                    <label for="talla">Talla:</label>
+                    <input type="text" id="talla" name="talla" required placeholder="Ej: M, 42, etc.">
+                </div>
+                <div class="input-group">
+                    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
+                    <input type="text" id="usuario" name="usuario" required placeholder="Ej: @roberto_carlos03">
+                </div>
+                <div class="input-group">
+                    <label for="parche">Parche:</label>
+                    <input type="text" id="parche" name="parche" placeholder="Ej: La Liga, Champions League, Eurocopa, etc.">
+                </div>
+                
+                <div class="input-group">
+                    <label for="dorsal">Dorsal:</label>
+                    <input type="text" id="dorsal" name="dorsal" placeholder="Ej: Name: Roberto Carlos, Number: 3">
+                </div>
+                
+                <div class="input-group">
+                    <label for="versionJugador">Versión Jugador:</label>
+                    <button type="button" id="versionJugador" class="boton-extra">
+                        <span id="textoVersionJugador">DESACTIVADO</span>
+                    </button>
+                </div>
                 <div class="input-group">
                     <label for="direccion">Dirección completa:</label>
                     <textarea id="direccion" name="direccion" required rows="7">Contact Name:
@@ -894,20 +858,20 @@ Phone Number:</textarea>
             <div class="calculadora-precio">
                 <h3>Desglose del Precio</h3>
                 <div class="detalle-precio">
-                    <span>Precio Base (<span id="cantidad-unidades">1</span> unidad<span id="plural-unidades"></span>):</span>
-                    <span><span id="precio-base-detalle">19.90</span>€</span>
+                    <span>Precio Base:</span>
+                    <span>19.90€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Parches personalizados:</span>
-                    <span><span id="cantidad-parches">0</span> × 1€ = <span id="total-parches">0.00</span>€</span>
+                    <span>Parche personalizado <span class="badge-extra">+1€</span></span>
+                    <span id="parche-precio">0.00€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Dorsales personalizados:</span>
-                    <span><span id="cantidad-dorsales">0</span> × 2€ = <span id="total-dorsales">0.00</span>€</span>
+                    <span>Dorsal personalizado <span class="badge-extra">+2€</span></span>
+                    <span id="dorsal-precio">0.00€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Versiones Jugador:</span>
-                    <span><span id="cantidad-versiones">0</span> × 3€ = <span id="total-versiones">0.00</span>€</span>
+                    <span>Versión Jugador <span class="badge-extra">+3€</span></span>
+                    <span id="versionJugador-precio">0.00€</span>
                 </div>
                 <div class="total-container">
                     <div>Total a Pagar</div>
@@ -922,8 +886,7 @@ Phone Number:</textarea>
             <div id="paso1">
                 <p class="nota-pago">
                     * Por favor selecciona la opción 'Enviar a amigos y familiares.' <br>
-                    * Añade tu @ de Instagram en el asunto del pago para agilizar la verificación.<br>
-                    * El formulario se enviará cuando cierres la ventana de PayPal.
+                    * Añade tu @ de Instagram en el asunto del pago para agilizar la verificación.
                 </p>
                 <br>
                 <button type="button" id="paypalButton" class="boton-pago" style="margin-top: 10px;">
@@ -944,10 +907,11 @@ Phone Number:</textarea>
 </footer>
     </div>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+        // Manejo de pestañas
+        document.addEventListener('DOMContentLoaded', function () {
     // Manejo de pestañas
     document.querySelectorAll('.boton-seccion').forEach(boton => {
-        boton.addEventListener('click', function() {
+        boton.addEventListener('click', function () {
             // Remover clases activas
             document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
             document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
@@ -959,146 +923,73 @@ Phone Number:</textarea>
         });
     });
 
-    // Variables y configuración
-    let unidades = 1;
-    const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
-    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3};
+    // Configuración de precios
+     const PRECIO_BASE = 0.01;
+    const EXTRAS = {
+        parche: 0.01,
+        dorsal: 0.01,
+        versionJugador: 0.01
+    };
 
-    // Función para crear unidades dinámicas
-    function crearUnidad(numeroUnidad) {
-        return `
-            <div class="unidad">
-                <h4>Unidad ${numeroUnidad}</h4>
-                <div class="input-group">
-                    <label>Imagen del producto:</label>
-                    <div class="file-upload">
-                        <input type="file" name="imagenProducto[]" accept="image/*" required>
-                        <div class="upload-area">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Arrastra o haz clic para subir</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label>Enlace del producto (opcional):</label>
-                    <input type="url" name="link[]" placeholder="Ej: https://...">
-                </div>
-                
-                <div class="input-group">
-                    <label>Parche:</label>
-                    <input type="text" name="parche[]" placeholder="Ej: La Liga, Champions..." class="input-parche">
-                </div>
-                
-                <div class="input-group">
-                    <label>Dorsal:</label>
-                    <input type="text" name="dorsal[]" placeholder="Ej: Nombre: ... Número: ..." class="input-dorsal">
-                </div>
+    // Elementos del DOM
+    const parcheInput = document.getElementById('parche');
+    const dorsalInput = document.getElementById('dorsal');
+    const versionJugadorButton = document.getElementById('versionJugador');
+    const precioDisplay = document.getElementById('precioDisplay');
+    const parchePrecio = document.getElementById('parche-precio');
+    const dorsalPrecio = document.getElementById('dorsal-precio');
+    const versionJugadorPrecio = document.getElementById('versionJugador-precio');
 
-                <div class="input-group">
-                    <label>Talla:</label>
-                    <input type="text" name="talla[]" required placeholder="Ej: M, 42, etc.">
-                </div>
-                
-                <div class="input-group">
-                    <label>Versión Jugador:</label>
-                    <button type="button" class="boton-version-jugador">
-                        <span>DESACTIVADO</span>
-                    </button>
-                    <input type="hidden" name="versionJugador[]" value="No">
-                </div>
-            </div>
-        `;
-    }
-
-    // Manejar cambio de unidades
-    document.querySelectorAll('.boton-unidad').forEach(boton => {
-        boton.addEventListener('click', function() {
-            unidades = parseInt(this.dataset.unidades);
-            
-            // Actualizar botones
-            document.querySelectorAll('.boton-unidad').forEach(b => b.classList.remove('activo'));
-            this.classList.add('activo');
-            
-            // Generar unidades
-            const contenedor = document.getElementById('contenedorUnidades');
-            contenedor.innerHTML = '';
-            for(let i = 1; i <= unidades; i++) {
-                contenedor.innerHTML += crearUnidad(i);
-            }
-            
-            // Actualizar precios
-            actualizarPrecio();
-            configurarEventosUnidades();
-        });
-    });
-
-    // Función de cálculo de precio
+    // Función para actualizar el precio en tiempo real
     function actualizarPrecio() {
-        let precioBase = PRECIOS_BASE[unidades];
-        let total = precioBase;
-        let parches = 0;
-        let dorsales = 0;
-        let versiones = 0;
+        let total = PRECIO_BASE;
 
-        // Calcular extras para cada unidad
-        document.querySelectorAll('.unidad').forEach(unidad => {
-            const parche = unidad.querySelector('[name="parche[]"]').value.trim();
-            const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
-            const version = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
+        // Verificar si los extras están activos
+        const tieneParche = parcheInput.value.trim().length > 0;
+        const tieneDorsal = dorsalInput.value.trim().length > 0;
+        const tieneVersionJugador = versionJugadorButton.classList.contains('activo');
 
-            if(parche) parches++;
-            if(dorsal) dorsales++;
-            if(version) versiones++;
-        });
+        // Actualizar los precios de los extras
+        parchePrecio.textContent = tieneParche ? `${EXTRAS.parche.toFixed(2)}€` : '0.00€';
+        dorsalPrecio.textContent = tieneDorsal ? `${EXTRAS.dorsal.toFixed(2)}€` : '0.00€';
+        versionJugadorPrecio.textContent = tieneVersionJugador ? `${EXTRAS.versionJugador.toFixed(2)}€` : '0.00€';
 
-        // Calcular totales
-        const totalParches = parches * EXTRAS.parche;
-        const totalDorsales = dorsales * EXTRAS.dorsal;
-        const totalVersiones = versiones * EXTRAS.versionJugador;
-        
-        total += totalParches + totalDorsales + totalVersiones;
+        // Calcular el total
+        total += tieneParche ? EXTRAS.parche : 0;
+        total += tieneDorsal ? EXTRAS.dorsal : 0;
+        total += tieneVersionJugador ? EXTRAS.versionJugador : 0;
 
-        // Actualizar display
-        document.getElementById('cantidad-unidades').textContent = unidades;
-        document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
-        document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
-        
-        document.getElementById('cantidad-parches').textContent = parches;
-        document.getElementById('total-parches').textContent = totalParches.toFixed(2);
-        
-        document.getElementById('cantidad-dorsales').textContent = dorsales;
-        document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
-        
-        document.getElementById('cantidad-versiones').textContent = versiones;
-        document.getElementById('total-versiones').textContent = totalVersiones.toFixed(2);
-        
-        document.getElementById('precioDisplay').textContent = total.toFixed(2);
-        document.getElementById('precioTotal').value = total.toFixed(2);
-        
+        // Mostrar el total
+        precioDisplay.textContent = total.toFixed(2);
         return total;
     }
 
-    // Configurar eventos para las unidades
-    function configurarEventosUnidades() {
-        // Manejar versión jugador
-        document.querySelectorAll('.boton-version-jugador').forEach(boton => {
-            boton.addEventListener('click', function() {
-                const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
-                this.classList.toggle('activo');
-                const activo = this.classList.contains('activo');
-                this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-                hiddenInput.value = activo ? 'Sí' : 'No';
-                actualizarPrecio();
-            });
-        });
-
-        // Eventos para inputs
-        document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
-            input.addEventListener('input', actualizarPrecio);
-        });
+    // Eventos para actualizar el precio
+    parcheInput.addEventListener('input', actualizarPrecio);
+    dorsalInput.addEventListener('input', actualizarPrecio);
+    // En el evento click del botón de versión jugador
+    versionJugadorButton.addEventListener('click', function () {
+    this.classList.toggle('activo'); // Alternar la clase 'activo'
+    
+    // Actualizar el texto del botón
+    const textoVersionJugador = document.getElementById('textoVersionJugador');
+    if (this.classList.contains('activo')) {
+        textoVersionJugador.textContent = 'ACTIVADO';
+    } else {
+        textoVersionJugador.textContent = 'DESACTIVADO';
     }
+    
+    // Actualizar el valor del campo oculto
+    const versionJugadorEstado = document.getElementById('versionJugadorEstado');
+    versionJugadorEstado.value = this.classList.contains('activo') ? 'Sí' : 'No';
+    
+    actualizarPrecio(); // Actualizar el precio
+});
 
+    // Inicializar el precio
+    actualizarPrecio();
+
+    // Función para abrir la ventana de PayPal
     // Función para abrir la ventana de PayPal
     function abrirPayPal(total) {
         const width = 600;
@@ -1111,17 +1002,17 @@ Phone Number:</textarea>
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
 
-        // Verificar si la ventana de PayPal se ha cerrado
-        const intervalo = setInterval(() => {
-            if (ventanaPayPal.closed) {
-                clearInterval(intervalo);
-                mostrarExito('Pago completado. Te contactaremos por Instagram para confirmar tu pedido.');
-                enviarFormulario();
-            }
-        }, 500);
+    // Verificar si la ventana de PayPal se ha cerrado
+    const intervalo = setInterval(() => {
+        if (ventanaPayPal.closed) {
+            clearInterval(intervalo); // Detener el intervalo
+            mostrarExito('Pago completado. Te contactaremos por Instagram para confirmar tu pedido.');
+            enviarFormulario(); // Enviar el formulario al servidor
+        }
+    }, 500); // Verificar cada 500ms
 
-        return ventanaPayPal;
-    }
+    return ventanaPayPal;
+}
 
     // Función para mostrar notificaciones de éxito
     function mostrarExito(mensaje) {
@@ -1132,62 +1023,39 @@ Phone Number:</textarea>
         setTimeout(() => notificacion.style.display = 'none', 5000);
     }
 
-    // Función para enviar el formulario
+    // Función para enviar el formulario al servidor
     function enviarFormulario() {
-        document.getElementById('precioTotal').value = document.getElementById('precioDisplay').textContent;
-        document.getElementById('pedidoForm').submit();
+        document.getElementById('precioTotal').value = actualizarPrecio().toFixed(2);
+        pedidoForm.submit(); // Enviar el formulario al servidor
     }
 
     // Evento del botón de PayPal
-    document.getElementById('paypalButton').addEventListener('click', function(event) {
-        event.preventDefault();
-        
-        // Obtener el email de PayPal
+    paypalButton.addEventListener('click', function (event) {
+        event.preventDefault(); // Evitar el envío automático del formulario
+        const total = actualizarPrecio();
         const emailPaypal = document.getElementById('emailPaypal').value.trim();
-        
-        // Validar el email
+        const imagenProducto = document.getElementById('imagenProducto').files[0];
+        const link = document.getElementById('link').value.trim();
+
+        // Validar el correo de PayPal
         if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
-            alert("Por favor, ingresa un correo válido de PayPal.");
+            alert("Por favor, ingresa un correo válido.");
             return;
         }
-        const usuarioInstagram = document.getElementById('usuario').value.trim();
-    
-        // Validar el usuario de Instagram
-        if (!usuarioInstagram || !/^@[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
-            alert("Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres).");
-            return;
-        }
-        
-        // Validar que al menos haya una imagen subida para cada unidad
-        const unidades = document.querySelectorAll('.unidad');
-        for (let i = 0; i < unidades.length; i++) {
-            const imagenInput = unidades[i].querySelector('input[type="file"]');
-            const linkInput = unidades[i].querySelector('input[type="url"]');
-            
-            if (!imagenInput.files[0] && !linkInput.value.trim()) {
-                alert(`Por favor, sube una imagen o proporciona un enlace para la Unidad ${i + 1}`);
-                return;
-            }
-        }
-        
-        // Obtener el precio total
-        const total = parseFloat(document.getElementById('precioDisplay').textContent);
-        
+        if (!imagenProducto && !link) {
+        alert("Por favor, sube una imagen o proporciona un enlace del producto.");
+        return;
+    }
+
         // Abrir la ventana de PayPal
         abrirPayPal(total);
     });
 
     // Inicialización
-    document.querySelector('.boton-unidad.activo').click();
-    configurarEventosUnidades();
-
-    // Actualizar precio al cambiar cualquier input
-    document.addEventListener('input', function(e) {
-        if(e.target.matches('[name="parche[]"], [name="dorsal[]"]')) {
-            actualizarPrecio();
-        }
-    });
+    actualizarPrecio(); // Calcular el precio inicial
+    parcheInput.addEventListener('input', actualizarPrecio); // Actualizar precio al cambiar el parche
+    dorsalInput.addEventListener('input', actualizarPrecio); // Actualizar precio al cambiar el dorsal
 });
-</script>
+    </script>
 </body>
 </html>
