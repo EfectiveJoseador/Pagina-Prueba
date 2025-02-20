@@ -854,10 +854,8 @@
             <input type="hidden" name="_language" value="es">
             <input type="hidden" name="_subject" value="Nuevo pedido de Camisetazo">
             <input type="hidden" name="_template" value="table">
-        <div class="contenedor-unidades" id="contenedorUnidades"></div>
-            <!-- Campos del formulario -->
 
-            <!-- Subir imagen -->
+        <div class="contenedor-unidades" id="contenedorUnidades"></div>
             <!-- Campos de información -->
             <div class="input-grid">
                 <div class="input-group">
@@ -972,12 +970,13 @@ Phone Number:</textarea>
                 <div class="input-group">
                     <label>Imagen del producto:</label>
                     <div class="file-upload">
-                        <input type="file" name="imagenProducto[]" accept="image/*" required>
-                        <div class="upload-area">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Arrastra o haz clic para subir</p>
-                        </div>
+                    <input type="file" name="imagenProducto[]" accept="image/*" required
+                        onchange="this.nextElementSibling.querySelector('p').textContent = this.files[0]?.name || 'Arrastra o haz clic para subir'">
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Arrastra o haz clic para subir</p>
                     </div>
+                </div>
                 </div>
                 
                 <div class="input-group">
@@ -1134,9 +1133,40 @@ Phone Number:</textarea>
 
     // Función para enviar el formulario
     function enviarFormulario() {
-        document.getElementById('precioTotal').value = document.getElementById('precioDisplay').textContent;
-        document.getElementById('pedidoForm').submit();
-    }
+    const form = document.getElementById('pedidoForm');
+    const formData = new FormData(form);
+    
+    // Añadir archivos al FormData
+    document.querySelectorAll('input[type="file"]').forEach((input, index) => {
+        if(input.files[0]) {
+            formData.append(`imagenProducto_${index}`, input.files[0]);
+        }
+    });
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if(response.ok) {
+            mostrarExito('Pedido enviado correctamente');
+            form.reset();
+        } else {
+            throw new Error('Error en el envío');
+        }
+    })
+    .catch(error => {
+        mostrarError('Error al enviar el formulario');
+        console.error('Error:', error);
+    });
+}
+    function mostrarError(mensaje) {
+    const notificacion = document.getElementById('formStatus');
+    notificacion.className = 'error animate__animated animate__headShake';
+    notificacion.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${mensaje}`;
+    notificacion.style.display = 'block';
+    setTimeout(() => notificacion.style.display = 'none', 5000);
+}
 
     // Evento del botón de PayPal
     document.getElementById('paypalButton').addEventListener('click', function(event) {
@@ -1169,6 +1199,23 @@ Phone Number:</textarea>
                 return;
             }
         }
+        let archivosValidos = true;
+        document.querySelectorAll('.unidad').forEach((unidad, index) => {
+        const imagenInput = unidad.querySelector('input[type="file"]');
+        const linkInput = unidad.querySelector('input[type="url"]');
+        
+        if(!imagenInput.files[0] && !linkInput.value.trim()) {
+            archivosValidos = false;
+            unidad.querySelector('.file-upload').style.borderColor = 'red';
+        } else {
+            unidad.querySelector('.file-upload').style.borderColor = '';
+        }
+    });
+    
+    if(!archivosValidos) {
+        mostrarError('Debes subir una imagen o enlace para cada unidad');
+        return;
+    }
 
         // Obtener el precio total
         const total = parseFloat(document.getElementById('precioDisplay').textContent);
