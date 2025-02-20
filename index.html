@@ -865,9 +865,17 @@
                     <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com">
                 </div>
                 <div class="input-group">
-                    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
-                    <input type="text" id="usuario" name="usuario" required placeholder="Ej: @roberto_carlos03">
-                </div>
+    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
+    <input 
+        type="text" 
+        id="usuario" 
+        name="usuario" 
+        required 
+        placeholder="Ej: @roberto_carlos03"
+        pattern="^@[A-Za-z0-9_.]{1,30}$"
+        title="Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres)."
+    >
+</div>
                 <div class="input-group">
                     <label for="direccion">Dirección completa:</label>
                     <textarea id="direccion" name="direccion" required rows="7">Contact Name:
@@ -936,9 +944,10 @@ Phone Number:</textarea>
 </footer>
     </div>
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
     // Manejo de pestañas
     document.querySelectorAll('.boton-seccion').forEach(boton => {
-        boton.addEventListener('click', function () {
+        boton.addEventListener('click', function() {
             // Remover clases activas
             document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
             document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
@@ -949,8 +958,8 @@ Phone Number:</textarea>
             document.getElementById(seccionId).classList.add('activa');
         });
     });
-    // Nuevas variables y configuración
-    document.addEventListener('DOMContentLoaded', function (){
+
+    // Variables y configuración
     let unidades = 1;
     const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
     const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3};
@@ -1002,74 +1011,76 @@ Phone Number:</textarea>
         `;
     }
 
-// Manejar cambio de unidades
-document.querySelectorAll('.boton-unidad').forEach(boton => {
+    // Manejar cambio de unidades
+    document.querySelectorAll('.boton-unidad').forEach(boton => {
         boton.addEventListener('click', function() {
             unidades = parseInt(this.dataset.unidades);
-            
+
             // Actualizar botones
             document.querySelectorAll('.boton-unidad').forEach(b => b.classList.remove('activo'));
             this.classList.add('activo');
-            
+
             // Generar unidades
             const contenedor = document.getElementById('contenedorUnidades');
             contenedor.innerHTML = '';
             for(let i = 1; i <= unidades; i++) {
                 contenedor.innerHTML += crearUnidad(i);
             }
-            
+
             // Actualizar precios
             actualizarPrecio();
             configurarEventosUnidades();
         });
     });
 
-// Nueva función de cálculo de precio
-function actualizarPrecio() {
-    let precioBase = PRECIOS_BASE[unidades];
-    let total = precioBase;
-    let parches = 0;
-    let dorsales = 0;
-    let versiones = 0;
+    // Función de cálculo de precio
+    function actualizarPrecio() {
+        let precioBase = PRECIOS_BASE[unidades];
+        let total = precioBase;
+        let parches = 0;
+        let dorsales = 0;
+        let versiones = 0;
 
-    // Calcular extras para cada unidad
-    document.querySelectorAll('.unidad').forEach(unidad => {
-        const parche = unidad.querySelector('[name="parche[]"]').value.trim();
-        const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
-        const version = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
+        // Calcular extras para cada unidad
+        document.querySelectorAll('.unidad').forEach(unidad => {
+            const parche = unidad.querySelector('[name="parche[]"]').value.trim();
+            const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
+            const version = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
 
-        if(parche) parches++;
-        if(dorsal) dorsales++;
-        if(version) versiones++;
-    });
+            if(parche) parches++;
+            if(dorsal) dorsales++;
+            if(version) versiones++;
+        });
 
-    // Calcular totales
-    const totalParches = parches * 1;
-    const totalDorsales = dorsales * 2;
-    const totalVersiones = versiones * 3;
-    
-    total += totalParches + totalDorsales + totalVersiones;
+        // Calcular totales
+        const totalParches = parches * EXTRAS.parche;
+        const totalDorsales = dorsales * EXTRAS.dorsal;
+        const totalVersiones = versiones * EXTRAS.versionJugador;
 
-    // Actualizar display
-    document.getElementById('cantidad-unidades').textContent = unidades;
-    document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
-    document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
-    
-    document.getElementById('cantidad-parches').textContent = parches;
-    document.getElementById('total-parches').textContent = totalParches.toFixed(2);
-    
-    document.getElementById('cantidad-dorsales').textContent = dorsales;
-    document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
-    
-    document.getElementById('cantidad-versiones').textContent = versiones;
-    document.getElementById('total-versiones').textContent = totalVersiones.toFixed(2);
-    
-    document.getElementById('precioDisplay').textContent = total.toFixed(2);
-    document.getElementById('precioTotal').value = total.toFixed(2);
-}
+        total += totalParches + totalDorsales + totalVersiones;
 
-// Manejar versión jugador en unidades dinámicas
-function configurarEventosUnidades() {
+        // Actualizar display
+        document.getElementById('cantidad-unidades').textContent = unidades;
+        document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
+        document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
+
+        document.getElementById('cantidad-parches').textContent = parches;
+        document.getElementById('total-parches').textContent = totalParches.toFixed(2);
+
+        document.getElementById('cantidad-dorsales').textContent = dorsales;
+        document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
+
+        document.getElementById('cantidad-versiones').textContent = versiones;
+        document.getElementById('total-versiones').textContent = totalVersiones.toFixed(2);
+
+        document.getElementById('precioDisplay').textContent = total.toFixed(2);
+        document.getElementById('precioTotal').value = total.toFixed(2);
+
+        return total;
+    }
+
+    // Configurar eventos para las unidades
+    function configurarEventosUnidades() {
         // Manejar versión jugador
         document.querySelectorAll('.boton-version-jugador').forEach(boton => {
             boton.addEventListener('click', function() {
@@ -1087,14 +1098,95 @@ function configurarEventosUnidades() {
             input.addEventListener('input', actualizarPrecio);
         });
     }
+
+    // Función para abrir la ventana de PayPal
+    function abrirPayPal(total) {
+        const width = 600;
+        const height = 800;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        const ventanaPayPal = window.open(
+            `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
+            'PagoPayPal',
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
+
+        // Verificar si la ventana de PayPal se ha cerrado
+        const intervalo = setInterval(() => {
+            if (ventanaPayPal.closed) {
+                clearInterval(intervalo);
+                mostrarExito('Pago completado. Te contactaremos por Instagram para confirmar tu pedido.');
+                enviarFormulario();
+            }
+        }, 500);
+
+        return ventanaPayPal;
+    }
+
+    // Función para mostrar notificaciones de éxito
+    function mostrarExito(mensaje) {
+        const notificacion = document.getElementById('formStatus');
+        notificacion.className = 'success animate__animated animate__fadeIn';
+        notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
+        notificacion.style.display = 'block';
+        setTimeout(() => notificacion.style.display = 'none', 5000);
+    }
+
+    // Función para enviar el formulario
+    function enviarFormulario() {
+        document.getElementById('precioTotal').value = document.getElementById('precioDisplay').textContent;
+        document.getElementById('pedidoForm').submit();
+    }
+
+    // Evento del botón de PayPal
+    document.getElementById('paypalButton').addEventListener('click', function(event) {
+        event.preventDefault();
+
+        // Obtener el email de PayPal
+        const emailPaypal = document.getElementById('emailPaypal').value.trim();
+
+        // Validar el email
+        if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
+            alert("Por favor, ingresa un correo válido de PayPal.");
+            return;
+        }
+        const usuarioInstagram = document.getElementById('usuario').value.trim();
+    
+        // Validar el usuario de Instagram
+        if (!usuarioInstagram || !/^@[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
+            alert("Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres).");
+            return;
+        }
+
+        // Validar que al menos haya una imagen subida para cada unidad
+        const unidades = document.querySelectorAll('.unidad');
+        for (let i = 0; i < unidades.length; i++) {
+            const imagenInput = unidades[i].querySelector('input[type="file"]');
+            const linkInput = unidades[i].querySelector('input[type="url"]');
+
+            if (!imagenInput.files[0] && !linkInput.value.trim()) {
+                alert(`Por favor, sube una imagen o proporciona un enlace para la Unidad ${i + 1}`);
+                return;
+            }
+        }
+
+        // Obtener el precio total
+        const total = parseFloat(document.getElementById('precioDisplay').textContent);
+
+        // Abrir la ventana de PayPal
+        abrirPayPal(total);
+    });
+
+    // Inicialización
     document.querySelector('.boton-unidad.activo').click();
     configurarEventosUnidades();
-// Actualizar precio al cambiar cualquier input
-document.addEventListener('input', function(e) {
-    if(e.target.matches('[name="parche[]"], [name="dorsal[]"]')) {
-        actualizarPrecio();
-    }
-});
+
+    // Actualizar precio al cambiar cualquier input
+    document.addEventListener('input', function(e) {
+        if(e.target.matches('[name="parche[]"], [name="dorsal[]"]')) {
+            actualizarPrecio();
+        }
+    });
 });
 </script>
 </body>
