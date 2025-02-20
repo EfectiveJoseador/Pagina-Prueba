@@ -957,7 +957,7 @@ Phone Number:</textarea>
     });
 
     // Variables y configuración
-    let unidades = 1;
+    let unidades = 0;
     const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
     const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3};
 
@@ -1016,7 +1016,7 @@ Phone Number:</textarea>
 
             // Actualizar precios
             actualizarPrecio();
-            configurarEventosUnidades();
+            configurarEventosUnidades(); // Configurar eventos después de generar las unidades
         });
     });
 
@@ -1181,6 +1181,7 @@ Phone Number:</textarea>
 
     // Inicialización
     document.querySelector('.boton-unidad.activo').click();
+    document.querySelector('.boton-unidad[data-unidades="0"]').click();
     configurarEventosUnidades();
 
     // Actualizar precio al cambiar cualquier input
