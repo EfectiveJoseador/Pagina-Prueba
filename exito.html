@@ -827,6 +827,7 @@ h1 small {
                     <i class="fas fa-check-circle"></i>
                 </div>
                 
+                <!-- Mostrar el usuario en lugar del nombre -->
                 <h2 style="text-align: center; margin-bottom: 1.5rem;">Gracias por tu compra, <span id="usuario" style="color: var(--azul-acento);"></span></h2>
 
                 <div class="detalle-pedido">
@@ -879,31 +880,32 @@ h1 small {
             </p>
         </footer>
     </div>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    // Obtener datos de la URL
-    const total = urlParams.get('total');
-    const direccion = decodeURIComponent(urlParams.get('direccion') || 'En proceso de verificación');
-    const nombre = decodeURIComponent(urlParams.get('nombre') || 'Cliente');
-    
-    // Mostrar datos en la página
-    if(total) {
-        document.getElementById('totalPedido').textContent = `€${total}`;
-    }
-    
-    if(direccion) {
-        document.getElementById('direccionEnvio').textContent = direccion;
-    }
-    
-    if(nombre) {
-        document.getElementById('nombreCliente').textContent = nombre;
-    }
-    
-    // Actualizar título dinámico
-    document.querySelector('h1').innerHTML = `¡Pedido Confirmado! <small>Nº ${Math.floor(100000 + Math.random() * 900000)}</small>`;
-});
-</script>
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Obtener datos de la URL
+        const total = urlParams.get('total');
+        const direccion = decodeURIComponent(urlParams.get('direccion') || 'En proceso de verificación');
+        const usuario = decodeURIComponent(urlParams.get('usuario') || '@usuario');
+        
+        // Mostrar datos en la página
+        if(total) {
+            document.getElementById('totalPedido').textContent = `€${total}`;
+        }
+        
+        if(direccion) {
+            document.getElementById('direccionEnvio').textContent = direccion;
+        }
+        
+        if(usuario) {
+            document.getElementById('usuario').textContent = usuario;
+        }
+        
+        // Actualizar título dinámico
+        document.querySelector('h1').innerHTML = `¡Pedido Confirmado! <small>Nº ${Math.floor(100000 + Math.random() * 900000)}</small>`;
+    });
+    </script>
 </body>
 </html>
