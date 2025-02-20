@@ -812,6 +812,91 @@ h1 small {
     margin-top: 0.5rem;
     color: rgba(255,255,255,0.7);
 }
+.preguntas-frecuentes {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(10, 31, 61, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(42, 91, 168, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .preguntas-frecuentes h2 {
+            text-align: center;
+            color: var(--azul-acento);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .preguntas-frecuentes h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--azul-acento);
+            transform: scaleX(0);
+            animation: subrayar-titulo 1.5s ease-in-out 1s forwards;
+            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(42, 91, 168, 0.2);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-5px);
+            background: rgba(42, 91, 168, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-item h4 {
+            color: var(--azul-acento);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .faq-item h4 i {
+            font-size: 1rem;
+            color: #4CAF50;
+        }
+
+        .faq-item p {
+            margin: 0;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .preguntas-frecuentes {
+                padding: 1.5rem;
+            }
+
+            .faq-item {
+                padding: 1rem;
+            }
+
+            .faq-item h4 {
+                font-size: 1.1rem;
+            }
+
+            .faq-item p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -827,22 +912,23 @@ h1 small {
                     <i class="fas fa-check-circle"></i>
                 </div>
                 
-                <!-- Mostrar el usuario en lugar del nombre -->
-                <h2 style="text-align: center; margin-bottom: 1.5rem;">Gracias por tu compra, <span id="usuario" style="color: var(--azul-acento);"></span></h2>
+                <h2 style="text-align: center; margin-bottom: 1.5rem;">Gracias por confiar en Camisetazo</h2>
 
                 <div class="detalle-pedido">
                     <div class="item-detalle">
-                        <h4><i class="fas fa-box"></i> Detalles del envío</h4>
-                        <p id="direccionEnvio"></p>
-                        <p>Método: Envío Express Gratuito</p>
+                        <h4><i class="fas fa-box"></i> Tu pedido está en proceso</h4>
+                        <p>Fecha estimada de entrega: <span id="fechaEntrega"></span></p>
+                        <p>Método de envío: Envío Express Gratuito</p>
                     </div>
-                
+
                     <div class="item-detalle">
-                        <h4><i class="fas fa-receipt"></i> Resumen del pedido</h4>
-                        <div class="detalle-precio" style="background: none; padding: 0;">
-                            <span>Total:</span>
-                            <span id="totalPedido"></span>
-                        </div>
+                        <h4><i class="fas fa-map-marker-alt"></i> Información de envío</h4>
+                        <p>Los detalles de envío serán confirmados por Instagram.</p>
+                    </div>
+
+                    <div class="item-detalle">
+                        <h4><i class="fas fa-credit-card"></i> Método de pago</h4>
+                        <p>Pago procesado correctamente.</p>
                     </div>
                 </div>
 
@@ -857,8 +943,14 @@ h1 small {
                     <div class="paso-tiempo">
                         <div class="numero-paso">2</div>
                         <h4>En camino</h4>
-                        <p>Recibirás actualizaciones de seguimiento por email</p>
-                        <p class="tiempo-estimado"><i class="fas fa-clock"></i> 7-14 días</p>
+                        <p>Recibirás actualizaciones de seguimiento por Instragram</p>
+                        <p class="tiempo-estimado"><i class="fas fa-clock"></i> 7-14 días laborales</p>
+                    </div>
+
+                    <div class="paso-tiempo">
+                        <div class="numero-paso">3</div>
+                        <h4>Entrega completada</h4>
+                        <p>Tu pedido llegará a la dirección proporcionada</p>
                     </div>
                 </div>
 
@@ -868,12 +960,35 @@ h1 small {
                     </a>
                 </div>
             </div>
+
+            <!-- Sección de preguntas frecuentes -->
+            <div class="preguntas-frecuentes">
+                <h2>Preguntas frecuentes</h2>
+                <div class="faq-item">
+                    <h4>¿Cómo puedo hacer un seguimiento de mi pedido?</h4>
+                    <p>Puedes seguir tu pedido a través del enlace de seguimiento que recibirás por Mensaje Directo en Instagram.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>¿Cuando se preparará mi pedido?</h4>
+                    <p>Tu pedido será preparado y empaquetado en un plazo de 2 a 3 días hábiles.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>¿Recibiré una foto antes de enviar el pedido?</h4>
+                    <p>Sí, antes de enviar tu pedido, te enviaremos una foto del producto completamente preparado, junto con su etiqueta de envío, para que puedas verificar que todo está en orden.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>¿Ofrecen envíos internacionales?</h4>
+                    <p>Sí, realizamos envíos a todo el mundo. Los tiempos de entrega pueden variar según el destino.</p>
+                </div>
+            </div>
         </div>
+        
 
         <footer>
             <div class="redes-sociales">
                 <a href="https://www.instagram.com/camisetazo._/"><i class="fab fa-instagram"></i></a>
                 <a href="https://www.tiktok.com/@camisetazo"><i class="fab fa-tiktok"></i></a>
+                <a href="mailto:info@camisetazo.com"><i class="fas fa-envelope"></i></a>
             </div>
             <p style="margin-top: 2rem; opacity: 0.8; font-size: 0.9rem;">
                 © 2025 Camisetazo. Todos los derechos reservados
@@ -883,28 +998,11 @@ h1 small {
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        // Obtener datos de la URL
-        const total = urlParams.get('total');
-        const direccion = decodeURIComponent(urlParams.get('direccion') || 'En proceso de verificación');
-        const usuario = decodeURIComponent(urlParams.get('usuario') || '@usuario');
-        
-        // Mostrar datos en la página
-        if(total) {
-            document.getElementById('totalPedido').textContent = `€${total}`;
-        }
-        
-        if(direccion) {
-            document.getElementById('direccionEnvio').textContent = direccion;
-        }
-        
-        if(usuario) {
-            document.getElementById('usuario').textContent = usuario;
-        }
-        
-        // Actualizar título dinámico
-        document.querySelector('h1').innerHTML = `¡Pedido Confirmado! <small>Nº ${Math.floor(100000 + Math.random() * 900000)}</small>`;
+        // Calcular fecha estimada de entrega (7 días a partir de hoy)
+        const fechaEntrega = new Date();
+        fechaEntrega.setDate(fechaEntrega.getDate() + 13);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('fechaEntrega').textContent = fechaEntrega.toLocaleDateString('es-ES', options);
     });
     </script>
 </body>
