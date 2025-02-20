@@ -828,28 +828,19 @@ h1 small {
                 </div>
                 
                 <h2 style="text-align: center; margin-bottom: 1.5rem;">Gracias por tu compra, <span style="color: var(--azul-acento);">[Nombre]</span></h2>
-                <p style="text-align: center; opacity: 0.9;">Tu pedido #CAM2024 está siendo procesado</p>
 
                 <div class="detalle-pedido">
                     <div class="item-detalle">
                         <h4><i class="fas fa-box"></i> Detalles del envío</h4>
-                        <p>Dirección: [Dirección completa]</p>
+                        <p id="direccionEnvio"></p>
                         <p>Método: Envío Express Gratuito</p>
                     </div>
-
+                
                     <div class="item-detalle">
                         <h4><i class="fas fa-receipt"></i> Resumen del pedido</h4>
                         <div class="detalle-precio" style="background: none; padding: 0;">
-                            <span>Total productos:</span>
-                            <span>€XX.XX</span>
-                        </div>
-                        <div class="detalle-precio" style="background: none; padding: 0;">
-                            <span>Envío:</span>
-                            <span>Gratis</span>
-                        </div>
-                        <div class="total-container" style="margin: 1rem 0 0 0;">
-                            <div>Total</div>
-                            <div class="precio-total">€XX.XX</div>
+                            <span>Total:</span>
+                            <span id="totalPedido"></span>
                         </div>
                     </div>
                 </div>
@@ -889,20 +880,25 @@ h1 small {
         </footer>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // Obtener datos de la URL
-            const total = urlParams.get('total');
-            const direccion = decodeURIComponent(urlParams.get('direccion') || 'En proceso de verificación');
-            
-            // Mostrar datos en la página
+       document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Obtener datos de la URL
+        const total = urlParams.get('total');
+        const direccion = decodeURIComponent(urlParams.get('direccion') || 'En proceso de verificación');
+        
+        // Mostrar datos en la página
+        if(total) {
             document.getElementById('totalPedido').textContent = `€${total}`;
+        }
+        
+        if(direccion) {
             document.getElementById('direccionEnvio').textContent = direccion;
-            
-            // Actualizar título dinámico
-            document.querySelector('h1').innerHTML = `¡Pedido Confirmado! <small>Nº ${Math.floor(100000 + Math.random() * 900000)}</small>`;
-        });
+        }
+        
+        // Actualizar título dinámico
+        document.querySelector('h1').innerHTML = `¡Pedido Confirmado! <small>Nº ${Math.floor(100000 + Math.random() * 900000)}</small>`;
+    });
         </script>
 </body>
 </html>
