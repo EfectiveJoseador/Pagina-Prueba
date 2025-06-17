@@ -1,102 +1,527 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Camisetazo - Tienda Deportiva Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">        
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <div id="formStatus"></div>
+    <div class="contenedor-principal">
+        <header>
+    <div class="brand-header">
+        <img src="assets/logos/logo.jpg" alt="Logo Camisetazo" class="logo">
+        <div class="brand-title">CAMISETAZO</div>
+        <div class="brand-subtitle">Tienda Deportiva Premium</div>
+    </div>
+    <nav class="navegacion">
+        <button class="boton-seccion activo" data-seccion="tienda">Tienda</button>
+        <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
+        <button class="boton-seccion" data-seccion="pedidos">Pedidos</button>
+    </nav>
+</header>
+
+        <!-- Sección Tienda -->
+        <section id="tienda" class="seccion activa">
+            <div class="catalogo-header animate__animated animate__fadeInDown">
+                <h2 class="catalogo-titulo">Catálogo Premium</h2>
+                <p class="catalogo-descripcion">Explora nuestra selección exclusiva de productos deportivos de alta calidad. Haz clic en cada categoría para ver el catálogo completo.</p>
+            </div>
+            <div class="grid-catalogo">
+                <!-- Tarjeta 1 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable futbol-dropdown" data-link="https://2020soccer.x.yupoo.com/albums">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/camfut.png" alt="Camisetas" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Camisetas Fútbol</h3>
+                        <p>Las mejores camisetas de clubes y selecciones, calidad premium.</p>
+                        <button class="catalogo-btn futbol-dropdown-btn" type="button">
+                            Ver opciones <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="futbol-dropdown-menu" style="display:none;">
+                            <a href="https://2020soccer.x.yupoo.com/albums" target="_blank">GENERAL</a>
+                            <a href="https://classic-football-fhirts052.x.yupoo.com/" target="_blank">RETRO</a>
+                            <a href="https://yongfa1688.x.yupoo.com/" target="_blank">NUEVA TEMPORADA</a>
+                            <a href="https://aosendi.x.yupoo.com/albums" target="_blank">CONJUNTO ENTRENAMIENTO</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta 2 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.1s;" data-link="https://eu1688.x.yupoo.com/albums">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/zap.png" alt="Zapatillas" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Zapatillas</h3>
+                        <p>Modelos exclusivos y últimas tendencias en sneakers deportivas.</p>
+                        <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Tarjeta 3 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.2s;" data-link="https://x.yupoo.com/photos/05941188/albums">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/nba.png" alt="NBA" class="catalogo-img nba-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NBA</h3>
+                        <p>Camisetas y productos oficiales de la mejor liga de baloncesto.</p>
+                        <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Tarjeta 4 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.3s;" data-link="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/airpods.png" alt="AirPods" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>AirPods</h3>
+                        <p>Audio inalámbrico de alta calidad, compatibles con todos tus dispositivos.</p>
+                        <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Tarjeta 5 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.4s;" data-link="https://zuqiuliu.x.yupoo.com">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/botfut.png" alt="Botas Fútbol" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Botas Fútbol</h3>
+                        <p>Botas de fútbol profesionales para todos los terrenos y estilos.</p>
+                        <a href="https://zuqiuliu.x.yupoo.com" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Tarjeta 6 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.5s;" data-link="https://x.yupoo.com/photos/yiyisports2016/collections/3551571">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/f1.png" alt="F1" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>F1</h3>
+                        <p>Merchandising y ropa oficial de Fórmula 1 para verdaderos fans.</p>
+                        <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Tarjeta 7 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.6s;" data-link="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/ps4.png" alt="Mandos PS4" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Mandos PS4</h3>
+                        <p>Mandos y accesorios para PlayStation 4, máxima precisión y calidad.</p>
+                        <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Tarjeta 8 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.7s;" data-link="https://nfl-world.x.yupoo.com/">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/nfl.png" alt="NFL" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NFL</h3>
+                        <p>Jerseys y artículos oficiales de la National Football League.</p>
+                        <a href="https://nfl-world.x.yupoo.com/" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Tarjeta 9 -->
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.8s;" data-link="https://chenzhefuzhuang.x.yupoo.com/collections/3230017">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/images/mlb.png" alt="MLB" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>MLB</h3>
+                        <p>Equipación y gorras oficiales de la Major League Baseball.</p>
+                        <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Quiénes Somos -->
+        <section id="quienes-somos" class="seccion">
     <style>
-        :root {
-            --azul-primario: #0a1f3d;
-            --azul-secundario: #1a3b6d;
-            --azul-acento: #2a5ba8;
-            --negro-mate: #0d0d0d;
-            --degradado-fondo: linear-gradient(135deg, var(--negro-mate) 30%, var(--azul-primario) 100%);
+    /* ...existing code... */
+    .quienes-somos-ui {
+        max-width: 900px;
+        margin: 0 auto 2.5rem auto;
+        background: rgba(20,40,80,0.18);
+        border-radius: 22px;
+        box-shadow: 0 4px 32px rgba(42,91,168,0.10), 0 1.5px 8px rgba(0,0,0,0.08);
+        padding: 2.5rem 2rem 2rem 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border: 1.5px solid rgba(42,91,168,0.13);
+        animation: aparecer 0.8s;
+    }
+    .quienes-somos-ui h2 {
+        color: var(--azul-acento);
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 1.2rem;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    }
+    .quienes-somos-ui p {
+        color: #e0e0e0;
+        font-size: 1.15rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        opacity: 0.92;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .quienes-somos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        margin-top: 2.5rem;
+    }
+    .quienes-somos-card {
+        background: rgba(42,91,168,0.13);
+        border-radius: 16px;
+        padding: 2rem 1.2rem 1.5rem 1.2rem;
+        box-shadow: 0 2px 12px rgba(42,91,168,0.08);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid rgba(42,91,168,0.10);
+    }
+    .quienes-somos-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 8px 32px rgba(42,91,168,0.13);
+        background: rgba(42,91,168,0.18);
+    }
+    .quienes-somos-card i {
+        font-size: 2.7rem;
+        margin-bottom: 1rem;
+        color: var(--azul-acento);
+        background: #fff;
+        border-radius: 50%;
+        padding: 0.7rem;
+        box-shadow: 0 2px 8px rgba(42,91,168,0.08);
+        transition: background 0.2s;
+    }
+    .quienes-somos-card h3 {
+        font-size: 1.25rem;
+        color: #fff;
+        margin-bottom: 0.7rem;
+        font-weight: 700;
+    }
+    .quienes-somos-card p {
+        color: #b8c6e0;
+        font-size: 1rem;
+        margin-bottom: 0;
+        min-height: 40px;
+    }
+    .quienes-somos-card .stars {
+        color: #ffd700;
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .quienes-somos-card .stars i {
+        color: #FFD700 !important; /* dorado */
+        font-size: 1rem !important; /* más pequeñas */
+        background: none !important; /* sin círculo */
+        border-radius: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        margin: 0 1px;
+        vertical-align: middle;
+    }
+    .quienes-somos-instagram {
+        background: linear-gradient(90deg, #e1306c 0%, #fdc468 100%);
+        color: #fff;
+        border-radius: 16px;
+        padding: 1.5rem 1rem 1.2rem 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 12px rgba(225,48,108,0.10);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: aparecer 1s;
+    }
+    .quienes-somos-instagram i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #fff;
+        background: #e1306c;
+        border-radius: 50%;
+        padding: 0.7rem;
+        box-shadow: 0 2px 8px rgba(225,48,108,0.10);
+    }
+    .quienes-somos-instagram a {
+        color: #fff;
+        font-weight: 600;
+        text-decoration: underline;
+        margin: 0.5rem 0;
+        font-size: 1.1rem;
+    }
+    .quienes-somos-instagram p {
+        margin-top: 0.5rem;
+        opacity: 0.95;
+        font-size: 1rem;
+    }
+    @media (max-width: 700px) {
+        .quienes-somos-ui {
+            padding: 1.2rem 0.5rem;
         }
+        .quienes-somos-grid {
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+        }
+    }
+    /* --- FIN: Quiénes Somos --- */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    /* --- INICIO: Pedidos --- */
+    .formulario-pedido {
+        max-width: 900px;
+        margin: 2.5rem auto;
+        background: linear-gradient(135deg, rgba(10,31,61,0.92) 70%, rgba(42,91,168,0.13) 100%);
+        backdrop-filter: blur(16px);
+        border-radius: 28px;
+        padding: 2.7rem 2.2rem 2.2rem 2.2rem;
+        border: 2.5px solid var(--azul-acento);
+        box-shadow: 0 8px 40px rgba(42,91,168,0.13), 0 2px 12px rgba(0,0,0,0.10);
+        position: relative;
+        animation: aparecer 0.7s;
+    }
 
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--degradado-fondo);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+    .formulario-pedido h2 {
+        text-align: center;
+        color: var(--azul-acento);
+        margin-bottom: 2.2rem;
+        font-size: 2.3rem;
+        font-weight: 900;
+        letter-spacing: 1.5px;
+        text-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
-            opacity: 0.1;
-            z-index: -1;
-            animation: moverFondo 20s linear infinite;
-        }
+    .selector-unidades {
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        margin-bottom: 2.2rem;
+    }
 
-        @keyframes moverFondo {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        /* Calculadora profesional */
-        .calculadora-precio {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    .boton-unidad {
+        background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 0.9rem 2.1rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 2px 12px rgba(42,91,168,0.10);
+        transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
 
-        .detalle-precio {
-            display: flex;
-            justify-content: space-between;
-            margin: 1rem 0;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-        }
+    .boton-unidad.activo, .boton-unidad:hover {
+        background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
+        color: var(--azul-acento);
+        transform: translateY(-3px) scale(1.04);
+        box-shadow: 0 6px 24px rgba(42,91,168,0.13);
+    }
 
-        .total-container {
-            background: var(--azul-acento);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 2rem 0;
-            text-align: center;
-        }
+    /* Campos del formulario */
+    .input-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.2rem;
+        margin: 2.2rem 0 1.5rem 0;
+    }
 
-        .precio-total {
-            font-size: 2.2rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-        }
+    .input-group {
+        margin-bottom: 1.2rem;
+        background: rgba(255,255,255,0.04);
+        border-radius: 10px;
+        padding: 1.1rem 1rem 0.7rem 1rem;
+        box-shadow: 0 1px 6px rgba(42,91,168,0.07);
+        border: 1.5px solid rgba(42,91,168,0.10);
+    }
 
-        .moneda {
-            font-size: 1.2rem;
-            vertical-align: super;
-        }
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #e0e0e0;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
 
-        .badge-extra {
-            background: #28a745;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            margin-left: 1rem;
-        }
-        .contenedor-principal {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+    .input-group input,
+    .input-group textarea {
+        width: 100%;
+        padding: 13px;
+        border: 2px solid var(--azul-acento);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.13);
+        color: white;
+        font-size: 1.08rem;
+        transition: all 0.3s ease;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+        outline: none;
+        border-color: #4a90e2;
+        box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
+        background: rgba(255,255,255,0.18);
+    }
+
+    .calculadora-precio {
+        background: rgba(255, 255, 255, 0.13);
+        border-radius: 16px;
+        padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+        margin: 2.2rem 0 1.2rem 0;
+        box-shadow: 0 4px 16px rgba(42, 91, 168, 0.10);
+        border: 1.5px solid var(--azul-acento);
+    }
+
+    .calculadora-precio h3 {
+        color: var(--azul-acento);
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+    .detalle-precio {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1rem 0;
+        padding: 1.1rem 1.2rem;
+        background: rgba(255, 255, 255, 0.09);
+        border-radius: 10px;
+        font-size: 1.08rem;
+        border: 1px solid rgba(42,91,168,0.10);
+        box-shadow: 0 1px 4px rgba(42,91,168,0.06);
+    }
+
+    .detalle-precio span:first-child:before {
+        content: '\f02b';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        color: var(--azul-acento);
+        margin-right: 0.7em;
+        font-size: 1.1em;
+        vertical-align: middle;
+    }
+
+    .total-container {
+        background: var(--azul-acento);
+        padding: 1.7rem;
+        border-radius: 12px;
+        margin: 2.2rem 0 0.5rem 0;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(42,91,168,0.13);
+    }
+
+    .precio-total {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0.5rem 0;
+        color: #fff;
+        text-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    }
+
+    .moneda {
+        font-size: 1.2rem;
+        vertical-align: super;
+    }
+
+    .badge-extra {
+        background: #28a745;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        margin-left: 1rem;
+    }
+    .contenedor-principal {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    /* NUEVO: Mejorar presentación de la marca */
+.brand-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20,40,80,0.25);
+    border-radius: 24px;
+    box-shadow: 0 6px 32px rgba(42,91,168,0.10), 0 1.5px 8px rgba(0,0,0,0.10);
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.brand-header .logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 24px rgba(42,91,168,0.15);
+    background: #fff;
+    border: 4px solid var(--azul-acento);
+    transition: transform 0.3s;
+}
+.brand-header .logo:hover {
+    transform: scale(1.07) rotate(-2deg);
+}
+
+.brand-header .brand-title {
+    font-size: 2.7em;
+    font-weight: 900;
+    color: var(--azul-acento);
+    letter-spacing: 2px;
+    text-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    margin-bottom: 0.2em;
+    line-height: 1.1;
+    background: linear-gradient(90deg, #fff 60%, var(--azul-acento) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.brand-header .brand-subtitle {
+    color: #e0e0e0;
+    font-size: 1.1em;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-bottom: 0;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
 
         header {
             text-align: center;
@@ -147,800 +572,106 @@
         /* Nuevos estilos para el selector de unidades */
         .selector-unidades {
             display: flex;
-            gap: 1rem;
             justify-content: center;
-            margin: 2rem 0;
+            gap: 1.2rem;
+            margin-bottom: 2.2rem;
         }
 
         .boton-unidad {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--azul-acento);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .boton-unidad.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-
-        /* Contenedor de unidades */
-        .contenedor-unidades {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .unidad {
-            background: rgba(10, 31, 61, 0.7);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .unidad h4 {
-            margin-bottom: 1rem;
-            color: var(--azul-acento);
-        }
-
-        .navegacion {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .boton-seccion {
-            background: transparent;
-            border: 2px solid var(--azul-acento);
-            color: white;
-            font-size: 1.1rem;
-            padding: 12px 35px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .boton-seccion.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 25px rgba(42, 91, 168, 0.5);
-        }
-
-        .boton-seccion:hover {
-            transform: translateY(-3px);
-        }
-
-        .seccion {
-            display: none;
-            animation: aparecer 0.6s ease forwards;
-        }
-
-        .seccion.activa {
-            display: block;
-        }
-
-        .grid-enlaces {
-            display: grid;
-            gap: 1.5rem;
-            perspective: 1000px;
-        }
-        .boton-extra {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid var(--azul-acento);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: block;
-        width: 100%;
-        text-align: center;
-        }
-
-        .boton-extra.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-                .boton-version-jugador {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--azul-acento);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .boton-version-jugador.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-
-        .boton-version-jugador:hover {
-            transform: translateY(-2px);
-        }
-        .boton-extra:hover {
-            transform: translateY(-2px);
-        }
-
-        .card-enlace {
-            background: rgba(10, 31, 61, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(42, 91, 168, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            opacity: 0;
-            animation: aparecer 0.5s ease forwards;
-        }
-
-        .card-enlace:nth-child(1) { animation-delay: 0.2s; }
-        .card-enlace:nth-child(2) { animation-delay: 0.4s; }
-        .card-enlace:nth-child(3) { animation-delay: 0.6s; }
-        .card-enlace:nth-child(4) { animation-delay: 0.8s; }
-        .card-enlace:nth-child(5) { animation-delay: 1.0s; }
-        .card-enlace:nth-child(6) { animation-delay: 1.2s; }
-        .card-enlace:nth-child(7) { animation-delay: 1.4s; }
-        .card-enlace:nth-child(8) { animation-delay: 1.6s; }
-        .card-enlace:nth-child(9) { animation-delay: 1.8s; }
-        .card-enlace:nth-child(10) { animation-delay: 2.0s; }
-
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card-enlace:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .enlace-btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-            width: 100%;
-        }
-
-        .imagen-previa {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
-            margin-right: 1.5rem;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-
-        .card-enlace:hover .imagen-previa {
-            transform: scale(1.1);
-        }
-
-        .quienes-somos {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(10, 31, 61, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            border: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .quienes-somos h2 {
-            font-size: 2.3em;
-            margin-bottom: 2rem;
-            color: var(--azul-acento);
-            text-align: center;
-        }
-
-        .quienes-somos p {
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .garantias {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .garantia-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .garantia-card:hover {
-            background: rgba(42, 91, 168, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .marcas-colaboradoras {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-            margin: 3rem 0;
-            opacity: 0.8;
-        }
-
-        .marca-item {
-            width: 120px;
-            filter: grayscale(1);
-            transition: all 0.3s ease;
-        }
-
-        .marca-item:hover {
-            filter: grayscale(0);
-            transform: scale(1.1);
-        }
-
-        .badge-premium {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--azul-acento);
-            padding: 15px 25px;
-            border-radius: 30px;
-            font-weight: bold;
-            box-shadow: 0 0 25px rgba(42, 91, 168, 0.4);
-            animation: flotar 3s ease-in-out infinite;
-            z-index: 1000;
-        }
-
-        footer {
-            margin-top: 4rem;
-            text-align: center;
-            padding: 3rem 0;
-            border-top: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .redes-sociales {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .redes-sociales a {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.8rem;
-            transition: all 0.3s;
-        }
-
-        .redes-sociales a:hover {
-            color: var(--azul-acento);
-            transform: translateY(-5px);
-        }
-
-        /* Estilos para la sección de pedidos */
-        .formulario-pedido {
-            max-width: 800px;
-            margin: 2rem auto;
-            background: rgba(10, 31, 61, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .formulario-pedido h2 {
-            text-align: center;
-            color: var(--azul-acento);
-            margin-bottom: 2rem;
-        }
-
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .input-group {
-            margin-bottom: 1rem;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #e0e0e0;
-        }
-
-        .input-group input,
-        .input-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--azul-acento);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
-        }
-
-        .file-upload {
-            border: 2px dashed var(--azul-acento);
-            border-radius: 10px;
-            padding: 1.5rem;
-            text-align: center;
-            margin: 1rem 0;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload:hover {
-            border-color: #4a90e2;
-            background: rgba(42, 91, 168, 0.1);
-        }
-
-        .upload-area {
-            cursor: pointer;
-        }
-
-        .upload-area i {
-            font-size: 2.5rem;
-            color: var(--azul-acento);
-            margin-bottom: 1rem;
-        }
-
-        .boton-pago {
-            background: #003087;
-            color: white;
+            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
+            color: #fff;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+            border-radius: 12px;
+            padding: 0.9rem 2.1rem;
             font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .boton-unidad.activo, .boton-unidad:hover {
+            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
+            color: var(--azul-acento);
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
+        }
+
+        /* Botones de versión */
+        .boton-version-especial, .boton-version-jugador, .boton-camiseta-nba {
             width: 100%;
+            padding: 0.85rem 0;
+            font-size: 1.08rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.18s, box-shadow 0.2s;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 0.7em;
+            position: relative;
+            outline: none;
         }
-
-        .boton-pago:hover {
-            background: #00205b;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 48, 135, 0.3);
+        .boton-version-especial span, .boton-version-jugador span, .boton-camiseta-nba span {
+            font-size: 0.98em;
+            font-weight: 600;
+            margin-left: 0.5em;
+            letter-spacing: 0.2px;
         }
-
-        #formStatus {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            padding: 15px 25px;
-            border-radius: 10px;
-            font-size: 1rem;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            min-width: 300px;
-            text-align: center;
-            opacity: 1 !important; 
-            pointer-events: none;
+        .boton-version-especial.activo, .boton-version-jugador.activo, .boton-camiseta-nba.activo {
+            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
+            color: var(--azul-acento);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
+            border: 2px solid var(--azul-acento);
         }
-
-        #formStatus.success {
-            background: #4CAF50;
-            border: 1px solid #45a049;
-            color: white;
+        .boton-version-especial:not(.activo):hover, .boton-version-jugador:not(.activo):hover, .boton-camiseta-nba:not(.activo):hover {
+            background: linear-gradient(90deg, #2a5ba8 60%, #1a3b6d 100%);
+            color: #fff;
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 4px 16px rgba(42,91,168,0.13);
         }
-        .nota-pago {
-    text-align: center;
-    margin-top: 1rem;
-    opacity: 0.8;
-    font-size: 0.9rem;
-}
-
-.instruccion-pago {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2rem;
-    border-radius: 15px;
-    text-align: center;
-    margin: 2rem 0;
-}
-.boton-version-especial {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid var(--azul-acento);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-}
-
-.boton-version-especial.activo {
-    background: var(--azul-acento);
-    box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-}
-
-.boton-version-especial:hover {
-    transform: translateY(-2px);
-}
-
-.instruccion-pago p {
-    margin: 1rem 0;
-}
-
-        #formStatus.error {
-        background: #f44336;
-        border: 1px solid #d32f2f;
-        color: white;
-}
-
-        .loading-spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-        .badge-premium {
-    z-index: 1000; /* Mantener igual */
-}
-#formStatus {
-    z-index: 9999; /* Mayor que todos los demás elementos */
-}
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-    /* Ajustes para los botones de secciones */
-    .navegacion {
-        flex-direction: column;
-        gap: 1rem;
+        .boton-version-jugador::before,
+    .boton-version-especial:not(.boton-version-jugador):not(.boton-camiseta-nba)::before,
+    .boton-camiseta-nba::before {
+        content: none !important;
+        display: none !important;
     }
-
-    .boton-seccion {
-        width: 100%;
-        padding: 15px;
-        font-size: 1rem;
-    }
-
-    /* Ajustes para los botones de unidades */
-    .selector-unidades {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .boton-unidad {
-        width: 100%;
-        padding: 15px;
-        font-size: 1rem;
-    }
-
-    /* Ajustes para los botones de versión jugador */
-    .boton-version-jugador {
-        width: 100%;
-        padding: 15px;
-        font-size: 1rem;
-    }
-
-    /* Ajustes para los inputs */
-    .input-group input,
-    .input-group textarea {
-        font-size: 1rem;
-    }
-
-    /* Ajustes para el formulario de pedido */
-    .formulario-pedido {
-        padding: 1rem;
-    }
-
-    .input-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* Ajustes para las tarjetas de enlace */
-    .card-enlace {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .imagen-previa {
-        margin-right: 0;
-        margin-bottom: 1rem;
-    }
-
-    /* Ajustes para el precio total */
-    .precio-total {
-        font-size: 1.8rem;
-    }
-
-    /* Ajustes para el badge premium */
-    .badge-premium {
-        font-size: 0.9rem;
-        padding: 10px 15px;
-        bottom: 10px;
-        right: 10px;
-    }
-
-    /* Ajustes en el footer */
-    footer {
-        padding: 1rem 0;
-    }
-
-    .redes-sociales {
-        gap: 1rem;
-    }
-
-    .redes-sociales a {
-        font-size: 1.5rem;
-    }
-
-    footer p {
-        font-size: 0.8rem;
-    }
-
-    /* Ajustes en la sección de garantías */
-    .garantias {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .garantia-card {
-        padding: 1rem;
-    }
-
-    .garantia-card h3 {
-        font-size: 1.2rem;
-    }
-
-    .garantia-card p {
-        font-size: 0.9rem;
-    }
-
-    /* Ajustes en la sección de "Quiénes Somos" */
-    .quienes-somos {
-        padding: 1rem;
-    }
-
-    .quienes-somos h2 {
-        font-size: 1.8rem;
-    }
-
-    .quienes-somos p {
-        font-size: 1rem;
-    }
-
-    /* Ajustes en la animación del fondo */
-    body::before {
-        animation: moverFondo 30s linear infinite;
-    }
-
-    @keyframes moverFondo {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-
-    /* Ajustes en el botón de PayPal */
-    .boton-pago {
-        font-size: 1rem;
-        padding: 15px 25px;
-    }
-
-    /* Ajustes en la nota de pago */
-    .nota-pago {
-        font-size: 0.8rem;
-    }
-
-    /* Ajustes en el formulario de pedido */
-    .formulario-pedido {
-        padding: 1rem;
-    }
-
-    .input-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .input-group input,
-    .input-group textarea {
-        font-size: 1rem;
-    }
-
-    .boton-pago {
-        font-size: 1rem;
-        padding: 12px 20px;
-    }
-
-    .nota-pago {
-        font-size: 0.8rem;
-    }
-}
-
-/* Añade animación de icono */
-@keyframes iconPop {
-    0% { transform: scale(0); }
-    80% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
     </style>
-</head>
-<body>
-    <div id="formStatus"></div>
-    <div class="contenedor-principal">
-        <div class="badge-premium">
-            <a
-               target="_blank" 
-               style="color: white; text-decoration: none; display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-thumbs-up"></i>
-                Compra con confianza
-            </a>
-        </div>
-
-        <header>
-            <img src="logo.png" alt="Logo Camisetazo" class="logo">
-            <h1 class="animate__animated animate__fadeIn">CAMISETAZO</h1>
-
-            <nav class="navegacion">
-                <button class="boton-seccion activo" data-seccion="tienda">Tienda</button>
-                <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
-                <button class="boton-seccion" data-seccion="pedidos">Pedidos</button>
-            </nav>
-        </header>
-
-        <!-- Sección Tienda -->
-        <section id="tienda" class="seccion activa">
-            <div class="grid-enlaces">
-                <div class="card-enlace">
-                    <img src="camfut.png" alt="Camisetas" class="imagen-previa">
-                    <a href="https://2020soccer.x.yupoo.com/albums" class="enlace-btn">
-                        <span>Camisetas Fútbol ⚽</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="zap.png" alt="Zapatillas" class="imagen-previa">
-                    <a href="https://eu1688.x.yupoo.com/albums" class="enlace-btn">
-                        <span>Zapatillas 👟</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="nba.png" alt="NBA" class="imagen-previa">
-                    <a href="https://x.yupoo.com/photos/05941188/albums" class="enlace-btn">
-                        <span>NBA 🏀</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="airpods.png" alt="AirPods" class="imagen-previa">
-                    <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="enlace-btn">
-                        <span>AirPods 🎧</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="botfut.png" alt="Botas Fútbol" class="imagen-previa">
-                    <a href="https://zuqiuliu.x.yupoo.com" class="enlace-btn">
-                        <span>Botas Fútbol ⚽</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="f1.png" alt="F1" class="imagen-previa">
-                    <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="enlace-btn">
-                        <span>F1 🏎️</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="ps4.png" alt="Mandos PS4" class="imagen-previa">
-                    <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="enlace-btn">
-                        <span>Mandos PS4 🎮</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="nfl.png" alt="NFL" class="imagen-previa">
-                    <a href="https://nfl-world.x.yupoo.com/" class="enlace-btn">
-                        <span>NFL 🏈</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="mlb.png" alt="MLB" class="imagen-previa">
-                    <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="enlace-btn">
-                        <span>MLB ⚾</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="nhl.png" alt="NHL" class="imagen-previa">
-                    <a href="https://nhl-world.x.yupoo.com/" class="enlace-btn">
-                        <span>NHL 🏑</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-<!-- Sección Quiénes Somos -->
-<section id="quienes-somos" class="seccion">
-    <div class="quienes-somos animate__animated animate__fadeIn" style="text-align: center;">
+    <div class="quienes-somos-ui animate__animated animate__fadeIn">
         <h2>Nuestra Historia</h2>
-
-        <p style="max-width: 800px; margin: 0 auto 2rem; line-height: 1.7;">
-            En Camisetazo nos apasiona conectar a los verdaderos amantes del deporte con artículos premium de las mejores marcas. Nos especializamos en ofrecer productos de alta calidad y artículos exclusivos que permiten vivir la emoción del deporte al mejor precio. Combinamos nuestro conocimiento experto con un servicio personalizado para garantizar que cada compra supere tus expectativas:
+        <p>
+            En Camisetazo nos apasiona conectar a los verdaderos amantes del deporte con artículos premium de las mejores marcas. Nos especializamos en ofrecer productos de alta calidad y artículos exclusivos que permiten vivir la emoción del deporte al mejor precio. Combinamos nuestro conocimiento experto con un servicio personalizado para garantizar que cada compra supere tus expectativas.
         </p>
-
-        <!-- Casilla Instagram -->
-        <div class="garantia-card" style="max-width: 500px; margin: 2rem auto;">
-            <i class="fab fa-instagram" style="font-size: 2.5rem; color: #E1306C; margin-bottom: 1rem;"></i>
+        <div class="quienes-somos-instagram">
+            <i class="fab fa-instagram"></i>
             <h3>Síguenos en Instagram</h3>
-            <a href="https://www.instagram.com/camisetazo._/" target="_blank" 
-               style="color: var(--azul-acento); text-decoration: none; font-weight: 600;
-                      display: inline-block; margin: 0.5rem 0;">
-                @camisetazo._ ➔
-            </a>
-            <p style="margin-top: 0.5rem; opacity: 0.9;">Novedades diarias | Ofertas exclusivas</p>
+            <a href="https://www.instagram.com/camisetazo._/" target="_blank">@camisetazo._ ➔</a>
+            <p>Novedades diarias | Ofertas exclusivas</p>
         </div>
-
-        <!-- Grid 2x2 -->
-        <div class="garantias" style="grid-template-columns: repeat(2, 1fr); max-width: 1000px; margin: 0 auto;">
-            <!-- Casilla 1 -->
-            <div class="garantia-card">
-                <i class="fas fa-shield-alt" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+        <div class="quienes-somos-grid">
+            <div class="quienes-somos-card">
+                <i class="fas fa-shield-alt"></i>
                 <h3>Garantía de Pago</h3>
                 <p>Transacciones seguras con protección al comprador</p>
             </div>
-
-            <!-- Casilla 2 -->
-            <div class="garantia-card">
-                <i class="fas fa-shipping-fast" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3>Envío Gratuito Express</h3>
-                <p>Entrega en 7-14 días con seguimiento del paquete</p>
+            <div class="quienes-somos-card">
+                <i class="fas fa-shipping-fast"></i>
+                <h3>Envío Express</h3>
+                <p>Entrega en 5-10 días con seguimiento del paquete</p>
             </div>
-
-            <!-- Casilla 3 -->
-            <div class="garantia-card">
-                <i class="fas fa-users" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+            <div class="quienes-somos-card">
+                <i class="fas fa-users"></i>
                 <h3>Comunidad</h3>
                 <p>+100 clientes satisfechos</p>
-                <div style="color: #ffd700; margin-top: 0.5rem;">
+                <div class="stars">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
@@ -948,14 +679,23 @@
                     <i class="fas fa-star"></i>
                 </div>
             </div>
-
-            <!-- Casilla 4 -->
-            <div class="garantia-card">
-                <i class="fas fa-headset" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h4>Atención al cliente</h4>
+            <div class="quienes-somos-card">
+                <i class="fas fa-headset"></i>
+                <h3>Atención al cliente</h3>
                 <p>Obtén respuestas rápidas con nuestro servicio de atención al cliente</p>
             </div>
+            <div class="quienes-somos-card">
+                <i class="fas fa-tshirt"></i>
+                <h3>Personalización</h3>
+                <p>Elige nombre, número y detalles únicos para tu camiseta</p>
+            </div>
+            <div class="quienes-somos-card">
+                <i class="fas fa-gem"></i>
+                <h3>Calidad Premium</h3>
+                <p>Materiales de alta gama y acabados profesionales en cada producto</p>
+            </div>
         </div>
+    </div>
 </section>
 <!-- Nueva sección de Pedidos -->
 <section id="pedidos" class="seccion">
@@ -1011,29 +751,41 @@ Phone Number:</textarea>
             </div>
 
             <!-- Sección de cálculo de precio -->
-            <div class="calculadora-precio">
-                <h3>Desglose del Precio</h3>
-                <div class="detalle-precio">
-                    <span>Precio Base (<span id="cantidad-unidades">1</span> unidad<span id="plural-unidades"></span>):</span>
-                    <span><span id="precio-base-detalle">19.90</span>€</span>
+            <div class="calculadora-precio animate__animated animate__fadeInUp">
+                <h3><i class="fas fa-receipt"></i> Desglose del Precio</h3>
+                <div class="detalle-precio" style="background:rgba(255,255,255,0.13);border-left:5px solid #e74c3c;">
+                    <span><i class="fas fa-tag"></i> Precio sin descuento <span class="badge-extra" style="background:#e74c3c;">Normal</span> (<span id="cantidad-unidades-sin-desc">1</span> unidad<span id="plural-unidades-sin-desc"></span>):</span>
+                    <span style="color:#e74c3c;text-decoration:line-through;font-weight:bold;"><span id="precio-sin-descuento">25.00</span>€</span>
+                </div>
+                <div class="detalle-precio" style="background:rgba(40,167,69,0.13);border-left:5px solid #28a745;">
+                    <span><i class="fas fa-bolt"></i> Precio con descuento <span class="badge-extra" style="background:#28a745;">Oferta</span> (<span id="cantidad-unidades">1</span> unidad<span id="plural-unidades"></span>):</span>
+                    <span style="color:#28a745;font-weight:bold;"><span id="precio-base-detalle">19.90</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Parches personalizados:</span>
-                    <span><span id="cantidad-parches">0</span> × 1€ = <span id="total-parches">0.00</span>€</span>
+                    <span><i class="fas fa-patch"></i> Parches personalizados:</span>
+                    <span><span id="cantidad-parches" class="badge-extra" style="background:#2a5ba8;">0</span> × 1€ = <span id="total-parches">0.00</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Dorsales personalizados:</span>
-                    <span><span id="cantidad-dorsales">0</span> × 2€ = <span id="total-dorsales">0.00</span>€</span>
+                    <span><i class="fas fa-tshirt"></i> Dorsales personalizados:</span>
+                    <span><span id="cantidad-dorsales" class="badge-extra" style="background:#2a5ba8;">0</span> × 2€ = <span id="total-dorsales">0.00</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Versiones Jugador / Retro:</span>
-                    <span><span id="cantidad-versiones">0</span> × 3€ = <span id="total-versiones">0.00</span>€</span>
+                    <span><i class="fas fa-star"></i> Versiones Jugador / Retro:</span>
+                    <span><span id="cantidad-versiones" class="badge-extra" style="background:#2a5ba8;">0</span> × 5€ = <span id="total-versiones">0.00</span>€</span>
                 </div>
-                <div class="total-container">
-                    <div>Total a Pagar</div>
-                    <div class="precio-total">
+                <div class="detalle-precio">
+                    <span><i class="fas fa-basketball-ball"></i> Camisetas NBA:</span>
+                    <span><span id="cantidad-camisetas-nba" class="badge-extra" style="background:#2a5ba8;">0</span> × 5€ = <span id="total-camisetas-nba">0.00</span>€</span>
+                </div>
+                <div class="total-container animate__animated animate__pulse animate__delay-1s">
+                    <div style="font-size:1.3rem;font-weight:700;letter-spacing:1px;">Total a Pagar</div>
+                    <div class="precio-total" style="background:linear-gradient(90deg,#28a745 60%,#2a5ba8 100%);border-radius:10px;padding:0.7rem 1.2rem;box-shadow:0 2px 12px rgba(42,91,168,0.13);">
+                        <span id="precioSinDescuentoTotal" style="color: #fff; text-decoration: line-through; font-size: 1.2rem; margin-right: 10px; vertical-align: middle; opacity:0.7;">25.00</span>
                         <span class="moneda">€</span>
-                        <span id="precioDisplay">19.90</span>
+                        <span id="precioDisplay" style="color:#fff;font-size:2.2rem;font-weight:900;text-shadow:0 2px 12px rgba(42,91,168,0.20);margin-left:10px;">19.90</span>
+                    </div>
+                    <div style="margin-top:0.5rem;font-size:1rem;color:#fff;opacity:0.85;">
+                        ¡Aprovecha el <b>descuento especial</b> por tiempo limitado!
                     </div>
                 </div>
             </div>
@@ -1047,14 +799,14 @@ Phone Number:</textarea>
                 </p>
                 <br>
                 <button type="button" id="paypalButton" class="boton-pago" style="margin-top: 10px;">
-                    <i class="fab fa-paypal"></i> Pagar con PayPal
-                </button>
+    <i class="fab fa-paypal"></i> Pagar con PayPal
+</button>
             </div>         
         </form>
     </div>
 </section>
 <footer>
-    <div class="redes-sociales">
+    <div class="redes_sociales">
         <a href="https://www.instagram.com/camisetazo._/"><i class="fab fa-instagram"></i></a>
         <a href="https://www.tiktok.com/@camisetazo"><i class="fab fa-tiktok"></i></a>
     </div>
@@ -1082,7 +834,7 @@ Phone Number:</textarea>
     // Variables y configuración
     let unidades = 0;
     const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
-    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3};
+    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 5, camisetaNBA: 5};
 
     // Función para crear unidades dinámicas
     function crearUnidad(numeroUnidad) {
@@ -1091,7 +843,7 @@ Phone Number:</textarea>
             <h4>Unidad ${numeroUnidad}</h4>
           
             <div class="input-group">
-                <label>Enlace del producto (opcional):</label>
+                <label>Enlace del producto:</label>
                 <input type="url" name="link[]" placeholder="Ej: https://...">
             </div>
             
@@ -1112,7 +864,7 @@ Phone Number:</textarea>
             
             <div class="input-group">
                 <label>Versión Jugador:</label>
-                <button type="button" class="boton-version-jugador">
+                <button type="button" class="boton-version-especial boton-version-jugador">
                     <span>DESACTIVADO</span>
                 </button>
                 <input type="hidden" name="versionJugador[]" value="No">
@@ -1125,6 +877,13 @@ Phone Number:</textarea>
                     <span>DESACTIVADO</span>
                 </button>
                 <input type="hidden" name="versionRetro[]" value="No">
+            </div>
+            <div class="input-group">
+                <label>Camiseta NBA:</label>
+                <button type="button" class="boton-version-especial boton-camiseta-nba">
+                    <span>DESACTIVADO</span>
+                </button>
+                <input type="hidden" name="camisetaNBA[]" value="No">
             </div>
         </div>
     `;
@@ -1160,6 +919,7 @@ Phone Number:</textarea>
     let dorsales = 0;
     let versionesJugador = 0;
     let versionesEspecial = 0;
+    let camisetasNBA = 0;
 
     // Calcular extras para cada unidad
     document.querySelectorAll('.unidad').forEach(unidad => {
@@ -1167,25 +927,54 @@ Phone Number:</textarea>
         const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
         const versionJugador = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
         const versionEspecial = unidad.querySelector('[name="versionRetro[]"]').value === 'Sí';
+        const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
 
-        if(parche) parches++;
-        if(dorsal) dorsales++;
-        if(versionJugador) versionesJugador++;
-        if(versionEspecial) versionesEspecial++;
+        // Validar que las camisetas NBA tengan dorsal
+        if (camisetaNBA && !dorsal) {
+            alert("Las camisetas NBA requieren un dorsal obligatorio.");
+            return;
+        }
+
+        // Si la camiseta NBA está activada
+        if (camisetaNBA) {
+            if (parche) {
+                alert("No se pueden añadir parches a una camiseta NBA.");
+                unidad.querySelector('[name="parche[]"]').value = '';
+            }
+            dorsales++; // El dorsal es obligatorio para NBA
+        } else {
+            if (parche) parches++;
+            if (dorsal) dorsales++;
+        }
+
+        if (versionJugador) versionesJugador++;
+        if (versionEspecial) versionesEspecial++;
+        if (camisetasNBA) camisetasNBA++;
     });
 
     // Calcular totales
     const totalParches = parches * EXTRAS.parche;
-    const totalDorsales = dorsales * EXTRAS.dorsal;
+    const totalDorsales = dorsales * EXTRAS.dorsal; // Ahora siempre se cobra el dorsal
     const totalVersionesJugador = versionesJugador * EXTRAS.versionJugador;
     const totalVersionesEspecial = versionesEspecial * EXTRAS.versionJugador;
+    const totalCamisetasNBA = camisetasNBA * EXTRAS.camisetaNBA;
 
-    total += totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial;
+    total += totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA;
 
     // Actualizar display
     document.getElementById('cantidad-unidades').textContent = unidades;
     document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
     document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
+
+    // NUEVO: Actualizar precio sin descuento por cantidad (ahora incluye extras)
+    document.getElementById('cantidad-unidades-sin-desc').textContent = unidades;
+    document.getElementById('plural-unidades-sin-desc').textContent = unidades > 1 ? 'es' : '';
+    const precioSinDescuentoUnidad = 25.00;
+    // Calcular extras también para el precio sin descuento
+    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial) * EXTRAS.versionJugador) + (camisetasNBA * EXTRAS.camisetaNBA);
+    const totalSinDescuento = (precioSinDescuentoUnidad * unidades + totalSinDescuentoExtras).toFixed(2);
+    document.getElementById('precio-sin-descuento').textContent = totalSinDescuento;
+    document.getElementById('precioSinDescuentoTotal').textContent = totalSinDescuento;
 
     document.getElementById('cantidad-parches').textContent = parches;
     document.getElementById('total-parches').textContent = totalParches.toFixed(2);
@@ -1196,8 +985,31 @@ Phone Number:</textarea>
     document.getElementById('cantidad-versiones').textContent = versionesJugador + versionesEspecial;
     document.getElementById('total-versiones').textContent = (totalVersionesJugador + totalVersionesEspecial).toFixed(2);
 
+    document.getElementById('cantidad-camisetas-nba').textContent = camisetasNBA;
+    document.getElementById('total-camisetas-nba').textContent = totalCamisetasNBA.toFixed(2);
+
     document.getElementById('precioDisplay').textContent = total.toFixed(2);
     document.getElementById('precioTotal').value = total.toFixed(2);
+
+    // Visualización sutil y compacta del ahorro (siempre visible)
+    const precioConDescuento = total.toFixed(2);
+    const diferencia = (totalSinDescuento - precioConDescuento).toFixed(2);
+    let ahorroHtml = '';
+    if (unidades > 0) {
+        ahorroHtml = `
+        <div class="ahorro-visual animate__animated animate__fadeIn" style="display:flex;justify-content:flex-end;margin:0.5rem 0 0.2rem 0;">
+            <span style="background:rgba(40,167,69,0.08);color:#28a745;font-weight:600;font-size:1rem;padding:0.25em 0.9em;border-radius:16px;box-shadow:0 1px 4px #2a5ba81a;display:inline-flex;align-items:center;gap:0.5em;">
+                <i class="fas fa-arrow-down" style="color:#28a745;font-size:1em;"></i>
+                Ahorro: <span style="font-weight:700;">-${diferencia}€</span>
+            </span>
+        </div>`;
+    }
+    const totalContainer = document.querySelector('.total-container');
+    if (totalContainer) {
+        let oldAhorro = totalContainer.parentElement.querySelector('.ahorro-visual');
+        if (oldAhorro) oldAhorro.remove();
+        totalContainer.insertAdjacentHTML('beforebegin', ahorroHtml);
+    }
 
     return total;
 }
@@ -1220,49 +1032,172 @@ Phone Number:</textarea>
     }
     // Configurar eventos para las unidades
     function configurarEventosUnidades() {
-    // Manejar versión jugador
-    document.querySelectorAll('.boton-version-jugador').forEach(boton => {
-        boton.addEventListener('click', function() {
-            const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
-            const botonEspecial = this.parentElement.parentElement.querySelector('.boton-version-especial');
+        // Manejar versión jugador
+        document.querySelectorAll('.boton-version-jugador').forEach(boton => {
+            boton.addEventListener('click', function() {
+                const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
+                const unidad = this.closest('.unidad');
+                const botonNBA = unidad.querySelector('.boton-camiseta-nba');
+                const botonRetro = unidad.querySelector('.boton-version-especial:not(.boton-version-jugador):not(.boton-camiseta-nba)');
 
-            // Desactivar la versión especial si está activa
-            if (botonEspecial.classList.contains('activo')) {
-                botonEspecial.classList.remove('activo');
-                botonEspecial.querySelector('span').textContent = 'DESACTIVADO';
-                botonEspecial.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
-            }
+                // Si se activa la versión jugador, desactivar NBA y Retro
+                if (!this.classList.contains('activo')) {
+                    if (botonNBA.classList.contains('activo')) {
+                        botonNBA.classList.remove('activo');
+                        botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                        botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                    }
+                    if (botonRetro && botonRetro.classList.contains('activo')) {
+                        botonRetro.classList.remove('activo');
+                        botonRetro.querySelector('span').textContent = 'DESACTIVADO';
+                        botonRetro.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+                    }
+                }
 
-            this.classList.toggle('activo');
-            const activo = this.classList.contains('activo');
-            this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-            hiddenInput.value = activo ? 'Sí' : 'No';
-            actualizarPrecio();
+                // Cambiar estado del botón
+                this.classList.toggle('activo');
+                const activo = this.classList.contains('activo');
+                this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+                hiddenInput.value = activo ? 'Sí' : 'No';
+
+                // Si se activa, desactivar los otros dos SIEMPRE
+                if (activo) {
+                    if (botonNBA.classList.contains('activo')) {
+                        botonNBA.classList.remove('activo');
+                        botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                        botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                    }
+                    if (botonRetro && botonRetro.classList.contains('activo')) {
+                        botonRetro.classList.remove('activo');
+                        botonRetro.querySelector('span').textContent = 'DESACTIVADO';
+                        botonRetro.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+                    }
+                }
+
+                // Actualizar el precio
+                actualizarPrecio();
+            });
         });
-    });
 
-    // Manejar versión especial
-    document.querySelectorAll('.boton-version-especial').forEach(boton => {
-        boton.addEventListener('click', function() {
-            const hiddenInput = this.parentElement.querySelector('[name="versionRetro[]"]');
-            const botonJugador = this.parentElement.parentElement.querySelector('.boton-version-jugador');
+        // Manejar versión retro
+        document.querySelectorAll('.boton-version-especial').forEach(boton => {
+            // Solo para los que no sean .boton-version-jugador ni .boton-camiseta-nba
+            if (
+                !boton.classList.contains('boton-version-jugador') &&
+                !boton.classList.contains('boton-camiseta-nba')
+            ) {
+                boton.addEventListener('click', function() {
+                    const hiddenInput = this.parentElement.querySelector('[name="versionRetro[]"]');
+                    const unidad = this.closest('.unidad');
+                    const botonNBA = unidad.querySelector('.boton-camiseta-nba');
+                    const botonJugador = unidad.querySelector('.boton-version-jugador');
 
-            // Desactivar la versión jugador si está activa
-            if (botonJugador.classList.contains('activo')) {
-                botonJugador.classList.remove('activo');
-                botonJugador.querySelector('span').textContent = 'DESACTIVADO';
-                botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                    // Si se activa la versión retro, desactivar NBA y Jugador
+                    if (!this.classList.contains('activo')) {
+                        if (botonNBA.classList.contains('activo')) {
+                            botonNBA.classList.remove('activo');
+                            botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                            botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                        }
+                        if (botonJugador.classList.contains('activo')) {
+                            botonJugador.classList.remove('activo');
+                            botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                            botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                        }
+                    }
+
+                    // Cambiar estado del botón
+                    this.classList.toggle('activo');
+                    const activo = this.classList.contains('activo');
+                    this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+                    hiddenInput.value = activo ? 'Sí' : 'No';
+
+                    // Si se activa, desactivar los otros dos SIEMPRE
+                    if (activo) {
+                        if (botonNBA.classList.contains('activo')) {
+                            botonNBA.classList.remove('activo');
+                            botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                            botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                        }
+                        if (botonJugador.classList.contains('activo')) {
+                            botonJugador.classList.remove('activo');
+                            botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                            botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                        }
+                    }
+
+                    // Actualizar el precio
+                    actualizarPrecio();
+                });
             }
-
-            this.classList.toggle('activo');
-            const activo = this.classList.contains('activo');
-            this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-            hiddenInput.value = activo ? 'Sí' : 'No';
-            actualizarPrecio();
         });
-    });
 
-    // Eventos para inputs
+        // Manejar camiseta NBA
+        document.querySelectorAll('.boton-camiseta-nba').forEach(boton => {
+            boton.addEventListener('click', function() {
+                const hiddenInput = this.parentElement.querySelector('[name="camisetaNBA[]"]');
+                const unidad = this.closest('.unidad');
+                const botonJugador = unidad.querySelector('.boton-version-jugador');
+                const botonRetro = unidad.querySelector('.boton-version-especial:not(.boton-version-jugador):not(.boton-camiseta-nba)');
+                const inputParche = unidad.querySelector('[name="parche[]"]');
+                const inputDorsal = unidad.querySelector('[name="dorsal[]"]');
+
+                // Si se va a activar la camiseta NBA, el dorsal es obligatorio
+                if (!this.classList.contains('activo')) {
+                    if (!inputDorsal.value.trim()) {
+                        alert('Debes introducir un dorsal para activar la camiseta NBA.');
+                        inputDorsal.focus();
+                        return;
+                    }
+                }
+
+                // Si se activa la camiseta NBA
+                if (!this.classList.contains('activo')) {
+                    // Desactivar otros botones
+                    if (botonJugador.classList.contains('activo')) {
+                        botonJugador.classList.remove('activo');
+                        botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                        botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                    }
+                    if (botonRetro && botonRetro.classList.contains('activo')) {
+                        botonRetro.classList.remove('activo');
+                        botonRetro.querySelector('span').textContent = 'DESACTIVADO';
+                        botonRetro.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+                    }
+                }
+
+                // Cambiar estado del botón
+                this.classList.toggle('activo');
+                const activo = this.classList.contains('activo');
+                this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+                hiddenInput.value = activo ? 'Sí' : 'No';
+
+                // Si se activa, desactivar los otros dos SIEMPRE
+                if (activo) {
+                    if (botonJugador.classList.contains('activo')) {
+                        botonJugador.classList.remove('activo');
+                        botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                        botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                    }
+                    if (botonRetro && botonRetro.classList.contains('activo')) {
+                        botonRetro.classList.remove('activo');
+                        botonRetro.querySelector('span').textContent = 'DESACTIVADO';
+                        botonRetro.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+                    }
+                }
+
+                // Bloquear el campo de parche
+                inputParche.disabled = activo;
+                if (activo) inputParche.value = '';
+
+                // Habilitar el campo de dorsal (pero será gratuito)
+                inputDorsal.disabled = false;
+
+                // Actualizar el precio
+                actualizarPrecio();
+            });
+        });
+        // Configurar eventos para inputs
     document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
         input.addEventListener('input', actualizarPrecio);
     });
@@ -1277,6 +1212,7 @@ Phone Number:</textarea>
         const ventanaPayPal = window.open(
             `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
             'PagoPayPal',
+           
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
 
@@ -1327,45 +1263,38 @@ Phone Number:</textarea>
             return;
         }
 
-        // Validar que al menos haya una imagen subida para cada unidad
-        const unidades = document.querySelectorAll('.unidad');
-        for (let i = 0; i < unidades.length; i++) {
-            const linkInput = unidades[i].querySelector('input[type="url"]');
-
-            if (!linkInput.value.trim()) {
-                alert(`Por favor, proporciona un enlace para la Unidad ${i + 1}`);
-                return;
-            }
-        }
-        for (let i = 0; i < unidades.length; i++) {
-        const versionJugador = unidades[i].querySelector('[name="versionJugador[]"]').value === 'Sí';
-        const versionEspecial = unidades[i].querySelector('[name="versionRetro[]"]').value === 'Sí';
-
-        if (versionJugador && versionEspecial) {
-            alert(`Error: No puedes activar ambas versiones en la Unidad ${i + 1}.`);
+        // Validar que al menos haya una unidad seleccionada
+        const cantidadUnidades = document.getElementById('cantidad-unidades').textContent;
+        if (parseInt(cantidadUnidades) === 0) {
+            alert("Debes seleccionar al menos una unidad.");
             return;
         }
+
+        // Obtener el total correctamente
+        const total = parseFloat(document.getElementById('precioDisplay').textContent);
+        if (isNaN(total) || total <= 0) {
+            alert("El total a pagar no es válido.");
+            return;
         }
 
-        // Obtener el precio total
-        const total = parseFloat(document.getElementById('precioDisplay').textContent);
-
-        // Abrir la ventana de PayPal
+        // Abrir PayPal
         abrirPayPal(total);
     });
 
-    // Inicialización
-    document.querySelector('.boton-unidad.activo').click();
-    document.querySelector('.boton-unidad[data-unidades="0"]').click();
-    configurarEventosUnidades();
-
-    // Actualizar precio al cambiar cualquier input
-    document.addEventListener('input', function(e) {
-        if(e.target.matches('[name="parche[]"], [name="dorsal[]"]')) {
-            actualizarPrecio();
+    // Hacer toda la tarjeta clickeable excepto el botón
+document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
+    card.addEventListener('click', function(e) {
+        // Si el click fue en el botón, no hacer nada (ya lo gestiona el botón)
+        const link = card.getAttribute('data-link');
+        if (link) {
+            window.open(link, '_blank');
         }
     });
 });
-</script>
+
+    // Inicializar
+    actualizarPrecio();
+    });
+    </script>
 </body>
 </html>
