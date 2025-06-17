@@ -20,8 +20,8 @@
     </div>
     <nav class="navegacion">
         <button class="boton-seccion activo" data-seccion="tienda">Tienda</button>
-        <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
         <button class="boton-seccion" data-seccion="pedidos">Pedidos</button>
+        <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
     </nav>
 </header>
 
@@ -656,6 +656,21 @@
             <a href="https://www.instagram.com/camisetazo._/" target="_blank">@camisetazo._ ➔</a>
             <p>Novedades diarias | Ofertas exclusivas</p>
         </div>
+        <!-- Carrusel de clientes satisfechos -->
+        <div class="clientes-carrusel-section">
+            <h3 style="color:var(--azul-acento);margin-bottom:1rem;">Clientes Satisfechos</h3>
+            <div class="clientes-carrusel">
+                <button class="carrusel-btn" id="carrusel-prev" aria-label="Anterior">&#8592;</button>
+                <div class="carrusel-imagenes">
+                    <img src="assets/clientes/cliente1.jpg" alt="Cliente satisfecho 1" class="carrusel-img activa">
+                    <img src="assets/clientes/cliente2.jpg" alt="Cliente satisfecho 2" class="carrusel-img">
+                    <img src="assets/clientes/cliente3.jpg" alt="Cliente satisfecho 3" class="carrusel-img">
+                </div>
+                <button class="carrusel-btn" id="carrusel-next" aria-label="Siguiente">&#8594;</button>
+            </div>
+            <p style="margin-top:0.7rem;color:#b8c6e0;font-size:1rem;">Desliza para ver más capturas de clientes reales. ¡Gracias por confiar en nosotros!</p>
+        </div>
+        <!-- Fin carrusel -->
         <div class="quienes-somos-grid">
             <div class="quienes-somos-card">
                 <i class="fas fa-shield-alt"></i>
@@ -770,12 +785,16 @@ Phone Number:</textarea>
                     <span><span id="cantidad-dorsales" class="badge-extra" style="background:#2a5ba8;">0</span> × 2€ = <span id="total-dorsales">0.00</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span><i class="fas fa-star"></i> Versiones Jugador / Retro:</span>
+                    <span><i class="fas fa-star"></i> Versiones Jugador / Retro / NBA:</span>
                     <span><span id="cantidad-versiones" class="badge-extra" style="background:#2a5ba8;">0</span> × 5€ = <span id="total-versiones">0.00</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span><i class="fas fa-basketball-ball"></i> Camisetas NBA:</span>
-                    <span><span id="cantidad-camisetas-nba" class="badge-extra" style="background:#2a5ba8;">0</span> × 5€ = <span id="total-camisetas-nba">0.00</span>€</span>
+                    <span><i class="fas fa-ruler-combined"></i> Tallas con recargo:</span>
+                    <span><span id="cantidad-tallas-extra" class="badge-extra" style="background:#2a5ba8;">0</span> = <span id="total-tallas-extra">0.00</span>€</span>
+                </div>
+                <div class="detalle-precio">
+                    <span><i class="fas fa-shipping-fast"></i> Gastos de envío:</span>
+                    <span id="gastos-envio"></span>
                 </div>
                 <div class="total-container animate__animated animate__pulse animate__delay-1s">
                     <div style="font-size:1.3rem;font-weight:700;letter-spacing:1px;">Total a Pagar</div>
@@ -833,8 +852,9 @@ Phone Number:</textarea>
 
     // Variables y configuración
     let unidades = 0;
-    const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
+    const PRECIOS_BASE = {1: 19.90, 2: 39.80, 3: 54.90, 5: 84.90};
     const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 5, camisetaNBA: 5};
+    const GASTOS_ENVIO = 2.00;
 
     // Función para crear unidades dinámicas
     function crearUnidad(numeroUnidad) {
@@ -859,7 +879,15 @@ Phone Number:</textarea>
 
             <div class="input-group">
                 <label>Talla:</label>
-                <input type="text" name="talla[]" required placeholder="Ej: M, 42, etc.">
+                <select name="talla[]" class="input-talla" required>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL (+1€)</option>
+                    <option value="3XL">3XL (+2€)</option>
+                    <option value="4XL">4XL (+3€)</option>
+                </select>
             </div>
             
             <div class="input-group">
@@ -920,6 +948,8 @@ Phone Number:</textarea>
     let versionesJugador = 0;
     let versionesEspecial = 0;
     let camisetasNBA = 0;
+    let recargoTallas = 0;
+    let totalRecargoTallas = 0;
 
     // Calcular extras para cada unidad
     document.querySelectorAll('.unidad').forEach(unidad => {
@@ -927,39 +957,62 @@ Phone Number:</textarea>
         const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
         const versionJugador = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
         const versionEspecial = unidad.querySelector('[name="versionRetro[]"]').value === 'Sí';
-        const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
+        const esCamisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
+        const talla = unidad.querySelector('[name="talla[]"]').value;
 
         // Validar que las camisetas NBA tengan dorsal
-        if (camisetaNBA && !dorsal) {
+        if (esCamisetaNBA && !dorsal) {
             alert("Las camisetas NBA requieren un dorsal obligatorio.");
             return;
         }
 
         // Si la camiseta NBA está activada
-        if (camisetaNBA) {
+        if (esCamisetaNBA) {
             if (parche) {
                 alert("No se pueden añadir parches a una camiseta NBA.");
                 unidad.querySelector('[name="parche[]"]').value = '';
             }
             dorsales++; // El dorsal es obligatorio para NBA
-        } else {
-            if (parche) parches++;
-            if (dorsal) dorsales++;
+            camisetasNBA++;
         }
-
         if (versionJugador) versionesJugador++;
         if (versionEspecial) versionesEspecial++;
-        if (camisetasNBA) camisetasNBA++;
+
+        // Calcular recargo por tallas XXL y 3XL
+        if (talla === 'XXL') {
+            recargoTallas++;
+            totalRecargoTallas += 1;
+        } else if (talla === '3XL') {
+            recargoTallas++;
+            totalRecargoTallas += 2;
+        } else if (talla === '4XL') {
+            recargoTallas++;
+            totalRecargoTallas += 3;
+        }
     });
 
     // Calcular totales
     const totalParches = parches * EXTRAS.parche;
     const totalDorsales = dorsales * EXTRAS.dorsal; // Ahora siempre se cobra el dorsal
-    const totalVersionesJugador = versionesJugador * EXTRAS.versionJugador;
-    const totalVersionesEspecial = versionesEspecial * EXTRAS.versionJugador;
-    const totalCamisetasNBA = camisetasNBA * EXTRAS.camisetaNBA;
+    // Unificar el total de versiones jugador, retro y NBA
+    const totalVersionesCombinadas = (versionesJugador + versionesEspecial + camisetasNBA);
+    const totalVersionesJugador = totalVersionesCombinadas * EXTRAS.versionJugador;
 
-    total += totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA;
+    total += totalParches + totalDorsales + totalVersionesJugador + totalRecargoTallas;
+
+    // Añadir gastos de envío si solo hay 1 unidad
+    let gastosEnvio = 0;
+    if (unidades === 1) {
+        gastosEnvio = GASTOS_ENVIO;
+        total += gastosEnvio;
+    }
+
+    // Mostrar gastos de envío en el desglose
+    if (gastosEnvio === 0) {
+        document.getElementById('gastos-envio').innerHTML = '<i class="fas fa-gift" style="color:#28a745;margin-right:0.4em;"></i><strong style="color:#28a745;font-size:1.1em;letter-spacing:1px;">GRATIS</strong>';
+    } else {
+        document.getElementById('gastos-envio').innerHTML = gastosEnvio.toFixed(2) + '€';
+    }
 
     // Actualizar display
     document.getElementById('cantidad-unidades').textContent = unidades;
@@ -971,7 +1024,7 @@ Phone Number:</textarea>
     document.getElementById('plural-unidades-sin-desc').textContent = unidades > 1 ? 'es' : '';
     const precioSinDescuentoUnidad = 25.00;
     // Calcular extras también para el precio sin descuento
-    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial) * EXTRAS.versionJugador) + (camisetasNBA * EXTRAS.camisetaNBA);
+    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial) * EXTRAS.versionJugador) + (camisetasNBA * EXTRAS.camisetaNBA) + totalRecargoTallas;
     const totalSinDescuento = (precioSinDescuentoUnidad * unidades + totalSinDescuentoExtras).toFixed(2);
     document.getElementById('precio-sin-descuento').textContent = totalSinDescuento;
     document.getElementById('precioSinDescuentoTotal').textContent = totalSinDescuento;
@@ -982,11 +1035,11 @@ Phone Number:</textarea>
     document.getElementById('cantidad-dorsales').textContent = dorsales;
     document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
 
-    document.getElementById('cantidad-versiones').textContent = versionesJugador + versionesEspecial;
-    document.getElementById('total-versiones').textContent = (totalVersionesJugador + totalVersionesEspecial).toFixed(2);
+    document.getElementById('cantidad-versiones').textContent = totalVersionesCombinadas;
+    document.getElementById('total-versiones').textContent = totalVersionesJugador.toFixed(2);
 
-    document.getElementById('cantidad-camisetas-nba').textContent = camisetasNBA;
-    document.getElementById('total-camisetas-nba').textContent = totalCamisetasNBA.toFixed(2);
+    document.getElementById('cantidad-tallas-extra').textContent = recargoTallas;
+    document.getElementById('total-tallas-extra').textContent = totalRecargoTallas.toFixed(2);
 
     document.getElementById('precioDisplay').textContent = total.toFixed(2);
     document.getElementById('precioTotal').value = total.toFixed(2);
@@ -1201,6 +1254,11 @@ Phone Number:</textarea>
     document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
         input.addEventListener('input', actualizarPrecio);
     });
+
+    // También actualizar precio al cambiar la talla
+        document.querySelectorAll('.input-talla').forEach(input => {
+            input.addEventListener('change', actualizarPrecio);
+        });
 }
 
     // Función para abrir la ventana de PayPal
@@ -1284,7 +1342,13 @@ Phone Number:</textarea>
     // Hacer toda la tarjeta clickeable excepto el botón
 document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
     card.addEventListener('click', function(e) {
-        // Si el click fue en el botón, no hacer nada (ya lo gestiona el botón)
+        // Si el click fue en el botón, o en un enlace del menú desplegable de fútbol, no hacer nada
+        if (
+            e.target.closest('.futbol-dropdown-menu a') ||
+            e.target.closest('.futbol-dropdown-btn')
+        ) {
+            return;
+        }
         const link = card.getAttribute('data-link');
         if (link) {
             window.open(link, '_blank');
@@ -1294,7 +1358,93 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
 
     // Inicializar
     actualizarPrecio();
+
+    // Carrusel de clientes satisfechos
+    function inicializarCarruselClientes() {
+        const imagenes = document.querySelectorAll('.carrusel-img');
+        const prevBtn = document.getElementById('carrusel-prev');
+        const nextBtn = document.getElementById('carrusel-next');
+        if (!imagenes.length || !prevBtn || !nextBtn) return;
+        let actual = 0;
+        function mostrarImagen(idx) {
+            imagenes.forEach((img, i) => {
+                img.classList.toggle('activa', i === idx);
+                img.style.display = i === idx ? 'block' : 'none';
+            });
+        }
+        prevBtn.onclick = function() {
+            actual = (actual - 1 + imagenes.length) % imagenes.length;
+            mostrarImagen(actual);
+        };
+        nextBtn.onclick = function() {
+            actual = (actual + 1) % imagenes.length;
+            mostrarImagen(actual);
+        };
+        // Ampliar imagen al hacer click
+        imagenes.forEach(img => {
+            img.onclick = function() {
+                mostrarModalImagen(this.src, this.alt);
+            };
+        });
+        mostrarImagen(actual);
+    }
+    // Modal para zoom
+    function mostrarModalImagen(src, alt) {
+        let modal = document.getElementById('modal-imagen-clientes');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'modal-imagen-clientes';
+            modal.innerHTML = `
+                <div class="modal-fondo"></div>
+                <div class="modal-contenido">
+                    <img src="" alt="" id="modal-img-clientes">
+                    <button class="modal-cerrar" aria-label="Cerrar">&times;</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            // Cerrar modal
+            modal.querySelector('.modal-fondo').onclick = cerrarModal;
+            modal.querySelector('.modal-cerrar').onclick = cerrarModal;
+            // Zoom con rueda
+            const modalImg = modal.querySelector('#modal-img-clientes');
+            let scale = 1;
+            modalImg.onwheel = function(e) {
+                e.preventDefault();
+                scale += e.deltaY * -0.0015;
+                scale = Math.min(Math.max(1, scale), 4);
+                modalImg.style.transform = `scale(${scale})`;
+            };
+            // Doble click para resetear zoom
+            modalImg.ondblclick = function() {
+                scale = 1;
+                modalImg.style.transform = 'scale(1)';
+            };
+        }
+        const modalImg = modal.querySelector('#modal-img-clientes');
+        modalImg.src = src;
+        modalImg.alt = alt;
+        modalImg.style.transform = 'scale(1)';
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function cerrarModal() {
+        const modal = document.getElementById('modal-imagen-clientes');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    }
+    // Inicializar carrusel al cargar y al mostrar la sección
+    inicializarCarruselClientes();
+    document.querySelectorAll('.boton-seccion').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.dataset.seccion === 'quienes-somos') {
+                setTimeout(inicializarCarruselClientes, 100); // Espera a que se muestre
+            }
+        });
     });
-    </script>
+}); // <-- Cierra el addEventListener('DOMContentLoaded', ...)
+</script>
+<script src="scripts/scripts.js"></script>
 </body>
 </html>

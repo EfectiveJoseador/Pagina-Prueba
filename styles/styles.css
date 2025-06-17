@@ -345,6 +345,8 @@
             border: 1.5px solid rgba(42,91,168,0.18);
             min-height: 420px;
             position: relative;
+            overflow: visible; /* Permite que el menú desplegable se muestre fuera de la tarjeta */
+            z-index: 1;
         }
         .catalogo-card:hover {
             transform: translateY(-10px) scale(1.035);
@@ -383,6 +385,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative; /* Para que el menú se posicione respecto a este contenedor */
         }
         .catalogo-info h3 {
             color: #fff;
@@ -555,6 +558,36 @@
             background: rgba(255,255,255,0.18);
         }
 
+        /* Estilo bonito para el select de talla */
+.input-talla {
+  width: 100%;
+  padding: 0.6em 2.5em 0.6em 1em;
+  border-radius: 8px;
+  border: 1.5px solid var(--azul-acento);
+  background: rgba(255,255,255,0.13);
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 600;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%232a5ba8" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1em center;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(42,91,168,0.08);
+}
+.input-talla:focus {
+  outline: none;
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 2px #e74c3c33;
+  background-color: rgba(255,255,255,0.18);
+}
+.input-talla option {
+  color: #0a1f3d;
+  background: #fff;
+  font-weight: 600;
+}
         .calculadora-precio {
             background: rgba(255, 255, 255, 0.13);
             border-radius: 16px;
@@ -851,35 +884,78 @@
 /* Estilos para el menú desplegable de opciones de fútbol en la tarjeta */
 .futbol-dropdown-menu {
     position: absolute;
+    left: 0;
+    right: auto;
+    top: 100%;
+    padding: 0;
     background: #1a3b6d;
     border-radius: 10px;
     box-shadow: 0 4px 16px rgba(42,91,168,0.18);
     margin-top: 10px;
-    z-index: 10;
-    min-width: 180px;
+    z-index: 1002;
+    min-width: 200px;
     display: flex;
     flex-direction: column;
-    padding: 0.5rem 0;
-    right: 1.5rem;
+    gap: 0;
+    overflow: hidden;
 }
+
 .futbol-dropdown-menu a {
     color: #fff;
-    padding: 0.7rem 1.5rem;
+    padding: 0.9rem 1.5rem;
     text-decoration: none;
     font-weight: 600;
     transition: background 0.2s, color 0.2s;
-    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     background: none;
     text-align: left;
+    display: block;
 }
+
+.futbol-dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
 .futbol-dropdown-menu a:hover {
-    background: var(--azul-acento);
+    background: var(--azul-acento, #254b8a);
     color: #ffd700;
 }
+
 .futbol-dropdown-btn {
+    background: var(--azul-acento, #1a3b6d);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-size: 1.08em;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 10px rgba(42,91,168,0.13);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s, color 0.2s;
     position: relative;
     z-index: 11;
 }
+.futbol-dropdown-btn.activo {
+    color: #ffd700;
+    background: var(--azul-acento, #1a3b6d);
+}
+.futbol-dropdown-btn i.fas {
+    margin-left: 0.5em;
+    transition: transform 0.2s, color 0.2s;
+    color: #fff;
+}
+.futbol-dropdown-btn.activo i.fas {
+    color: #ffd700;
+}
+.futbol-dropdown-btn:hover {
+    background: #1a3e6e;
+    box-shadow: 0 4px 18px rgba(42,91,168,0.18);
+    transform: translateY(-2px) scale(1.04);
+}
+
 .futbol-dropdown {
     position: relative;
 }
@@ -946,4 +1022,129 @@
     body, input, button, select, textarea {
         font-size: 1.07rem;
     }
+}
+
+/* Estilos para el carrusel de imágenes de clientes satisfechos */
+.clientes-carrusel-section {
+    margin: 2.5rem auto 2rem auto;
+    max-width: 520px;
+    background: rgba(42,91,168,0.10);
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(42,91,168,0.10);
+    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+    text-align: center;
+}
+.clientes-carrusel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+}
+.carrusel-btn {
+    background: var(--azul-acento, #1a3b6d);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(42,91,168,0.10);
+    transition: background 0.2s, transform 0.2s;
+}
+.carrusel-btn:hover {
+    background: #254b8a;
+    transform: scale(1.08);
+}
+.carrusel-imagenes {
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    position: relative;
+}
+.carrusel-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    position: absolute;
+    left: 0; top: 0;
+    transition: opacity 0.4s;
+    opacity: 0;
+    z-index: 1;
+}
+.carrusel-img.activa {
+    opacity: 1;
+    position: relative;
+    z-index: 2;
+}
+
+/* Estilos para el modal de imagen ampliada */
+#modal-imagen-clientes {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10,20,40,0.85);
+    animation: aparecer 0.2s;
+}
+#modal-imagen-clientes .modal-fondo {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: zoom-out;
+}
+#modal-imagen-clientes .modal-contenido {
+    position: relative;
+    z-index: 2;
+    background: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(42,91,168,0.18);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+#modal-img-clientes {
+    max-width: 80vw;
+    max-height: 80vh;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(42,91,168,0.13);
+    background: #fff;
+    transition: transform 0.3s;
+    cursor: zoom-in;
+}
+.modal-cerrar {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    background: #fff;
+    color: #1a3b6d;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 2rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(42,91,168,0.10);
+    z-index: 3;
+    transition: background 0.2s, color 0.2s;
+}
+.modal-cerrar:hover {
+    background: #1a3b6d;
+    color: #fff;
 }
