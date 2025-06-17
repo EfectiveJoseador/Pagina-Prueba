@@ -9,18 +9,32 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btn && menu) {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                // Cerrar otros menús abiertos
+                // Cerrar otros menús abiertos y quitar estilos activos
                 document.querySelectorAll('.futbol-dropdown-menu').forEach(function(m) {
                     if (m !== menu) m.style.display = 'none';
                 });
-                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+                document.querySelectorAll('.futbol-dropdown-btn').forEach(function(b) {
+                    b.classList.remove('activo');
+                    const icon = b.querySelector('i.fas');
+                    if (icon) icon.classList.remove('fa-chevron-up');
+                    if (icon) icon.classList.add('fa-chevron-down');
+                });
+                // Toggle menú y estilos activos
+                if (menu.style.display === 'block') {
+                    menu.style.display = 'none';
+                    btn.classList.remove('activo');
+                    const icon = btn.querySelector('i.fas');
+                    if (icon) icon.classList.remove('fa-chevron-up');
+                    if (icon) icon.classList.add('fa-chevron-down');
+                } else {
+                    menu.style.display = 'block';
+                    btn.classList.add('activo');
+                    const icon = btn.querySelector('i.fas');
+                    if (icon) icon.classList.remove('fa-chevron-down');
+                    if (icon) icon.classList.add('fa-chevron-up');
+                }
             });
         }
     });
-    // Cerrar el menú si se hace clic fuera
-    document.addEventListener('click', function(e) {
-        document.querySelectorAll('.futbol-dropdown-menu').forEach(function(menu) {
-            menu.style.display = 'none';
-        });
-    });
+    // Eliminamos el cierre automático al hacer clic fuera
 });
