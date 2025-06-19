@@ -19,6 +19,10 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         body::before {
@@ -1078,14 +1082,94 @@
     transition: opacity 0.4s;
     opacity: 0;
     z-index: 1;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 .carrusel-img.activa {
     opacity: 1;
     position: relative;
     z-index: 2;
 }
+.carrusel-img-bg {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    position: absolute;
+    left: 0; top: 0;
+    transition: opacity 0.4s;
+    opacity: 0;
+    z-index: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.carrusel-img-bg.activa {
+    opacity: 1;
+    position: relative;
+    z-index: 2;
+}
 
-/* Estilos para el modal de imagen ampliada */
+/* --- INDICADOR DE CLICK EN IMAGEN DEL CARRUSEL --- */
+.carrusel-imagenes {
+  position: relative;
+}
+.carrusel-img-bg {
+  cursor: pointer;
+  transition: box-shadow 0.3s, filter 0.3s;
+}
+.carrusel-img-bg.clickable-hint {
+  animation: parpadeo-clickeable 1.2s 2;
+  box-shadow: 0 0 0 4px #ffd70099, 0 0 18px #ffd70055;
+  z-index: 2;
+}
+@keyframes parpadeo-clickeable {
+  0%, 100% { filter: brightness(1); }
+  20%, 60% { filter: brightness(1.25) drop-shadow(0 0 8px #ffd700cc); }
+  40%, 80% { filter: brightness(0.7); }
+}
+.carrusel-img-bg .zoom-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  background: rgba(10,31,61,0.82);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.92;
+  box-shadow: 0 2px 8px #0002;
+}
+/* Eliminado el overlay azul, solo queda el tooltip negro */
+.carrusel-img-bg[data-tooltip]:hover::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222b;
+  color: #fff;
+  padding: 0.3em 0.9em;
+  border-radius: 10px;
+  font-size: 0.98em;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.92;
+  white-space: nowrap;
+}
+
+        /* Estilos para el modal de imagen ampliada */
 #modal-imagen-clientes {
     display: none;
     position: fixed;
@@ -1147,4 +1231,86 @@
 .modal-cerrar:hover {
     background: #1a3b6d;
     color: #fff;
+}
+
+.carrusel-img {
+    pointer-events: auto;
+}
+
+.clientes-carrusel-section, .clientes-carrusel, .carrusel-imagenes {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@media (max-width: 600px) {
+  .clientes-carrusel-section {
+    max-width: 98vw;
+    padding: 0.7rem 0.2rem 1rem 0.2rem;
+  }
+  .clientes-carrusel {
+    gap: 0.3rem;
+    min-height: 60vw; /* Asegura altura mínima para las flechas */
+    align-items: center;
+    position: relative;
+  }
+  .carrusel-imagenes {
+    width: 90vw;
+    height: 55vw;
+    min-height: 180px;
+    max-width: 98vw;
+    max-height: 60vw;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .carrusel-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1.3rem;
+    border-radius: 12px;
+    background: rgba(42,91,168,0.85);
+    position: absolute;
+    top: 50% !important;
+    transform: translateY(-50%);
+    z-index: 20;
+    opacity: 0.92;
+    box-shadow: 0 1px 6px rgba(42,91,168,0.13);
+  }
+  #carrusel-prev {
+    left: 2px;
+    right: auto;
+  }
+  #carrusel-next {
+    right: 2px;
+    left: auto;
+  }
+}
+
+/* Estilos para el mensaje deslizante en el modal (móvil) */
+#modal-mensaje-desliza {
+  display: none;
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #2a5ba8 60%, #1a3b6d 100%);
+  color: #fff;
+  padding: 0.55em 1.3em;
+  border-radius: 16px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  z-index: 30;
+  box-shadow: 0 4px 18px rgba(42,91,168,0.18);
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.7s;
+  pointer-events: none;
+  text-shadow: 0 2px 8px #1a3b6d44;
+  border: 1.5px solid #fff2;
+}
+#modal-mensaje-desliza.visible {
+  opacity: 1;
 }
