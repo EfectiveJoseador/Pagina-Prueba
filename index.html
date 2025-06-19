@@ -739,7 +739,7 @@
 <section id="pedidos" class="seccion">
     <div class="formulario-pedido">
         <h2>Realizar Pedido</h2>
-        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" onsubmit="return prepararRedireccion(event)">
+        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST">
             <input type="hidden" name="_next" value="https://compra-exitosa.vercel.app/">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
@@ -771,9 +771,9 @@
         id="usuario" 
         name="usuario" 
         required 
-        placeholder="Ej: @roberto_carlos03"
+        placeholder="Ej: roberto_carlos03"
         pattern="^[A-Za-z0-9_.]{1,30}$"
-        title="Por favor, ingresa un nombre de usuario válido de Instagram (debe tener entre 1 y 30 caracteres)."
+        title="Por favor, ingresa un nombre de usuario válido de Instagram (solo letras, números, guion bajo o punto, entre 1 y 30 caracteres, sin @)."
     >
 </div>
                 <div class="input-group">
@@ -854,7 +854,7 @@ Phone Number:</textarea>
                     <input type="checkbox" id="confirmPago" name="confirmPago" style="transform:scale(1.3);margin-right:0.5em;">
                     <label for="confirmPago" style="color:#fff;font-weight:600;">He realizado el pago en PayPal</label>
                 </div>
-                <button type="submit" id="enviarPedidoBtn" class="boton-pago" style="margin-top: 20px;opacity:0.5;pointer-events:none;">Enviar Pedido</button>
+                <button type="submit" id="enviarPedidoBtn" class="boton-pago" style="margin-top: 20px;">Enviar Pedido</button>
                 <div id="avisoPago" style="color:#e74c3c;font-weight:600;margin-top:0.7em;display:none;">Debes marcar la casilla de pago antes de enviar el pedido.</div>
             </div>         
         </form>
@@ -1338,9 +1338,9 @@ Phone Number:</textarea>
         }
         const usuarioInstagram = document.getElementById('usuario').value.trim();
     
-        // Validar el usuario de Instagram
-        if (!usuarioInstagram || !/^@[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
-            alert("Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres).");
+        // Validar el usuario de Instagram (sin @)
+        if (!/^[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
+            alert("Por favor, ingresa un nombre de usuario válido de Instagram (solo letras, números, guion bajo o punto, entre 1 y 30 caracteres, sin @).");
             return;
         }
 
