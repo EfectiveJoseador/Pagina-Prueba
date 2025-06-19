@@ -851,6 +851,10 @@ Phone Number:</textarea>
                     <label for="comprobantePago" style="color:#fff;font-weight:600;">Adjunta el comprobante de pago (opcional pero recomendado):</label>
                     <input type="file" id="comprobantePago" name="comprobantePago" accept="image/*,application/pdf">
                 </div>
+                <div style="margin-top:1rem;">
+                <label for="idTransaccion" style="color:#fff;font-weight:600;">ID de transacción de PayPal <span style='color:#e74c3c;'>(obligatorio)</span>:</label>
+                <input type="text" id="idTransaccion" name="idTransaccion" required placeholder="Ej: 1AB23456CD7890123">
+            </div>
                 <button type="submit" id="enviarPedidoBtn" class="boton-pago" style="margin-top: 20px;opacity:0.5;pointer-events:none;">Enviar Pedido</button>
                 <div id="avisoPago" style="color:#e74c3c;font-weight:600;margin-top:0.7em;display:none;">Debes marcar la casilla de pago antes de enviar el pedido.</div>
             </div>         
@@ -1376,6 +1380,19 @@ Phone Number:</textarea>
                 avisoPago.style.display = 'block';
             }
         });
+        // Validar ID de transacción obligatorio al enviar
+    enviarPedidoBtn.addEventListener('click', function(e) {
+        const idTransaccion = document.getElementById('idTransaccion');
+        if (idTransaccion && idTransaccion.value.trim() === '') {
+            e.preventDefault();
+            idTransaccion.focus();
+            avisoPago.style.display = 'block';
+            avisoPago.textContent = 'Debes ingresar el ID de transacción de PayPal.';
+            return;
+        } else {
+            avisoPago.textContent = 'Debes marcar la casilla de pago antes de enviar el pedido.';
+        }
+    });
     }
 
     // Hacer toda la tarjeta clickeable excepto el botón
