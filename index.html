@@ -1292,7 +1292,7 @@ Phone Number:</textarea>
         const top = (window.innerHeight - height) / 2;
         // Redirección a la página de éxito tras el pago
         const returnUrl = `${window.location.origin}/pago-exitoso.html`;
-        const paypalUrl = `https://www.paypal.com/paypalme/camisetazo/${total}EUR?return=${encodeURIComponent(returnUrl)}`;
+        const paypalUrl = `https://www.paypal.com/paypalme/camisetazo/0,01EUR?return=${encodeURIComponent(returnUrl)}`;
         const ventanaPayPal = window.open(
             paypalUrl,
             'PagoPayPal',
