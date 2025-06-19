@@ -837,12 +837,22 @@ Phone Number:</textarea>
                 <p class="nota-pago">
                     * Por favor selecciona la opción 'Enviar a amigos y familiares.' <br>
                     * Añade tu @ de Instagram en el asunto del pago para agilizar la verificación.<br>
-                    * El formulario se enviará cuando cierres la ventana de PayPal.
+                    * Tras pagar en PayPal, marca la casilla y adjunta el comprobante para finalizar tu pedido.
                 </p>
                 <br>
                 <button type="button" id="paypalButton" class="boton-pago" style="margin-top: 10px;">
-    <i class="fab fa-paypal"></i> Pagar con PayPal
-</button>
+                    <i class="fab fa-paypal"></i> Pagar con PayPal
+                </button>
+                <div style="margin-top:1.5rem;">
+                    <input type="checkbox" id="confirmPago" name="confirmPago" style="transform:scale(1.3);margin-right:0.5em;">
+                    <label for="confirmPago" style="color:#fff;font-weight:600;">He realizado el pago en PayPal</label>
+                </div>
+                <div style="margin-top:1rem;">
+                    <label for="comprobantePago" style="color:#fff;font-weight:600;">Adjunta el comprobante de pago (opcional pero recomendado):</label>
+                    <input type="file" id="comprobantePago" name="comprobantePago" accept="image/*,application/pdf">
+                </div>
+                <button type="submit" id="enviarPedidoBtn" class="boton-pago" style="margin-top: 20px;opacity:0.5;pointer-events:none;">Enviar Pedido</button>
+                <div id="avisoPago" style="color:#e74c3c;font-weight:600;margin-top:0.7em;display:none;">Debes marcar la casilla de pago antes de enviar el pedido.</div>
             </div>         
         </form>
     </div>
@@ -1343,6 +1353,30 @@ Phone Number:</textarea>
         // Mostrar mensaje al usuario
         mostrarExito('Cuando completes el pago en PayPal, serás redirigido automáticamente.');
     });
+
+    // Habilitar envío solo si se marca la casilla de pago
+    const confirmPago = document.getElementById('confirmPago');
+    const enviarPedidoBtn = document.getElementById('enviarPedidoBtn');
+    const avisoPago = document.getElementById('avisoPago');
+    if (confirmPago && enviarPedidoBtn) {
+        confirmPago.addEventListener('change', function() {
+            if (this.checked) {
+                enviarPedidoBtn.style.opacity = '1';
+                enviarPedidoBtn.style.pointerEvents = 'auto';
+                avisoPago.style.display = 'none';
+            } else {
+                enviarPedidoBtn.style.opacity = '0.5';
+                enviarPedidoBtn.style.pointerEvents = 'none';
+            }
+        });
+        // Validar antes de enviar
+        enviarPedidoBtn.addEventListener('click', function(e) {
+            if (!confirmPago.checked) {
+                e.preventDefault();
+                avisoPago.style.display = 'block';
+            }
+        });
+    }
 
     // Hacer toda la tarjeta clickeable excepto el botón
 document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
