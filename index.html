@@ -837,24 +837,23 @@ Phone Number:</textarea>
                 <p class="nota-pago">
                     * Por favor selecciona la opción 'Enviar a amigos y familiares.' <br>
                     * Añade tu @ de Instagram en el asunto del pago para agilizar la verificación.<br>
-                    * Tras pagar en PayPal, marca la casilla y adjunta el comprobante para finalizar tu pedido.
+                    * Tras pagar en PayPal, marca la casilla e introduce el ID de transacción para finalizar tu pedido.
                 </p>
                 <br>
                 <button type="button" id="paypalButton" class="boton-pago" style="margin-top: 10px;">
                     <i class="fab fa-paypal"></i> Pagar con PayPal
                 </button>
-                <div style="margin-top:1.5rem;">
+                <div style="margin-top:1rem; display: flex; align-items: center; gap: 1.2em; background: rgba(42,91,168,0.13); border-radius: 10px; padding: 1.1rem 1rem 1.1rem 1.2rem; box-shadow: 0 1px 6px rgba(42,91,168,0.07); border: 1.5px solid rgba(42,91,168,0.18); max-width: 420px;">
+                    <i class="fab fa-paypal" style="font-size:2.1em;color:#2a5ba8;background:#fff;border-radius:50%;padding:0.4em 0.5em;box-shadow:0 2px 8px rgba(42,91,168,0.10);"></i>
+                    <div style="flex:1;">
+                        <label for="idTransaccion" style="color:#2a5ba8;font-weight:700;font-size:1.08em;letter-spacing:0.5px;">ID de transacción de PayPal <span style='color:#e74c3c;'>(obligatorio)</span>:</label>
+                        <input type="text" id="idTransaccion" name="idTransaccion" required placeholder="Ej: 1AB23456CD7890123" style="margin-top:0.5em;width:100%;padding:12px 14px;border:2px solid #2a5ba8;border-radius:8px;background:rgba(255,255,255,0.13);color:#222;font-size:1.08em;transition:all 0.3s;box-shadow:0 1px 4px rgba(42,91,168,0.08);font-weight:600;letter-spacing:1px;">
+                    </div>
+                </div>
+                <div style="margin-top:1rem;">
                     <input type="checkbox" id="confirmPago" name="confirmPago" style="transform:scale(1.3);margin-right:0.5em;">
                     <label for="confirmPago" style="color:#fff;font-weight:600;">He realizado el pago en PayPal</label>
                 </div>
-                <div style="margin-top:1rem;">
-                    <label for="comprobantePago" style="color:#fff;font-weight:600;">Adjunta el comprobante de pago (opcional pero recomendado):</label>
-                    <input type="file" id="comprobantePago" name="comprobantePago" accept="image/*,application/pdf">
-                </div>
-                <div style="margin-top:1rem;">
-                <label for="idTransaccion" style="color:#fff;font-weight:600;">ID de transacción de PayPal <span style='color:#e74c3c;'>(obligatorio)</span>:</label>
-                <input type="text" id="idTransaccion" name="idTransaccion" required placeholder="Ej: 1AB23456CD7890123">
-            </div>
                 <button type="submit" id="enviarPedidoBtn" class="boton-pago" style="margin-top: 20px;opacity:0.5;pointer-events:none;">Enviar Pedido</button>
                 <div id="avisoPago" style="color:#e74c3c;font-weight:600;margin-top:0.7em;display:none;">Debes marcar la casilla de pago antes de enviar el pedido.</div>
             </div>         
@@ -1375,6 +1374,7 @@ Phone Number:</textarea>
         });
         // Validar antes de enviar
         enviarPedidoBtn.addEventListener('click', function(e) {
+
             if (!confirmPago.checked) {
                 e.preventDefault();
                 avisoPago.style.display = 'block';
