@@ -1358,42 +1358,47 @@ Phone Number:</textarea>
     });
 
     // Habilitar envío solo si se marca la casilla de pago
-    const confirmPago = document.getElementById('confirmPago');
-    const enviarPedidoBtn = document.getElementById('enviarPedidoBtn');
-    const avisoPago = document.getElementById('avisoPago');
     if (confirmPago && enviarPedidoBtn) {
         confirmPago.addEventListener('change', function() {
             if (this.checked) {
+                enviarPedidoBtn.disabled = false;
                 enviarPedidoBtn.style.opacity = '1';
-                enviarPedidoBtn.style.pointerEvents = 'auto';
                 avisoPago.style.display = 'none';
             } else {
+                enviarPedidoBtn.disabled = true;
                 enviarPedidoBtn.style.opacity = '0.5';
-                enviarPedidoBtn.style.pointerEvents = 'none';
             }
         });
-        // Validar antes de enviar
-        enviarPedidoBtn.addEventListener('click', function(e) {
+        // Inicialmente deshabilitado
+        enviarPedidoBtn.disabled = !confirmPago.checked;
+        enviarPedidoBtn.style.opacity = confirmPago.checked ? '1' : '0.5';
+    }
 
-            if (!confirmPago.checked) {
-                e.preventDefault();
-                avisoPago.style.display = 'block';
-            }
-        });
-        // Validar ID de transacción obligatorio al enviar
-    enviarPedidoBtn.addEventListener('click', function(e) {
+    // Validación única al enviar el formulario
+    document.getElementById('pedidoForm').addEventListener('submit', function(e) {
         const idTransaccion = document.getElementById('idTransaccion');
-        if (idTransaccion && idTransaccion.value.trim() === '') {
+        if (!confirmPago.checked) {
+            e.preventDefault();
+            avisoPago.style.display = 'block';
+            avisoPago.textContent = 'Debes marcar la casilla de pago antes de enviar el pedido.';
+            return;
+        }
+        if (!idTransaccion.value.trim()) {
             e.preventDefault();
             idTransaccion.focus();
             avisoPago.style.display = 'block';
             avisoPago.textContent = 'Debes ingresar el ID de transacción de PayPal.';
             return;
-        } else {
-            avisoPago.textContent = 'Debes marcar la casilla de pago antes de enviar el pedido.';
+        }
+        // Validar usuario de Instagram (sin @)
+        const usuarioInstagram = document.getElementById('usuario').value.trim();
+        if (!/^[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
+            e.preventDefault();
+            document.getElementById('usuario').focus();
+            alert('Por favor, ingresa un nombre de usuario válido de Instagram (solo letras, números, guion bajo o punto, entre 1 y 30 caracteres, sin @).');
+            return;
         }
     });
-    }
 
     // Hacer toda la tarjeta clickeable excepto el botón
 document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
