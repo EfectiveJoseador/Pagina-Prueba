@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">        
     <link rel="stylesheet" href="styles/styles.css">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-GS53GWE2Z0');
+</script>
 </head>
 <body>
     <div id="formStatus"></div>
@@ -662,9 +670,24 @@
             <div class="clientes-carrusel">
                 <button class="carrusel-btn" id="carrusel-prev" aria-label="Anterior">&#8592;</button>
                 <div class="carrusel-imagenes">
-                    <img src="assets/clientes/cliente1.jpg" alt="Cliente satisfecho 1" class="carrusel-img activa">
-                    <img src="assets/clientes/cliente2.jpg" alt="Cliente satisfecho 2" class="carrusel-img">
-                    <img src="assets/clientes/cliente3.jpg" alt="Cliente satisfecho 3" class="carrusel-img">
+                    <div class="carrusel-img-bg activa" data-img="assets/clientes/cliente1.jpg" aria-label="Cliente satisfecho 1"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente2.jpg" aria-label="Cliente satisfecho 2"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente3.jpg" aria-label="Cliente satisfecho 3"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente4.jpg" aria-label="Cliente satisfecho 4"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente5.jpg" aria-label="Cliente satisfecho 5"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente6.jpg" aria-label="Cliente satisfecho 6"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente7.jpg" aria-label="Cliente satisfecho 7"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente8.jpg" aria-label="Cliente satisfecho 8"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente9.jpg" aria-label="Cliente satisfecho 9"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente10.jpg" aria-label="Cliente satisfecho 10"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente11.jpg" aria-label="Cliente satisfecho 11"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente12.jpg" aria-label="Cliente satisfecho 12"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente13.jpg" aria-label="Cliente satisfecho 13"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente14.jpg" aria-label="Cliente satisfecho 14"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente15.jpg" aria-label="Cliente satisfecho 15"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente16.jpg" aria-label="Cliente satisfecho 16"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente17.jpg" aria-label="Cliente satisfecho 17"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente18.jpg" aria-label="Cliente satisfecho 18"></div>
                 </div>
                 <button class="carrusel-btn" id="carrusel-next" aria-label="Siguiente">&#8594;</button>
             </div>
@@ -680,7 +703,7 @@
             <div class="quienes-somos-card">
                 <i class="fas fa-shipping-fast"></i>
                 <h3>Envío Express</h3>
-                <p>Entrega en 5-10 días con seguimiento del paquete</p>
+                <p>Entrega en 1-2 semanas con seguimiento del paquete</p>
             </div>
             <div class="quienes-somos-card">
                 <i class="fas fa-users"></i>
@@ -1267,22 +1290,15 @@ Phone Number:</textarea>
         const height = 800;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
+        // Redirección a la página de éxito tras el pago
+        const returnUrl = `${window.location.origin}/pago-exitoso.html`;
+        const paypalUrl = `https://www.paypal.com/paypalme/camisetazo/${total}EUR?return=${encodeURIComponent(returnUrl)}`;
         const ventanaPayPal = window.open(
-            `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
+            paypalUrl,
             'PagoPayPal',
-           
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
-
-        // Verificar si la ventana de PayPal se ha cerrado
-        const intervalo = setInterval(() => {
-            if (ventanaPayPal.closed) {
-                clearInterval(intervalo);
-                mostrarExito('Solicitud completada. Espere');
-                enviarFormulario();
-            }
-        }, 500);
-
+        // Ya no se envía el formulario automáticamente al cerrar la ventana
         return ventanaPayPal;
     }
 
@@ -1293,12 +1309,6 @@ Phone Number:</textarea>
         notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
         notificacion.style.display = 'block';
         setTimeout(() => notificacion.style.display = 'none', 5000);
-    }
-
-    // Función para enviar el formulario
-    function enviarFormulario() {
-        document.getElementById('precioTotal').value = document.getElementById('precioDisplay').textContent;
-        document.getElementById('pedidoForm').submit();
     }
 
     // Evento del botón de PayPal
@@ -1327,16 +1337,11 @@ Phone Number:</textarea>
             alert("Debes seleccionar al menos una unidad.");
             return;
         }
-
-        // Obtener el total correctamente
-        const total = parseFloat(document.getElementById('precioDisplay').textContent);
-        if (isNaN(total) || total <= 0) {
-            alert("El total a pagar no es válido.");
-            return;
-        }
-
-        // Abrir PayPal
+        // Obtener el total a pagar
+        const total = document.getElementById('precioDisplay').textContent;
         abrirPayPal(total);
+        // Mostrar mensaje al usuario
+        mostrarExito('Cuando completes el pago en PayPal, serás redirigido automáticamente.');
     });
 
     // Hacer toda la tarjeta clickeable excepto el botón
@@ -1359,92 +1364,10 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
     // Inicializar
     actualizarPrecio();
 
-    // Carrusel de clientes satisfechos
-    function inicializarCarruselClientes() {
-        const imagenes = document.querySelectorAll('.carrusel-img');
-        const prevBtn = document.getElementById('carrusel-prev');
-        const nextBtn = document.getElementById('carrusel-next');
-        if (!imagenes.length || !prevBtn || !nextBtn) return;
-        let actual = 0;
-        function mostrarImagen(idx) {
-            imagenes.forEach((img, i) => {
-                img.classList.toggle('activa', i === idx);
-                img.style.display = i === idx ? 'block' : 'none';
-            });
-        }
-        prevBtn.onclick = function() {
-            actual = (actual - 1 + imagenes.length) % imagenes.length;
-            mostrarImagen(actual);
-        };
-        nextBtn.onclick = function() {
-            actual = (actual + 1) % imagenes.length;
-            mostrarImagen(actual);
-        };
-        // Ampliar imagen al hacer click
-        imagenes.forEach(img => {
-            img.onclick = function() {
-                mostrarModalImagen(this.src, this.alt);
-            };
-        });
-        mostrarImagen(actual);
-    }
-    // Modal para zoom
-    function mostrarModalImagen(src, alt) {
-        let modal = document.getElementById('modal-imagen-clientes');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'modal-imagen-clientes';
-            modal.innerHTML = `
-                <div class="modal-fondo"></div>
-                <div class="modal-contenido">
-                    <img src="" alt="" id="modal-img-clientes">
-                    <button class="modal-cerrar" aria-label="Cerrar">&times;</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            // Cerrar modal
-            modal.querySelector('.modal-fondo').onclick = cerrarModal;
-            modal.querySelector('.modal-cerrar').onclick = cerrarModal;
-            // Zoom con rueda
-            const modalImg = modal.querySelector('#modal-img-clientes');
-            let scale = 1;
-            modalImg.onwheel = function(e) {
-                e.preventDefault();
-                scale += e.deltaY * -0.0015;
-                scale = Math.min(Math.max(1, scale), 4);
-                modalImg.style.transform = `scale(${scale})`;
-            };
-            // Doble click para resetear zoom
-            modalImg.ondblclick = function() {
-                scale = 1;
-                modalImg.style.transform = 'scale(1)';
-            };
-        }
-        const modalImg = modal.querySelector('#modal-img-clientes');
-        modalImg.src = src;
-        modalImg.alt = alt;
-        modalImg.style.transform = 'scale(1)';
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-    function cerrarModal() {
-        const modal = document.getElementById('modal-imagen-clientes');
-        if (modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-        }
-    }
-    // Inicializar carrusel al cargar y al mostrar la sección
-    inicializarCarruselClientes();
-    document.querySelectorAll('.boton-seccion').forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (this.dataset.seccion === 'quienes-somos') {
-                setTimeout(inicializarCarruselClientes, 100); // Espera a que se muestre
-            }
-        });
-    });
-}); // <-- Cierra el addEventListener('DOMContentLoaded', ...)
+    // Carrusel de clientes satisfechos y modal ahora están en scripts/scripts.js
+});
 </script>
 <script src="scripts/scripts.js"></script>
+<script defer src="https://analytics.vercel.com/script.js"></script>
 </body>
 </html>
