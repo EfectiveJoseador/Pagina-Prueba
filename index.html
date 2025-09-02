@@ -1541,15 +1541,15 @@
 
                 const checkoutData = { name, address, city, state, country, postal, phone, paypalEmail, instagram };
 
-                // Recompute totals to be safe
-                let subtotal = 0; CART.forEach(ci => subtotal += ci.total);
-                const shipping = CART.length>0 ? SHIPPING : 0;
-                const total = subtotal + shipping;
+                // Recompute totals using centralized logic (incluye ofertas y recargos)
+                const computed = computeCartTotals();
+                const total = Number(computed.total || 0);
 
                 console.log('Checkout data:', checkoutData, 'total:', total);
 
                 if (typeof abrirPayPal === 'function') {
-                    const ventana = abrirPayPal(total);
+                    // pasar el total formateado con 2 decimales para el enlace PayPal
+                    const ventana = abrirPayPal(total.toFixed(2));
                     const intervalo = setInterval(()=>{ if (ventana && ventana.closed){ clearInterval(intervalo); clearCart(); modal.remove(); alert('Pago cerrado - si completaste el pago, tu carrito se vaciará.'); } }, 500);
                 } else {
                     alert('Función de pago no disponible.');
@@ -2007,14 +2007,28 @@
 }
 
     function abrirPayPal(total) {
+        // Acepta total como número o string; normaliza a formato '12.34'
+        let totalStr = String(total || '0');
+        // Reemplazar coma por punto y eliminar posibles separadores de miles
+        totalStr = totalStr.replace(/\./g, '.').replace(/,/g, '.');
+        // Si hay múltiples puntos, dejar solo el último como decimal separator
+        const parts = totalStr.split('.');
+        if (parts.length > 2) {
+            const dec = parts.pop();
+            totalStr = parts.join('') + '.' + dec;
+        }
+        // Forzar dos decimales
+        const num = Number(totalStr) || 0;
+        const payAmount = num.toFixed(2);
+
         const width = 600;
         const height = 800;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
+        const paypalUrl = `https://www.paypal.com/paypalme/camisetazo/${encodeURIComponent(payAmount)}EUR`;
         const ventanaPayPal = window.open(
-            `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
+            paypalUrl,
             'PagoPayPal',
-           
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
 
