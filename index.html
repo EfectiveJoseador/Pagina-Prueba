@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">        
     <link rel="stylesheet" href="styles/styles.css">
-    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -33,8 +32,8 @@
     </nav>
 </header>
 
-        <!-- Sección Tienda -->
-        <section id="tienda" class="seccion activa">
+<!-- Sección Tienda -->
+<section id="tienda" class="seccion activa">
             <div class="catalogo-header animate__animated animate__fadeInDown">
                 <h2 class="catalogo-titulo">Catálogo Premium</h2>
                 <p class="catalogo-descripcion">Explora nuestra selección exclusiva de productos deportivos de alta calidad. Haz clic en cada categoría para ver el catálogo completo.</p>
@@ -55,7 +54,8 @@
                             <a href="https://2020soccer.x.yupoo.com/albums" target="_blank">GENERAL</a>
                             <a href="https://classic-football-fhirts052.x.yupoo.com/" target="_blank">RETRO</a>
                             <a href="https://yongfa1688.x.yupoo.com/" target="_blank">NUEVA TEMPORADA</a>
-                            <a href="https://aosendi.x.yupoo.com/albums" target="_blank">CONJUNTO ENTRENAMIENTO</a>
+                            <a href="https://aosendi.x.yupoo.com/albums" target="_blank">CONJUNTOS</a>
+                            <a href="https://dongshanstore.x.yupoo.com/" target="_blank">CONJUNTOS 2</a>
                         </div>
                     </div>
                 </div>
@@ -166,10 +166,10 @@
             </div>
         </section>
 
-        <!-- Sección Quiénes Somos -->
+
+<!-- Sección Quiénes Somos -->
         <section id="quienes-somos" class="seccion">
     <style>
-    /* ...existing code... */
     .quienes-somos-ui {
         max-width: 900px;
         margin: 0 auto 2.5rem auto;
@@ -251,9 +251,9 @@
         font-size: 1.1rem;
     }
     .quienes-somos-card .stars i {
-        color: #FFD700 !important; /* dorado */
-        font-size: 1rem !important; /* más pequeñas */
-        background: none !important; /* sin círculo */
+        color: #FFD700 !important;
+        font-size: 1rem !important;
+        background: none !important;
         border-radius: 0 !important;
         padding: 0 !important;
         box-shadow: none !important;
@@ -302,9 +302,6 @@
             gap: 1.2rem;
         }
     }
-    /* --- FIN: Quiénes Somos --- */
-
-    /* --- INICIO: Pedidos --- */
     .formulario-pedido {
         max-width: 900px;
         margin: 2.5rem auto;
@@ -336,26 +333,35 @@
     }
 
     .boton-unidad {
-        background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
+        background: var(--azul-acento);
         color: #fff;
-        border: none;
+        border: 2px solid transparent;
         border-radius: 12px;
         padding: 0.9rem 2.1rem;
         font-size: 1.1rem;
         font-weight: 700;
         cursor: pointer;
         box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        transition: background 0.2s, color 0.2s, border 0.2s, transform 0.2s, box-shadow 0.2s;
     }
 
-    .boton-unidad.activo, .boton-unidad:hover {
-        background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
+    .boton-unidad.activo, .boton-unidad:focus {
+        background: #163a6b;
         color: var(--azul-acento);
-        transform: translateY(-3px) scale(1.04);
+        border: 2.5px solid var(--azul-acento);
+        outline: none;
         box-shadow: 0 6px 24px rgba(42,91,168,0.13);
+        transform: translateY(-3px) scale(1.04);
     }
 
-    /* Campos del formulario */
+    .boton-unidad:not(.activo):hover {
+        background: #2456a8;
+        color: #fff;
+        border: 2px solid #2456a8;
+        transform: translateY(-1px) scale(1.02);
+        box-shadow: 0 4px 16px rgba(42,91,168,0.13);
+    }
+
     .input-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -475,7 +481,6 @@
         padding: 2rem;
     }
 
-    /* NUEVO: Mejorar presentación de la marca */
 .brand-header {
     display: flex;
     flex-direction: column;
@@ -577,7 +582,6 @@
             from { transform: scaleX(0); }
             to { transform: scaleX(1); }
         }
-        /* Nuevos estilos para el selector de unidades */
         .selector-unidades {
             display: flex;
             justify-content: center;
@@ -586,26 +590,35 @@
         }
 
         .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
+            background: var(--azul-acento);
             color: #fff;
-            border: none;
+            border: 2px solid transparent;
             border-radius: 12px;
             padding: 0.9rem 2.1rem;
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            transition: background 0.2s, color 0.2s, border 0.2s, transform 0.2s, box-shadow 0.2s;
         }
 
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
+        .boton-unidad.activo, .boton-unidad:focus {
+            background: #163a6b;
             color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
+            border: 2.5px solid var(--azul-acento);
+            outline: none;
             box-shadow: 0 6px 24px rgba(42,91,168,0.13);
+            transform: translateY(-3px) scale(1.04);
         }
 
-        /* Botones de versión */
+        .boton-unidad:not(.activo):hover {
+            background: #2456a8;
+            color: #fff;
+            border: 2px solid #2456a8;
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 4px 16px rgba(42,91,168,0.13);
+        }
+
         .boton-version-especial, .boton-version-jugador, .boton-camiseta-nba {
             width: 100%;
             padding: 0.85rem 0;
@@ -664,7 +677,6 @@
             <a href="https://www.instagram.com/camisetazo._/" target="_blank">@camisetazo._ ➔</a>
             <p>Novedades diarias | Ofertas exclusivas</p>
         </div>
-        <!-- Carrusel de clientes satisfechos -->
         <div class="clientes-carrusel-section">
             <h3 style="color:var(--azul-acento);margin-bottom:1rem;">Clientes Satisfechos</h3>
             <div class="clientes-carrusel">
@@ -688,12 +700,19 @@
                     <div class="carrusel-img-bg" data-img="assets/clientes/cliente16.jpg" aria-label="Cliente satisfecho 16"></div>
                     <div class="carrusel-img-bg" data-img="assets/clientes/cliente17.jpg" aria-label="Cliente satisfecho 17"></div>
                     <div class="carrusel-img-bg" data-img="assets/clientes/cliente18.jpg" aria-label="Cliente satisfecho 18"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente19.jpg" aria-label="Cliente satisfecho 19"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente20.jpg" aria-label="Cliente satisfecho 20"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente21.jpg" aria-label="Cliente satisfecho 21"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente22.jpg" aria-label="Cliente satisfecho 22"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente23.jpg" aria-label="Cliente satisfecho 23"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente24.jpg" aria-label="Cliente satisfecho 24"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente25.jpg" aria-label="Cliente satisfecho 25"></div>
+                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente26.jpg" aria-label="Cliente satisfecho 26"></div>
                 </div>
                 <button class="carrusel-btn" id="carrusel-next" aria-label="Siguiente">&#8594;</button>
             </div>
             <p style="margin-top:0.7rem;color:#b8c6e0;font-size:1rem;">Desliza para ver más capturas de clientes reales. ¡Gracias por confiar en nosotros!</p>
         </div>
-        <!-- Fin carrusel -->
         <div class="quienes-somos-grid">
             <div class="quienes-somos-card">
                 <i class="fas fa-shield-alt"></i>
@@ -735,130 +754,709 @@
         </div>
     </div>
 </section>
-<!-- Nueva sección de Pedidos -->
+<!-- Sección Pedidos: Galería de productos y carrito -->
 <section id="pedidos" class="seccion">
-    <div class="formulario-pedido">
-        <h2>Realizar Pedido</h2>
-        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST">
-            <input type="hidden" name="_next" value="https://compra-exitosa.vercel.app/">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
-            <input type="hidden" name="precio_total" id="precioTotal">
+    <div class="product-gallery-ui">
+    <div class="gallery-header"></div>
 
-            <div class="selector-unidades">
-                <button type="button" class="boton-unidad activo" data-unidades="1">1 Unidad</button>
-                <button type="button" class="boton-unidad" data-unidades="2">2 Unidades</button>
-                <button type="button" class="boton-unidad" data-unidades="3">3 Unidades</button>
-                <button type="button" class="boton-unidad" data-unidades="5">5 Unidades</button>
+    <div id="productGallery" class="product-gallery" aria-live="polite"></div>
+
+    <aside id="cartPanel" class="cart-panel" aria-label="Carrito de compras">
+            <h3>Tu Carrito</h3>
+            <div id="cartItems" class="cart-items"></div>
+            <div class="cart-totals">
+                <div>Subtotal: <span id="cartSubtotal">0.00</span>€</div>
+                <div>Gastos envío: <span id="cartShipping">2.00</span>€</div>
+                <div style="font-weight:800">Total: <span id="cartTotal">0.00</span>€</div>
             </div>
-
-            <!-- Campos requeridos por Formspree -->
-            <input type="hidden" name="_language" value="es">
-            <input type="hidden" name="_subject" value="Nuevo pedido de Camisetazo">
-            <input type="hidden" name="_template" value="table">
-        <div class="contenedor-unidades" id="contenedorUnidades"></div>
-            <!-- Campos del formulario -->
-            <!-- Campos de información -->
-            <div class="input-grid">
-                <div class="input-group">
-                    <label for="emailPaypal">Correo de PayPal: ¡IMPORTANTE!</label>
-                    <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com">
-                </div>
-                <div class="input-group">
-    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
-    <input 
-        type="text" 
-        id="usuario" 
-        name="usuario" 
-        required 
-        placeholder="Ej: roberto_carlos03"
-        pattern="^[A-Za-z0-9_.]{1,30}$"
-        title="Por favor, ingresa un nombre de usuario válido de Instagram (solo letras, números, guion bajo o punto, entre 1 y 30 caracteres, sin @)."
-    >
-</div>
-                <div class="input-group">
-                    <label for="direccion">Dirección completa:</label>
-                    <textarea id="direccion" name="direccion" required rows="7">Contact Name:
-Address Line:
-City:
-State:
-Country:
-Postal Code:
-Phone Number:</textarea>
-                </div>
+            <div class="cart-actions">
+                <button id="clearCartGallery" class="btn-secondary">Vaciar</button>
+                <button id="gotoCheckoutBtn" class="btn-primary">Ir a Checkout</button>
             </div>
-
-            <!-- Sección de cálculo de precio -->
-            <div class="calculadora-precio animate__animated animate__fadeInUp">
-                <h3><i class="fas fa-receipt"></i> Desglose del Precio</h3>
-                <div class="detalle-precio" style="background:rgba(255,255,255,0.13);border-left:5px solid #e74c3c;">
-                    <span><i class="fas fa-tag"></i> Precio sin descuento <span class="badge-extra" style="background:#e74c3c;">Normal</span> (<span id="cantidad-unidades-sin-desc">1</span> unidad<span id="plural-unidades-sin-desc"></span>):</span>
-                    <span style="color:#e74c3c;text-decoration:line-through;font-weight:bold;"><span id="precio-sin-descuento">25.00</span>€</span>
-                </div>
-                <div class="detalle-precio" style="background:rgba(40,167,69,0.13);border-left:5px solid #28a745;">
-                    <span><i class="fas fa-bolt"></i> Precio con descuento <span class="badge-extra" style="background:#28a745;">Oferta</span> (<span id="cantidad-unidades">1</span> unidad<span id="plural-unidades"></span>):</span>
-                    <span style="color:#28a745;font-weight:bold;"><span id="precio-base-detalle">19.90</span>€</span>
-                </div>
-                <div class="detalle-precio">
-                    <span><i class="fas fa-patch"></i> Parches personalizados:</span>
-                    <span><span id="cantidad-parches" class="badge-extra" style="background:#2a5ba8;">0</span> × 1€ = <span id="total-parches">0.00</span>€</span>
-                </div>
-                <div class="detalle-precio">
-                    <span><i class="fas fa-tshirt"></i> Dorsales personalizados:</span>
-                    <span><span id="cantidad-dorsales" class="badge-extra" style="background:#2a5ba8;">0</span> × 2€ = <span id="total-dorsales">0.00</span>€</span>
-                </div>
-                <div class="detalle-precio">
-                    <span><i class="fas fa-star"></i> Versiones Jugador / Retro / NBA:</span>
-                    <span><span id="cantidad-versiones" class="badge-extra" style="background:#2a5ba8;">0</span> × 5€ = <span id="total-versiones">0.00</span>€</span>
-                </div>
-                <div class="detalle-precio">
-                    <span><i class="fas fa-ruler-combined"></i> Tallas con recargo:</span>
-                    <span><span id="cantidad-tallas-extra" class="badge-extra" style="background:#2a5ba8;">0</span> = <span id="total-tallas-extra">0.00</span>€</span>
-                </div>
-                <div class="detalle-precio">
-                    <span><i class="fas fa-shipping-fast"></i> Gastos de envío:</span>
-                    <span id="gastos-envio"></span>
-                </div>
-                <div class="total-container animate__animated animate__pulse animate__delay-1s">
-                    <div style="font-size:1.3rem;font-weight:700;letter-spacing:1px;">Total a Pagar</div>
-                    <div class="precio-total" style="background:linear-gradient(90deg,#28a745 60%,#2a5ba8 100%);border-radius:10px;padding:0.7rem 1.2rem;box-shadow:0 2px 12px rgba(42,91,168,0.13);">
-                        <span id="precioSinDescuentoTotal" style="color: #fff; text-decoration: line-through; font-size: 1.2rem; margin-right: 10px; vertical-align: middle; opacity:0.7;">25.00</span>
-                        <span class="moneda">€</span>
-                        <span id="precioDisplay" style="color:#fff;font-size:2.2rem;font-weight:900;text-shadow:0 2px 12px rgba(42,91,168,0.20);margin-left:10px;">19.90</span>
-                    </div>
-                    <div style="margin-top:0.5rem;font-size:1rem;color:#fff;opacity:0.85;">
-                        ¡Aprovecha el <b>descuento especial</b> por tiempo limitado!
-                    </div>
-                </div>
-            </div>
-
-            <!-- Botón de pago -->
-            <div id="paso1">
-                <p class="nota-pago">
-                    * Por favor selecciona la opción 'Enviar a amigos y familiares.' <br>
-                    * Añade tu @ de Instagram en el asunto del pago para agilizar la verificación.<br>
-                    * Tras pagar en PayPal, marca la casilla e introduce el ID de transacción para finalizar tu pedido.
-                </p>
-                <br>
-                <button type="button" id="paypalButton" class="boton-pago" style="margin-top: 10px;">
-                    <i class="fab fa-paypal"></i> Pagar con PayPal
-                </button>
-                <div style="margin-top:1rem; display: flex; align-items: center; gap: 1.2em; background: rgba(42,91,168,0.13); border-radius: 10px; padding: 1.1rem 1rem 1.1rem 1.2rem; box-shadow: 0 1px 6px rgba(42,91,168,0.07); border: 1.5px solid rgba(42,91,168,0.18); max-width: 420px;">
-                    <i class="fab fa-paypal" style="font-size:2.1em;color:#2a5ba8;background:#fff;border-radius:50%;padding:0.4em 0.5em;box-shadow:0 2px 8px rgba(42,91,168,0.10);"></i>
-                    <div style="flex:1;">
-                        <label for="idTransaccion" style="color:#2a5ba8;font-weight:700;font-size:1.08em;letter-spacing:0.5px;">ID de transacción de PayPal <span style='color:#e74c3c;'>(obligatorio)</span>:</label>
-                        <input type="text" id="idTransaccion" name="idTransaccion" required placeholder="Ej: 1AB23456CD7890123" style="margin-top:0.5em;width:100%;padding:12px 14px;border:2px solid #2a5ba8;border-radius:8px;background:rgba(255,255,255,0.13);color:#222;font-size:1.08em;transition:all 0.3s;box-shadow:0 1px 4px rgba(42,91,168,0.08);font-weight:600;letter-spacing:1px;">
-                    </div>
-                </div>
-                <div style="margin-top:1rem;">
-                    <input type="checkbox" id="confirmPago" name="confirmPago" style="transform:scale(1.3);margin-right:0.5em;">
-                    <label for="confirmPago" style="color:#fff;font-weight:600;">He realizado el pago en PayPal</label>
-                </div>
-                <button type="submit" id="enviarPedidoBtn" class="boton-pago" style="margin-top: 20px;">Enviar Pedido</button>
-                <div id="avisoPago" style="color:#e74c3c;font-weight:600;margin-top:0.7em;display:none;">Debes marcar la casilla de pago antes de enviar el pedido.</div>
-            </div>         
-        </form>
+            <p class="cart-note">Antes de pagar se solicitará correo de PayPal, usuario de Instagram y dirección de envío en el checkout.</p>
+            </aside>
     </div>
+
+    <style>
+    /* Galería: estilo azul, limpio y responsivo similar a Manchester City */
+    /* Ocultar la UI de la galería cuando la sección pedidos no está activa */
+    #pedidos:not(.activa) .product-gallery-ui { display: none; }
+    /* Grid layout with named areas so header spans both columns and the product gallery
+       always occupies the left column while the cart occupies the right column. This
+       prevents automatic wrapping that placed the cart below the products. */
+    #pedidos.activa .product-gallery-ui {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        grid-template-rows: auto 1fr;
+        grid-template-areas: "header header" "gallery cart";
+        gap: 22px;
+        align-items: start;
+    }
+    .gallery-header { grid-area: header; }
+    .product-gallery { grid-area: gallery; }
+    .cart-panel { grid-area: cart; }
+        .gallery-header h2 { color: var(--azul-acento); font-size: 2rem; margin: 0 0 6px; }
+        .gallery-header p { color: #cfdff6; margin: 0 0 16px; }
+          /* Gallery: center items inside the left column by default.
+              If there is only one product, align it to the left (start) so it appears at the very left edge. */
+        .product-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 18px; justify-items: stretch; }
+          .product-gallery > .product-item:only-child { justify-self: start; max-width: 800px; }
+    .product-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(42,91,168,0.08); padding: 12px; border-radius: 12px; text-align: center; transition: transform .16s, box-shadow .16s; max-width: 360px; box-sizing: border-box; cursor: pointer; }
+        .product-item:hover { transform: translateY(-6px); box-shadow: 0 8px 30px rgba(42,91,168,0.12); }
+        .product-item img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+        .product-item h4 { color: #fff; margin: 10px 0 6px; font-size: 1.05rem; }
+        .product-item .price { color: #9fe0ff; font-weight: 800; margin-bottom: 8px; }
+        .product-item .excerpt { color: #d6e9ff; font-size: 0.95rem; min-height: 40px; }
+        .product-item .actions { display:flex; gap:8px; justify-content:center; margin-top:10px; }
+        .btn-primary { background: linear-gradient(90deg,var(--azul-acento) 60%, #163a6b 100%); color: #fff; border: none; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+        .btn-secondary { background: transparent; color: #d6e9ff; border: 1px solid rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+
+          /* Keep the cart visually on the right side of the page at all times. Make it fixed so it doesn't move
+              when the gallery grows. Add max-height/overflow to remain scrollable on small viewports. */
+    .cart-panel { background: rgba(10,31,61,0.9); padding: 14px; border-radius: 12px; color: #dbeeff; border: 1px solid rgba(42,91,168,0.12); position: relative; width: 100%; max-width: 360px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
+        .cart-items { max-height: 420px; overflow:auto; margin-bottom:12px; }
+        .cart-item { display:flex; gap:8px; align-items:center; padding:8px; border-radius:8px; background: rgba(255,255,255,0.02); margin-bottom:8px; }
+        .cart-item img { width:56px; height:56px; object-fit:cover; border-radius:6px; }
+        .cart-item .meta { flex:1; text-align:left; }
+        .cart-item .meta b { display:block; color:#fff; }
+        .cart-item .meta small { color:#bcd9ff; display:block; }
+        .cart-item .remove { background:transparent; border:none; color:#ffb3b3; cursor:pointer; }
+        .cart-note { font-size:0.85rem; color:#bcd9ff; margin-top:8px; }
+
+        /* Keep cart on the right even on narrower viewports but reduce its width and ensure the gallery
+           has right padding so content doesn't sit underneath the fixed cart. */
+        @media (min-width: 1201px) {
+            /* Desktop: two-column grid — gallery left, cart right. Header spans both columns. */
+            #pedidos.activa .product-gallery-ui { display: grid; grid-template-columns: 1fr 360px; grid-template-rows: auto 1fr; grid-template-areas: "header header" "gallery cart"; gap: 22px; }
+            .gallery-header { grid-area: header; }
+            .product-gallery { grid-area: gallery; }
+            /* On wide screens show 3 products per row inside the gallery */
+            .product-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+            .cart-panel { grid-area: cart; position: relative; right: 0; top: 0; width: 100%; max-width: 360px; align-self: start; transform: none; }
+            /* Remove right padding so gallery doesn't shift underneath */
+            #pedidos.activa .product-gallery { padding-right: 0; }
+        }
+        @media (max-width: 1200px) {
+            .product-gallery-ui { padding-right: 380px; }
+            .cart-panel { position: fixed; width: 300px; right: 12px; top: 90px; }
+        }
+    /* Small helper for the checkout modal inputs */
+    .checkout-input { width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:8px }
+    /* Ajustes para que la tarjeta se adapte a la imagen 800x800 */
+    .product-item, .pedido-mini-card { display:flex; flex-direction:column; align-items:center; }
+    .product-item > img, .pedido-mini-card img.pedido-carrusel-img { max-width:800px; width:100%; height:auto; object-fit:contain; border-radius:8px; }
+    .pedido-mini-card { padding:8px; }
+    .pedido-mini-card .thumb-img { display:none; }
+    </style>
+
+    <script>
+        // Datos de ejemplos tomados de la carpeta assets/productos
+        const PRODUCTS = [
+            { id: 'barca1', name: 'Camiseta Local Barcelona 25/26', price: 19.90, img: 'assets/productos/Barcelona2526L/1.jpg', images: [
+                'assets/productos/Barcelona2526L/1.jpg',
+                'assets/productos/Barcelona2526L/2.jpg',
+                'assets/productos/Barcelona2526L/3.jpg',
+                'assets/productos/Barcelona2526L/4.jpg',
+                'assets/productos/Barcelona2526L/5.jpg'
+            ], excerpt: '', link: 'productos/barcelona2526L.html' },
+            { id: 'realm1', name: 'Camiseta Local Real Madrid 25/26', price: 19.90, img: 'assets/productos/RealMadrid2526L/1.jpg', images: [
+                'assets/productos/RealMadrid2526L/1.jpg',
+                'assets/productos/RealMadrid2526L/2.jpg',
+                'assets/productos/RealMadrid2526L/3.jpg',
+                'assets/productos/RealMadrid2526L/4.jpg'
+            ], excerpt: '', link: 'productos/realmadrid2526L.html' },
+            { id: 'athl1', name: 'Camiseta Local Athletic Club 25/26', price: 19.90, img: 'assets/productos/Athletic2526L/1.jpg', images: [
+                'assets/productos/Athletic2526L/1.jpg',
+                'assets/productos/Athletic2526L/2.jpg',
+                'assets/productos/Athletic2526L/3.jpg'
+            ], excerpt: '', link: 'productos/athletic2526L.html' }
+        ];
+        const EXTRAS = { parche: 1, dorsal: 2, version: 5 };
+        const SHIPPING = 2.00;
+        // Ofertas por cantidad (no se crean productos nuevos; se aplican automáticamente según cantidad de camisetas)
+        // Nota: asumimos que las camisetas son el producto con id 'barca1' o cuyo nombre contiene 'Camiseta'
+        const OFFERS = [
+            { size: 5, price: 86.90, shipping: 0, label: 'MEGAPACK 5' },
+            { size: 4, price: 74.90, shipping: 0, label: 'Pack 4' },
+            { size: 3, price: 56.90, shipping: 0, label: 'Pack 3' },
+            { size: 2, price: 39.80, shipping: 0, label: 'Pack 2' },
+            // oferta para 1 unidad promocional (si la tienda tiene 1x en oferta)
+            { size: 1, price: 19.90, shipping: 1.90, label: 'Pack 1 (Promo)' }
+        ];
+        let CART = [];
+
+        // Helpers globales para detección de camisetas y cálculo de mejor combinación de packs
+        function isShirtItem(ci){
+            if (!ci || !ci.name) return false;
+            const name = (ci.name || '').toLowerCase();
+            return (ci.productId === 'barca1') || name.includes('camiseta') || name.includes('camisetas');
+        }
+
+        function computeBestOfferForCount(count){
+            if (count <= 0) return { total:0, shipping:0, combo: {} };
+            const dp = Array(count+1).fill(null);
+            dp[0] = { total:0, shipping:0, combo: {} };
+            for (let i=1;i<=count;i++){
+                let best = null;
+                for (const offer of OFFERS){
+                    if (i - offer.size < 0) continue;
+                    const prev = dp[i - offer.size];
+                    if (!prev) continue;
+                    const candTotal = prev.total + offer.price;
+                    const candShipping = prev.shipping + (offer.shipping||0);
+                    const candSum = candTotal + candShipping;
+                    if (!best || candSum < (best.total + best.shipping)){
+                        const combo = Object.assign({}, prev.combo);
+                        combo[offer.size] = (combo[offer.size]||0) + 1;
+                        best = { total: candTotal, shipping: candShipping, combo };
+                    }
+                }
+                dp[i] = best;
+            }
+            return dp[count] || { total:0, shipping:0, combo: {} };
+        }
+
+        function byId(id){return document.getElementById(id);}    
+
+        // computeCartTotals: reutilizable para carrito y checkout
+        function computeCartTotals(){
+            const shirtItems = CART.filter(isShirtItem);
+            const nonShirtItems = CART.filter(ci => !isShirtItem(ci));
+            const nonShirtSubtotal = nonShirtItems.reduce((s,it)=> s + (it.total || 0), 0);
+            const shirtCount = shirtItems.length;
+            const shirtExtrasSum = shirtItems.reduce((s,it)=> s + (it.extra||0), 0);
+            const shirtBaseSum = shirtItems.reduce((s,it)=> s + (it.price||0), 0);
+            const originalSubtotal = nonShirtSubtotal + shirtBaseSum + shirtExtrasSum;
+            const originalShipping = (CART.length>0? SHIPPING : 0);
+            const originalTotal = originalSubtotal + originalShipping;
+            if (shirtCount === 0) return { subtotal: originalSubtotal, shipping: originalShipping, total: originalTotal, appliedOffer: null, savings:0 };
+            const best = computeBestOfferForCount(shirtCount);
+            const shirtsOfferCost = best.total + shirtExtrasSum;
+            // Si hay más de 1 camiseta aplicamos envío gratis a todo el pedido
+            const shirtsOfferShipping = (shirtCount > 1) ? 0 : best.shipping;
+            const newSubtotal = nonShirtSubtotal + shirtsOfferCost;
+            // Si hay más de 1 camiseta, envío gratis global; si no, sumar shipping para nonShirtItems si existen
+            const newShipping = (shirtCount > 1) ? 0 : (shirtsOfferShipping + (nonShirtItems.length>0 ? SHIPPING : 0));
+            const newTotal = newSubtotal + newShipping;
+            const savings = Math.max(0, originalTotal - newTotal);
+            return { subtotal: newSubtotal, shipping: newShipping, total: newTotal, appliedOffer: { count: shirtCount, detail: best }, savings };
+        }
+
+        function renderGallery(){
+            const container = byId('productGallery');
+            container.innerHTML = '';
+            PRODUCTS.forEach(p => {
+                const el = document.createElement('article');
+                el.className = 'product-item';
+                // Make the entire card clickable: attach data attributes to the article
+                el.setAttribute('data-id', p.id);
+                el.setAttribute('data-action', 'add');
+                // If the product has an images array render a mini carousel; otherwise render the simple card
+                if (p.images && p.images.length) {
+                    const imgsJson = JSON.stringify(p.images);
+                    el.innerHTML = `
+                        <div class="pedido-mini-card" style="cursor:default;" data-images='${imgsJson}'>
+                            <div style="display:flex;justify-content:center;">
+                                        <div style="max-width:800px;width:100%;">
+                                            <img class="pedido-carrusel-img" src="${p.images[0]}" alt="${p.name}" style="width:100%;height:auto;display:block;border-radius:8px;">
+                                        </div>
+                                    </div>
+                            <h4 style="margin-top:10px">${p.name}</h4>
+                            <div class="price">€${p.price.toFixed(2)}</div>
+                            <div class="excerpt">${p.excerpt}</div>
+                            <!-- boton eliminado: la tarjeta completa es clicable -->
+                        </div>
+                    `;
+                } else {
+                    el.innerHTML = `
+                        <img src="${p.img}" alt="${p.name}">
+                        <h4>${p.name}</h4>
+                        <div class="price">€${p.price.toFixed(2)}</div>
+                        <div class="excerpt">${p.excerpt}</div>
+                        <!-- boton eliminado: la tarjeta completa es clicable -->
+                    `;
+                }
+                container.appendChild(el);
+            });
+        }
+
+        function openProductModal(product){
+            // panel simple: generate options inline
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.left = 0; modal.style.top = 0; modal.style.right = 0; modal.style.bottom = 0;
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.background = 'rgba(2,6,23,0.7)';
+            modal.style.zIndex = 1200;
+            modal.innerHTML = `
+                <div style="width:92%;max-width:920px;background:#071735;padding:18px;border-radius:12px;color:#dbeeff;">
+                    <div style="display:flex;gap:14px;align-items:flex-start;">
+                        <img src="${product.img}" alt="${product.name}" style="width:320px;height:320px;object-fit:cover;border-radius:10px;">
+                        <div style="flex:1;">
+                            <h3 style="margin-top:0;color:var(--azul-acento);">${product.name}</h3>
+                            <p style="color:#d6e9ff;">${product.excerpt}</p>
+                            <p style="font-weight:800;font-size:1.25rem;color:#9fe0ff;">€${product.price.toFixed(2)}</p>
+                            <form id="_personalizeForm" style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;">
+                                <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Nombre y número (ej: MESSI 10) <small style="color:#bcd9ff;display:block;font-weight:400">(+2€)</small>
+                                    <input id="_opt_dorsal" placeholder="Ej: MESSI 10" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;" />
+                                </label>
+
+                                <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Parche (+1€)
+                                    <select id="_opt_parche_select" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;">
+                                        <option value="none">Ninguno</option>
+                                        <option value="LaLiga">LaLiga</option>
+                                        <option value="Premier League">Premier League</option>
+                                        <option value="Ligue 1">Ligue 1</option>
+                                        <option value="Serie A">Serie A</option>
+                                        <option value="Bundesliga">Bundesliga</option>
+                                        <option value="Champions League">Champions League</option>
+                                        <option value="Europa League">Europa League</option>
+                                        <option value="Otros">Otros</option>
+                                    </select>
+                                </label>
+                                <label id="_opt_parche_otros_wrap" style="grid-column:1/3;display:none;">
+                                    <input id="_opt_parche_otros" placeholder="Indica el parche" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;" />
+                                </label>
+
+                                <label style="grid-column:1/3;"> Talla:
+                                    <select id="_opt_talla" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;">
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL (+1€)</option>
+                                        <option value="3XL">3XL (+2€)</option>
+                                        <option value="4XL">4XL (+3€)</option>
+                                    </select>
+                                </label>
+
+                                <label style="grid-column:1/3;"> Versión especial (Jugador/Retro/NBA):
+                                    <select id="_opt_version" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;">
+                                        <option value="none">Ninguna</option>
+                                        <option value="jugador">Jugador (+5€)</option>
+                                        <option value="retro">Retro (+5€)</option>
+                                        <option value="nba">NBA (+5€)</option>
+                                    </select>
+                                </label>
+                            </form>
+                            <div style="margin-top:12px;display:flex;gap:8px;">
+                                <button id="_addCart" class="btn-primary">Personalizar y Comprar</button>
+                                <button id="_closeModal" class="btn-secondary">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            modal.querySelector('#_closeModal').addEventListener('click', ()=> modal.remove());
+            // show/hide 'otros' field for parche
+            const parcheSelect = modal.querySelector('#_opt_parche_select');
+            const parcheOtrosWrap = modal.querySelector('#_opt_parche_otros_wrap');
+            const parcheOtrosInput = modal.querySelector('#_opt_parche_otros');
+            if (parcheSelect) {
+                parcheSelect.addEventListener('change', function(){
+                    if (this.value === 'Otros') { parcheOtrosWrap.style.display = ''; parcheOtrosInput.focus(); }
+                    else { parcheOtrosWrap.style.display = 'none'; }
+                });
+            }
+
+            modal.querySelector('#_addCart').addEventListener('click', ()=>{
+                const talla = modal.querySelector('#_opt_talla').value;
+                const dorsal = modal.querySelector('#_opt_dorsal').value.trim();
+                const parcheSel = modal.querySelector('#_opt_parche_select').value;
+                const parcheFinal = (parcheSel === 'Otros') ? (modal.querySelector('#_opt_parche_otros').value.trim() || '') : (parcheSel === 'none' ? '' : parcheSel);
+                const version = modal.querySelector('#_opt_version').value;
+                // pasar parcheFinal como string ('' si ninguno)
+                addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
+                modal.remove();
+            });
+        }
+
+        // Nuevo: abrir modal que reutiliza el carrusel/programación visual de la tienda
+        function openTiendaCarouselModal(product) {
+            if (document.getElementById('modal-tienda-carrusel')) return;
+            const modal = document.createElement('div');
+            modal.id = 'modal-tienda-carrusel';
+            modal.style.position = 'fixed';
+            modal.style.left = 0; modal.style.top = 0; modal.style.right = 0; modal.style.bottom = 0;
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.background = 'rgba(2,6,23,0.78)';
+            modal.style.zIndex = 1400;
+
+            // Build carousel HTML dynamically from product.images (fallback to [product.img])
+            const imgs = Array.isArray(product.images) && product.images.length ? product.images : [product.img];
+            const slidesHtml = imgs.map((src, i) => `<img src="${src}" alt="${i+1}" style="flex:0 0 100%;width:100%;max-height:520px;object-fit:cover;border-radius:6px;">`).join('');
+            const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" style="width:72px;height:72px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
+
+            modal.innerHTML = `
+                <div style="width:94%;max-width:1120px;background:#071735;padding:14px;border-radius:12px;color:#dbeeff;display:grid;grid-template-columns:1fr 360px;gap:16px;">
+                    <div style="background:rgba(10,31,61,0.6);padding:12px;border-radius:10px;">
+                        <div id="modalTiendaCarousel" style="position:relative;overflow:hidden;border-radius:8px;">
+                            <button id="modalTiendaPrev" aria-label="Anterior" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.4);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;">‹</button>
+                            <div class="carousel-track" style="display:flex;transition:transform .35s ease;">
+                                ${slidesHtml}
+                            </div>
+                            <button id="modalTiendaNext" aria-label="Siguiente" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.4);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;">›</button>
+                        </div>
+                        <div id="modalTiendaThumbs" style="display:flex;gap:8px;margin-top:10px;justify-content:center;padding:6px;">
+                            ${thumbsHtml}
+                        </div>
+                    </div>
+                    <div style="background:rgba(10,31,61,0.9);padding:16px;border-radius:10px;border:1px solid rgba(42,91,168,0.12);">
+                        <h3 style="color:var(--azul-acento);margin-top:0;">${product.name}</h3>
+                        <p style="color:#d6e9ff;">${product.excerpt}</p>
+                        <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
+                        <div style="display:flex;gap:8px;flex-direction:column;">
+                            <button id="modalTiendaPersonalizar" class="btn-primary">Personalizar y Comprar</button>
+                        </div>
+                    </div>
+                </div>
+                <button id="modalTiendaClose" aria-label="Cerrar" style="position:fixed;top:18px;right:18px;background:transparent;border:2px solid rgba(255,255,255,0.12);color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer;z-index:1500;">Cerrar</button>
+            `;
+
+            document.body.appendChild(modal);
+            document.getElementById('modalTiendaClose').addEventListener('click', ()=> { modal.remove(); });
+
+            // Carousel logic (scoped to modal)
+            const track = modal.querySelector('.carousel-track');
+            const slides = Array.from(track.querySelectorAll('img'));
+            let idx = 0;
+            const prev = modal.querySelector('#modalTiendaPrev');
+            const next = modal.querySelector('#modalTiendaNext');
+            const thumbs = modal.querySelector('#modalTiendaThumbs');
+            function update(){ track.style.transform = `translateX(-${idx * 100}%)`; Array.from(thumbs.children).forEach((t,i)=> t.style.outline = i===idx? '3px solid var(--azul-acento)' : 'none'); }
+            prev && prev.addEventListener('click', (e)=>{ e.stopPropagation(); idx = (idx-1+slides.length)%slides.length; update(); });
+            next && next.addEventListener('click', (e)=>{ e.stopPropagation(); idx = (idx+1)%slides.length; update(); });
+            if (thumbs) thumbs.addEventListener('click', (e)=>{ const t = e.target.closest('img[data-index]'); if (!t) return; idx = parseInt(t.dataset.index,10); update(); });
+            update();
+
+            // Autoplay every 5s with pause on hover
+            let autoplayTimer = setInterval(()=>{ idx = (idx+1)%slides.length; update(); }, 5000);
+            const carouselWrap = modal.querySelector('#modalTiendaCarousel');
+            [carouselWrap, prev, next, thumbs].forEach(el => { if (!el) return; el.addEventListener('mouseenter', ()=> clearInterval(autoplayTimer)); el.addEventListener('mouseleave', ()=> autoplayTimer = setInterval(()=>{ idx = (idx+1)%slides.length; update(); }, 5000)); });
+
+            // 'Personalizar y Comprar' behavior: abrir sección Pedidos y trigger detalle del producto en la galería (si existe)
+            const personalizarBtn = modal.querySelector('#modalTiendaPersonalizar');
+            personalizarBtn && personalizarBtn.addEventListener('click', ()=>{
+                // Abrir directamente el modal de personalización para este producto
+                if (typeof openProductModal === 'function') {
+                    openProductModal(product);
+                }
+                modal.remove();
+            });
+        }
+
+        function addToCart(item){
+            // compute extra costs
+            let extra = 0;
+            if (item.parche) extra += EXTRAS.parche;
+            if (item.dorsal) extra += EXTRAS.dorsal;
+            if (item.version && item.version !== 'none') extra += EXTRAS.version;
+            if (item.talla === 'XXL') extra += 1;
+            else if (item.talla === '3XL') extra += 2;
+            else if (item.talla === '4XL') extra += 3;
+            const total = (item.price + extra);
+            const cartItem = { id: Date.now().toString(36), productId: item.productId, name: item.name, img: item.img, price: item.price, extra, talla: item.talla, dorsal: item.dorsal, parche: item.parche, version: item.version, total };
+            CART.push(cartItem);
+            renderCart();
+        }
+
+        function renderCart(){
+            const list = byId('cartItems');
+            list.innerHTML = '';
+            let subtotal = 0;
+            // Agrupar items iguales (por productId + talla + version) para manejar cantidades fácilmente
+            const grouped = {};
+            CART.forEach(ci => {
+                subtotal += ci.total;
+                const key = `${ci.productId}::${ci.talla}::${ci.version || 'none'}`;
+                if (!grouped[key]) grouped[key] = { ...ci, cantidad: 0 };
+                grouped[key].cantidad += 1;
+                // recalcular subtotal por agrupado si queremos mostrar precio por unidad
+            });
+            Object.keys(grouped).forEach(key => {
+                const ci = grouped[key];
+                const row = document.createElement('div'); row.className = 'cart-item';
+                const parcheLabel = ci.parche ? `<small>Parche: ${ci.parche}</small>` : '';
+                row.innerHTML = `
+                    <img src="${ci.img}" alt="${ci.name}">
+                    <div class="meta"><b>${ci.name}</b><small>${ci.talla} ${ci.dorsal? '· ' + ci.dorsal : ''} ${ci.version !== 'none' ? '· ' + ci.version : ''}</small>${parcheLabel}<small>Extras: €${ci.extra.toFixed(2)}</small></div>
+                    <div style="text-align:right">
+                        <div style="font-weight:700">€${(ci.total * ci.cantidad).toFixed(2)}</div>
+                        <div style="margin-top:6px;display:flex;gap:6px;align-items:center;justify-content:flex-end;">
+                            <button class="decrease" data-key="${key}" aria-label="Disminuir">−</button>
+                            <input class="cart-qty-input" data-key="${key}" value="${ci.cantidad}" style="width:48px;text-align:center;" />
+                            <button class="increase" data-key="${key}" aria-label="Aumentar">+</button>
+                            <button class="remove" data-id="${ci.id}" style="margin-left:6px;">Eliminar</button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+            // Detectar camisetas en el carrito para aplicar ofertas por cantidad
+            function isShirt(ci){
+                if (!ci || !ci.name) return false;
+                const n = ci.name.toLowerCase();
+                return ci.productId === 'barca1' || n.indexOf('camiseta') !== -1 || n.indexOf('camisetas') !== -1;
+            }
+
+            const shirtItems = CART.filter(isShirt);
+            const nonShirtItems = CART.filter(ci => !isShirt(ci));
+
+            // Sumas base y extras de camisetas
+            const shirtCount = shirtItems.length;
+            const shirtExtrasSum = shirtItems.reduce((s, it) => s + (it.extra || 0), 0);
+            const shirtBaseSum = shirtItems.reduce((s, it) => s + (it.price || 0), 0);
+
+            // use global computeBestOfferForCount
+
+            // calcular totals no afectados por oferta
+            const nonShirtTotal = nonShirtItems.reduce((s,it)=> s + (it.total || 0), 0);
+
+            // original totals (antes de ofertas) - comportamiento previo usaba SHIPPING global si carrito no vacío
+            const originalTotal = (subtotal + (CART.length>0? SHIPPING : 0));
+
+            let appliedOffer = null;
+            let newSubtotal = subtotal;
+            let newShipping = (CART.length>0? SHIPPING : 0);
+
+            if (shirtCount > 0){
+                const best = computeBestOfferForCount(shirtCount);
+                // best.total es precio de bases de packs; añadimos extras de camisetas
+                const shirtsOfferCost = best.total + shirtExtrasSum;
+                // Si hay más de 1 camiseta aplicamos envío gratis global
+                const shirtsOfferShipping = (shirtCount > 1) ? 0 : best.shipping;
+                // nuevo subtotal = nonShirtTotal + shirtsOfferCost
+                newSubtotal = nonShirtTotal + shirtsOfferCost;
+                // Si hay más de 1 camiseta, envío gratis global; si no, sumar shipping para nonShirtItems si existen
+                newShipping = (shirtCount > 1) ? 0 : (shirtsOfferShipping + (nonShirtItems.length>0 ? SHIPPING : 0));
+                appliedOffer = { count: shirtCount, detail: best, shirtsOfferCost, shirtsOfferShipping };
+            }
+
+            const total = (CART.length>0) ? (newSubtotal + newShipping) : 0;
+
+            byId('cartSubtotal').textContent = newSubtotal.toFixed(2);
+            byId('cartShipping').textContent = newShipping.toFixed(2);
+            byId('cartTotal').textContent = total.toFixed(2);
+
+            // Si hay una oferta aplicada, mostrar summary del ahorro justo encima de totales
+            const totalsContainer = document.querySelector('.cart-totals');
+            if (totalsContainer){
+                // remove previous offer note if any
+                const prev = totalsContainer.querySelector('.offer-summary'); if (prev) prev.remove();
+                if (appliedOffer){
+                    const savings = (originalTotal - total);
+                    const box = document.createElement('div');
+                    box.className = 'offer-summary';
+                    box.style.margin = '10px 0';
+                    box.style.padding = '8px';
+                    box.style.borderRadius = '8px';
+                    box.style.background = 'linear-gradient(90deg, rgba(255,250,230,0.04), rgba(180,220,255,0.02))';
+                    box.innerHTML = `
+                        <div style="font-weight:800;color:#ffd966">Oferta aplicada: ${appliedOffer.count} camisetas</div>
+                        <div style="color:#cfe7ff;font-size:0.95rem">Ahorro estimado: <strong>€${savings.toFixed(2)}</strong></div>
+                        <div style="color:#bcd9ff;font-size:0.9rem">Detalle: ${Object.keys(appliedOffer.detail.combo).map(sz => `${appliedOffer.detail.combo[sz]}×${sz}`).join(' + ')}</div>
+                    `;
+                    totalsContainer.insertBefore(box, totalsContainer.firstChild);
+                }
+            }
+
+            // attach remove
+            // manejar eventos de los controles agrupados
+            list.querySelectorAll('.remove').forEach(btn => btn.addEventListener('click', ()=>{
+                const id = btn.dataset.id; CART = CART.filter(i=> i.id !== id); renderCart();
+            }));
+            list.querySelectorAll('.increase').forEach(btn => btn.addEventListener('click', ()=>{
+                const key = btn.dataset.key;
+                // añadir una unidad igual a la agrupación (clonar primer ítem de esa agrupación)
+                const [productId, talla, version] = key.split('::');
+                const item = CART.find(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version);
+                if (item) CART.push(Object.assign({}, item, { id: Date.now().toString(36) }));
+                renderCart();
+            }));
+            list.querySelectorAll('.decrease').forEach(btn => btn.addEventListener('click', ()=>{
+                const key = btn.dataset.key;
+                const [productId, talla, version] = key.split('::');
+                // encontrar una instancia y eliminarla (la última)
+                for (let i = CART.length-1; i>=0; i--) {
+                    const it = CART[i];
+                    if (it.productId === productId && it.talla === talla && (it.version || 'none') === version) { CART.splice(i,1); break; }
+                }
+                renderCart();
+            }));
+            list.querySelectorAll('.cart-qty-input').forEach(inp => inp.addEventListener('change', ()=>{
+                const key = inp.dataset.key;
+                const v = Math.max(1, parseInt(inp.value) || 1);
+                const [productId, talla, version] = key.split('::');
+                // contar actuales
+                const current = CART.filter(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version).length;
+                if (v > current) {
+                    const item = CART.find(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version);
+                    for (let k=0;k < v-current; k++) { if (item) CART.push(Object.assign({}, item, { id: Date.now().toString(36) })); }
+                } else if (v < current) {
+                    let toRemove = current - v;
+                    for (let i = CART.length-1; i>=0 && toRemove>0; i--) {
+                        const it = CART[i];
+                        if (it.productId === productId && it.talla === talla && (it.version || 'none') === version) { CART.splice(i,1); toRemove--; }
+                    }
+                }
+                renderCart();
+            }));
+        }
+
+        function clearCart(){ CART = []; renderCart(); }
+
+        // Nuevo flujo: abrir modal de checkout para recopilar correo PayPal, @Instagram y dirección
+        function openCheckout(){
+            const total = parseFloat(byId('cartTotal').textContent);
+            if (!total || total <= 0) { alert('Tu carrito está vacío. Añade algún producto antes de proceder al checkout.'); return; }
+            // Evitar duplicados
+            if (document.getElementById('checkoutModal')) return;
+            const modal = document.createElement('div');
+            modal.id = 'checkoutModal';
+            modal.style.position = 'fixed'; modal.style.left = 0; modal.style.top = 0; modal.style.right = 0; modal.style.bottom = 0; modal.style.display = 'flex'; modal.style.alignItems = 'center'; modal.style.justifyContent = 'center'; modal.style.background = 'rgba(2,6,23,0.78)'; modal.style.zIndex = 2000;
+            modal.innerHTML = `
+                <div style="width:92%;max-width:760px;background:#071735;padding:16px;border-radius:10px;color:#dbeeff;">
+                    <h3 style="margin-top:0;color:var(--azul-acento);">Resumen de pedido y datos de envío</h3>
+                    <div style="margin-bottom:10px;color:#cfe7ff">Total a pagar: <strong>€${total.toFixed(2)}</strong></div>
+                    <div id="checkoutSummary" style="background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;margin-bottom:12px;max-height:200px;overflow:auto;"></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+                        <input id="checkoutContactName" class="checkout-input" placeholder="Contact Name:" />
+                        <input id="checkoutAddressLine" class="checkout-input" placeholder="Address Line:" />
+                        <input id="checkoutCity" class="checkout-input" placeholder="City:" />
+                        <input id="checkoutState" class="checkout-input" placeholder="State:" />
+                        <input id="checkoutCountry" class="checkout-input" placeholder="Country:" />
+                        <input id="checkoutPostal" class="checkout-input" placeholder="Postal Code:" />
+                        <input id="checkoutPhone" class="checkout-input" placeholder="Phone Number:" />
+                        <input id="checkoutPaypalEmail" class="checkout-input" placeholder="PayPal Email:" />
+                        <input id="checkoutInstagram" class="checkout-input" placeholder="@Instagram" />
+                    </div>
+                    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
+                                <button id="checkoutCancel" class="btn-secondary">Cancelar</button>
+                                <button id="checkoutConfirm" class="btn-primary">Pagar con PayPal</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // render summary (itemized)
+            const summary = modal.querySelector('#checkoutSummary');
+            function renderSummary(){
+                summary.innerHTML = '';
+                let subtotal = 0;
+                CART.forEach(ci => {
+                    subtotal += ci.total;
+                    const item = document.createElement('div');
+                    item.style.padding = '8px 0';
+                    const parche = ci.parche ? `<div style="color:#bcd9ff;font-size:0.95rem">Parche: ${ci.parche} (+€${(ci.parche? EXTRAS.parche:0).toFixed(2)})</div>` : '';
+                    const dorsal = ci.dorsal ? `<div style="color:#bcd9ff;font-size:0.95rem">Dorsal: ${ci.dorsal} (+€${(ci.dorsal? EXTRAS.dorsal:0).toFixed(2)})</div>` : '';
+                    const version = (ci.version && ci.version !== 'none') ? `<div style="color:#bcd9ff;font-size:0.95rem">Versión: ${ci.version} (+€${EXTRAS.version.toFixed(2)})</div>` : '';
+                    item.innerHTML = `
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                            <div style="flex:1">
+                                <strong>${ci.name}</strong>
+                                <div style="color:#d6e9ff;font-size:0.95rem">Talla: ${ci.talla} ${ci.version && ci.version !== 'none' ? '· ' + ci.version : ''}</div>
+                                ${parche}${dorsal}${version}
+                                <div style="color:#bcd9ff;font-size:0.9rem">Extras: €${ci.extra.toFixed(2)}</div>
+                            </div>
+                            <div style="text-align:right"><div style="font-weight:800">€${ci.total.toFixed(2)}</div></div>
+                        </div>
+                    `;
+                    summary.appendChild(item);
+                });
+
+                // Totals block usando la lógica de ofertas por cantidad
+                const totals = document.createElement('div');
+                totals.style.marginTop = '10px';
+                const computed = computeCartTotals();
+                totals.innerHTML = `
+                    <div style="display:flex;justify-content:space-between;color:#cfe7ff"><div>Subtotal</div><div>€${computed.subtotal.toFixed(2)}</div></div>
+                    <div style="display:flex;justify-content:space-between;color:#cfe7ff"><div>Gastos envío</div><div>€${computed.shipping.toFixed(2)}</div></div>
+                    ${computed.savings>0? `<div style="display:flex;justify-content:space-between;color:#ffd966;font-weight:800"><div>Ahorro total</div><div>€${computed.savings.toFixed(2)}</div></div>`: ''}
+                    <div style="display:flex;justify-content:space-between;font-weight:800;margin-top:6px"><div>Total</div><div>€${computed.total.toFixed(2)}</div></div>
+                    <div style="margin-top:8px;color:#9aaed9;font-size:0.9rem">ENVIO EXPRESS 5-15 DIAS</div>
+                `;
+                summary.appendChild(totals);
+            }
+            renderSummary();
+
+            modal.querySelector('#checkoutCancel').addEventListener('click', ()=> modal.remove());
+
+            modal.querySelector('#checkoutConfirm').addEventListener('click', ()=>{
+                const name = modal.querySelector('#checkoutContactName').value.trim();
+                const address = modal.querySelector('#checkoutAddressLine').value.trim();
+                const city = modal.querySelector('#checkoutCity').value.trim();
+                const state = modal.querySelector('#checkoutState').value.trim();
+                const country = modal.querySelector('#checkoutCountry').value.trim();
+                const postal = modal.querySelector('#checkoutPostal').value.trim();
+                const phone = modal.querySelector('#checkoutPhone').value.trim();
+                const paypalEmail = modal.querySelector('#checkoutPaypalEmail').value.trim();
+                const instagram = modal.querySelector('#checkoutInstagram').value.trim();
+
+                if (!name || !address || !city || !country || !postal || !phone) {
+                    alert('Por favor, completa todos los campos de dirección.');
+                    return;
+                }
+                if (!paypalEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paypalEmail)) { alert('Introduce un correo PayPal válido.'); return; }
+                if (!instagram || !/^@/.test(instagram)) { alert('Introduce tu usuario de Instagram, debe empezar por @'); return; }
+
+                const checkoutData = { name, address, city, state, country, postal, phone, paypalEmail, instagram };
+
+                // Recompute totals to be safe
+                let subtotal = 0; CART.forEach(ci => subtotal += ci.total);
+                const shipping = CART.length>0 ? SHIPPING : 0;
+                const total = subtotal + shipping;
+
+                console.log('Checkout data:', checkoutData, 'total:', total);
+
+                if (typeof abrirPayPal === 'function') {
+                    const ventana = abrirPayPal(total);
+                    const intervalo = setInterval(()=>{ if (ventana && ventana.closed){ clearInterval(intervalo); clearCart(); modal.remove(); alert('Pago cerrado - si completaste el pago, tu carrito se vaciará.'); } }, 500);
+                } else {
+                    alert('Función de pago no disponible.');
+                }
+            });
+        }
+
+        // eventos globales
+            document.addEventListener('click', (e)=>{
+            // Accept clicks on either a button[data-action] or any element with [data-action]
+            const targetWithAction = e.target.closest('[data-action]');
+            if (!targetWithAction) return;
+            // If the click originated from an interactive control inside the card (like a form input), ignore it
+            if (e.target.matches('input,textarea,select,button') && !e.target.closest('.product-item')) {
+                return;
+            }
+            const id = targetWithAction.dataset.id;
+            const action = targetWithAction.dataset.action;
+            const product = PRODUCTS.find(p=>p.id===id);
+            if (!product) return;
+            if (action === 'details') {
+                // open carousel modal for products with images, otherwise product modal
+                if (product.images && product.images.length) openTiendaCarouselModal(product);
+                else openProductModal(product);
+            }
+            if (action === 'add') {
+                if (product.images && product.images.length) openTiendaCarouselModal(product);
+                else openProductModal(product);
+            }
+        });
+
+    // solo adjuntar listeners si los botones existen (por seguridad)
+    if (byId('gotoCheckoutBtn')) byId('gotoCheckoutBtn').addEventListener('click', openCheckout);
+        if (byId('clearCartGallery')) byId('clearCartGallery').addEventListener('click', clearCart);
+
+        // Renderizar UI solo si existe el contenedor (sección pedidos)
+        if (byId('productGallery') && byId('cartItems')) {
+            renderGallery(); renderCart();
+        }
+    </script>
 </section>
 <footer>
     <div class="redes_sociales">
@@ -872,112 +1470,131 @@ Phone Number:</textarea>
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Manejo de pestañas
     document.querySelectorAll('.boton-seccion').forEach(boton => {
         boton.addEventListener('click', function() {
-            // Remover clases activas
             document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
             document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
-
-            // Activar la sección correspondiente
             const seccionId = this.dataset.seccion;
             this.classList.add('activo');
             document.getElementById(seccionId).classList.add('activa');
+            // Si abrimos la sección Pedidos, desplazar la galería al inicio para que la
+            // primera fila de productos sea visible y el carrito se alinee con su borde superior.
+            if (seccionId === 'pedidos') {
+                const gallery = document.getElementById('productGallery');
+                const cart = document.getElementById('cartPanel');
+                if (gallery) {
+                    // Bring gallery to viewport top
+                    gallery.scrollIntoView({ behavior: 'auto', block: 'start' });
+                    // After layout stabilizes, align the cart top with the first product top
+                    window.requestAnimationFrame(() => {
+                        let topPx = 8;
+                        const gRect = gallery.getBoundingClientRect();
+                        if (gRect) topPx = Math.max(8, Math.round(gRect.top));
+                        if (cart) {
+                            cart.style.position = 'fixed';
+                            cart.style.top = topPx + 'px';
+                            cart.style.right = 'calc((100% - 1200px)/2 + 24px)';
+                            cart.style.zIndex = 1200;
+                        }
+                    });
+                } else if (cart) {
+                    positionCartBelowHeader();
+                }
+            }
         });
     });
 
-    // Variables y configuración
-    let unidades = 0;
-    const PRECIOS_BASE = {1: 19.90, 2: 39.80, 3: 54.90, 5: 84.90};
-    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 5, camisetaNBA: 5};
-    const GASTOS_ENVIO = 2.00;
+    // Posicionar el carrito fijo debajo del nav (botones de sección). Fallback a header si no existe nav.
+    (function(){
+        const cart = document.getElementById('cartPanel');
+        const nav = document.querySelector('.navegacion');
+        const header = document.querySelector('header');
+        if (!cart) return;
 
-    // Función para crear unidades dinámicas
-    function crearUnidad(numeroUnidad) {
-    return `
-        <div class="unidad">
-            <h4>Unidad ${numeroUnidad}</h4>
-          
-            <div class="input-group">
-                <label>Enlace del producto:</label>
-                <input type="url" name="link[]" placeholder="Ej: https://...">
-            </div>
-            
-            <div class="input-group">
-                <label>Parche:</label>
-                <input type="text" name="parche[]" placeholder="Ej: La Liga, Champions..." class="input-parche">
-            </div>
-            
-            <div class="input-group">
-                <label>Dorsal:</label>
-                <input type="text" name="dorsal[]" placeholder="Ej: Nombre: ... Número: ..." class="input-dorsal">
-            </div>
+        // Compute the ideal top (viewport px) where the cart should sit so its top border
+        // aligns with the top of the first product row. Return null if the gallery
+        // isn't ready yet (so caller can retry shortly).
+        function calculateTopForCart(){
+            const pedidos = document.getElementById('pedidos');
+            const gallery = document.getElementById('productGallery');
+            const ref = nav || header;
+            const minTop = ref ? Math.round((ref.getBoundingClientRect().bottom || 0) + 8) : 8;
 
-            <div class="input-group">
-                <label>Talla:</label>
-                <select name="talla[]" class="input-talla" required>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="XXL">XXL (+1€)</option>
-                    <option value="3XL">3XL (+2€)</option>
-                    <option value="4XL">4XL (+3€)</option>
-                </select>
-            </div>
-            
-            <div class="input-group">
-                <label>Versión Jugador:</label>
-                <button type="button" class="boton-version-especial boton-version-jugador">
-                    <span>DESACTIVADO</span>
-                </button>
-                <input type="hidden" name="versionJugador[]" value="No">
-            </div>
+            if (pedidos && pedidos.classList.contains('activa') && gallery) {
+                const firstProduct = gallery.querySelector('.product-item');
+                if (!firstProduct) return null; // not rendered yet
+                const pRect = firstProduct.getBoundingClientRect();
+                let top = Math.round(pRect.top);
+                if (isNaN(top)) top = Math.round(gallery.getBoundingClientRect().top);
+                // ensure cart doesn't sit above the nav/header
+                top = Math.max(top, minTop);
+                return top;
+            }
 
-            <!-- Nuevo extra: Versión Especial -->
-            <div class="input-group">
-                <label>Versión Retro:</label>
-                <button type="button" class="boton-version-especial">
-                    <span>DESACTIVADO</span>
-                </button>
-                <input type="hidden" name="versionRetro[]" value="No">
-            </div>
-            <div class="input-group">
-                <label>Camiseta NBA:</label>
-                <button type="button" class="boton-version-especial boton-camiseta-nba">
-                    <span>DESACTIVADO</span>
-                </button>
-                <input type="hidden" name="camisetaNBA[]" value="No">
-            </div>
-        </div>
-    `;
-}
+            if (ref) return Math.max(minTop, Math.round((ref.getBoundingClientRect().bottom || 0) + 8));
+            return 8;
+        }
 
-    // Manejar cambio de unidades
+        function positionCartBelowHeader(){
+            let top = calculateTopForCart();
+            if (top === null) {
+                // gallery not ready: retry shortly so alignment happens after layout
+                clearTimeout(positionCartBelowHeader._retry);
+                positionCartBelowHeader._retry = setTimeout(positionCartBelowHeader, 60);
+                return;
+            }
+            if (isNaN(top) || top < 8) top = 8;
+            // limit top so the cart always fits inside viewport
+            const vh = Math.max(320, window.innerHeight || 768);
+            const cartH = Math.min(cart.offsetHeight || 420, vh - 32);
+            if (top + cartH > vh - 12) top = Math.max(8, vh - 12 - cartH);
+
+            cart.style.position = 'fixed';
+            cart.style.top = top + 'px';
+            // prefer centering offset but ensure a small right margin when viewport is narrow
+            cart.style.right = (window.innerWidth < 1280) ? '12px' : 'calc((100% - 1200px)/2 + 24px)';
+            cart.style.zIndex = 1200;
+        }
+
+        // Update on common events and after section switches
+        window.addEventListener('resize', positionCartBelowHeader);
+        window.addEventListener('scroll', positionCartBelowHeader);
+        document.querySelectorAll('.boton-seccion').forEach(b => b.addEventListener('click', () => setTimeout(positionCartBelowHeader, 220)));
+
+        // initial attempt shortly after load
+        setTimeout(positionCartBelowHeader, 120);
+    })();
+
     document.querySelectorAll('.boton-unidad').forEach(boton => {
         boton.addEventListener('click', function() {
             unidades = parseInt(this.dataset.unidades);
-
-            // Actualizar botones
             document.querySelectorAll('.boton-unidad').forEach(b => b.classList.remove('activo'));
             this.classList.add('activo');
-
-            // Generar unidades
             const contenedor = document.getElementById('contenedorUnidades');
             contenedor.innerHTML = '';
             for(let i = 1; i <= unidades; i++) {
-                contenedor.innerHTML += crearUnidad(i);
+                const isFullWidth = (unidades % 2 === 1) && (i === unidades);
+                contenedor.innerHTML += crearUnidad(i, isFullWidth);
             }
-
-            // Actualizar precios
             actualizarPrecio();
-            configurarEventosUnidades(); // Configurar eventos después de generar las unidades
+            configurarEventosUnidades();
         });
     });
 
-    // Función de cálculo de precio
+    document.querySelectorAll('.boton-seccion').forEach(boton => {
+        boton.addEventListener('click', function() {
+            const seccionId = this.dataset.seccion;
+            if (seccionId === 'pedidos') {
+                document.querySelectorAll('.boton-unidad').forEach(b => b.classList.remove('activo'));
+                unidades = 0;
+                document.getElementById('contenedorUnidades').innerHTML = '';
+                actualizarPrecio();
+            }
+        });
+    });
+
     function actualizarPrecio() {
-    let precioBase = PRECIOS_BASE[unidades];
+    let precioBase = PRECIOS_BASE[unidades] || 0;
     let total = precioBase;
     let parches = 0;
     let dorsales = 0;
@@ -987,7 +1604,6 @@ Phone Number:</textarea>
     let recargoTallas = 0;
     let totalRecargoTallas = 0;
 
-    // Calcular extras para cada unidad
     document.querySelectorAll('.unidad').forEach(unidad => {
         const parche = unidad.querySelector('[name="parche[]"]').value.trim();
         const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
@@ -996,25 +1612,22 @@ Phone Number:</textarea>
         const esCamisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
         const talla = unidad.querySelector('[name="talla[]"]').value;
 
-        // Validar que las camisetas NBA tengan dorsal
         if (esCamisetaNBA && !dorsal) {
-            alert("Las camisetas NBA requieren un dorsal obligatorio.");
-            return;
         }
 
-        // Si la camiseta NBA está activada
         if (esCamisetaNBA) {
             if (parche) {
-                alert("No se pueden añadir parches a una camiseta NBA.");
                 unidad.querySelector('[name="parche[]"]').value = '';
             }
-            dorsales++; // El dorsal es obligatorio para NBA
             camisetasNBA++;
+            if (dorsal) dorsales++;
+        } else {
+            if (parche) parches++;
+            if (dorsal) dorsales++;
         }
         if (versionJugador) versionesJugador++;
         if (versionEspecial) versionesEspecial++;
 
-        // Calcular recargo por tallas XXL y 3XL
         if (talla === 'XXL') {
             recargoTallas++;
             totalRecargoTallas += 1;
@@ -1027,40 +1640,33 @@ Phone Number:</textarea>
         }
     });
 
-    // Calcular totales
     const totalParches = parches * EXTRAS.parche;
-    const totalDorsales = dorsales * EXTRAS.dorsal; // Ahora siempre se cobra el dorsal
-    // Unificar el total de versiones jugador, retro y NBA
+    const totalDorsales = dorsales * EXTRAS.dorsal;
     const totalVersionesCombinadas = (versionesJugador + versionesEspecial + camisetasNBA);
     const totalVersionesJugador = totalVersionesCombinadas * EXTRAS.versionJugador;
 
     total += totalParches + totalDorsales + totalVersionesJugador + totalRecargoTallas;
 
-    // Añadir gastos de envío si solo hay 1 unidad
     let gastosEnvio = 0;
     if (unidades === 1) {
         gastosEnvio = GASTOS_ENVIO;
         total += gastosEnvio;
     }
 
-    // Mostrar gastos de envío en el desglose
     if (gastosEnvio === 0) {
         document.getElementById('gastos-envio').innerHTML = '<i class="fas fa-gift" style="color:#28a745;margin-right:0.4em;"></i><strong style="color:#28a745;font-size:1.1em;letter-spacing:1px;">GRATIS</strong>';
     } else {
         document.getElementById('gastos-envio').innerHTML = gastosEnvio.toFixed(2) + '€';
     }
 
-    // Actualizar display
     document.getElementById('cantidad-unidades').textContent = unidades;
     document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
-    document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
+    document.getElementById('precio-base-detalle').textContent = (PRECIOS_BASE[unidades] || 0).toFixed(2);
 
-    // NUEVO: Actualizar precio sin descuento por cantidad (ahora incluye extras)
     document.getElementById('cantidad-unidades-sin-desc').textContent = unidades;
     document.getElementById('plural-unidades-sin-desc').textContent = unidades > 1 ? 'es' : '';
     const precioSinDescuentoUnidad = 25.00;
-    // Calcular extras también para el precio sin descuento
-    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial) * EXTRAS.versionJugador) + (camisetasNBA * EXTRAS.camisetaNBA) + totalRecargoTallas;
+    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial + camisetasNBA) * EXTRAS.versionJugador) + totalRecargoTallas;
     const totalSinDescuento = (precioSinDescuentoUnidad * unidades + totalSinDescuentoExtras).toFixed(2);
     document.getElementById('precio-sin-descuento').textContent = totalSinDescuento;
     document.getElementById('precioSinDescuentoTotal').textContent = totalSinDescuento;
@@ -1080,7 +1686,6 @@ Phone Number:</textarea>
     document.getElementById('precioDisplay').textContent = total.toFixed(2);
     document.getElementById('precioTotal').value = total.toFixed(2);
 
-    // Visualización sutil y compacta del ahorro (siempre visible)
     const precioConDescuento = total.toFixed(2);
     const diferencia = (totalSinDescuento - precioConDescuento).toFixed(2);
     let ahorroHtml = '';
@@ -1103,25 +1708,17 @@ Phone Number:</textarea>
     return total;
 }
     function prepararRedireccion(event) {
-    // Obtener datos necesarios
     const total = document.getElementById('precioDisplay').textContent;
     const direccion = document.getElementById('direccion').value;
-    
-    // Codificar parámetros
     const params = new URLSearchParams({
         total: total,
         direccion: encodeURIComponent(direccion)
     });
-    
-    // Construir URL de redirección
     const baseUrl = window.location.href.replace('index.html', 'exito.html');
     document.getElementById('nextUrl').value = `${baseUrl}?${params.toString()}`;
-    
-    return true; // Continuar con el envío normal del formulario
+    return true;
     }
-    // Configurar eventos para las unidades
     function configurarEventosUnidades() {
-        // Manejar versión jugador
         document.querySelectorAll('.boton-version-jugador').forEach(boton => {
             boton.addEventListener('click', function() {
                 const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
@@ -1129,7 +1726,6 @@ Phone Number:</textarea>
                 const botonNBA = unidad.querySelector('.boton-camiseta-nba');
                 const botonRetro = unidad.querySelector('.boton-version-especial:not(.boton-version-jugador):not(.boton-camiseta-nba)');
 
-                // Si se activa la versión jugador, desactivar NBA y Retro
                 if (!this.classList.contains('activo')) {
                     if (botonNBA.classList.contains('activo')) {
                         botonNBA.classList.remove('activo');
@@ -1143,13 +1739,11 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Cambiar estado del botón
                 this.classList.toggle('activo');
                 const activo = this.classList.contains('activo');
                 this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
                 hiddenInput.value = activo ? 'Sí' : 'No';
 
-                // Si se activa, desactivar los otros dos SIEMPRE
                 if (activo) {
                     if (botonNBA.classList.contains('activo')) {
                         botonNBA.classList.remove('activo');
@@ -1163,14 +1757,11 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Actualizar el precio
                 actualizarPrecio();
             });
         });
 
-        // Manejar versión retro
         document.querySelectorAll('.boton-version-especial').forEach(boton => {
-            // Solo para los que no sean .boton-version-jugador ni .boton-camiseta-nba
             if (
                 !boton.classList.contains('boton-version-jugador') &&
                 !boton.classList.contains('boton-camiseta-nba')
@@ -1181,7 +1772,6 @@ Phone Number:</textarea>
                     const botonNBA = unidad.querySelector('.boton-camiseta-nba');
                     const botonJugador = unidad.querySelector('.boton-version-jugador');
 
-                    // Si se activa la versión retro, desactivar NBA y Jugador
                     if (!this.classList.contains('activo')) {
                         if (botonNBA.classList.contains('activo')) {
                             botonNBA.classList.remove('activo');
@@ -1195,13 +1785,11 @@ Phone Number:</textarea>
                         }
                     }
 
-                    // Cambiar estado del botón
                     this.classList.toggle('activo');
                     const activo = this.classList.contains('activo');
                     this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
                     hiddenInput.value = activo ? 'Sí' : 'No';
 
-                    // Si se activa, desactivar los otros dos SIEMPRE
                     if (activo) {
                         if (botonNBA.classList.contains('activo')) {
                             botonNBA.classList.remove('activo');
@@ -1215,13 +1803,11 @@ Phone Number:</textarea>
                         }
                     }
 
-                    // Actualizar el precio
                     actualizarPrecio();
                 });
             }
         });
 
-        // Manejar camiseta NBA
         document.querySelectorAll('.boton-camiseta-nba').forEach(boton => {
             boton.addEventListener('click', function() {
                 const hiddenInput = this.parentElement.querySelector('[name="camisetaNBA[]"]');
@@ -1231,7 +1817,6 @@ Phone Number:</textarea>
                 const inputParche = unidad.querySelector('[name="parche[]"]');
                 const inputDorsal = unidad.querySelector('[name="dorsal[]"]');
 
-                // Si se va a activar la camiseta NBA, el dorsal es obligatorio
                 if (!this.classList.contains('activo')) {
                     if (!inputDorsal.value.trim()) {
                         alert('Debes introducir un dorsal para activar la camiseta NBA.');
@@ -1240,9 +1825,7 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Si se activa la camiseta NBA
                 if (!this.classList.contains('activo')) {
-                    // Desactivar otros botones
                     if (botonJugador.classList.contains('activo')) {
                         botonJugador.classList.remove('activo');
                         botonJugador.querySelector('span').textContent = 'DESACTIVADO';
@@ -1255,13 +1838,11 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Cambiar estado del botón
                 this.classList.toggle('activo');
                 const activo = this.classList.contains('activo');
                 this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
                 hiddenInput.value = activo ? 'Sí' : 'No';
 
-                // Si se activa, desactivar los otros dos SIEMPRE
                 if (activo) {
                     if (botonJugador.classList.contains('activo')) {
                         botonJugador.classList.remove('activo');
@@ -1275,47 +1856,46 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Bloquear el campo de parche
                 inputParche.disabled = activo;
                 if (activo) inputParche.value = '';
 
-                // Habilitar el campo de dorsal (pero será gratuito)
                 inputDorsal.disabled = false;
 
-                // Actualizar el precio
                 actualizarPrecio();
             });
         });
-        // Configurar eventos para inputs
     document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
         input.addEventListener('input', actualizarPrecio);
     });
 
-    // También actualizar precio al cambiar la talla
         document.querySelectorAll('.input-talla').forEach(input => {
             input.addEventListener('change', actualizarPrecio);
         });
 }
 
-    // Función para abrir la ventana de PayPal
     function abrirPayPal(total) {
         const width = 600;
         const height = 800;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
-        // Redirección a la página de éxito tras el pago
-        const returnUrl = `${window.location.origin}/pago-exitoso.html`;
-        const paypalUrl = `https://www.paypal.com/paypalme/camisetazo/0,01EUR?return=${encodeURIComponent(returnUrl)}`;
         const ventanaPayPal = window.open(
-            paypalUrl,
+            `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
             'PagoPayPal',
+           
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
-        // Ya no se envía el formulario automáticamente al cerrar la ventana
+
+        const intervalo = setInterval(() => {
+            if (ventanaPayPal.closed) {
+                clearInterval(intervalo);
+                mostrarExito('Solicitud completada. Espere');
+                enviarFormulario();
+            }
+        }, 500);
+
         return ventanaPayPal;
     }
 
-    // Función para mostrar notificaciones de éxito
     function mostrarExito(mensaje) {
         const notificacion = document.getElementById('formStatus');
         notificacion.className = 'success animate__animated animate__fadeIn';
@@ -1324,86 +1904,60 @@ Phone Number:</textarea>
         setTimeout(() => notificacion.style.display = 'none', 5000);
     }
 
-    // Evento del botón de PayPal
-    document.getElementById('paypalButton').addEventListener('click', function(event) {
-        event.preventDefault();
-
-        // Obtener el email de PayPal
-        const emailPaypal = document.getElementById('emailPaypal').value.trim();
-
-        // Validar el email
-        if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
-            alert("Por favor, ingresa un correo válido de PayPal.");
-            return;
-        }
-        const usuarioInstagram = document.getElementById('usuario').value.trim();
-    
-        // Validar el usuario de Instagram (sin @)
-        if (!/^[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
-            alert("Por favor, ingresa un nombre de usuario válido de Instagram (solo letras, números, guion bajo o punto, entre 1 y 30 caracteres, sin @).");
-            return;
-        }
-
-        // Validar que al menos haya una unidad seleccionada
-        const cantidadUnidades = document.getElementById('cantidad-unidades').textContent;
-        if (parseInt(cantidadUnidades) === 0) {
-            alert("Debes seleccionar al menos una unidad.");
-            return;
-        }
-        // Obtener el total a pagar
-        const total = document.getElementById('precioDisplay').textContent;
-        abrirPayPal(total);
-        // Mostrar mensaje al usuario
-        mostrarExito('Cuando completes el pago en PayPal, serás redirigido automáticamente.');
-    });
-
-    // Habilitar envío solo si se marca la casilla de pago
-    if (confirmPago && enviarPedidoBtn) {
-        confirmPago.addEventListener('change', function() {
-            if (this.checked) {
-                enviarPedidoBtn.disabled = false;
-                enviarPedidoBtn.style.opacity = '1';
-                avisoPago.style.display = 'none';
-            } else {
-                enviarPedidoBtn.disabled = true;
-                enviarPedidoBtn.style.opacity = '0.5';
-            }
-        });
-        // Inicialmente deshabilitado
-        enviarPedidoBtn.disabled = !confirmPago.checked;
-        enviarPedidoBtn.style.opacity = confirmPago.checked ? '1' : '0.5';
+    function enviarFormulario() {
+        const precioTotalEl = document.getElementById('precioTotal');
+        const precioDisplayEl = document.getElementById('precioDisplay');
+        const pedidoFormEl = document.getElementById('pedidoForm');
+        if (precioTotalEl && precioDisplayEl) precioTotalEl.value = precioDisplayEl.textContent;
+        if (pedidoFormEl) pedidoFormEl.submit();
     }
 
-    // Validación única al enviar el formulario
-    document.getElementById('pedidoForm').addEventListener('submit', function(e) {
-        const idTransaccion = document.getElementById('idTransaccion');
-        if (!confirmPago.checked) {
-            e.preventDefault();
-            avisoPago.style.display = 'block';
-            avisoPago.textContent = 'Debes marcar la casilla de pago antes de enviar el pedido.';
-            return;
-        }
-        if (!idTransaccion.value.trim()) {
-            e.preventDefault();
-            idTransaccion.focus();
-            avisoPago.style.display = 'block';
-            avisoPago.textContent = 'Debes ingresar el ID de transacción de PayPal.';
-            return;
-        }
-        // Validar usuario de Instagram (sin @)
-        const usuarioInstagram = document.getElementById('usuario').value.trim();
-        if (!/^[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
-            e.preventDefault();
-            document.getElementById('usuario').focus();
-            alert('Por favor, ingresa un nombre de usuario válido de Instagram (solo letras, números, guion bajo o punto, entre 1 y 30 caracteres, sin @).');
-            return;
-        }
-    });
+    // Legacy form handlers: only attach if the old pedido form exists on the page
+    (function attachLegacyFormHandlers(){
+        const pedidoFormEl = document.getElementById('pedidoForm');
+        if (!pedidoFormEl) return;
 
-    // Hacer toda la tarjeta clickeable excepto el botón
+        const paypalBtn = document.getElementById('paypalButton');
+        if (!paypalBtn) return;
+
+        paypalBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const emailEl = document.getElementById('emailPaypal');
+            const usuarioEl = document.getElementById('usuario');
+            const cantidadEl = document.getElementById('cantidad-unidades');
+            const precioDisplayEl = document.getElementById('precioDisplay');
+
+            const emailPaypal = emailEl ? emailEl.value.trim() : '';
+            if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
+                alert("Por favor, ingresa un correo válido de PayPal.");
+                return;
+            }
+
+            const usuarioInstagram = usuarioEl ? usuarioEl.value.trim() : '';
+            if (!usuarioInstagram || !/^@[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
+                alert("Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres).");
+                return;
+            }
+
+            const cantidadUnidades = cantidadEl ? cantidadEl.textContent : '0';
+            if (parseInt(cantidadUnidades) === 0) {
+                alert("Debes seleccionar al menos una unidad.");
+                return;
+            }
+
+            const total = precioDisplayEl ? parseFloat(precioDisplayEl.textContent) : NaN;
+            if (isNaN(total) || total <= 0) {
+                alert("El total a pagar no es válido.");
+                return;
+            }
+
+            abrirPayPal(total);
+        });
+    })();
+
 document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
     card.addEventListener('click', function(e) {
-        // Si el click fue en el botón, o en un enlace del menú desplegable de fútbol, no hacer nada
         if (
             e.target.closest('.futbol-dropdown-menu a') ||
             e.target.closest('.futbol-dropdown-btn')
@@ -1417,10 +1971,8 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
     });
 });
 
-    // Inicializar
     actualizarPrecio();
 
-    // Carrusel de clientes satisfechos y modal ahora están en scripts/scripts.js
 });
 </script>
 <script src="scripts/scripts.js"></script>
