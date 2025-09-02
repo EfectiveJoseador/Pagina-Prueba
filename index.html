@@ -1547,9 +1547,9 @@
 
                 console.log('Checkout data:', checkoutData, 'total:', total);
 
-                if (typeof abrirPayPal === 'function') {
+                if (typeof window.abrirPayPal === 'function') {
                     // pasar el total formateado con 2 decimales para el enlace PayPal
-                    const ventana = abrirPayPal(total.toFixed(2));
+                    const ventana = window.abrirPayPal(total.toFixed(2));
                     const intervalo = setInterval(()=>{ if (ventana && ventana.closed){ clearInterval(intervalo); clearCart(); modal.remove(); alert('Pago cerrado - si completaste el pago, tu carrito se vaciará.'); } }, 500);
                 } else {
                     alert('Función de pago no disponible.');
@@ -2006,7 +2006,8 @@
         });
 }
 
-    function abrirPayPal(total) {
+    // Ensure the payment function is available globally so event handlers can find it
+    window.abrirPayPal = function (total) {
         // Acepta total como número o string; normaliza a formato '12.34'
         let totalStr = String(total || '0');
         // Reemplazar coma por punto y eliminar posibles separadores de miles
@@ -2099,7 +2100,7 @@
                 return;
             }
 
-            abrirPayPal(total);
+            if (typeof window.abrirPayPal === 'function') window.abrirPayPal(total);
         });
     })();
 
