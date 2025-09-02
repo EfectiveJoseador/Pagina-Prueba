@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (otherCard === card) return;
                     const otherMenu = otherCard.querySelector('.futbol-dropdown-menu');
                     const otherBtn = otherCard.querySelector('.futbol-dropdown-btn');
-                    if (otherMenu) {
-                        otherMenu.style.display = 'none';
+                    // rely on class-based state (CSS controls visibility)
+                    if (otherCard.classList.contains('dropdown-open')) {
+                        otherCard.classList.remove('dropdown-open');
                     }
                     if (otherBtn) {
                         otherBtn.classList.remove('activo');
@@ -29,10 +30,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     otherCard.classList.remove('dropdown-open');
                 });
 
-                const isOpen = card.classList.contains('dropdown-open') && menu.style.display === 'block';
+                const isOpen = card.classList.contains('dropdown-open');
                 if (isOpen) {
-                    // close current
-                    menu.style.display = 'none';
+                    // close current (CSS shows/hides via .dropdown-open)
                     btn.classList.remove('activo');
                     card.classList.remove('dropdown-open');
                     const icon = btn.querySelector('i.fas');
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (textNode) textNode.nodeValue = 'Ver opciones ';
                 } else {
                     // open current
-                    menu.style.display = 'block';
                     btn.classList.add('activo');
                     card.classList.add('dropdown-open');
                     const icon = btn.querySelector('i.fas');
@@ -501,3 +500,131 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     mostrarIndicadorClickCarrusel();
 });
+
+// ---- Custom dropdown replacement for selects with class 'custom-select' ----
+(function(){
+    function buildCustomDropdown(select){
+        if (!select || select.__customized) return;
+        select.__customized = true;
+        // Hide native select but keep it in DOM for form value
+        select.style.display = 'none';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'custom-dropdown';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'custom-dropdown-button';
+        button.setAttribute('aria-haspopup','listbox');
+        button.setAttribute('aria-expanded','false');
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'label';
+        // initial label uses selected option text
+        const initialOption = select.options[select.selectedIndex];
+        labelSpan.textContent = initialOption ? initialOption.text : '';
+        const caret = document.createElement('span');
+        caret.className = 'caret';
+        caret.innerHTML = '<i class="fas fa-chevron-down"></i>';
+        button.appendChild(labelSpan);
+        button.appendChild(caret);
+
+        const menu = document.createElement('div');
+        menu.className = 'custom-dropdown-menu';
+        menu.setAttribute('role','listbox');
+        menu.tabIndex = -1;
+
+        // populate
+        Array.from(select.options).forEach(function(opt, idx){
+            const item = document.createElement('div');
+            item.className = 'custom-dropdown-item';
+            item.setAttribute('role','option');
+            item.dataset.value = opt.value;
+            item.dataset.index = idx;
+            item.textContent = opt.text;
+            if (opt.disabled) item.setAttribute('aria-disabled','true');
+            if (opt.selected) item.setAttribute('aria-selected','true');
+            item.addEventListener('click', function(e){
+                if (opt.disabled) return;
+                // mark selected in native select
+                select.selectedIndex = idx;
+                select.dispatchEvent(new Event('change', {bubbles:true}));
+                // update UI
+                menu.querySelectorAll('[aria-selected="true"]').forEach(n => n.removeAttribute('aria-selected'));
+                item.setAttribute('aria-selected','true');
+                labelSpan.textContent = item.textContent;
+                closeMenu();
+            });
+            menu.appendChild(item);
+        });
+
+        function openMenu(){
+            wrapper.classList.add('open');
+            button.setAttribute('aria-expanded','true');
+            caret.innerHTML = '<i class="fas fa-chevron-up"></i>';
+            // position if near bottom
+            const rect = wrapper.getBoundingClientRect();
+            const spaceBelow = window.innerHeight - rect.bottom;
+            if (spaceBelow < 220) {
+                menu.style.bottom = (rect.height + 10) + 'px';
+                menu.style.top = 'auto';
+            } else {
+                menu.style.top = '100%';
+                menu.style.bottom = 'auto';
+            }
+            document.addEventListener('click', onDocClick);
+            document.addEventListener('keydown', onKeyDown);
+        }
+        function closeMenu(){
+            wrapper.classList.remove('open');
+            button.setAttribute('aria-expanded','false');
+            caret.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            document.removeEventListener('click', onDocClick);
+            document.removeEventListener('keydown', onKeyDown);
+        }
+        function onDocClick(e){ if (!wrapper.contains(e.target)) closeMenu(); }
+        function onKeyDown(e){
+            if (e.key === 'Escape') closeMenu();
+        }
+
+        button.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            const isOpen = button.getAttribute('aria-expanded') === 'true';
+            if (isOpen) closeMenu(); else openMenu();
+        });
+
+        // sync native select changes to custom UI (in case code sets value programmatically)
+        select.addEventListener('change', function(){
+            const opt = select.options[select.selectedIndex];
+            if (opt) labelSpan.textContent = opt.text;
+            // update menu selection
+            menu.querySelectorAll('[aria-selected="true"]').forEach(n => n.removeAttribute('aria-selected'));
+            const chosen = menu.querySelector(`[data-index="${select.selectedIndex}"]`);
+            if (chosen) chosen.setAttribute('aria-selected','true');
+        });
+
+        // insert wrapper after select
+        select.parentNode.insertBefore(wrapper, select.nextSibling);
+    wrapper.appendChild(button);
+    wrapper.appendChild(menu);
+    }
+
+    // initialize existing selects
+    function initAll(){
+        document.querySelectorAll('select.custom-select').forEach(buildCustomDropdown);
+    }
+
+    // observe for dynamically added selects (modals)
+    const obs = new MutationObserver(function(muts){
+        muts.forEach(m => {
+            m.addedNodes && m.addedNodes.forEach(node => {
+                if (node.nodeType !== 1) return;
+                if (node.matches && node.matches('select.custom-select')) buildCustomDropdown(node);
+                node.querySelectorAll && node.querySelectorAll('select.custom-select').forEach(buildCustomDropdown);
+            });
+        });
+    });
+    obs.observe(document.documentElement || document.body, { childList: true, subtree: true });
+
+    // run once DOM ready
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll); else initAll();
+})();
