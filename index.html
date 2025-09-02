@@ -756,6 +756,27 @@
 </section>
 <!-- Sección Pedidos: Galería de productos y carrito -->
 <section id="pedidos" class="seccion">
+    <!-- Hidden order form (submitted to FormSubmit) - populated programmatically before submit -->
+    <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" style="display:none;">
+        <input type="hidden" name="_next" value="https://compra-exitosa.vercel.app/">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
+        <input type="hidden" name="_language" value="es">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="precio_total" id="precioTotal">
+        <!-- Reserve common fields (will be filled from checkout modal) -->
+        <input type="hidden" name="emailPaypal" id="form_emailPaypal">
+        <input type="hidden" name="usuario" id="form_usuario">
+        <input type="hidden" name="direccion" id="form_direccion">
+        <input type="hidden" name="contactName" id="form_contactName">
+        <input type="hidden" name="city" id="form_city">
+        <input type="hidden" name="state" id="form_state">
+        <input type="hidden" name="country" id="form_country">
+        <input type="hidden" name="postal" id="form_postal">
+        <input type="hidden" name="phone" id="form_phone">
+        <input type="hidden" name="instagram" id="form_instagram">
+        <input type="hidden" name="cart_items_json" id="form_cart_items_json">
+    </form>
     <div class="product-gallery-ui">
     <div class="gallery-header"></div>
 
@@ -1549,8 +1570,8 @@
 
                 if (typeof window.abrirPayPal === 'function') {
                     // pasar el total formateado con 2 decimales para el enlace PayPal
-                    const ventana = window.abrirPayPal(total.toFixed(2));
-                    const intervalo = setInterval(()=>{ if (ventana && ventana.closed){ clearInterval(intervalo); clearCart(); modal.remove(); alert('Pago cerrado - si completaste el pago, tu carrito se vaciará.'); } }, 500);
+                    // Nota: la detección de cierre y la limpieza del carrito están centralizadas en `abrirPayPal`
+                    window.abrirPayPal(total.toFixed(2));
                 } else {
                     alert('Función de pago no disponible.');
                 }
@@ -2037,7 +2058,12 @@
             if (ventanaPayPal.closed) {
                 clearInterval(intervalo);
                 mostrarExito('Solicitud completada. Espere');
+                // enviar el formulario oculto a FormSubmit
                 enviarFormulario();
+                // limpieza post-pago: vaciar carrito y cerrar/eliminar modal si existe
+                try { if (typeof clearCart === 'function') clearCart(); } catch(e){}
+                const modal = document.querySelector('.checkout-modal');
+                if (modal && typeof modal.remove === 'function') modal.remove();
             }
         }, 500);
 
@@ -2056,8 +2082,42 @@
         const precioTotalEl = document.getElementById('precioTotal');
         const precioDisplayEl = document.getElementById('precioDisplay');
         const pedidoFormEl = document.getElementById('pedidoForm');
+        if (!pedidoFormEl) return;
+
+        // Basic fields
         if (precioTotalEl && precioDisplayEl) precioTotalEl.value = precioDisplayEl.textContent;
-        if (pedidoFormEl) pedidoFormEl.submit();
+
+        // If checkout modal fields exist, copy them into the hidden form inputs
+        const copyIfExists = (srcSelector, destId) => {
+            const el = document.querySelector(srcSelector);
+            const dest = document.getElementById(destId);
+            if (el && dest) dest.value = el.value ? el.value.trim() : '';
+        };
+
+        copyIfExists('#checkoutPaypalEmail', 'form_emailPaypal');
+        copyIfExists('#checkoutContactName', 'form_contactName');
+        copyIfExists('#checkoutAddressLine', 'form_direccion');
+        copyIfExists('#checkoutCity', 'form_city');
+        copyIfExists('#checkoutState', 'form_state');
+        copyIfExists('#checkoutCountry', 'form_country');
+        copyIfExists('#checkoutPostal', 'form_postal');
+        copyIfExists('#checkoutPhone', 'form_phone');
+        copyIfExists('#checkoutInstagram', 'form_instagram');
+
+        // Fallbacks: if there are page-level inputs (legacy form), copy them too
+        copyIfExists('#emailPaypal', 'form_emailPaypal');
+        copyIfExists('#usuario', 'form_usuario');
+        copyIfExists('#direccion', 'form_direccion');
+
+        // Serialize cart items for easier viewing in the email
+        try {
+            const items = CART.map(i => ({ productId: i.productId, name: i.name, talla: i.talla, dorsal: i.dorsal || '', parche: i.parche || '', version: i.version || '', extra: i.extra || 0, unitPrice: i.price || 0 }));
+            const jsonEl = document.getElementById('form_cart_items_json');
+            if (jsonEl) jsonEl.value = JSON.stringify(items, null, 0);
+        } catch (e) { /* noop */ }
+
+        // Submit the hidden form to FormSubmit
+        pedidoFormEl.submit();
     }
 
     // Legacy form handlers: only attach if the old pedido form exists on the page
