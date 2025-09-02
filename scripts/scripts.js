@@ -1,51 +1,67 @@
-// Archivo de scripts para la página
 console.log('Página cargada correctamente');
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Soporte para múltiples menús desplegables si se agregan más en el futuro
     document.querySelectorAll('.futbol-dropdown').forEach(function(card) {
         const btn = card.querySelector('.futbol-dropdown-btn');
         const menu = card.querySelector('.futbol-dropdown-menu');
         if (btn && menu) {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                // Cerrar otros menús abiertos y quitar estilos activos
-                document.querySelectorAll('.futbol-dropdown-menu').forEach(function(m) {
-                    if (m !== menu) m.style.display = 'none';
+                // Close other dropdowns and remove their open class on their cards
+                document.querySelectorAll('.futbol-dropdown').forEach(function(otherCard) {
+                    // skip the current card; only close other cards
+                    if (otherCard === card) return;
+                    const otherMenu = otherCard.querySelector('.futbol-dropdown-menu');
+                    const otherBtn = otherCard.querySelector('.futbol-dropdown-btn');
+                    if (otherMenu) {
+                        otherMenu.style.display = 'none';
+                    }
+                    if (otherBtn) {
+                        otherBtn.classList.remove('activo');
+                        const iconOther = otherBtn.querySelector('i.fas');
+                        if (iconOther) iconOther.classList.remove('fa-chevron-up');
+                        if (iconOther) iconOther.classList.add('fa-chevron-down');
+                        // Reset label text for other buttons
+                        const textNodeOther = Array.from(otherBtn.childNodes).find(n => n.nodeType === 3);
+                        if (textNodeOther) textNodeOther.nodeValue = 'Ver opciones ';
+                    }
+                    // remove open class from other cards
+                    otherCard.classList.remove('dropdown-open');
                 });
-                document.querySelectorAll('.futbol-dropdown-btn').forEach(function(b) {
-                    b.classList.remove('activo');
-                    const icon = b.querySelector('i.fas');
-                    if (icon) icon.classList.remove('fa-chevron-up');
-                    if (icon) icon.classList.add('fa-chevron-down');
-                });
-                // Toggle menú y estilos activos
-                if (menu.style.display === 'block') {
+
+                const isOpen = card.classList.contains('dropdown-open') && menu.style.display === 'block';
+                if (isOpen) {
+                    // close current
                     menu.style.display = 'none';
                     btn.classList.remove('activo');
+                    card.classList.remove('dropdown-open');
                     const icon = btn.querySelector('i.fas');
                     if (icon) icon.classList.remove('fa-chevron-up');
                     if (icon) icon.classList.add('fa-chevron-down');
+                    // Cambiar texto a 'Ver opciones'
+                    const textNode = Array.from(btn.childNodes).find(n => n.nodeType === 3);
+                    if (textNode) textNode.nodeValue = 'Ver opciones ';
                 } else {
+                    // open current
                     menu.style.display = 'block';
                     btn.classList.add('activo');
+                    card.classList.add('dropdown-open');
                     const icon = btn.querySelector('i.fas');
                     if (icon) icon.classList.remove('fa-chevron-down');
                     if (icon) icon.classList.add('fa-chevron-up');
+                    // Cambiar texto a 'Ocultar opciones'
+                    const textNode = Array.from(btn.childNodes).find(n => n.nodeType === 3);
+                    if (textNode) textNode.nodeValue = 'Ocultar opciones ';
                 }
             });
         }
     });
-    // Eliminamos el cierre automático al hacer clic fuera
-    // Carrusel de clientes satisfechos con imágenes como fondo
-    // Variables globales para el carrusel
+
     let carruselActual = 0;
     let carruselExistentes = [];
     let carruselMostrarImagen = function(idx) {};
     function inicializarCarruselClientes() {
-        // Solo incluir los divs que tengan imagen realmente existente
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
-        // Filtrar solo los divs cuya imagen realmente existe usando una petición HEAD
         const existentes = [];
         let pendientes = imagenes.length;
         if (!imagenes.length) return;
@@ -68,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             const prevBtn = document.getElementById('carrusel-prev');
             const nextBtn = document.getElementById('carrusel-next');
-            // Ocultar flechas solo en móvil
             if (window.innerWidth <= 600) {
                 if (prevBtn) prevBtn.style.display = 'none';
                 if (nextBtn) nextBtn.style.display = 'none';
@@ -128,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         mostrarImagen(actual);
     }
-    // Modal para zoom mejorado y robusto
     function mostrarModalImagen(src, alt) {
         let modal = document.getElementById('modal-imagen-clientes');
         if (!modal) {
@@ -137,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.innerHTML = `
                 <div class="modal-fondo"></div>
                 <div class="modal-contenido" style="position:relative;display:flex;align-items:center;justify-content:center;gap:0;">
-                    <button class="modal-arrow modal-arrow-left" aria-label="Anterior" style="position:absolute;left:-60px;top:50%;transform:translateY(-50%);width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:10;cursor:pointer;transition:background 0.2s;outline:none;">
+                    <button class="modal-arrow modal-arrow-left" aria-label="Anterior" style="width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:110;cursor:pointer;transition:background 0.2s;outline:none;">
                         <span style="display:inline-block;transform:translateX(-2px);">&#8592;</span>
                     </button>
                     <div style="position:relative;display:inline-block;">
@@ -145,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div id="watermark-text" style="position:absolute;bottom:18px;right:18px;color:#fff;font-size:1.5rem;font-weight:bold;opacity:0.7;text-shadow:1px 1px 4px #000;pointer-events:none;user-select:none;">@camisetazo._</div>
                         <div id="modal-mensaje-desliza" style="display:none;position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(42,91,168,0.92);color:#fff;padding:0.4em 1em;border-radius:10px;font-size:1rem;z-index:30;">Desliza para ver más imágenes</div>
                     </div>
-                    <button class="modal-arrow modal-arrow-right" aria-label="Siguiente" style="position:absolute;right:-60px;top:50%;transform:translateY(-50%);width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:10;cursor:pointer;transition:background 0.2s;outline:none;">
+                    <button class="modal-arrow modal-arrow-right" aria-label="Siguiente" style="width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:110;cursor:pointer;transition:background 0.2s;outline:none;">
                         <span style="display:inline-block;transform:translateX(2px);">&#8594;</span>
                     </button>
                     <button class="modal-cerrar" aria-label="Cerrar">&times;</button>
@@ -153,15 +167,12 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             document.body.appendChild(modal);
         }
-        // --- Lógica robusta de modal y zoom ---
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
         const existentes = imagenes.filter(div => {
             const imgUrl = div.getAttribute('data-img');
-            return [
-                'assets/clientes/cliente1.jpg','assets/clientes/cliente2.jpg','assets/clientes/cliente3.jpg','assets/clientes/cliente4.jpg',
-                'assets/clientes/cliente5.jpg','assets/clientes/cliente6.jpg','assets/clientes/cliente7.jpg','assets/clientes/cliente8.jpg',
-                'assets/clientes/cliente9.jpg','assets/clientes/cliente10.jpg','assets/clientes/cliente11.jpg','assets/clientes/cliente12.jpg'
-            ].includes(imgUrl);
+            // Genera lista de cliente1.jpg a cliente26.jpg
+            const clientesValidos = Array.from({length: 26}, (_, i) => `assets/clientes/cliente${i+1}.jpg`);
+            return clientesValidos.includes(imgUrl);
         });
         let actual = existentes.findIndex(div => div.getAttribute('data-img') === src);
         if (actual === -1) actual = 0;
@@ -190,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(imgOriginal, 0, 0, canvas.width, canvas.height);
-                // Marca de agua SOLO en mayúsculas (ya no hay HTML)
                 const fontSize = Math.floor(canvas.height/18);
                 ctx.font = `bold ${fontSize}px Arial, sans-serif`;
                 ctx.textAlign = 'center';
@@ -207,7 +217,6 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             imgOriginal.src = imgUrl;
             canvas.style.cursor = (!esMovil() && !("ontouchstart" in window && navigator.maxTouchPoints > 0)) ? 'zoom-in' : 'default';
-            // Zoom solo en escritorio
             function esMovil() {
                 return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|webOS|BlackBerry/i.test(navigator.userAgent);
             }
@@ -237,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 zoomHandlers.push({event:'click', handler:clickHandler});
                 zoomHandlers.push({event:'mousemove', handler:moveHandler});
             } else {
-                // En móvil, bloquear cualquier intento de zoom por tap/click
                 const blockZoom = function(e) { e.stopPropagation(); e.preventDefault(); };
                 canvas.addEventListener('click', blockZoom);
                 zoomHandlers.push({event:'click', handler:blockZoom});
@@ -256,7 +264,6 @@ document.addEventListener('DOMContentLoaded', function() {
             sx = Math.max(0, Math.min(sx, w - zoomW));
             sy = Math.max(0, Math.min(sy, h - zoomH));
             ctx.drawImage(imgOriginal, sx, sy, zoomW, zoomH, 0, 0, w, h);
-            // Marca de agua
             const fontSize = Math.floor(h/18);
             ctx.font = `bold ${fontSize}px Arial, sans-serif`;
             ctx.textAlign = 'center';
@@ -271,25 +278,66 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.fillText('@CAMISETAZO._', w/2, yText);
             ctx.globalAlpha = 1;
         }
-        // Flechas
         const leftArrow = modal.querySelector('.modal-arrow-left');
         const rightArrow = modal.querySelector('.modal-arrow-right');
-        if (window.innerWidth > 600) {
-            if (leftArrow) leftArrow.onclick = function(e) {
-                e.stopPropagation();
-                actual = (actual - 1 + existentes.length) % existentes.length;
-                dibujarImagen(actual);
-            };
-            if (rightArrow) rightArrow.onclick = function(e) {
-                e.stopPropagation();
-                actual = (actual + 1) % existentes.length;
-                dibujarImagen(actual);
-            };
+
+        // Posicionar flechas en una ubicación agradable y constante del viewport.
+        // Mantendremos las flechas a la mitad vertical del viewport pero ligeramente
+        // por encima del centro del canvas para una mejor visibilidad.
+        let flechasHandler = null;
+        function colocarFlechasFixed() {
+            if (!leftArrow || !rightArrow) return;
+            if (window.innerWidth <= 600) {
+                leftArrow.style.display = 'none';
+                rightArrow.style.display = 'none';
+                return;
+            }
+            leftArrow.style.display = '';
+            rightArrow.style.display = '';
+            // Valores ajustables
+            const verticalPct = 0.48; // 48% del viewport height (ligeramente arriba del centro)
+            const horizontalGap = 28; // px desde el centro del canvas hacia las flechas
+            const arrowSize = 48; // px
+
+            const viewportH = window.innerHeight;
+            const top = Math.max(12, Math.round(viewportH * verticalPct) - Math.round(arrowSize/2));
+
+            // Colocar las flechas casi al borde horizontal del viewport (edge gap pequeño)
+            const edgeGap = 12; // px desde el borde de la pantalla
+            leftArrow.style.position = 'fixed';
+            leftArrow.style.top = top + 'px';
+            leftArrow.style.left = edgeGap + 'px';
+            leftArrow.style.right = 'auto';
+
+            rightArrow.style.position = 'fixed';
+            rightArrow.style.top = top + 'px';
+            rightArrow.style.right = edgeGap + 'px';
+            rightArrow.style.left = 'auto';
+            // Asegurar transform neutro
+            leftArrow.style.transform = 'none';
+            rightArrow.style.transform = 'none';
         }
-        // Quitar marca de agua HTML y flechas en móvil, y bloquear zoom en móvil
+
+        // Registrar clicks en flechas
+        if (leftArrow) leftArrow.onclick = function(e) {
+            e.stopPropagation();
+            actual = (actual - 1 + existentes.length) % existentes.length;
+            dibujarImagen(actual);
+        };
+        if (rightArrow) rightArrow.onclick = function(e) {
+            e.stopPropagation();
+            actual = (actual + 1) % existentes.length;
+            dibujarImagen(actual);
+        };
+
+        // Handler para recalcular la posición en resize/scroll
+        flechasHandler = function() { colocarFlechasFixed(); };
+        window.addEventListener('resize', flechasHandler);
+        window.addEventListener('scroll', flechasHandler, {passive:true});
+        // Posicionar inicialmente
+        setTimeout(colocarFlechasFixed, 25);
         const watermarkDiv = modal.querySelector('#watermark-text');
         if (watermarkDiv) watermarkDiv.style.display = 'none';
-        // Ocultar flechas en móvil
         if (window.innerWidth <= 600) {
             if (leftArrow) leftArrow.style.display = 'none';
             if (rightArrow) rightArrow.style.display = 'none';
@@ -297,11 +345,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (leftArrow) leftArrow.style.display = '';
             if (rightArrow) rightArrow.style.display = '';
         }
-        // Bloquear zoom en móvil (solo permite deslizar)
         function esMovil() {
             return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|webOS|BlackBerry/i.test(navigator.userAgent);
         }
-        // Cerrar modal
         function cerrarModalSeguro() {
             limpiarZoomHandlers();
             zoomActivo = false;
@@ -309,6 +355,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.style.opacity = '0';
                 setTimeout(() => { modal.style.display = 'none'; }, 250);
             }
+            // limpiar listeners de posicionamiento de flechas
+            try {
+                if (flechasHandler) {
+                    window.removeEventListener('resize', flechasHandler);
+                    window.removeEventListener('scroll', flechasHandler);
+                    flechasHandler = null;
+                }
+            } catch(e) {}
             document.body.style.overflow = '';
             document.removeEventListener('keydown', onKeyDownModal);
         }
@@ -318,7 +372,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.key === 'Escape') cerrarModalSeguro();
         }
         document.addEventListener('keydown', onKeyDownModal);
-        // Inicializar imagen y mostrar modal
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         if (modal) {
@@ -327,7 +380,6 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { modal.style.opacity = '1'; }, 10);
         }
         dibujarImagen(actual);
-        // Mostrar mensaje temporal en móvil al abrir el modal
         if (window.innerWidth <= 600) {
             const mensajeDesliza = modal.querySelector('#modal-mensaje-desliza');
             if (mensajeDesliza) {
@@ -343,7 +395,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 2500);
             }
         }
-        // Soporte táctil para deslizar en móvil dentro del modal
         let modalStartX = null;
         let modalMoved = false;
         if (canvas) {
@@ -378,16 +429,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.boton-seccion').forEach(btn => {
         btn.addEventListener('click', function() {
             if (this.dataset.seccion === 'quienes-somos') {
-                setTimeout(inicializarCarruselClientes, 100); // Espera a que se muestre
+                setTimeout(inicializarCarruselClientes, 100);
             }
         });
     });
-    // Protección máxima: bloquear clic derecho y arrastre en los divs de fondo
     document.querySelectorAll('.carrusel-img-bg').forEach(function(div) {
         div.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         div.addEventListener('dragstart', function(e) { e.preventDefault(); });
     });
-    // Protección adicional: superponer capa invisible sobre imágenes del carrusel
     const carruselImagenes = document.querySelector('.carrusel-imagenes');
     if (carruselImagenes) {
         const overlay = document.createElement('div');
@@ -398,11 +447,10 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.style.height = '100%';
         overlay.style.zIndex = 10;
         overlay.style.background = 'transparent';
-        overlay.style.pointerEvents = 'none'; // Permite clicks en imágenes
+        overlay.style.pointerEvents = 'none';
         carruselImagenes.style.position = 'relative';
         carruselImagenes.appendChild(overlay);
     }
-    // Soporte táctil para deslizar en móvil
     let startX = null;
     let moved = false;
     const imagenesContainer = document.querySelector('.carrusel-imagenes');
@@ -433,7 +481,6 @@ document.addEventListener('DOMContentLoaded', function() {
             startX = null;
         });
     }
-    // --- INDICADOR DE CLICK EN IMAGEN DEL CARRUSEL ---
     function mostrarIndicadorClickCarrusel() {
         const primeraImg = document.querySelector('.carrusel-img-bg');
         if (!primeraImg) return;
@@ -444,14 +491,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('carruselClickHintShown', '1');
             }, 2400);
         }
-        // Añadir icono de lupa si no existe
         if (!primeraImg.querySelector('.zoom-icon')) {
             const icon = document.createElement('span');
             icon.className = 'zoom-icon';
             icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="7" stroke="#ffd700" stroke-width="2"/><line x1="14.2" y1="14.2" x2="18" y2="18" stroke="#ffd700" stroke-width="2" stroke-linecap="round"/></svg>`;
             primeraImg.appendChild(icon);
         }
-        // Añadir tooltip
         primeraImg.setAttribute('data-tooltip', 'Haz clic para ampliar');
     }
     mostrarIndicadorClickCarrusel();
