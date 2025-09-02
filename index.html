@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
@@ -50,7 +50,7 @@
                         <button class="catalogo-btn futbol-dropdown-btn" type="button">
                             Ver opciones <i class="fas fa-chevron-down"></i>
                         </button>
-                        <div class="futbol-dropdown-menu" style="display:none;">
+                        <div class="futbol-dropdown-menu">
                             <a href="https://2020soccer.x.yupoo.com/albums" target="_blank">GENERAL</a>
                             <a href="https://classic-football-fhirts052.x.yupoo.com/" target="_blank">RETRO</a>
                             <a href="https://yongfa1688.x.yupoo.com/" target="_blank">NUEVA TEMPORADA</a>
@@ -762,19 +762,30 @@
     <div id="productGallery" class="product-gallery" aria-live="polite"></div>
 
     <aside id="cartPanel" class="cart-panel" aria-label="Carrito de compras">
-            <h3>Tu Carrito</h3>
-            <div id="cartItems" class="cart-items"></div>
-            <div class="cart-totals">
-                <div>Subtotal: <span id="cartSubtotal">0.00</span>€</div>
-                <div>Gastos envío: <span id="cartShipping">2.00</span>€</div>
-                <div style="font-weight:800">Total: <span id="cartTotal">0.00</span>€</div>
+            <div class="cart-header">
+                <h3>Tu Carrito</h3>
+                <div id="cartCount" class="cart-count" aria-hidden="true">0</div>
             </div>
+
+            <div id="cartItems" class="cart-items">
+                <div class="cart-empty">Tu carrito está vacío<br><small>Agrega productos para empezar</small></div>
+            </div>
+
+            <div class="cart-divider" aria-hidden="true"></div>
+
+            <div class="cart-totals">
+                <div class="tot-row"><span>Subtotal</span><span><strong id="cartSubtotal">0.00</strong>€</span></div>
+                <div class="tot-row"><span>Gastos envío</span><span id="cartShipping">2.00</span>€</div>
+                <div class="tot-row total"><span>Total</span><span id="cartTotal">0.00</span>€</div>
+            </div>
+
             <div class="cart-actions">
                 <button id="clearCartGallery" class="btn-secondary">Vaciar</button>
-                <button id="gotoCheckoutBtn" class="btn-primary">Ir a Checkout</button>
+                <button id="gotoCheckoutBtn" class="btn-primary">Pagar</button>
             </div>
-            <p class="cart-note">Antes de pagar se solicitará correo de PayPal, usuario de Instagram y dirección de envío en el checkout.</p>
-            </aside>
+
+            <p class="cart-note">Antes de pagar se solicitará correo de PayPal, usuario de Instagram y dirección de envío.</p>
+    </aside>
     </div>
 
     <style>
@@ -801,26 +812,39 @@
               If there is only one product, align it to the left (start) so it appears at the very left edge. */
         .product-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 18px; justify-items: stretch; }
           .product-gallery > .product-item:only-child { justify-self: start; max-width: 800px; }
-    .product-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(42,91,168,0.08); padding: 12px; border-radius: 12px; text-align: center; transition: transform .16s, box-shadow .16s; max-width: 360px; box-sizing: border-box; cursor: pointer; }
+    .product-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(42,91,168,0.08); padding: 6px; border-radius: 12px; text-align: center; transition: transform .12s, box-shadow .12s; max-width: 360px; box-sizing: border-box; cursor: pointer; align-items: stretch; }
         .product-item:hover { transform: translateY(-6px); box-shadow: 0 8px 30px rgba(42,91,168,0.12); }
-        .product-item img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
-        .product-item h4 { color: #fff; margin: 10px 0 6px; font-size: 1.05rem; }
-        .product-item .price { color: #9fe0ff; font-weight: 800; margin-bottom: 8px; }
-        .product-item .excerpt { color: #d6e9ff; font-size: 0.95rem; min-height: 40px; }
-        .product-item .actions { display:flex; gap:8px; justify-content:center; margin-top:10px; }
+    .product-item img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; }
+        .product-item h4 { color: #fff; margin: 6px 0 4px; font-size: 1.03rem; }
+        .product-item .price { color: #9fe0ff; font-weight: 800; margin-bottom: 4px; }
+        .product-item .excerpt { color: #d6e9ff; font-size: 0.95rem; min-height: 0; margin-bottom:0; }
+    .product-item .actions { display:flex; gap:8px; justify-content:center; margin-top:6px; }
         .btn-primary { background: linear-gradient(90deg,var(--azul-acento) 60%, #163a6b 100%); color: #fff; border: none; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
         .btn-secondary { background: transparent; color: #d6e9ff; border: 1px solid rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 10px; cursor: pointer; }
 
           /* Keep the cart visually on the right side of the page at all times. Make it fixed so it doesn't move
               when the gallery grows. Add max-height/overflow to remain scrollable on small viewports. */
-    .cart-panel { background: rgba(10,31,61,0.9); padding: 14px; border-radius: 12px; color: #dbeeff; border: 1px solid rgba(42,91,168,0.12); position: relative; width: 100%; max-width: 360px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
+    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 380px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
+        .cart-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+        .cart-header h3 { margin:0; color:#fff; font-size:1.15rem; letter-spacing:0.4px; }
+        .cart-count { background:linear-gradient(90deg,#2e7bed,#144a85); color:#fff; padding:6px 10px; border-radius:999px; font-weight:800; font-size:0.9rem; box-shadow:0 6px 18px rgba(46,123,237,0.18); }
         .cart-items { max-height: 420px; overflow:auto; margin-bottom:12px; }
-        .cart-item { display:flex; gap:8px; align-items:center; padding:8px; border-radius:8px; background: rgba(255,255,255,0.02); margin-bottom:8px; }
-        .cart-item img { width:56px; height:56px; object-fit:cover; border-radius:6px; }
+        .cart-empty { text-align:center; color:#9fbfe8; padding:24px 8px; border-radius:10px; background:rgba(255,255,255,0.02); }
+        .cart-item { display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); margin-bottom:10px; border:1px solid rgba(255,255,255,0.03); }
+        .cart-item img { width:64px; height:64px; object-fit:cover; border-radius:8px; box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
         .cart-item .meta { flex:1; text-align:left; }
-        .cart-item .meta b { display:block; color:#fff; }
-        .cart-item .meta small { color:#bcd9ff; display:block; }
-        .cart-item .remove { background:transparent; border:none; color:#ffb3b3; cursor:pointer; }
+        .cart-item .meta b { display:block; color:#fff; font-size:0.98rem; margin-bottom:4px; }
+        .cart-item .meta small { color:#bcd9ff; display:block; font-size:0.9rem; }
+        .cart-item .meta .qty-row { margin-top:6px; display:flex; align-items:center; gap:8px; }
+        .cart-item .meta .qty-row input { width:56px; padding:6px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:#fff; text-align:center; }
+        .cart-item .remove { background:transparent; border:none; color:#ff8a8a; cursor:pointer; font-size:1.05rem; padding:6px; }
+        .cart-divider { height:1px; background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01)); margin:10px 0; border-radius:2px; }
+        .cart-totals { display:flex; flex-direction:column; gap:8px; padding:6px 2px; }
+        .cart-totals .tot-row { display:flex; justify-content:space-between; color:#cfe8ff; font-weight:700; }
+        .cart-totals .tot-row.total { font-size:1.16rem; color:#fff; font-weight:900; }
+        .cart-actions { display:flex; gap:8px; margin-top:10px; }
+        .cart-actions .btn-primary { flex:1; }
+        .cart-actions .btn-secondary { background:transparent; border:1px solid rgba(255,255,255,0.04); padding:10px 12px; border-radius:10px; color:#d6e9ff; }
         .cart-note { font-size:0.85rem; color:#bcd9ff; margin-top:8px; }
 
         /* Keep cart on the right even on narrower viewports but reduce its width and ensure the gallery
@@ -844,8 +868,8 @@
     .checkout-input { width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:8px }
     /* Ajustes para que la tarjeta se adapte a la imagen 800x800 */
     .product-item, .pedido-mini-card { display:flex; flex-direction:column; align-items:center; }
-    .product-item > img, .pedido-mini-card img.pedido-carrusel-img { max-width:800px; width:100%; height:auto; object-fit:contain; border-radius:8px; }
-    .pedido-mini-card { padding:8px; }
+    .product-item > img, .pedido-mini-card img.pedido-carrusel-img { max-width:800px; width:100%; height:140px; object-fit:cover; border-radius:8px; }
+    .pedido-mini-card { padding:4px; cursor: pointer; }
     .pedido-mini-card .thumb-img { display:none; }
     </style>
 
@@ -869,7 +893,12 @@
                 'assets/productos/Athletic2526L/1.jpg',
                 'assets/productos/Athletic2526L/2.jpg',
                 'assets/productos/Athletic2526L/3.jpg'
-            ], excerpt: '', link: 'productos/athletic2526L.html' }
+            ], excerpt: '', link: 'productos/athletic2526L.html' },
+            { id: 'atletico0203', name: 'Camiseta Retro Atlético 02/03', price: 24.90, img: 'assets/productos/Atletico0203L/1.jpg', images: [
+                'assets/productos/Atletico0203L/1.jpg',
+                'assets/productos/Atletico0203L/2.jpg',
+                'assets/productos/Atletico0203L/3.jpg'
+            ], excerpt: '', link: 'productos/atletico0203.html', versions: ['fan'], isRetro: true }
         ];
         const EXTRAS = { parche: 1, dorsal: 2, version: 5 };
         const SHIPPING = 2.00;
@@ -926,12 +955,17 @@
             const shirtCount = shirtItems.length;
             const shirtExtrasSum = shirtItems.reduce((s,it)=> s + (it.extra||0), 0);
             const shirtBaseSum = shirtItems.reduce((s,it)=> s + (it.price||0), 0);
+            // Determinar precio base por unidad usado por las ofertas (pack de 1 si existe)
+            const baseOffer = (OFFERS && OFFERS.find(o=>o.size===1) && OFFERS.find(o=>o.size===1).price) ? OFFERS.find(o=>o.size===1).price : 19.90;
+            // Sumar recargo por camisetas que tengan precio mayor al precio base (p. ej. 24.90 vs 19.90)
+            const shirtPriceSurplus = shirtItems.reduce((s,it) => s + Math.max(0, (it.price || 0) - baseOffer), 0);
             const originalSubtotal = nonShirtSubtotal + shirtBaseSum + shirtExtrasSum;
             const originalShipping = (CART.length>0? SHIPPING : 0);
             const originalTotal = originalSubtotal + originalShipping;
             if (shirtCount === 0) return { subtotal: originalSubtotal, shipping: originalShipping, total: originalTotal, appliedOffer: null, savings:0 };
             const best = computeBestOfferForCount(shirtCount);
-            const shirtsOfferCost = best.total + shirtExtrasSum;
+            // El coste calculado por packs (best.total) asume precios base; añadimos extras y cualquier diferencia de precio por unidad
+            const shirtsOfferCost = best.total + shirtExtrasSum + shirtPriceSurplus;
             // Si hay más de 1 camiseta aplicamos envío gratis a todo el pedido
             const shirtsOfferShipping = (shirtCount > 1) ? 0 : best.shipping;
             const newSubtotal = nonShirtSubtotal + shirtsOfferCost;
@@ -939,7 +973,7 @@
             const newShipping = (shirtCount > 1) ? 0 : (shirtsOfferShipping + (nonShirtItems.length>0 ? SHIPPING : 0));
             const newTotal = newSubtotal + newShipping;
             const savings = Math.max(0, originalTotal - newTotal);
-            return { subtotal: newSubtotal, shipping: newShipping, total: newTotal, appliedOffer: { count: shirtCount, detail: best }, savings };
+            return { subtotal: newSubtotal, shipping: newShipping, total: newTotal, appliedOffer: { count: shirtCount, detail: best, priceSurplus: shirtPriceSurplus }, savings };
         }
 
         function renderGallery(){
@@ -955,13 +989,13 @@
                 if (p.images && p.images.length) {
                     const imgsJson = JSON.stringify(p.images);
                     el.innerHTML = `
-                        <div class="pedido-mini-card" style="cursor:default;" data-images='${imgsJson}'>
+                        <div class="pedido-mini-card" data-images='${imgsJson}'>
                             <div style="display:flex;justify-content:center;">
                                         <div style="max-width:800px;width:100%;">
                                             <img class="pedido-carrusel-img" src="${p.images[0]}" alt="${p.name}" style="width:100%;height:auto;display:block;border-radius:8px;">
                                         </div>
                                     </div>
-                            <h4 style="margin-top:10px">${p.name}</h4>
+                            <h4 style="margin-top:6px">${p.name}</h4>
                             <div class="price">€${p.price.toFixed(2)}</div>
                             <div class="excerpt">${p.excerpt}</div>
                             <!-- boton eliminado: la tarjeta completa es clicable -->
@@ -969,12 +1003,12 @@
                     `;
                 } else {
                     el.innerHTML = `
-                        <img src="${p.img}" alt="${p.name}">
-                        <h4>${p.name}</h4>
-                        <div class="price">€${p.price.toFixed(2)}</div>
-                        <div class="excerpt">${p.excerpt}</div>
-                        <!-- boton eliminado: la tarjeta completa es clicable -->
-                    `;
+                            <img src="${p.img}" alt="${p.name}">
+                            <h4>${p.name}</h4>
+                            <div class="price">€${p.price.toFixed(2)}</div>
+                            <div class="excerpt">${p.excerpt}</div>
+                            <!-- boton eliminado: la tarjeta completa es clicable -->
+                        `;
                 }
                 container.appendChild(el);
             });
@@ -1004,7 +1038,7 @@
                                 </label>
 
                                 <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Parche (+1€)
-                                    <select id="_opt_parche_select" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;">
+                                    <select id="_opt_parche_select" class="custom-select" style="margin-top:6px;">
                                         <option value="none">Ninguno</option>
                                         <option value="LaLiga">LaLiga</option>
                                         <option value="Premier League">Premier League</option>
@@ -1021,23 +1055,23 @@
                                 </label>
 
                                 <label style="grid-column:1/3;"> Talla:
-                                    <select id="_opt_talla" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;">
+                                    <select id="_opt_talla" class="custom-select input-talla">
                                         <option value="S">S</option>
                                         <option value="M">M</option>
                                         <option value="L">L</option>
                                         <option value="XL">XL</option>
                                         <option value="XXL">XXL (+1€)</option>
+                                        <option value="2XL">2XL (+1€)</option>
                                         <option value="3XL">3XL (+2€)</option>
-                                        <option value="4XL">4XL (+3€)</option>
+                                        <option value="4XL">4XL (+2€)</option>
                                     </select>
                                 </label>
 
-                                <label style="grid-column:1/3;"> Versión especial (Jugador/Retro/NBA):
-                                    <select id="_opt_version" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;">
-                                        <option value="none">Ninguna</option>
-                                        <option value="jugador">Jugador (+5€)</option>
-                                        <option value="retro">Retro (+5€)</option>
-                                        <option value="nba">NBA (+5€)</option>
+                                <label style="grid-column:1/3;"> Versión (elige una):
+                                    <select id="_opt_version" class="custom-select">
+                                        <option value="" disabled selected>Selecciona versión</option>
+                                        <option value="fan">FAN</option>
+                                        <option value="jugador">JUGADOR (+5€)</option>
                                     </select>
                                 </label>
                             </form>
@@ -1052,7 +1086,18 @@
 
             document.body.appendChild(modal);
 
-            modal.querySelector('#_closeModal').addEventListener('click', ()=> modal.remove());
+                // Cerrar modal al pulsar el botón o al hacer click fuera del panel
+                modal.querySelector('#_closeModal').addEventListener('click', ()=> modal.remove());
+                modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+            // Si el producto define versiones y sólo hay una opción, preseleccionarla y ocultar el selector
+            try {
+                if (product && Array.isArray(product.versions) && product.versions.length === 1) {
+                    const verSelect = modal.querySelector('#_opt_version');
+                    const verLabel = verSelect ? verSelect.parentElement : null;
+                    if (verSelect) { verSelect.value = product.versions[0]; }
+                    if (verLabel) { verLabel.style.display = 'none'; }
+                }
+            } catch(e) { /* ignore if modal not present */ }
             // show/hide 'otros' field for parche
             const parcheSelect = modal.querySelector('#_opt_parche_select');
             const parcheOtrosWrap = modal.querySelector('#_opt_parche_otros_wrap');
@@ -1070,7 +1115,7 @@
                 const parcheSel = modal.querySelector('#_opt_parche_select').value;
                 const parcheFinal = (parcheSel === 'Otros') ? (modal.querySelector('#_opt_parche_otros').value.trim() || '') : (parcheSel === 'none' ? '' : parcheSel);
                 const version = modal.querySelector('#_opt_version').value;
-                // pasar parcheFinal como string ('' si ninguno)
+                if (!version) { alert('Selecciona una versión antes de añadir al carrito.'); return; }
                 addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
                 modal.remove();
             });
@@ -1121,7 +1166,9 @@
             `;
 
             document.body.appendChild(modal);
-            document.getElementById('modalTiendaClose').addEventListener('click', ()=> { modal.remove(); });
+                document.getElementById('modalTiendaClose').addEventListener('click', ()=> { modal.remove(); });
+                // Cerrar modal al hacer click fuera del panel principal
+                modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
 
             // Carousel logic (scoped to modal)
             const track = modal.querySelector('.carousel-track');
@@ -1136,20 +1183,94 @@
             if (thumbs) thumbs.addEventListener('click', (e)=>{ const t = e.target.closest('img[data-index]'); if (!t) return; idx = parseInt(t.dataset.index,10); update(); });
             update();
 
-            // Autoplay every 5s with pause on hover
-            let autoplayTimer = setInterval(()=>{ idx = (idx+1)%slides.length; update(); }, 5000);
+            // Autoplay every 5s with robust start/stop (avoid duplicated intervals)
+            let autoplayTimer = null;
+            function startAutoplay(){ if (autoplayTimer) clearInterval(autoplayTimer); autoplayTimer = setInterval(()=>{ idx = (idx+1)%slides.length; update(); }, 5000); }
+            function stopAutoplay(){ if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; } }
+            startAutoplay();
             const carouselWrap = modal.querySelector('#modalTiendaCarousel');
-            [carouselWrap, prev, next, thumbs].forEach(el => { if (!el) return; el.addEventListener('mouseenter', ()=> clearInterval(autoplayTimer)); el.addEventListener('mouseleave', ()=> autoplayTimer = setInterval(()=>{ idx = (idx+1)%slides.length; update(); }, 5000)); });
+            [carouselWrap, prev, next, thumbs, modal].forEach(el => { if (!el) return; el.addEventListener('mouseenter', ()=> stopAutoplay()); el.addEventListener('mouseleave', ()=> startAutoplay()); });
 
-            // 'Personalizar y Comprar' behavior: abrir sección Pedidos y trigger detalle del producto en la galería (si existe)
-            const personalizarBtn = modal.querySelector('#modalTiendaPersonalizar');
-            personalizarBtn && personalizarBtn.addEventListener('click', ()=>{
-                // Abrir directamente el modal de personalización para este producto
-                if (typeof openProductModal === 'function') {
-                    openProductModal(product);
-                }
-                modal.remove();
-            });
+            // Reemplazamos el botón de personalizar por un formulario embebido en la columna derecha
+            const rightCol = modal.querySelector('div[style*="background:rgba(10,31,61,0.9)"]');
+            if (rightCol) {
+                rightCol.innerHTML = `
+                    <h3 style="color:var(--azul-acento);margin-top:0;">${product.name}</h3>
+                    <p style="color:#d6e9ff;">${product.excerpt}</p>
+                    <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
+                    <form id="modalTiendaForm" style="display:grid;gap:8px;">
+                        <label style="font-weight:700;color:#dbeeff;">Nombre y número <small style="color:#bcd9ff;display:block;font-weight:400">(+2€)</small>
+                            <input id="_opt_dorsal_modal" placeholder="Ej: MESSI 10" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;" />
+                        </label>
+                        <label style="font-weight:700;color:#dbeeff;">Parche (+1€)
+                            <select id="_opt_parche_select_modal" class="custom-select" style="margin-top:6px;">
+                                <option value="none">Ninguno</option>
+                                <option value="LaLiga">LaLiga</option>
+                                <option value="Premier League">Premier League</option>
+                                <option value="Ligue 1">Ligue 1</option>
+                                <option value="Serie A">Serie A</option>
+                                <option value="Bundesliga">Bundesliga</option>
+                                <option value="Champions League">Champions League</option>
+                                <option value="Europa League">Europa League</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </label>
+                        <label id="_opt_parche_otros_wrap_modal" style="display:none;"><input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;" /></label>
+                        <label>Talla:
+                            <select id="_opt_talla_modal" class="custom-select input-talla">
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="2XL">2XL (+1€)</option>
+                                <option value="XXL">XXL (+1€)</option>
+                                <option value="3XL">3XL (+2€)</option>
+                                <option value="4XL">4XL (+2€)</option>
+                            </select>
+                        </label>
+                        <label>Versión:
+                            <select id="_opt_version_modal" class="custom-select">
+                                <option value="" disabled selected>Selecciona versión</option>
+                                <option value="fan">FAN</option>
+                                <option value="jugador">JUGADOR (+5€)</option>
+                            </select>
+                        </label>
+                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
+                            <button id="modalTiendaAdd" type="button" class="btn-primary">Añadir al carrito</button>
+                            <button id="modalTiendaCloseInline" type="button" class="btn-secondary">Cerrar</button>
+                        </div>
+                    </form>
+                `;
+
+                // parche otros toggle
+                const parcheSelectModal = rightCol.querySelector('#_opt_parche_select_modal');
+                const parcheOtrosWrapModal = rightCol.querySelector('#_opt_parche_otros_wrap_modal');
+                if (parcheSelectModal) parcheSelectModal.addEventListener('change', function(){ if (this.value === 'Otros') { parcheOtrosWrapModal.style.display = ''; } else { parcheOtrosWrapModal.style.display = 'none'; } });
+
+                // Si el producto define versiones y sólo hay una opción, preseleccionarla y ocultar el selector modal
+                try {
+                    if (product && Array.isArray(product.versions) && product.versions.length === 1) {
+                        const verSelModal = rightCol.querySelector('#_opt_version_modal');
+                        const verLabelModal = verSelModal ? verSelModal.parentElement : null;
+                        if (verSelModal) verSelModal.value = product.versions[0];
+                        if (verLabelModal) verLabelModal.style.display = 'none';
+                    }
+                } catch(e) {}
+
+                // add to cart from modal right column
+                rightCol.querySelector('#modalTiendaAdd').addEventListener('click', ()=>{
+                    const talla = rightCol.querySelector('#_opt_talla_modal').value;
+                    const dorsal = rightCol.querySelector('#_opt_dorsal_modal').value.trim();
+                    const parcheSel = rightCol.querySelector('#_opt_parche_select_modal').value;
+                    const parcheFinal = (parcheSel === 'Otros') ? (rightCol.querySelector('#_opt_parche_otros_modal').value.trim() || '') : (parcheSel === 'none' ? '' : parcheSel);
+                    const version = rightCol.querySelector('#_opt_version_modal').value;
+                    if (!version) { alert('Selecciona una versión antes de añadir al carrito.'); return; }
+                    addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
+                    // opción: cerrar modal tras añadir
+                    stopAutoplay(); modal.remove();
+                });
+                rightCol.querySelector('#modalTiendaCloseInline').addEventListener('click', ()=> { stopAutoplay(); modal.remove(); });
+            }
         }
 
         function addToCart(item){
@@ -1157,10 +1278,11 @@
             let extra = 0;
             if (item.parche) extra += EXTRAS.parche;
             if (item.dorsal) extra += EXTRAS.dorsal;
-            if (item.version && item.version !== 'none') extra += EXTRAS.version;
+            // apply version surcharge only when version === 'jugador'
+            if (item.version === 'jugador') extra += EXTRAS.version;
             if (item.talla === 'XXL') extra += 1;
             else if (item.talla === '3XL') extra += 2;
-            else if (item.talla === '4XL') extra += 3;
+            else if (item.talla === '4XL') extra += 2;
             const total = (item.price + extra);
             const cartItem = { id: Date.now().toString(36), productId: item.productId, name: item.name, img: item.img, price: item.price, extra, talla: item.talla, dorsal: item.dorsal, parche: item.parche, version: item.version, total };
             CART.push(cartItem);
@@ -1169,7 +1291,7 @@
 
         function renderCart(){
             const list = byId('cartItems');
-            list.innerHTML = '';
+                list.innerHTML = '';
             let subtotal = 0;
             // Agrupar items iguales (por productId + talla + version) para manejar cantidades fácilmente
             const grouped = {};
@@ -1199,6 +1321,13 @@
                 `;
                 list.appendChild(row);
             });
+            // actualizar contador visual
+            const countEl = byId('cartCount');
+            if (countEl) countEl.textContent = CART.length.toString();
+            // si no hay items mostrar mensaje de vacío
+            if (CART.length === 0) {
+                list.innerHTML = '<div class="cart-empty">Tu carrito está vacío<br><small>Agrega productos para empezar</small></div>';
+            }
             // Detectar camisetas en el carrito para aplicar ofertas por cantidad
             function isShirt(ci){
                 if (!ci || !ci.name) return false;
@@ -1213,6 +1342,10 @@
             const shirtCount = shirtItems.length;
             const shirtExtrasSum = shirtItems.reduce((s, it) => s + (it.extra || 0), 0);
             const shirtBaseSum = shirtItems.reduce((s, it) => s + (it.price || 0), 0);
+
+            // precio base usado en las ofertas (pack 1) - por defecto 19.90
+            const baseOffer = (OFFERS && OFFERS.find(o=>o.size===1) && OFFERS.find(o=>o.size===1).price) ? OFFERS.find(o=>o.size===1).price : 19.90;
+            const shirtPriceSurplus = shirtItems.reduce((s,it) => s + Math.max(0, (it.price || 0) - baseOffer), 0);
 
             // use global computeBestOfferForCount
 
@@ -1229,7 +1362,7 @@
             if (shirtCount > 0){
                 const best = computeBestOfferForCount(shirtCount);
                 // best.total es precio de bases de packs; añadimos extras de camisetas
-                const shirtsOfferCost = best.total + shirtExtrasSum;
+                const shirtsOfferCost = best.total + shirtExtrasSum + shirtPriceSurplus;
                 // Si hay más de 1 camiseta aplicamos envío gratis global
                 const shirtsOfferShipping = (shirtCount > 1) ? 0 : best.shipping;
                 // nuevo subtotal = nonShirtTotal + shirtsOfferCost
@@ -1356,7 +1489,7 @@
                     item.style.padding = '8px 0';
                     const parche = ci.parche ? `<div style="color:#bcd9ff;font-size:0.95rem">Parche: ${ci.parche} (+€${(ci.parche? EXTRAS.parche:0).toFixed(2)})</div>` : '';
                     const dorsal = ci.dorsal ? `<div style="color:#bcd9ff;font-size:0.95rem">Dorsal: ${ci.dorsal} (+€${(ci.dorsal? EXTRAS.dorsal:0).toFixed(2)})</div>` : '';
-                    const version = (ci.version && ci.version !== 'none') ? `<div style="color:#bcd9ff;font-size:0.95rem">Versión: ${ci.version} (+€${EXTRAS.version.toFixed(2)})</div>` : '';
+                    const version = (ci.version && ci.version !== 'none') ? (ci.version === 'version' ? `<div style="color:#bcd9ff;font-size:0.95rem">Versión: ${ci.version} (+€${EXTRAS.version.toFixed(2)})</div>` : `<div style="color:#bcd9ff;font-size:0.95rem">Versión: ${ci.version}</div>`) : '';
                     item.innerHTML = `
                         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
                             <div style="flex:1">
@@ -1636,7 +1769,7 @@
             totalRecargoTallas += 2;
         } else if (talla === '4XL') {
             recargoTallas++;
-            totalRecargoTallas += 3;
+            totalRecargoTallas += 2;
         }
     });
 
