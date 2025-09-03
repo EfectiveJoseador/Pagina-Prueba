@@ -766,7 +766,6 @@
         <input type="hidden" name="precio_total" id="precioTotal">
         <!-- Reserve common fields (will be filled from checkout modal) -->
         <input type="hidden" name="emailPaypal" id="form_emailPaypal">
-        <input type="hidden" name="usuario" id="form_usuario">
         <input type="hidden" name="direccion" id="form_direccion">
         <input type="hidden" name="contactName" id="form_contactName">
         <input type="hidden" name="city" id="form_city">
@@ -775,7 +774,7 @@
         <input type="hidden" name="postal" id="form_postal">
         <input type="hidden" name="phone" id="form_phone">
         <input type="hidden" name="instagram" id="form_instagram">
-    <input type="hidden" name="cart_items_json" id="form_cart_items_json">
+    <!-- removed JSON payload: keep only the human-readable summary to avoid large payloads in FormSubmit -->
     <!-- Human-readable cart summary for email clarity -->
     <input type="hidden" name="cart_items_text" id="form_cart_items_text">
     </form>
@@ -2105,8 +2104,20 @@
             return;
         }
 
-        // Rellenar campos básicos
-        if (precioTotalEl && precioDisplayEl) precioTotalEl.value = precioDisplayEl.textContent || precioTotalEl.value || '0.00';
+        // Rellenar campos básicos: usar el total calculado centralmente si está disponible
+        try {
+            const computed = (typeof computeCartTotals === 'function') ? computeCartTotals() : null;
+            if (computed && computed.total !== undefined) {
+                precioTotalEl.value = Number(computed.total).toFixed(2);
+            } else if (precioDisplayEl) {
+                precioTotalEl.value = precioDisplayEl.textContent || precioTotalEl.value || '0.00';
+            } else {
+                const cartTotalEl = document.getElementById('cartTotal');
+                precioTotalEl.value = cartTotalEl ? (cartTotalEl.textContent || '0.00') : '0.00';
+            }
+        } catch (e) {
+            precioTotalEl.value = '0.00';
+        }
 
         // Copiar campos del modal/legacy
         const copyIfExists = (srcSelector, destId) => {
@@ -2123,15 +2134,14 @@
         copyIfExists('#checkoutPostal', 'form_postal');
         copyIfExists('#checkoutPhone', 'form_phone');
         copyIfExists('#checkoutInstagram', 'form_instagram');
-        // fallbacks legacy
-        copyIfExists('#emailPaypal', 'form_emailPaypal');
-        copyIfExists('#usuario', 'form_usuario');
-        copyIfExists('#direccion', 'form_direccion');
+    // fallbacks legacy
+    copyIfExists('#emailPaypal', 'form_emailPaypal');
+    // (usuario field removed) copyIfExists('#usuario', 'form_usuario');
+    copyIfExists('#direccion', 'form_direccion');
 
-        // Serialize cart items (json + human-readable text)
+        // Serialize cart items into a human-readable text field (no JSON): include talla, parche, dorsal y versión
         try {
-            let items = (window.CART || []).map(i => ({ productId: i.productId, name: i.name, talla: i.talla, dorsal: i.dorsal || '', parche: i.parche || '', version: i.version || '', extra: i.extra || 0, unitPrice: i.price || 0, total: i.total || 0, quantity: 1 }));
-            // If CART is empty for some reason, attempt to reconstruct items from the DOM (#cartItems)
+            let items = (window.CART || []).map(i => ({ productId: i.productId || '', name: i.name || '', talla: i.talla || '', dorsal: i.dorsal || '', parche: i.parche || '', version: i.version || '', extra: i.extra || 0, unitPrice: i.price || 0, total: i.total || 0, quantity: 1 }));
             if ((!items || items.length === 0) && document.querySelectorAll) {
                 console.warn('enviarFormulario: CART vacío — intentando reconstruir items desde DOM');
                 const domRows = document.querySelectorAll('#cartItems .cart-item');
@@ -2139,27 +2149,24 @@
                 domRows.forEach(row => {
                     try {
                         const name = row.querySelector('.meta b') ? row.querySelector('.meta b').textContent.trim() : 'Producto';
-                        const metaSmall = row.querySelector('.meta small') ? row.querySelector('.meta small').textContent.trim() : '';
-                        // parse talla/version/dorsal from metaSmall where possible
-                        let talla = '';
-                        let version = '';
-                        let dorsal = '';
-                        if (metaSmall) {
-                            // ejemplo: "Talla: M · JUGADOR"
-                            const parts = metaSmall.split('\n').join(' ').split('·').map(s=>s.trim()).filter(Boolean);
-                            // buscar elemento que empiece por 'Talla' o sea una talla posible
-                            parts.forEach(p => {
-                                if (/talla/i.test(p)) {
-                                    const t = p.replace(/talla[:]?/i,'').trim(); if (t) talla = t;
-                                } else if (/^\@/.test(p) === false && /[A-Za-z]/.test(p) && p.length <= 10) {
-                                    // heurística: puede ser versión o talla
-                                    if (!talla) talla = p; else version = p;
-                                }
-                            });
-                        }
+                        const metaSmall = row.querySelector('.meta small') ? row.querySelectorAll('.meta small')[0].textContent.trim() : '';
                         const qtyInput = row.querySelector('.cart-qty-input');
                         const quantity = qtyInput ? Math.max(1, parseInt(qtyInput.value) || 1) : 1;
-                        // price displayed is total for the row; try to read it
+                        let talla = '';
+                        let dorsal = '';
+                        let parche = '';
+                        let version = '';
+                        if (metaSmall) {
+                            const parts = metaSmall.split('·').map(s=>s.trim()).filter(Boolean);
+                            // heurística: buscar talla (S,M,L,XL,2XL,XXL etc.) y buscar dorsal si contiene número o espacios
+                            parts.forEach(p => {
+                                if (!talla && /^(S|M|L|XL|XXL|2XL|3XL|4XL|[0-9]{1,2})$/i.test(p)) { talla = p; }
+                                else if (!parche && /[A-Za-z\s]+/.test(p) && p.toLowerCase().indexOf('parche')===-1 && p.length<=30 && /[A-Za-z]/.test(p)) { parche = p; }
+                                else if (!dorsal && /\d+|[A-Z\s]{2,}/.test(p)) { dorsal = p; }
+                                else if (!version && (p.toLowerCase()==='fan' || p.toLowerCase()==='jugador' || p.toLowerCase()==='player')) { version = p; }
+                            });
+                        }
+                        // precio por fila
                         let priceTextEl = row.querySelector('div[style*="font-weight:700"]');
                         let totalDisplayed = 0;
                         if (priceTextEl) {
@@ -2167,33 +2174,34 @@
                             const m = raw.replace(/[^0-9.,]/g,'').replace(',', '.');
                             totalDisplayed = parseFloat(m) || 0;
                         }
-                        const unitPrice = (quantity > 0) ? (totalDisplayed && totalDisplayed > 0 ? (totalDisplayed/quantity) : 0) : 0;
-                        reconstructed.push({ productId: '', name, talla, dorsal, parche: '', version, extra: 0, unitPrice: unitPrice, total: totalDisplayed, quantity });
+                        reconstructed.push({ productId: '', name, talla, dorsal, parche, version, extra:0, unitPrice: totalDisplayed/quantity || 0, total: totalDisplayed, quantity });
                     } catch (e) { console.error('reconstruct row error', e); }
                 });
                 if (reconstructed.length) items = reconstructed;
             }
 
-            // Ensure quantity property exists and expand totals for items that represent grouped entries
-            items = items.map(it => ({ ...it, quantity: it.quantity || 1 }));
+            // human-friendly version mapping
+            const mapVersion = v => { if (!v) return ''; if (v.toLowerCase() === 'jugador') return 'player'; return v; };
 
-            console.log('enviarFormulario: items to serialize =', items);
-            const jsonEl = document.getElementById('form_cart_items_json');
-            if (jsonEl) jsonEl.value = JSON.stringify(items, null, 0);
             const textEl = document.getElementById('form_cart_items_text');
             if (textEl) {
-                const lines = [];
-                items.forEach((it, idx) => {
-                    const qty = it.quantity || 1;
-                    if (qty > 1) {
-                        lines.push(`${idx+1}. ${it.name} ×${qty} — ${it.talla || ''} ${it.version? '· ' + it.version : ''} ${it.dorsal? '· ' + it.dorsal : ''} — €${(it.total||0).toFixed(2)}`);
-                    } else {
-                        lines.push(`${idx+1}. ${it.name} — ${it.talla || ''} ${it.version? '· ' + it.version : ''} ${it.dorsal? '· ' + it.dorsal : ''} — €${(it.total||0).toFixed(2)}`);
-                    }
+                const lines = items.map((it, idx) => {
+                    const parts = [];
+                    if (it.talla) parts.push(it.talla);
+                    if (it.parche) parts.push(it.parche);
+                    if (it.dorsal) parts.push(it.dorsal);
+                    const ver = mapVersion(it.version);
+                    if (ver) parts.push(ver);
+                    const extras = parts.length ? ' · ' + parts.join(' · ') : '';
+                    const priceStr = `€${(it.total||0).toFixed(2)}`;
+                    return `${idx+1}. ${it.name}${extras} — ${priceStr}`;
                 });
                 textEl.value = lines.join('\n');
+        console.log('enviarFormulario: cart_items_text =', textEl.value);
             }
         } catch (e) { console.error('serialize cart error', e); }
+    // Debug: precio_total value
+    try { console.log('enviarFormulario: precio_total =', precioTotalEl ? precioTotalEl.value : '(no input)'); } catch(e){}
 
         // Enviar el form usando un iframe oculto para evitar navegación fuera de la página
         try {
