@@ -1681,7 +1681,10 @@
             const pedidos = document.getElementById('pedidos');
             const gallery = document.getElementById('productGallery');
             const ref = nav || header;
-            const minTop = ref ? Math.round((ref.getBoundingClientRect().bottom || 0) + 8) : 8;
+            const refBottom = ref ? Math.round((ref.getBoundingClientRect().bottom || 0) + 8) : 8;
+            // top of the pedidos section (we will not allow the cart to be placed above this)
+            const pedidosTop = pedidos ? Math.round(pedidos.getBoundingClientRect().top || 8) : 8;
+            const minTop = Math.max(refBottom, pedidosTop);
 
             if (pedidos && pedidos.classList.contains('activa') && gallery) {
                 const firstProduct = gallery.querySelector('.product-item');
@@ -1689,13 +1692,13 @@
                 const pRect = firstProduct.getBoundingClientRect();
                 let top = Math.round(pRect.top);
                 if (isNaN(top)) top = Math.round(gallery.getBoundingClientRect().top);
-                // ensure cart doesn't sit above the nav/header
+                // ensure cart doesn't sit above the nav/header or above the pedidos top
                 top = Math.max(top, minTop);
                 return top;
             }
 
-            if (ref) return Math.max(minTop, Math.round((ref.getBoundingClientRect().bottom || 0) + 8));
-            return 8;
+            if (ref) return Math.max(minTop, refBottom);
+            return minTop || 8;
         }
 
         function positionCartBelowHeader(){
@@ -2141,17 +2144,23 @@
     const notificacion = document.getElementById('formStatus');
     if (!notificacion) return;
     notificacion.className = 'success';
+    // Make it a fixed, high z-index floating notification so it's always visible in primer plano
+    notificacion.style.position = 'fixed';
+    notificacion.style.top = '20px';
+    notificacion.style.left = '50%';
+    notificacion.style.transform = 'translateX(-50%)';
+    notificacion.style.zIndex = '200000';
     notificacion.style.background = '#1e7e34';
     notificacion.style.color = '#fff';
-    notificacion.style.padding = '10px 12px';
+    notificacion.style.padding = '12px 16px';
     notificacion.style.borderRadius = '8px';
     notificacion.style.display = 'block';
-    notificacion.style.maxWidth = '760px';
-    notificacion.style.margin = '12px auto';
-    notificacion.style.boxShadow = '0 6px 18px rgba(30,126,52,0.18)';
-    notificacion.innerHTML = `<strong style="margin-right:8px;">✔</strong> ${mensaje} <button id="closeFormStatus" style="margin-left:12px;background:transparent;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:4px 8px;border-radius:6px;cursor:pointer;">Cerrar</button>`;
+    notificacion.style.width = 'auto';
+    notificacion.style.maxWidth = '94%';
+    notificacion.style.boxShadow = '0 8px 30px rgba(30,126,52,0.22)';
+    notificacion.innerHTML = `<strong style="margin-right:8px;">✔</strong> ${mensaje} <button id="closeFormStatus" style="margin-left:12px;background:transparent;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:6px 10px;border-radius:6px;cursor:pointer;">Cerrar</button>`;
     const closeBtn = document.getElementById('closeFormStatus');
-    if (closeBtn) closeBtn.addEventListener('click', ()=> notificacion.style.display = 'none');
+    if (closeBtn) closeBtn.addEventListener('click', ()=> { notificacion.style.display = 'none'; });
     }
     function enviarFormulario() {
     console.log('enviarFormulario: start. CART length=', (window.CART||[]).length);
