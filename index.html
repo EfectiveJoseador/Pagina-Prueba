@@ -819,7 +819,7 @@
        prevents automatic wrapping that placed the cart below the products. */
     #pedidos.activa .product-gallery-ui {
         display: grid;
-        grid-template-columns: 1fr 360px;
+        grid-template-columns: 1fr 420px;
         grid-template-rows: auto 1fr;
         grid-template-areas: "header header" "gallery cart";
         gap: 22px;
@@ -834,11 +834,11 @@
               If there is only one product, align it to the left (start) so it appears at the very left edge. */
         .product-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 18px; justify-items: stretch; }
           .product-gallery > .product-item:only-child { justify-self: start; max-width: 800px; }
-    .product-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(42,91,168,0.08); padding: 6px; border-radius: 12px; text-align: center; transition: transform .12s, box-shadow .12s; max-width: 360px; box-sizing: border-box; cursor: pointer; align-items: stretch; }
+    .product-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(42,91,168,0.08); padding: 10px 12px; border-radius: 12px; text-align: center; transition: transform .12s, box-shadow .12s; max-width: 360px; box-sizing: border-box; cursor: pointer; align-items: stretch; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; }
         .product-item:hover { transform: translateY(-6px); box-shadow: 0 8px 30px rgba(42,91,168,0.12); }
-    .product-item img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; }
-        .product-item h4 { color: #fff; margin: 6px 0 4px; font-size: 1.03rem; }
-        .product-item .price { color: #9fe0ff; font-weight: 800; margin-bottom: 4px; }
+    .product-item img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; }
+        .product-item h4 { color: #fff; margin: 8px 0 6px; font-size: 1.04rem; }
+        .product-item .price { color: #9fe0ff; font-weight: 900; margin: 6px 0; font-size:1.05rem; display:inline-block; background: rgba(15,56,100,0.12); padding:6px 10px; border-radius:8px; }
         .product-item .excerpt { color: #d6e9ff; font-size: 0.95rem; min-height: 0; margin-bottom:0; }
     .product-item .actions { display:flex; gap:8px; justify-content:center; margin-top:6px; }
         .btn-primary { background: linear-gradient(90deg,var(--azul-acento) 60%, #163a6b 100%); color: #fff; border: none; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
@@ -846,7 +846,7 @@
 
           /* Keep the cart visually on the right side of the page at all times. Make it fixed so it doesn't move
               when the gallery grows. Add max-height/overflow to remain scrollable on small viewports. */
-    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 380px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
+    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 420px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
         .cart-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
         .cart-header h3 { margin:0; color:#fff; font-size:1.15rem; letter-spacing:0.4px; }
         .cart-count { background:linear-gradient(90deg,#2e7bed,#144a85); color:#fff; padding:6px 10px; border-radius:999px; font-weight:800; font-size:0.9rem; box-shadow:0 6px 18px rgba(46,123,237,0.18); }
@@ -873,18 +873,18 @@
            has right padding so content doesn't sit underneath the fixed cart. */
         @media (min-width: 1201px) {
             /* Desktop: two-column grid — gallery left, cart right. Header spans both columns. */
-            #pedidos.activa .product-gallery-ui { display: grid; grid-template-columns: 1fr 360px; grid-template-rows: auto 1fr; grid-template-areas: "header header" "gallery cart"; gap: 22px; }
+            #pedidos.activa .product-gallery-ui { display: grid; grid-template-columns: 1fr 420px; grid-template-rows: auto 1fr; grid-template-areas: "header header" "gallery cart"; gap: 22px; }
             .gallery-header { grid-area: header; }
             .product-gallery { grid-area: gallery; }
             /* On wide screens show 3 products per row inside the gallery */
-            .product-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-            .cart-panel { grid-area: cart; position: relative; right: 0; top: 0; width: 100%; max-width: 360px; align-self: start; transform: none; }
+            .product-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-right: 18px; }
+            .cart-panel { grid-area: cart; position: relative; right: 0; top: 0; width: 100%; max-width: 420px; align-self: start; transform: none; }
             /* Remove right padding so gallery doesn't shift underneath */
             #pedidos.activa .product-gallery { padding-right: 0; }
         }
         @media (max-width: 1200px) {
-            .product-gallery-ui { padding-right: 380px; }
-            .cart-panel { position: fixed; width: 300px; right: 12px; top: 90px; }
+            .product-gallery-ui { padding-right: 460px; }
+            .cart-panel { position: fixed; width: 360px; right: 12px; top: 90px; }
         }
     /* Small helper for the checkout modal inputs */
     .checkout-input { width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:8px }
@@ -970,7 +970,7 @@
         function byId(id){return document.getElementById(id);}    
 
         // computeCartTotals: reutilizable para carrito y checkout
-        function computeCartTotals(){
+    function computeCartTotals(){
             const shirtItems = CART.filter(isShirtItem);
             const nonShirtItems = CART.filter(ci => !isShirtItem(ci));
             const nonShirtSubtotal = nonShirtItems.reduce((s,it)=> s + (it.total || 0), 0);
@@ -994,14 +994,50 @@
             // Si hay más de 1 camiseta, envío gratis global; si no, sumar shipping para nonShirtItems si existen
             const newShipping = (shirtCount > 1) ? 0 : (shirtsOfferShipping + (nonShirtItems.length>0 ? SHIPPING : 0));
             const newTotal = newSubtotal + newShipping;
-            const savings = Math.max(0, originalTotal - newTotal);
+
+            // Map user-defined estimated savings per number of camisetas (base table)
+            const SAVINGS_TABLE = { 1: 2.00, 2: 5.00, 3: 13.00, 4: 15.00, 5: 25.00 };
+
+            // Decompose count into multiples of 5 + remainder and sum the table values
+            function computeSavingsByDecomposition(n){
+                if (!n || n <= 0) return 0;
+                let remaining = n;
+                let totalSavings = 0;
+                // use as many 5-packs as possible
+                const pack5 = Math.floor(remaining / 5);
+                if (pack5 > 0 && SAVINGS_TABLE[5]) {
+                    totalSavings += pack5 * SAVINGS_TABLE[5];
+                    remaining = remaining - pack5 * 5;
+                }
+                // handle remainder using table if available, otherwise fallback to original diff for remainder
+                if (remaining > 0) {
+                    if (SAVINGS_TABLE[remaining] !== undefined) {
+                        totalSavings += SAVINGS_TABLE[remaining];
+                    } else {
+                        // fallback: estimate proportional part of fallback savings
+                        const fallback = Math.max(0, originalTotal - newTotal);
+                        // distribute fallback proportionally by remaining/count
+                        totalSavings += Math.round((fallback * (remaining / n)) * 100) / 100;
+                    }
+                }
+                return totalSavings;
+            }
+
+            const fallbackSavings = Math.max(0, originalTotal - newTotal);
+            const savings = (shirtCount > 0) ? computeSavingsByDecomposition(shirtCount) : 0;
+
             return { subtotal: newSubtotal, shipping: newShipping, total: newTotal, appliedOffer: { count: shirtCount, detail: best, priceSurplus: shirtPriceSurplus }, savings };
         }
 
-        function renderGallery(){
+        // simple debounce helper
+        function debounce(fn, wait){ let t = null; return function(){ clearTimeout(t); t = setTimeout(()=> fn.apply(this, arguments), wait); }; }
+
+        function renderGallery(filterText){
             const container = byId('productGallery');
             container.innerHTML = '';
-            PRODUCTS.forEach(p => {
+            const q = filterText ? String(filterText).toLowerCase() : '';
+            const list = PRODUCTS.filter(p => { if (!q) return true; return (p.name || '').toLowerCase().indexOf(q) !== -1; });
+            list.forEach(p => {
                 const el = document.createElement('article');
                 el.className = 'product-item';
                 // Make the entire card clickable: attach data attributes to the article
@@ -1337,7 +1373,7 @@
                             <button class="decrease" data-key="${key}" aria-label="Disminuir">−</button>
                             <input class="cart-qty-input" data-key="${key}" value="${ci.cantidad}" style="width:48px;text-align:center;" />
                             <button class="increase" data-key="${key}" aria-label="Aumentar">+</button>
-                            <button class="remove" data-id="${ci.id}" style="margin-left:6px;">Eliminar</button>
+                            <button class="remove" data-key="${key}" style="margin-left:6px;">Eliminar</button>
                         </div>
                     </div>
                 `;
@@ -1405,8 +1441,12 @@
             if (totalsContainer){
                 // remove previous offer note if any
                 const prev = totalsContainer.querySelector('.offer-summary'); if (prev) prev.remove();
-                if (appliedOffer){
-                    const savings = (originalTotal - total);
+                    if (appliedOffer){
+                        // Prefer centralized computed savings when available
+                        let savings = 0;
+                        try { const computed = computeCartTotals(); if (computed && computed.savings !== undefined) savings = Number(computed.savings); else savings = (originalTotal - total); } catch(e){ savings = (originalTotal - total); }
+                        // UI rule: display the computed 'savings' value directly
+                        const displayedSavings = Number(savings);
                     const box = document.createElement('div');
                     box.className = 'offer-summary';
                     box.style.margin = '10px 0';
@@ -1415,17 +1455,20 @@
                     box.style.background = 'linear-gradient(90deg, rgba(255,250,230,0.04), rgba(180,220,255,0.02))';
                     box.innerHTML = `
                         <div style="font-weight:800;color:#ffd966">Oferta aplicada: ${appliedOffer.count} camisetas</div>
-                        <div style="color:#cfe7ff;font-size:0.95rem">Ahorro estimado: <strong>€${savings.toFixed(2)}</strong></div>
+                        <div style="color:#cfe7ff;font-size:0.95rem">Ahorro estimado: <strong>€${displayedSavings.toFixed(2)}</strong></div>
                         <div style="color:#bcd9ff;font-size:0.9rem">Detalle: ${Object.keys(appliedOffer.detail.combo).map(sz => `${appliedOffer.detail.combo[sz]}×${sz}`).join(' + ')}</div>
                     `;
                     totalsContainer.insertBefore(box, totalsContainer.firstChild);
                 }
             }
 
-            // attach remove
-            // manejar eventos de los controles agrupados
+            // attach remove (remove whole grouped item regardless of quantity)
             list.querySelectorAll('.remove').forEach(btn => btn.addEventListener('click', ()=>{
-                const id = btn.dataset.id; CART = CART.filter(i=> i.id !== id); renderCart();
+                const key = btn.dataset.key;
+                if (!key) return;
+                const [productId, talla, version] = key.split('::');
+                CART = CART.filter(i => !(i.productId === productId && i.talla === talla && (i.version || 'none') === version));
+                renderCart();
             }));
             list.querySelectorAll('.increase').forEach(btn => btn.addEventListener('click', ()=>{
                 const key = btn.dataset.key;
@@ -1538,13 +1581,15 @@
                 const totals = document.createElement('div');
                 totals.style.marginTop = '10px';
                 const computed = computeCartTotals();
+                // Display the computed.savings in the UI
+                const displayedSavingsModal = computed.savings ? Number(computed.savings) : 0;
                 totals.innerHTML = `
-                    <div style="display:flex;justify-content:space-between;color:#cfe7ff"><div>Subtotal</div><div>€${computed.subtotal.toFixed(2)}</div></div>
-                    <div style="display:flex;justify-content:space-between;color:#cfe7ff"><div>Gastos envío</div><div>€${computed.shipping.toFixed(2)}</div></div>
-                    ${computed.savings>0? `<div style="display:flex;justify-content:space-between;color:#ffd966;font-weight:800"><div>Ahorro total</div><div>€${computed.savings.toFixed(2)}</div></div>`: ''}
-                    <div style="display:flex;justify-content:space-between;font-weight:800;margin-top:6px"><div>Total</div><div>€${computed.total.toFixed(2)}</div></div>
-                    <div style="margin-top:8px;color:#9aaed9;font-size:0.9rem">ENVIO EXPRESS 5-15 DIAS</div>
-                `;
+                        <div style="display:flex;justify-content:space-between;color:#cfe7ff"><div>Subtotal</div><div>€${computed.subtotal.toFixed(2)}</div></div>
+                        <div style="display:flex;justify-content:space-between;color:#cfe7ff"><div>Gastos envío</div><div>€${computed.shipping.toFixed(2)}</div></div>
+                        ${displayedSavingsModal>0? `<div style="display:flex;justify-content:space-between;color:#ffd966;font-weight:800"><div>Ahorro total</div><div>€${displayedSavingsModal.toFixed(2)}</div></div>`: ''}
+                        <div style="display:flex;justify-content:space-between;font-weight:800;margin-top:6px"><div>Total</div><div>€${computed.total.toFixed(2)}</div></div>
+                        <div style="margin-top:8px;color:#9aaed9;font-size:0.9rem">ENVIO EXPRESS 5-15 DIAS</div>
+                    `;
                 summary.appendChild(totals);
             }
             renderSummary();
@@ -1617,6 +1662,34 @@
 
         // Renderizar UI solo si existe el contenedor (sección pedidos)
         if (byId('productGallery') && byId('cartItems')) {
+            // render with a prominent search control inside the gallery header
+            const galleryWrap = document.getElementById('productGallery');
+            const galleryHeaderEl = document.querySelector('.gallery-header') || galleryWrap.parentElement;
+            if (!document.getElementById('productSearch')) {
+                const wrap = document.createElement('div');
+                wrap.className = 'product-search-wrap';
+                wrap.style.display = 'flex';
+                wrap.style.justifyContent = 'space-between';
+                wrap.style.alignItems = 'center';
+                wrap.style.margin = '0 0 12px 0';
+                wrap.style.width = '100%';
+                wrap.style.boxSizing = 'border-box';
+                wrap.innerHTML = `
+                    <div style="display:flex;align-items:center;gap:10px;width:100%;max-width:820px;">
+                        <div style="background:linear-gradient(90deg, rgba(5,25,55,0.6), rgba(10,31,61,0.6));padding:8px 12px;border-radius:12px;display:flex;align-items:center;gap:10px;width:100%;box-shadow:0 8px 30px rgba(10,31,61,0.25);border:1px solid rgba(255,255,255,0.04);">
+                            <i class="fas fa-search" style="color:#9fe0ff;font-size:1.05rem;"></i>
+                            <input id="productSearch" placeholder="Buscar camiseta por nombre..." style="flex:1;padding:12px 8px;border-radius:8px;border:none;background:transparent;color:#fff;font-size:1.05rem;outline:none;" />
+                            <button id="productSearchClear" title="Limpiar" style="background:transparent;border:none;color:#bcd9ff;cursor:pointer;font-weight:700;padding:6px 8px;border-radius:8px;">Limpiar</button>
+                        </div>
+                    </div>
+                `;
+                galleryHeaderEl.appendChild(wrap);
+
+                const input = document.getElementById('productSearch');
+                const clearBtn = document.getElementById('productSearchClear');
+                if (input) input.addEventListener('input', debounce(function(e){ renderGallery(e.target.value.trim()); }, 180));
+                if (clearBtn) clearBtn.addEventListener('click', function(){ if (input) { input.value = ''; renderGallery(''); input.focus(); } });
+            }
             renderGallery(); renderCart();
         }
     </script>
@@ -1633,39 +1706,26 @@
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.boton-seccion').forEach(boton => {
-        boton.addEventListener('click', function() {
-            document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
-            document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
-            const seccionId = this.dataset.seccion;
-            this.classList.add('activo');
-            document.getElementById(seccionId).classList.add('activa');
-            // Si abrimos la sección Pedidos, desplazar la galería al inicio para que la
-            // primera fila de productos sea visible y el carrito se alinee con su borde superior.
-            if (seccionId === 'pedidos') {
-                const gallery = document.getElementById('productGallery');
-                const cart = document.getElementById('cartPanel');
-                if (gallery) {
-                    // Bring gallery to viewport top
-                    gallery.scrollIntoView({ behavior: 'auto', block: 'start' });
-                    // After layout stabilizes, align the cart top with the first product top
-                    window.requestAnimationFrame(() => {
-                        let topPx = 8;
-                        const gRect = gallery.getBoundingClientRect();
-                        if (gRect) topPx = Math.max(8, Math.round(gRect.top));
-                        if (cart) {
-                            cart.style.position = 'fixed';
-                            cart.style.top = topPx + 'px';
-                            cart.style.right = 'calc((100% - 1200px)/2 + 24px)';
-                            cart.style.zIndex = 1200;
-                        }
-                    });
-                } else if (cart) {
-                    positionCartBelowHeader();
-                }
-            }
+        // Simplified: all section buttons behave the same. No automatic scrolling or
+        // special handling for the 'pedidos' tab — just toggle the active class and
+        // refresh cart positioning.
+        document.querySelectorAll('.boton-seccion').forEach(boton => {
+            boton.addEventListener('click', function() {
+                document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
+                document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+                const seccionId = this.dataset.seccion;
+                this.classList.add('activo');
+                const target = document.getElementById(seccionId);
+                if (target) target.classList.add('activa');
+                // Reposition cart after layout settles to avoid visual jumps (delays are small)
+                try {
+                    if (typeof positionCartBelowHeader === 'function') {
+                        setTimeout(positionCartBelowHeader, 120);
+                        setTimeout(positionCartBelowHeader, 420);
+                    }
+                } catch(e){}
+            });
         });
-    });
 
     // Posicionar el carrito fijo debajo del nav (botones de sección). Fallback a header si no existe nav.
     (function(){
@@ -1702,11 +1762,21 @@
         }
 
         function positionCartBelowHeader(){
+            // Only use fixed cart on smaller viewports to avoid complex layout shifts on wide desktop
+            // On wide desktop the grid already positions the cart in the right column.
+            if (window.innerWidth > 1200) {
+                cart.style.position = 'relative';
+                cart.style.top = '';
+                cart.style.right = '';
+                cart.style.zIndex = '';
+                return;
+            }
+
             let top = calculateTopForCart();
             if (top === null) {
-                // gallery not ready: retry shortly so alignment happens after layout
+                // gallery or images not ready: retry shortly so alignment happens after layout
                 clearTimeout(positionCartBelowHeader._retry);
-                positionCartBelowHeader._retry = setTimeout(positionCartBelowHeader, 60);
+                positionCartBelowHeader._retry = setTimeout(positionCartBelowHeader, 120);
                 return;
             }
             if (isNaN(top) || top < 8) top = 8;
@@ -1717,15 +1787,29 @@
 
             cart.style.position = 'fixed';
             cart.style.top = top + 'px';
-            // prefer centering offset but ensure a small right margin when viewport is narrow
-            cart.style.right = (window.innerWidth < 1280) ? '12px' : 'calc((100% - 1200px)/2 + 24px)';
+            // prefer a comfortable right offset on narrow screens
+            cart.style.right = '12px';
             cart.style.zIndex = 1200;
+            // ensure smooth visibility: add small transition only when changing from relative
+            cart.style.transition = 'top 0.12s ease, right 0.12s ease';
         }
 
         // Update on common events and after section switches
         window.addEventListener('resize', positionCartBelowHeader);
         window.addEventListener('scroll', positionCartBelowHeader);
         document.querySelectorAll('.boton-seccion').forEach(b => b.addEventListener('click', () => setTimeout(positionCartBelowHeader, 220)));
+
+        // Retry positioning after images in the gallery load (helps avoid jumps when images change layout)
+        const gallery = document.getElementById('productGallery');
+        if (gallery) {
+            const imgs = gallery.querySelectorAll('img');
+            imgs.forEach(img => {
+                if (!img.complete) {
+                    img.addEventListener('load', () => setTimeout(positionCartBelowHeader, 120));
+                    img.addEventListener('error', () => setTimeout(positionCartBelowHeader, 120));
+                }
+            });
+        }
 
         // initial attempt shortly after load
         setTimeout(positionCartBelowHeader, 120);
@@ -1747,17 +1831,7 @@
         });
     });
 
-    document.querySelectorAll('.boton-seccion').forEach(boton => {
-        boton.addEventListener('click', function() {
-            const seccionId = this.dataset.seccion;
-            if (seccionId === 'pedidos') {
-                document.querySelectorAll('.boton-unidad').forEach(b => b.classList.remove('activo'));
-                unidades = 0;
-                document.getElementById('contenedorUnidades').innerHTML = '';
-                actualizarPrecio();
-            }
-        });
-    });
+    
 
     function actualizarPrecio() {
     let precioBase = PRECIOS_BASE[unidades] || 0;
