@@ -2490,6 +2490,7 @@
                     if (it.dorsal) parts.push(it.dorsal);
                     const ver = mapVersion(it.version);
                     if (ver) parts.push(ver);
+                    if (it.qty) parts.push(`Cantidad: ${it.qty}`);
                     const extras = parts.length ? ' · ' + parts.join(' · ') : '';
                     const priceStr = `€${(it.total||0).toFixed(2)}`;
                     return `${idx+1}. ${it.name}${extras} — ${priceStr}`;
