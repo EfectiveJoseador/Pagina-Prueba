@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
@@ -832,7 +832,7 @@
         .gallery-header p { color: #cfdff6; margin: 0 0 16px; }
           /* Gallery: center items inside the left column by default.
               If there is only one product, align it to the left (start) so it appears at the very left edge. */
-        .product-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 18px; justify-items: stretch; }
+        .product-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; width: 100%; }
           .product-gallery > .product-item:only-child { justify-self: start; max-width: 800px; }
     .product-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(42,91,168,0.08); padding: 10px 12px; border-radius: 12px; text-align: center; transition: transform .12s, box-shadow .12s; max-width: 360px; box-sizing: border-box; cursor: pointer; align-items: stretch; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; }
         .product-item:hover { transform: translateY(-6px); box-shadow: 0 8px 30px rgba(42,91,168,0.12); }
@@ -876,8 +876,10 @@
             #pedidos.activa .product-gallery-ui { display: grid; grid-template-columns: 1fr 420px; grid-template-rows: auto 1fr; grid-template-areas: "header header" "gallery cart"; gap: 22px; }
             .gallery-header { grid-area: header; }
             .product-gallery { grid-area: gallery; }
-            /* On wide screens show 3 products per row inside the gallery */
-            .product-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-right: 18px; }
+            /* On wide screens maintain the column layout for competition sections */
+            .product-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-right: 18px; width: 100%; }
+            /* Each competition's products grid shows 3 products per row */
+            .competition-products { grid-template-columns: repeat(3, 1fr); }
             .cart-panel { grid-area: cart; position: relative; right: 0; top: 0; width: 100%; max-width: 420px; align-self: start; transform: none; }
             /* Remove right padding so gallery doesn't shift underneath */
             #pedidos.activa .product-gallery { padding-right: 0; }
@@ -893,6 +895,68 @@
     .product-item > img, .pedido-mini-card img.pedido-carrusel-img { max-width:800px; width:100%; height:140px; object-fit:cover; border-radius:8px; }
     .pedido-mini-card { padding:4px; cursor: pointer; }
     .pedido-mini-card .thumb-img { display:none; }
+    
+    /* Estilos para las secciones de competición */
+    .gallery-controls {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: rgba(5,25,55,0.6);
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .gallery-controls .league-filter,
+    .gallery-controls .sort-order {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .gallery-controls select {
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: #071735;
+        color: white;
+        border: 1px solid #2e7bed;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 180px;
+    }
+    
+    .gallery-controls select:hover {
+        border-color: var(--azul-acento);
+        box-shadow: 0 0 8px rgba(46,123,237,0.5);
+    }
+    
+    .gallery-controls label {
+        color: #9fe0ff;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+    
+    @media (max-width: 768px) {
+        .gallery-controls {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .gallery-controls .league-filter,
+        .gallery-controls .sort-order {
+            width: 100%;
+        }
+        
+        .gallery-controls select {
+            width: 100%;
+        }
+    }
     </style>
 
     <script>
@@ -1203,44 +1267,152 @@
         // simple debounce helper
         function debounce(fn, wait){ let t = null; return function(){ clearTimeout(t); t = setTimeout(()=> fn.apply(this, arguments), wait); }; }
 
+        // Variable global para almacenar el estado de ordenamiento y filtrado
+        let currentSortOrder = 'default'; // 'default', 'price-asc', 'price-desc'
+        let currentLeagueFilter = 'all'; // 'all', 'La Liga', 'Premier League', etc.
+        
+        // Función para crear los controles de filtrado y ordenamiento
+        function createGalleryControls(container) {
+            // Obtener todas las ligas disponibles
+            const leagues = [];
+            PRODUCTS.forEach(p => {
+                const imgPath = p.img || (p.images && p.images.length > 0 ? p.images[0] : '');
+                const match = imgPath.match(/assets\/productos\/([^/]+)\//i);
+                const league = match ? match[1] : 'Otros';
+                if (!leagues.includes(league)) {
+                    leagues.push(league);
+                }
+            });
+            
+            // Crear el contenedor de controles
+            const controlsContainer = document.createElement('div');
+            controlsContainer.id = 'galleryControls';
+            controlsContainer.className = 'gallery-controls';
+            
+            // Crear el selector de ligas
+            const leagueFilter = document.createElement('div');
+            leagueFilter.className = 'league-filter';
+            leagueFilter.innerHTML = `
+                <label for="leagueSelect">Filtrar por liga:</label>
+                <select id="leagueSelect">
+                    <option value="all">Todas las ligas</option>
+                    ${leagues.sort().map(league => `<option value="${league}">${league}</option>`).join('')}
+                </select>
+            `;
+            
+            // Crear el selector de ordenamiento
+            const sortOrder = document.createElement('div');
+            sortOrder.className = 'sort-order';
+            sortOrder.innerHTML = `
+                <label for="sortSelect">Ordenar por:</label>
+                <select id="sortSelect">
+                    <option value="default">Por defecto</option>
+                    <option value="price-asc">Precio: menor a mayor</option>
+                    <option value="price-desc">Precio: mayor a menor</option>
+                </select>
+            `;
+            
+            // Agregar los controles al contenedor
+            controlsContainer.appendChild(leagueFilter);
+            controlsContainer.appendChild(sortOrder);
+            
+            // Buscar el contenedor del buscador para insertar los controles debajo
+            const searchWrap = document.querySelector('.product-search-wrap');
+            if (searchWrap) {
+                // Insertar después del buscador
+                searchWrap.parentNode.insertBefore(controlsContainer, searchWrap.nextSibling);
+            } else {
+                // Si no hay buscador, insertar al principio del contenedor
+                container.insertBefore(controlsContainer, container.firstChild);
+            }
+            
+            // Agregar event listeners
+            document.getElementById('leagueSelect').addEventListener('change', function(e) {
+                currentLeagueFilter = e.target.value;
+                renderGallery(document.getElementById('productSearch')?.value || '');
+            });
+            
+            document.getElementById('sortSelect').addEventListener('change', function(e) {
+                currentSortOrder = e.target.value;
+                renderGallery(document.getElementById('productSearch')?.value || '');
+            });
+        }
+        
         function renderGallery(filterText){
             const container = byId('productGallery');
             container.innerHTML = '';
-            const q = filterText ? String(filterText).toLowerCase() : '';
-            const list = PRODUCTS.filter(p => { if (!q) return true; return (p.name || '').toLowerCase().indexOf(q) !== -1; });
-            list.forEach(p => {
-                const el = document.createElement('article');
-                el.className = 'product-item';
-                // Make the entire card clickable: attach data attributes to the article
-                el.setAttribute('data-id', p.id);
-                el.setAttribute('data-action', 'add');
-                // If the product has an images array render a mini carousel; otherwise render the simple card
-                if (p.images && p.images.length) {
-                    const imgsJson = JSON.stringify(p.images);
-                    el.innerHTML = `
-                        <div class="pedido-mini-card" data-images='${imgsJson}'>
-                            <div style="display:flex;justify-content:center;">
-                                        <div style="max-width:800px;width:100%;">
-                                            <img class="pedido-carrusel-img" src="${p.images[0]}" alt="${p.name}" style="width:100%;height:auto;display:block;border-radius:8px;">
-                                        </div>
-                                    </div>
-                            <h4 style="margin-top:6px">${p.name}</h4>
-                            <div class="price">€${p.price.toFixed(2)}</div>
-                            <div class="excerpt">${p.excerpt}</div>
-                            <!-- boton eliminado: la tarjeta completa es clicable -->
-                        </div>
-                    `;
-                } else {
-                    el.innerHTML = `
-                            <img src="${p.img}" alt="${p.name}">
-                            <h4>${p.name}</h4>
-                            <div class="price">€${p.price.toFixed(2)}</div>
-                            <div class="excerpt">${p.excerpt}</div>
-                            <!-- boton eliminado: la tarjeta completa es clicable -->
-                        `;
+            
+            // Crear controles de filtrado y ordenamiento si no existen
+            if (!document.getElementById('galleryControls')) {
+                createGalleryControls(container);
+            } else {
+                // Asegurarse de que los controles estén debajo del buscador
+                const controls = document.getElementById('galleryControls');
+                const searchWrap = document.querySelector('.product-search-wrap');
+                
+                if (controls && searchWrap) {
+                    // Mover los controles debajo del buscador
+                    searchWrap.parentNode.insertBefore(controls, searchWrap.nextSibling);
                 }
-                container.appendChild(el);
+            }
+            
+            const q = filterText ? String(filterText).toLowerCase() : '';
+            let list = PRODUCTS.filter(p => { 
+                if (!q) return true; 
+                return (p.name || '').toLowerCase().indexOf(q) !== -1; 
             });
+            
+            // Aplicar filtro por liga
+            if (currentLeagueFilter !== 'all') {
+                list = list.filter(p => {
+                    const imgPath = p.img || (p.images && p.images.length > 0 ? p.images[0] : '');
+                    const match = imgPath.match(/assets\/productos\/([^/]+)\//i);
+                    const league = match ? match[1] : 'Otros';
+                    return league === currentLeagueFilter;
+                });
+            }
+            
+            // Aplicar ordenamiento
+            if (currentSortOrder === 'price-asc') {
+                list.sort((a, b) => a.price - b.price);
+            } else if (currentSortOrder === 'price-desc') {
+                list.sort((a, b) => b.price - a.price);
+            }
+            
+            // Mostrar todos los productos juntos
+            list.forEach(p => {
+                    const el = document.createElement('article');
+                    el.className = 'product-item';
+                    // Make the entire card clickable: attach data attributes to the article
+                    el.setAttribute('data-id', p.id);
+                    el.setAttribute('data-action', 'add');
+                    // If the product has an images array render a mini carousel; otherwise render the simple card
+                    if (p.images && p.images.length) {
+                        const imgsJson = JSON.stringify(p.images);
+                        el.innerHTML = `
+                            <div class="pedido-mini-card" data-images='${imgsJson}'>
+                                <div style="display:flex;justify-content:center;">
+                                    <div style="max-width:800px;width:100%;">
+                                        <img class="pedido-carrusel-img" src="${p.images[0]}" alt="${p.name}" style="width:100%;height:auto;display:block;border-radius:8px;">
+                                    </div>
+                                </div>
+                                <h4 style="margin-top:6px">${p.name}</h4>
+                                <div class="price">€${p.price.toFixed(2)}</div>
+                                <div class="excerpt">${p.excerpt}</div>
+                                <!-- boton eliminado: la tarjeta completa es clicable -->
+                            </div>
+                        `;
+                    } else {
+                        el.innerHTML = `
+                                <img src="${p.img}" alt="${p.name}">
+                                <h4>${p.name}</h4>
+                                <div class="price">€${p.price.toFixed(2)}</div>
+                                <div class="excerpt">${p.excerpt}</div>
+                                <!-- boton eliminado: la tarjeta completa es clicable -->
+                            `;
+                    }
+                    container.appendChild(el);
+                });
         }
 
         function openProductModal(product){
