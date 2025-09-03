@@ -2437,10 +2437,10 @@
     // (usuario field removed) copyIfExists('#usuario', 'form_usuario');
     copyIfExists('#direccion', 'form_direccion');
 
-        // Serialize cart items into a human-readable text field (no JSON): include talla, parche, dorsal y versión
+                // Serialize cart items into a human-readable text field (no JSON): include talla, parche, dorsal y versión
         try {
-            let items = (window.CART || []).map(i => ({ productId: i.productId || '', name: i.name || '', talla: i.talla || '', dorsal: i.dorsal || '', parche: i.parche || '', version: i.version || '', extra: i.extra || 0, unitPrice: i.price || 0, total: i.total || 0, quantity: 1 }));
-            if ((!items || items.length === 0) && document.querySelectorAll) {
+            let itemsToProcess = (window.CART || []);
+            if ((!itemsToProcess || itemsToProcess.length === 0) && document.querySelectorAll) {
                 console.warn('enviarFormulario: CART vacío — intentando reconstruir items desde DOM');
                 const domRows = document.querySelectorAll('#cartItems .cart-item');
                 const reconstructed = [];
@@ -2456,7 +2456,6 @@
                         let version = '';
                         if (metaSmall) {
                             const parts = metaSmall.split('·').map(s=>s.trim()).filter(Boolean);
-                            // heurística: buscar talla (S,M,L,XL,2XL,XXL etc.) y buscar dorsal si contiene número o espacios
                             parts.forEach(p => {
                                 if (!talla && /^(S|M|L|XL|XXL|2XL|3XL|4XL|[0-9]{1,2})$/i.test(p)) { talla = p; }
                                 else if (!parche && /[A-Za-z\s]+/.test(p) && p.toLowerCase().indexOf('parche')===-1 && p.length<=30 && /[A-Za-z]/.test(p)) { parche = p; }
@@ -2464,7 +2463,6 @@
                                 else if (!version && (p.toLowerCase()==='fan' || p.toLowerCase()==='jugador' || p.toLowerCase()==='player')) { version = p; }
                             });
                         }
-                        // precio por fila
                         let priceTextEl = row.querySelector('div[style*="font-weight:700"]');
                         let totalDisplayed = 0;
                         if (priceTextEl) {
@@ -2472,17 +2470,33 @@
                             const m = raw.replace(/[^0-9.,]/g,'').replace(',', '.');
                             totalDisplayed = parseFloat(m) || 0;
                         }
-                        reconstructed.push({ productId: '', name, talla, dorsal, parche, version, extra:0, unitPrice: totalDisplayed/quantity || 0, total: totalDisplayed, quantity });
+                        // Reconstruir múltiples ítems si la cantidad es > 1
+                        for (let k = 0; k < quantity; k++) {
+                            reconstructed.push({ productId: '', name, talla, dorsal, parche, version, extra:0, unitPrice: totalDisplayed/quantity || 0, total: totalDisplayed/quantity, quantity: 1 });
+                        }
                     } catch (e) { console.error('reconstruct row error', e); }
                 });
-                if (reconstructed.length) items = reconstructed;
+                if (reconstructed.length) itemsToProcess = reconstructed;
             }
+
+            // Agrupar ítems para mostrar la cantidad
+            const groupedItems = {};
+            itemsToProcess.forEach(item => {
+                const key = `${item.productId || ''}-${item.name || ''}-${item.talla || ''}-${item.dorsal || ''}-${item.parche || ''}-${item.version || ''}`;
+                if (!groupedItems[key]) {
+                    groupedItems[key] = { ...item, quantity: 0, total: 0 };
+                }
+                groupedItems[key].quantity += 1;
+                groupedItems[key].total += item.total; // Sumar el total de cada unidad
+            });
+
+            const finalItems = Object.values(groupedItems);
 
             // human-friendly version mapping
             const mapVersion = v => { if (!v) return ''; if (v.toLowerCase() === 'jugador') return 'player'; return v; };
             const textEl = document.getElementById('form_cart_items_text');
             if (textEl) { 
-                const lines = items.map((it, idx) => {
+                const lines = finalItems.map((it, idx) => {
                     const parts = [];
                     if (it.talla) parts.push(it.talla);
                     if (it.parche) parts.push(it.parche);
@@ -2491,10 +2505,10 @@
                     if (ver) parts.push(ver);
                     const extras = parts.length ? ' · ' + parts.join(' · ') : '';
                     const priceStr = `€${(it.total||0).toFixed(2)}`;
-                    return `${idx+1}. ${it.name}${extras} — ${priceStr}`;
+                    return `${idx+1}. ${it.quantity}x ${it.name}${extras} — ${priceStr}`;
                 });
                 textEl.value = lines.join('\n');
-        console.log('enviarFormulario: cart_items_text =', textEl.value);
+                console.log('enviarFormulario: cart_items_text =', textEl.value);
             }
         } catch (e) { console.error('serialize cart error', e); }
     // Debug: precio_total value
