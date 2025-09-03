@@ -846,13 +846,13 @@
 
           /* Keep the cart visually on the right side of the page at all times. Make it fixed so it doesn't move
               when the gallery grows. Add max-height/overflow to remain scrollable on small viewports. */
-    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 420px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
+    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 520px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
         .cart-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
         .cart-header h3 { margin:0; color:#fff; font-size:1.15rem; letter-spacing:0.4px; }
         .cart-count { background:linear-gradient(90deg,#2e7bed,#144a85); color:#fff; padding:6px 10px; border-radius:999px; font-weight:800; font-size:0.9rem; box-shadow:0 6px 18px rgba(46,123,237,0.18); }
         .cart-items { max-height: 420px; overflow:auto; margin-bottom:12px; }
         .cart-empty { text-align:center; color:#9fbfe8; padding:24px 8px; border-radius:10px; background:rgba(255,255,255,0.02); }
-        .cart-item { display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); margin-bottom:10px; border:1px solid rgba(255,255,255,0.03); }
+        .cart-item { display:flex; flex-wrap:wrap; gap:16px; padding:14px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); margin-bottom:10px; border:1px solid rgba(255,255,255,0.03); width: 100%; box-sizing: border-box; }
         .cart-item img { width:64px; height:64px; object-fit:cover; border-radius:8px; box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
         .cart-item .meta { flex:1; text-align:left; }
         .cart-item .meta b { display:block; color:#fff; font-size:0.98rem; margin-bottom:4px; }
@@ -1708,15 +1708,21 @@
                 const row = document.createElement('div'); row.className = 'cart-item';
                 const parcheLabel = ci.parche ? `<small>Parche: ${ci.parche}</small>` : '';
                 row.innerHTML = `
-                    <img src="${ci.img}" alt="${ci.name}">
-                    <div class="meta"><b>${ci.name}</b><small>${ci.talla} ${ci.dorsal? '· ' + ci.dorsal : ''} ${ci.version !== 'none' ? '· ' + ci.version : ''}</small>${parcheLabel}<small>Extras: €${ci.extra.toFixed(2)}</small></div>
-                    <div style="text-align:right">
-                        <div style="font-weight:700">€${(ci.total * ci.cantidad).toFixed(2)}</div>
-                        <div style="margin-top:6px;display:flex;gap:6px;align-items:center;justify-content:flex-end;">
-                            <button class="decrease" data-key="${key}" aria-label="Disminuir">−</button>
-                            <input class="cart-qty-input" data-key="${key}" value="${ci.cantidad}" style="width:48px;text-align:center;" />
-                            <button class="increase" data-key="${key}" aria-label="Aumentar">+</button>
-                            <button class="remove" data-key="${key}" style="margin-left:6px;">Eliminar</button>
+                    <div style="display: flex; gap: 16px; align-items: flex-start; width: 100%;">
+                        <img src="${ci.img}" alt="${ci.name}" style="width: 64px; height: 64px; object-fit: cover; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.35);">
+                        <div class="meta" style="flex: 1;"><b>${ci.name}</b><small>${ci.talla} ${ci.dorsal? '· ' + ci.dorsal : ''} ${ci.version !== 'none' ? '· ' + ci.version : ''}</small>${parcheLabel}<small>Extras: €${ci.extra.toFixed(2)}</small></div>
+                        <div style="text-align:right;min-width:140px;">
+                            <div style="font-weight:700;margin-bottom:8px;font-size:1.1rem;color:#fff;background:rgba(42,91,168,0.15);padding:6px 10px;border-radius:8px;display:inline-block;">€${(ci.total * ci.cantidad).toFixed(2)}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; width: 100%; margin-top: 12px;">
+                        <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;">
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <button class="decrease" data-key="${key}" aria-label="Disminuir" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(180deg, var(--azul-acento) 0%, #1a3b6d 100%);color:#fff;border:1px solid rgba(255,255,255,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:18px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;">−</button>
+                                <input class="cart-qty-input" data-key="${key}" value="${ci.cantidad}" style="width:48px;height:32px;text-align:center;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-weight:600;" />
+                                <button class="increase" data-key="${key}" aria-label="Aumentar" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(180deg, var(--azul-acento) 0%, #1a3b6d 100%);color:#fff;border:1px solid rgba(255,255,255,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:18px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;">+</button>
+                            </div>
+                            <button class="remove" data-key="${key}" style="height:32px;padding:0 12px;margin-left:10px;border-radius:8px;background:rgba(255,50,50,0.2);color:#ff5050;border:1px solid rgba(255,80,80,0.3);font-weight:600;transition:all 0.2s ease;">Eliminar</button>
                         </div>
                     </div>
                 `;
