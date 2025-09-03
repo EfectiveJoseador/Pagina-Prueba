@@ -2046,11 +2046,28 @@
         const left = Math.round((window.innerWidth - width) / 2);
         const top = Math.round((window.innerHeight - height) / 2);
         const paypalUrl = `https://www.paypal.com/paypalme/camisetazo/${encodeURIComponent(payAmount)}EUR`;
-        const ventanaPayPal = window.open(
-            paypalUrl,
-            'PagoPayPal',
-            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
-        );
+        // Show brief instructional hint: use 'Amigos y Familiares' when enviando dinero y warn that closing will trigger submission
+        const hint = document.getElementById('formStatus');
+        if (hint) {
+            hint.className = 'info';
+            hint.style.display = 'block';
+            hint.style.background = '#ffc107';
+            hint.style.color = '#000';
+            hint.style.padding = '10px 12px';
+            hint.style.borderRadius = '8px';
+            hint.style.margin = '12px auto';
+            hint.style.maxWidth = '760px';
+            hint.innerHTML = `<strong>Importante:</strong> En la ventana de PayPal selecciona la opción "Enviar a amigos y familiares" si corresponde. Al cerrar la ventana se procesará el envío del pedido.`;
+        }
+
+        // small delay so user sees the hint then open popup (keeps handle to the opened window)
+        let popup = null;
+        try {
+            popup = window.open(paypalUrl, 'PagoPayPal', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+        } catch(e) {
+            // fallback with slight delay
+            setTimeout(()=> { popup = window.open(paypalUrl, 'PagoPayPal', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`); }, 300);
+        }
 
         if (!ventanaPayPal) {
             mostrarExito('Popup bloqueado. Abre manualmente: ' + paypalUrl);
@@ -2058,11 +2075,13 @@
         }
 
         // Poll until the PayPal window is closed, then submit the hidden order form automatically
-        const intervalo = setInterval(() => {
+    const intervalo = setInterval(() => {
             try {
                 if (ventanaPayPal.closed) {
                     clearInterval(intervalo);
-                    mostrarExito('Ventana de pago cerrada. Enviando pedido...');
+            // remove the yellow hint
+            const hint = document.getElementById('formStatus'); if (hint) { hint.style.display = 'none'; }
+            mostrarExito('Pago detectado. Enviando pedido...');
                     try {
                         // llamar al envío del formulario que copiará los campos disponibles y serializará el carrito
                         if (typeof enviarFormulario === 'function') {
@@ -2085,11 +2104,20 @@
     }
 
     function mostrarExito(mensaje) {
-        const notificacion = document.getElementById('formStatus');
-        notificacion.className = 'success animate__animated animate__fadeIn';
-        notificacion.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
-        notificacion.style.display = 'block';
-        setTimeout(() => notificacion.style.display = 'none', 5000);
+    const notificacion = document.getElementById('formStatus');
+    if (!notificacion) return;
+    notificacion.className = 'success';
+    notificacion.style.background = '#1e7e34';
+    notificacion.style.color = '#fff';
+    notificacion.style.padding = '10px 12px';
+    notificacion.style.borderRadius = '8px';
+    notificacion.style.display = 'block';
+    notificacion.style.maxWidth = '760px';
+    notificacion.style.margin = '12px auto';
+    notificacion.style.boxShadow = '0 6px 18px rgba(30,126,52,0.18)';
+    notificacion.innerHTML = `<strong style="margin-right:8px;">✔</strong> ${mensaje} <button id="closeFormStatus" style="margin-left:12px;background:transparent;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:4px 8px;border-radius:6px;cursor:pointer;">Cerrar</button>`;
+    const closeBtn = document.getElementById('closeFormStatus');
+    if (closeBtn) closeBtn.addEventListener('click', ()=> notificacion.style.display = 'none');
     }
     function enviarFormulario() {
     console.log('enviarFormulario: start. CART length=', (window.CART||[]).length);
