@@ -1428,7 +1428,7 @@
             modal.style.background = 'rgba(2,6,23,0.7)';
             modal.style.zIndex = 1200;
             modal.innerHTML = `
-                <div style="width:92%;max-width:920px;background:#071735;padding:18px;border-radius:12px;color:#dbeeff;">
+                <div style="width:92%;max-width:920px;background:#071735;padding:24px;border-radius:16px;color:#dbeeff;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
                     <div style="display:flex;gap:14px;align-items:flex-start;">
                         <img src="${product.img}" alt="${product.name}" style="width:320px;height:320px;object-fit:cover;border-radius:10px;">
                         <div style="flex:1;">
@@ -1543,8 +1543,8 @@
             const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" style="width:72px;height:72px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
 
             modal.innerHTML = `
-                <div style="width:94%;max-width:1120px;background:#071735;padding:14px;border-radius:12px;color:#dbeeff;display:grid;grid-template-columns:1fr 360px;gap:16px;">
-                    <div style="background:rgba(10,31,61,0.6);padding:12px;border-radius:10px;">
+                <div style="width:94%;max-width:1120px;background:#071735;padding:24px;border-radius:16px;color:#dbeeff;display:grid;grid-template-columns:1fr 360px;gap:24px;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+                    <div style="background:rgba(10,31,61,0.6);padding:18px;border-radius:14px;border:1px solid rgba(42,91,168,0.12);">
                         <div id="modalTiendaCarousel" style="position:relative;overflow:hidden;border-radius:8px;">
                             <button id="modalTiendaPrev" aria-label="Anterior" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.4);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;">‹</button>
                             <div class="carousel-track" style="display:flex;transition:transform .35s ease;">
@@ -1556,7 +1556,7 @@
                             ${thumbsHtml}
                         </div>
                     </div>
-                    <div style="background:rgba(10,31,61,0.9);padding:16px;border-radius:10px;border:1px solid rgba(42,91,168,0.12);">
+                    <div style="background:rgba(10,31,61,0.9);padding:20px;border-radius:14px;border:1px solid rgba(42,91,168,0.12);">
                         <h3 style="color:var(--azul-acento);margin-top:0;">${product.name}</h3>
                         <p style="color:#d6e9ff;">${product.excerpt}</p>
                         <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
@@ -1598,14 +1598,14 @@
             const rightCol = modal.querySelector('div[style*="background:rgba(10,31,61,0.9)"]');
             if (rightCol) {
                 rightCol.innerHTML = `
-                    <h3 style="color:var(--azul-acento);margin-top:0;">${product.name}</h3>
-                    <p style="color:#d6e9ff;">${product.excerpt}</p>
-                    <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
-                    <form id="modalTiendaForm" style="display:grid;gap:8px;">
-                        <label style="font-weight:700;color:#dbeeff;">Nombre y número <small style="color:#bcd9ff;display:block;font-weight:400">(+2€)</small>
-                            <input id="_opt_dorsal_modal" placeholder="Ej: MESSI 10" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;" />
+                    <h3 style="margin-top:0;color:var(--azul-acento);font-size:1.5rem;">${product.name}</h3>
+                    <p style="color:#d6e9ff;font-size:1rem;line-height:1.4;">${product.excerpt}</p>
+                    <p style="font-weight:800;font-size:1.25rem;color:#9fe0ff;margin:12px 0;">€${product.price.toFixed(2)}</p>
+                    <form id="modalTiendaForm" style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;">
+                        <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Nombre y número <small style="color:#dbeeff;display:inline-block;font-weight:700;margin-left:5px;font-size:0.95rem;">(+2€)</small>
+                            <input id="_opt_dorsal_modal" placeholder="Ej: MESSI 10" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.15);color:#fff;margin-top:8px;font-size:0.95rem;" />
                         </label>
-                        <label style="font-weight:700;color:#dbeeff;">Parche (+1€)
+                        <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Parche (+1€)
                             <select id="_opt_parche_select_modal" class="custom-select" style="margin-top:6px;">
                                 <option value="none">Ninguno</option>
                                 <option value="LaLiga">LaLiga</option>
@@ -1618,8 +1618,10 @@
                                 <option value="Otros">Otros</option>
                             </select>
                         </label>
-                        <label id="_opt_parche_otros_wrap_modal" style="display:none;"><input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;" /></label>
-                        <label>Talla:
+                        <label id="_opt_parche_otros_wrap_modal" style="grid-column:1/3;display:none;">
+                            <input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.15);color:#fff;font-size:0.95rem;" />
+                        </label>
+                        <label style="grid-column:1/3;"> Talla:
                             <select id="_opt_talla_modal" class="custom-select input-talla">
                                 <option value="S">S</option>
                                 <option value="M">M</option>
@@ -1631,14 +1633,14 @@
                                 <option value="4XL">4XL (+2€)</option>
                             </select>
                         </label>
-                        <label>Versión:
+                        <label style="grid-column:1/3;"> Versión (elige una):
                             <select id="_opt_version_modal" class="custom-select">
                                 <option value="" disabled selected>Selecciona versión</option>
                                 <option value="fan">FAN</option>
                                 <option value="jugador">JUGADOR (+5€)</option>
                             </select>
                         </label>
-                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
+                        <div style="grid-column:1/3;margin-top:20px;display:flex;gap:12px;">
                             <button id="modalTiendaAdd" type="button" class="btn-primary">Añadir al carrito</button>
                             <button id="modalTiendaCloseInline" type="button" class="btn-secondary">Cerrar</button>
                         </div>
