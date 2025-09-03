@@ -2064,24 +2064,26 @@
         let popup = null;
         try {
             popup = window.open(paypalUrl, 'PagoPayPal', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+            if (popup && typeof popup.focus === 'function') popup.focus();
         } catch(e) {
             // fallback with slight delay
-            setTimeout(()=> { popup = window.open(paypalUrl, 'PagoPayPal', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`); }, 300);
+            setTimeout(()=> { try { popup = window.open(paypalUrl, 'PagoPayPal', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`); if (popup && typeof popup.focus === 'function') popup.focus(); } catch(e2){} }, 300);
         }
 
-        if (!ventanaPayPal) {
+        // If popup blocked, inform user and provide manual URL
+        if (!popup) {
             mostrarExito('Popup bloqueado. Abre manualmente: ' + paypalUrl);
             return null;
         }
 
         // Poll until the PayPal window is closed, then submit the hidden order form automatically
-    const intervalo = setInterval(() => {
+        const intervalo = setInterval(() => {
             try {
-                if (ventanaPayPal.closed) {
+                if (popup.closed) {
                     clearInterval(intervalo);
-            // remove the yellow hint
-            const hint = document.getElementById('formStatus'); if (hint) { hint.style.display = 'none'; }
-            mostrarExito('Pago detectado. Enviando pedido...');
+                    // remove the yellow hint
+                    const hintEl = document.getElementById('formStatus'); if (hintEl) { hintEl.style.display = 'none'; }
+                    mostrarExito('Pago detectado. Enviando pedido...');
                     try {
                         // llamar al envío del formulario que copiará los campos disponibles y serializará el carrito
                         if (typeof enviarFormulario === 'function') {
@@ -2100,7 +2102,7 @@
             }
         }, 500);
 
-        return ventanaPayPal;
+        return popup;
     }
 
     function mostrarExito(mensaje) {
