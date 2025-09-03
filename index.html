@@ -775,7 +775,9 @@
         <input type="hidden" name="postal" id="form_postal">
         <input type="hidden" name="phone" id="form_phone">
         <input type="hidden" name="instagram" id="form_instagram">
-        <input type="hidden" name="cart_items_json" id="form_cart_items_json">
+    <input type="hidden" name="cart_items_json" id="form_cart_items_json">
+    <!-- Human-readable cart summary for email clarity -->
+    <input type="hidden" name="cart_items_text" id="form_cart_items_text">
     </form>
     <div class="product-gallery-ui">
     <div class="gallery-header"></div>
@@ -1502,6 +1504,7 @@
             // render summary (itemized)
             const summary = modal.querySelector('#checkoutSummary');
             function renderSummary(){
+                console.log('renderSummary: CART length =', CART.length);
                 summary.innerHTML = '';
                 let subtotal = 0;
                 CART.forEach(ci => {
@@ -2088,10 +2091,11 @@
         setTimeout(() => notificacion.style.display = 'none', 5000);
     }
     function enviarFormulario() {
+    console.log('enviarFormulario: start. CART length=', (window.CART||[]).length);
         const precioTotalEl = document.getElementById('precioTotal');
         const precioDisplayEl = document.getElementById('precioDisplay');
         const pedidoFormEl = document.getElementById('pedidoForm');
-        if (!pedidoFormEl) return;
+    if (!pedidoFormEl) { console.error('enviarFormulario: pedidoForm not found'); return; }
 
         // Evitar envíos dobles
         if (pedidoFormEl.dataset.submitted === '1') {
@@ -2122,12 +2126,18 @@
         copyIfExists('#usuario', 'form_usuario');
         copyIfExists('#direccion', 'form_direccion');
 
-        // Serialize cart items
+        // Serialize cart items (json + human-readable text)
         try {
-            const items = (window.CART || []).map(i => ({ productId: i.productId, name: i.name, talla: i.talla, dorsal: i.dorsal || '', parche: i.parche || '', version: i.version || '', extra: i.extra || 0, unitPrice: i.price || 0 }));
+            const items = (window.CART || []).map(i => ({ productId: i.productId, name: i.name, talla: i.talla, dorsal: i.dorsal || '', parche: i.parche || '', version: i.version || '', extra: i.extra || 0, unitPrice: i.price || 0, total: i.total || 0 }));
+            console.log('enviarFormulario: items to serialize =', items);
             const jsonEl = document.getElementById('form_cart_items_json');
             if (jsonEl) jsonEl.value = JSON.stringify(items, null, 0);
-        } catch (e) { /* noop */ }
+            const textEl = document.getElementById('form_cart_items_text');
+            if (textEl) {
+                const lines = items.map((it, idx) => `${idx+1}. ${it.name} — ${it.talla} ${it.version? '· ' + it.version : ''} ${it.dorsal? '· ' + it.dorsal : ''} — €${(it.total||0).toFixed(2)}`);
+                textEl.value = lines.join('\n');
+            }
+        } catch (e) { console.error('serialize cart error', e); }
 
         // Enviar el form usando un iframe oculto para evitar navegación fuera de la página
         try {
@@ -2153,6 +2163,7 @@
             };
             iframe.addEventListener('load', onLoadHandler);
 
+            console.log('enviarFormulario: submitting form to', pedidoFormEl.action, 'target=', pedidoFormEl.target);
             pedidoFormEl.submit();
         } catch (err) {
             console.error('Error enviando formulario:', err);
@@ -2194,7 +2205,12 @@
         document.body.appendChild(modal);
 
         modal.querySelector('#confirmSendCancel').addEventListener('click', () => { modal.remove(); mostrarExito('Envío cancelado.'); });
-        modal.querySelector('#confirmSendConfirm').addEventListener('click', () => { try{ document.getElementById('pedidoForm').dataset.submitted = '1'; }catch(e){} enviarFormulario(); modal.remove(); });
+        modal.querySelector('#confirmSendConfirm').addEventListener('click', () => {
+            console.log('ConfirmSend clicked: sending form...');
+            // enviarFormulario gestionará la marca de 'submitted' para evitar dobles envíos
+            enviarFormulario();
+            modal.remove();
+        });
     }
 
     // Legacy form handlers: only attach if the old pedido form exists on the page
