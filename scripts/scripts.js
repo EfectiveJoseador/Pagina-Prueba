@@ -503,6 +503,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ---- Custom dropdown replacement for selects with class 'custom-select' ----
 (function(){
+    // Mantener referencia al dropdown actualmente abierto
+    let currentOpenDropdown = null;
+    
     function buildCustomDropdown(select){
         if (!select || select.__customized) return;
         select.__customized = true;
@@ -557,6 +560,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         function openMenu(){
+            // Cerrar el dropdown actualmente abierto si existe y es diferente al actual
+            if (currentOpenDropdown && currentOpenDropdown !== wrapper) {
+                currentOpenDropdown.classList.remove('open');
+                const currentButton = currentOpenDropdown.querySelector('.custom-dropdown-button');
+                if (currentButton) {
+                    currentButton.setAttribute('aria-expanded', 'false');
+                    const currentCaret = currentButton.querySelector('.caret');
+                    if (currentCaret) currentCaret.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                }
+            }
+            
+            // Establecer este dropdown como el actualmente abierto
+            currentOpenDropdown = wrapper;
+            
             wrapper.classList.add('open');
             button.setAttribute('aria-expanded','true');
             caret.innerHTML = '<i class="fas fa-chevron-up"></i>';
@@ -574,6 +591,9 @@ document.addEventListener('DOMContentLoaded', function() {
             document.addEventListener('keydown', onKeyDown);
         }
         function closeMenu(){
+            if (currentOpenDropdown === wrapper) {
+                currentOpenDropdown = null;
+            }
             wrapper.classList.remove('open');
             button.setAttribute('aria-expanded','false');
             caret.innerHTML = '<i class="fas fa-chevron-down"></i>';
