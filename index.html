@@ -898,30 +898,183 @@
     <script>
         // Datos de ejemplos tomados de la carpeta assets/productos
         const PRODUCTS = [
-            { id: 'barca1', name: 'Camiseta Local Barcelona 25/26', price: 19.90, img: 'assets/productos/Barcelona2526L/1.jpg', images: [
-                'assets/productos/Barcelona2526L/1.jpg',
-                'assets/productos/Barcelona2526L/2.jpg',
-                'assets/productos/Barcelona2526L/3.jpg',
-                'assets/productos/Barcelona2526L/4.jpg',
-                'assets/productos/Barcelona2526L/5.jpg'
-            ], excerpt: '', link: 'productos/barcelona2526L.html' },
-            { id: 'realm1', name: 'Camiseta Local Real Madrid 25/26', price: 19.90, img: 'assets/productos/RealMadrid2526L/1.jpg', images: [
-                'assets/productos/RealMadrid2526L/1.jpg',
-                'assets/productos/RealMadrid2526L/2.jpg',
-                'assets/productos/RealMadrid2526L/3.jpg',
-                'assets/productos/RealMadrid2526L/4.jpg'
-            ], excerpt: '', link: 'productos/realmadrid2526L.html' },
-            { id: 'athl1', name: 'Camiseta Local Athletic Club 25/26', price: 19.90, img: 'assets/productos/Athletic2526L/1.jpg', images: [
-                'assets/productos/Athletic2526L/1.jpg',
-                'assets/productos/Athletic2526L/2.jpg',
-                'assets/productos/Athletic2526L/3.jpg'
-            ], excerpt: '', link: 'productos/athletic2526L.html' },
-            { id: 'atletico0203', name: 'Camiseta Retro Atlético 02/03', price: 24.90, img: 'assets/productos/Atletico0203L/1.jpg', images: [
-                'assets/productos/Atletico0203L/1.jpg',
-                'assets/productos/Atletico0203L/2.jpg',
-                'assets/productos/Atletico0203L/3.jpg'
-            ], excerpt: '', link: 'productos/atletico0203.html', versions: ['fan'], isRetro: true }
-        ];
+    { id: 'barca1', name: 'Camiseta Local Barcelona 25/26', price: 19.90, img: 'assets/productos/Barcelona2526L/1.jpg', images: [
+        'assets/productos/Barcelona2526L/1.jpg',
+        'assets/productos/Barcelona2526L/2.jpg',
+        'assets/productos/Barcelona2526L/3.jpg',
+        'assets/productos/Barcelona2526L/4.jpg',
+        'assets/productos/Barcelona2526L/5.jpg'
+    ], excerpt: '', link: 'productos/barcelona2526L.html' },
+
+    { id: 'realm1', name: 'Camiseta Local Real Madrid 25/26', price: 19.90, img: 'assets/productos/RealMadrid2526L/1.jpg', images: [
+        'assets/productos/RealMadrid2526L/1.jpg',
+        'assets/productos/RealMadrid2526L/2.jpg',
+        'assets/productos/RealMadrid2526L/3.jpg',
+        'assets/productos/RealMadrid2526L/4.jpg'
+    ], excerpt: '', link: 'productos/realmadrid2526L.html' },
+
+    { id: 'athl1', name: 'Camiseta Local Athletic Club 25/26', price: 19.90, img: 'assets/productos/Athletic2526L/1.jpg', images: [
+        'assets/productos/Athletic2526L/1.jpg',
+        'assets/productos/Athletic2526L/2.jpg',
+        'assets/productos/Athletic2526L/3.jpg'
+    ], excerpt: '', link: 'productos/athletic2526L.html' },
+
+    { id: 'atletico0203', name: 'Camiseta Retro Atlético 02/03', price: 24.90, img: 'assets/productos/Atletico0203LR/1.jpg', images: [
+        'assets/productos/Atletico0203LR/1.jpg',
+        'assets/productos/Atletico0203LR/2.jpg',
+        'assets/productos/Atletico0203LR/3.jpg'
+    ], excerpt: '', link: 'productos/atletico0203.html', versions: ['fan'], isRetro: true },
+
+    { id: 'athl0103F', name: 'Camiseta Retro Athletic 01/03 Visitante', price: 24.90, img: 'assets/productos/Athletic0103FR/1.jpg', images: [
+        'assets/productos/Athletic0103FR/1.jpg',
+        'assets/productos/Athletic0103FR/2.jpg',
+        'assets/productos/Athletic0103FR/3.jpg'
+    ], excerpt: '', link: 'productos/athletic0103FR.html', versions: ['fan'], isRetro: true },
+
+    { id: 'atleticoF', name: 'Camiseta Visitante Atlético 25/26', price: 19.90, img: 'assets/productos/Atletico2526F/1.jpg', images: [
+        'assets/productos/Atletico2526F/1.jpg',
+        'assets/productos/Atletico2526F/2.jpg',
+        'assets/productos/Atletico2526F/3.jpg'
+    ], excerpt: '', link: 'productos/atletico2526F.html' },
+
+    { id: 'atleticoL', name: 'Camiseta Local Atlético 25/26', price: 19.90, img: 'assets/productos/Atletico2526L/1.jpg', images: [
+        'assets/productos/Atletico2526L/1.jpg',
+        'assets/productos/Atletico2526L/2.jpg',
+        'assets/productos/Atletico2526L/3.jpg'
+    ], excerpt: '', link: 'productos/atletico2526L.html' },
+
+    { id: 'atleticoF2', name: 'Camiseta Visitante Atlético 25/26', price: 19.90, img: 'assets/productos/Atletico2526F/1.jpg', images: [
+        'assets/productos/Atletico2526F/1.jpg',
+        'assets/productos/Atletico2526F/2.jpg'
+    ], excerpt: '', link: 'productos/atletico2526F.html' },
+
+    { id: 'betisL', name: 'Camiseta Local Betis 25/26', price: 19.90, img: 'assets/productos/Betis2526L/1.jpg', images: [
+        'assets/productos/Betis2526L/1.jpg',
+        'assets/productos/Betis2526L/2.jpg'
+    ], excerpt: '', link: 'productos/betis2526L.html' },
+
+    { id: 'celtaL', name: 'Camiseta Local Celta 25/26', price: 19.90, img: 'assets/productos/Celta2526L/1.jpg', images: [
+        'assets/productos/Celta2526L/1.jpg',
+        'assets/productos/Celta2526L/2.jpg'
+    ], excerpt: '', link: 'productos/celta2526L.html' },
+
+    { id: 'elcheF', name: 'Camiseta Visitante Elche 25/26', price: 19.90, img: 'assets/productos/Elche2526F/1.jpg', images: [
+        'assets/productos/Elche2526F/1.jpg',
+        'assets/productos/Elche2526F/2.jpg'
+    ], excerpt: '', link: 'productos/Elche2526F.html' },
+
+    { id: 'elcheL', name: 'Camiseta Local Elche 25/26', price: 19.90, img: 'assets/productos/Elche2526L/1.jpeg', images: [
+        'assets/productos/Elche2526L/1.jpeg',
+        'assets/productos/Elche2526L/2.jpeg'
+    ], excerpt: '', link: 'productos/Elche2526L.html' },
+
+    { id: 'espanyolLR', name: 'Camiseta Retro Espanyol 99/20 Local', price: 24.90, img: 'assets/productos/Espanyol9920LR/1.jpg', images: [
+        'assets/productos/Espanyol9920LR/1.jpg',
+        'assets/productos/Espanyol9920LR/2.jpg'
+    ], excerpt: '', link: 'productos/espanyol9920LR.html', versions: ['fan'], isRetro: true },
+
+    { id: 'getafeL', name: 'Camiseta Local Getafe 25/26', price: 19.90, img: 'assets/productos/Getafe2526L/1.png', images: [
+        'assets/productos/Getafe2526L/1.png',
+        'assets/productos/Getafe2526L/2.png'
+    ], excerpt: '', link: 'productos/getafe2526L.html' },
+
+    { id: 'gironaL', name: 'Camiseta Local Girona 25/26', price: 19.90, img: 'assets/productos/Girona2526L/1.jpg', images: [
+        'assets/productos/Girona2526L/1.jpg',
+        'assets/productos/Girona2526L/2.jpg'
+    ], excerpt: '', link: 'productos/girona2526L.html' },
+
+    { id: 'granadaL', name: 'Camiseta Local Granada 25/26', price: 19.90, img: 'assets/productos/Granada2526L/1.jpg', images: [
+        'assets/productos/Granada2526L/1.jpg',
+        'assets/productos/Granada2526L/2.jpg'
+    ], excerpt: '', link: 'productos/granada2526L.html' },
+
+    { id: 'laspalmasL', name: 'Camiseta Local Las Palmas 25/26', price: 19.90, img: 'assets/productos/LasPalmas2526L/1.jpg', images: [
+        'assets/productos/LasPalmas2526L/1.jpg',
+        'assets/productos/LasPalmas2526L/2.jpg'
+    ], excerpt: '', link: 'productos/laspalmas2526L.html' },
+
+    { id: 'leganesL', name: 'Camiseta Local Leganés 25/26', price: 19.90, img: 'assets/productos/Leganes2526L/1.jpg', images: [
+        'assets/productos/Leganes2526L/1.jpg',
+        'assets/productos/Leganes2526L/2.jpg'
+    ], excerpt: '', link: 'productos/leganes2526L.html' },
+
+    { id: 'levanteL', name: 'Camiseta Local Levante 25/26', price: 19.90, img: 'assets/productos/Levante2526L/1.jpeg', images: [
+        'assets/productos/Levante2526L/1.jpeg',
+        'assets/productos/Levante2526L/2.jpeg'
+    ], excerpt: '', link: 'productos/levante2526L.html' },
+
+    { id: 'malagaL', name: 'Camiseta Local Málaga 25/26', price: 19.90, img: 'assets/productos/Malaga2526L/1.jpg', images: [
+        'assets/productos/Malaga2526L/1.jpg',
+        'assets/productos/Malaga2526L/2.jpg'
+    ], excerpt: '', link: 'productos/malaga2526L.html' },
+
+    { id: 'mallorcaL', name: 'Camiseta Local Mallorca 25/26', price: 19.90, img: 'assets/productos/Mallorca2526L/1.jpg', images: [
+        'assets/productos/Mallorca2526L/1.jpg',
+        'assets/productos/Mallorca2526L/2.jpg'
+    ], excerpt: '', link: 'productos/mallorca2526L.html' },
+
+    { id: 'osasunaL', name: 'Camiseta Local Osasuna 25/26', price: 19.90, img: 'assets/productos/Osasuna2526L/1.png', images: [
+        'assets/productos/Osasuna2526L/1.png',
+        'assets/productos/Osasuna2526L/2.png'
+    ], excerpt: '', link: 'productos/osasuna2526L.html' },
+
+    { id: 'oviedoL', name: 'Camiseta Local Oviedo 25/26', price: 19.90, img: 'assets/productos/Oviedo2526L/1.jpg', images: [
+        'assets/productos/Oviedo2526L/1.jpg',
+        'assets/productos/Oviedo2526L/2.jpg'
+    ], excerpt: '', link: 'productos/oviedo2526L.html' },
+
+    { id: 'rayoL', name: 'Camiseta Local Rayo Vallecano 25/26', price: 19.90, img: 'assets/productos/Rayo2526L/1.jpg', images: [
+        'assets/productos/Rayo2526L/1.jpg',
+        'assets/productos/Rayo2526L/2.jpg'
+    ], excerpt: '', link: 'productos/rayo2526L.html' },
+
+    { id: 'realmF', name: 'Camiseta Visitante Real Madrid 25/26', price: 19.90, img: 'assets/productos/RealMadrid2526F/1.jpg', images: [
+        'assets/productos/RealMadrid2526F/1.jpg',
+        'assets/productos/RealMadrid2526F/2.jpg'
+    ], excerpt: '', link: 'productos/realmadrid2526F.html' },
+
+    { id: 'realmT', name: 'Camiseta Tercera Real Madrid 25/26', price: 19.90, img: 'assets/productos/RealMadrid2526T/1.jpg', images: [
+        'assets/productos/RealMadrid2526T/1.jpg',
+        'assets/productos/RealMadrid2526T/2.jpg'
+    ], excerpt: '', link: 'productos/realmadrid2526T.html' },
+
+    { id: 'realsociedadL', name: 'Camiseta Local Real Sociedad 25/26', price: 19.90, img: 'assets/productos/RealSociedad2526L/1.jpg', images: [
+        'assets/productos/RealSociedad2526L/1.jpg',
+        'assets/productos/RealSociedad2526L/2.jpg'
+    ], excerpt: '', link: 'productos/realsociedad2526L.html' },
+
+    { id: 'sevillaF', name: 'Camiseta Visitante Sevilla 25/26', price: 19.90, img: 'assets/productos/Sevilla2526F/1.jpg', images: [
+        'assets/productos/Sevilla2526F/1.jpg',
+        'assets/productos/Sevilla2526F/2.jpg'
+    ], excerpt: '', link: 'productos/sevilla2526F.html' },
+
+    { id: 'sevillaT', name: 'Camiseta Tercera Sevilla 25/26', price: 19.90, img: 'assets/productos/Sevilla2526T/1.jpg', images: [
+        'assets/productos/Sevilla2526T/1.jpg',
+        'assets/productos/Sevilla2526T/2.jpg'
+    ], excerpt: '', link: 'productos/sevilla2526T.html' },
+
+    { id: 'valenciaL', name: 'Camiseta Local Valencia 25/26', price: 19.90, img: 'assets/productos/Valencia2526L/1.jpg', images: [
+        'assets/productos/Valencia2526L/1.jpg',
+        'assets/productos/Valencia2526L/2.jpg'
+    ], excerpt: '', link: 'productos/valencia2526L.html' },
+
+    { id: 'valladolidL', name: 'Camiseta Local Valladolid 25/26', price: 19.90, img: 'assets/productos/Valladolid2526L/1.jpg', images: [
+        'assets/productos/Valladolid2526L/1.jpg',
+        'assets/productos/Valladolid2526L/2.jpg'
+    ], excerpt: '', link: 'productos/valladolid2526L.html' },
+    
+    { id: 'alavesL', name: 'Camiseta Local Alavés 25/26', price: 19.90, img: 'assets/productos/Alaves2526L/1.jpg', images: [
+        'assets/productos/Alaves2526L/1.jpg',
+        'assets/productos/Alaves2526L/2.jpg',
+        'assets/productos/Alaves2526L/3.jpg'
+    ], excerpt: '', link: 'productos/alaves2526L.html' },
+
+    { id: 'villarrealL', name: 'Camiseta Local Villarreal 25/26', price: 19.90, img: 'assets/productos/Villarreal2526L/1.jpg', images: [
+        'assets/productos/Villarreal2526L/1.jpg',
+        'assets/productos/Villarreal2526L/2.jpg'
+    ], excerpt: '', link: 'productos/villarreal2526L.html' }
+];
+
         const EXTRAS = { parche: 1, dorsal: 2, version: 5 };
         const SHIPPING = 2.00;
         // Ofertas por cantidad (no se crean productos nuevos; se aplican automáticamente según cantidad de camisetas)
