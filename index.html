@@ -26,8 +26,8 @@
         <div class="brand-subtitle">Tienda Deportiva Premium</div>
     </div>
     <nav class="navegacion">
-        <button class="boton-seccion activo" data-seccion="tienda">Tienda</button>
-        <button class="boton-seccion" data-seccion="pedidos">Pedidos</button>
+        <button class="boton-seccion activo" data-seccion="tienda">Catálogo</button>
+        <button class="boton-seccion" data-seccion="pedidos">Tienda</button>
         <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
     </nav>
 </header>
@@ -713,6 +713,27 @@
             </div>
             <p style="margin-top:0.7rem;color:#b8c6e0;font-size:1rem;">Desliza para ver más capturas de clientes reales. ¡Gracias por confiar en nosotros!</p>
         </div>
+        
+        <div class="reseñas-clientes">
+            <h3 style="color:var(--azul-acento);margin:1.5rem 0 1rem;">Opiniones sobre nuestras camisetas</h3>
+            <div class="lista-reseñas">
+                <div class="reseña">
+                    <p>"La calidad de la tela es increíble, se nota que es premium desde el primer uso. ¡Superó mis expectativas!"</p>
+                </div>
+                <div class="reseña">
+                    <p>"Compré la del Barça y la verdad que los detalles están perfectamente cosidos. No se deshilacha como otras."</p>
+                </div>
+                <div class="reseña">
+                    <p>"Llevo 3 meses usando la del Madrid y sigue como nueva después de tantos lavados. Calidad-precio imbatible."</p>
+                </div>
+                <div class="reseña">
+                    <p>"Los logos y patrocinadores están bien pegados, no se levantan como en otras tiendas. Muy recomendable."</p>
+                </div>
+                <div class="reseña">
+                    <p>"La transpiración es excelente, jugué un partido completo y no se pegó al cuerpo. ¡De las mejores que he tenido!"</p>
+                </div>
+            </div>
+        </div>
         <div class="quienes-somos-grid">
             <div class="quienes-somos-card">
                 <i class="fas fa-shield-alt"></i>
@@ -756,8 +777,6 @@
 </section>
 <!-- Sección Pedidos: Galería de productos y carrito -->
 <section id="pedidos" class="seccion">
-    <!-- Notification element for form status -->
-    <div id="formStatus" style="display:none;"></div>
     <!-- Hidden order form (submitted to FormSubmit) - populated programmatically before submit -->
     <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" style="display:none;">
         <input type="hidden" name="_next" value="https://compra-exitosa.vercel.app/">
@@ -848,20 +867,23 @@
 
           /* Keep the cart visually on the right side of the page at all times. Make it fixed so it doesn't move
               when the gallery grows. Add max-height/overflow to remain scrollable on small viewports. */
-    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 520px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
+    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 420px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
         .cart-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
         .cart-header h3 { margin:0; color:#fff; font-size:1.15rem; letter-spacing:0.4px; }
         .cart-count { background:linear-gradient(90deg,#2e7bed,#144a85); color:#fff; padding:6px 10px; border-radius:999px; font-weight:800; font-size:0.9rem; box-shadow:0 6px 18px rgba(46,123,237,0.18); }
         .cart-items { max-height: 420px; overflow:auto; margin-bottom:12px; }
         .cart-empty { text-align:center; color:#9fbfe8; padding:24px 8px; border-radius:10px; background:rgba(255,255,255,0.02); }
-        .cart-item { display:flex; flex-wrap:wrap; gap:16px; padding:14px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); margin-bottom:10px; border:1px solid rgba(255,255,255,0.03); width: 100%; box-sizing: border-box; }
+        .cart-item { display:flex; gap:12px; align-items:flex-start; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); margin-bottom:10px; border:1px solid rgba(255,255,255,0.03); width:100%; box-sizing:border-box; }
         .cart-item img { width:64px; height:64px; object-fit:cover; border-radius:8px; box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
-        .cart-item .meta { flex:1; text-align:left; }
-        .cart-item .meta b { display:block; color:#fff; font-size:0.98rem; margin-bottom:4px; }
+        .cart-item .meta { flex:1; text-align:left; min-width:0; }
+        .cart-item .meta b { display:block; color:#fff; font-size:0.98rem; margin-bottom:4px; white-space:normal; overflow-wrap:anywhere; word-break:break-word; }
         .cart-item .meta small { color:#bcd9ff; display:block; font-size:0.9rem; }
         .cart-item .meta .qty-row { margin-top:6px; display:flex; align-items:center; gap:8px; }
         .cart-item .meta .qty-row input { width:56px; padding:6px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:#fff; text-align:center; }
         .cart-item .remove { background:transparent; border:none; color:#ff8a8a; cursor:pointer; font-size:1.05rem; padding:6px; }
+        /* Evitar desborde: limitar columna derecha y permitir envolver controles */
+        .cart-item .meta + div { flex: 0 0 auto; max-width: 52%; }
+        .cart-item .meta + div > div { flex-wrap: wrap; }
         .cart-divider { height:1px; background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01)); margin:10px 0; border-radius:2px; }
         .cart-totals { display:flex; flex-direction:column; gap:8px; padding:6px 2px; }
         .cart-totals .tot-row { display:flex; justify-content:space-between; color:#cfe8ff; font-weight:700; }
@@ -887,8 +909,8 @@
             #pedidos.activa .product-gallery { padding-right: 0; }
         }
         @media (max-width: 1200px) {
-            .product-gallery-ui { padding-right: 460px; }
-            .cart-panel { position: fixed; width: 360px; right: 12px; top: 90px; }
+            .product-gallery-ui { padding-right: 500px; }
+            .cart-panel { position: fixed; width: 400px; right: 12px; top: 90px; }
         }
     /* Small helper for the checkout modal inputs */
     .checkout-input { width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:8px }
@@ -1428,7 +1450,7 @@
             modal.style.background = 'rgba(2,6,23,0.7)';
             modal.style.zIndex = 1200;
             modal.innerHTML = `
-                <div style="width:92%;max-width:920px;background:#071735;padding:24px;border-radius:16px;color:#dbeeff;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+                <div style="width:92%;max-width:920px;background:#071735;padding:18px;border-radius:12px;color:#dbeeff;">
                     <div style="display:flex;gap:14px;align-items:flex-start;">
                         <img src="${product.img}" alt="${product.name}" style="width:320px;height:320px;object-fit:cover;border-radius:10px;">
                         <div style="flex:1;">
@@ -1436,7 +1458,7 @@
                             <p style="color:#d6e9ff;">${product.excerpt}</p>
                             <p style="font-weight:800;font-size:1.25rem;color:#9fe0ff;">€${product.price.toFixed(2)}</p>
                             <form id="_personalizeForm" style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;">
-                                <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Nombre y número (ej: MESSI 10) <small style="color:#bcd9ff;display:block;font-weight:400">(+2€)</small>
+                                <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Nombre y número (+2€)
                                     <input id="_opt_dorsal" placeholder="Ej: MESSI 10" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;" />
                                 </label>
 
@@ -1543,8 +1565,8 @@
             const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" style="width:72px;height:72px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
 
             modal.innerHTML = `
-                <div style="width:94%;max-width:1120px;background:#071735;padding:24px;border-radius:16px;color:#dbeeff;display:grid;grid-template-columns:1fr 360px;gap:24px;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
-                    <div style="background:rgba(10,31,61,0.6);padding:18px;border-radius:14px;border:1px solid rgba(42,91,168,0.12);">
+                <div style="width:94%;max-width:1120px;background:#071735;padding:14px;border-radius:12px;color:#dbeeff;display:grid;grid-template-columns:1fr 360px;gap:16px;">
+                    <div style="background:rgba(10,31,61,0.6);padding:12px;border-radius:10px;">
                         <div id="modalTiendaCarousel" style="position:relative;overflow:hidden;border-radius:8px;">
                             <button id="modalTiendaPrev" aria-label="Anterior" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.4);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;">‹</button>
                             <div class="carousel-track" style="display:flex;transition:transform .35s ease;">
@@ -1556,7 +1578,7 @@
                             ${thumbsHtml}
                         </div>
                     </div>
-                    <div style="background:rgba(10,31,61,0.9);padding:20px;border-radius:14px;border:1px solid rgba(42,91,168,0.12);">
+                    <div style="background:rgba(10,31,61,0.9);padding:16px;border-radius:10px;border:1px solid rgba(42,91,168,0.12);">
                         <h3 style="color:var(--azul-acento);margin-top:0;">${product.name}</h3>
                         <p style="color:#d6e9ff;">${product.excerpt}</p>
                         <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
@@ -1598,14 +1620,14 @@
             const rightCol = modal.querySelector('div[style*="background:rgba(10,31,61,0.9)"]');
             if (rightCol) {
                 rightCol.innerHTML = `
-                    <h3 style="margin-top:0;color:var(--azul-acento);font-size:1.5rem;">${product.name}</h3>
-                    <p style="color:#d6e9ff;font-size:1rem;line-height:1.4;">${product.excerpt}</p>
-                    <p style="font-weight:800;font-size:1.25rem;color:#9fe0ff;margin:12px 0;">€${product.price.toFixed(2)}</p>
-                    <form id="modalTiendaForm" style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;">
-                        <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Nombre y número <small style="color:#dbeeff;display:inline-block;font-weight:700;margin-left:5px;font-size:0.95rem;">(+2€)</small>
-                            <input id="_opt_dorsal_modal" placeholder="Ej: MESSI 10" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.15);color:#fff;margin-top:8px;font-size:0.95rem;" />
+                    <h3 style="color:var(--azul-acento);margin-top:0;">${product.name}</h3>
+                    <p style="color:#d6e9ff;">${product.excerpt}</p>
+                    <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
+                    <form id="modalTiendaForm" style="display:grid;gap:8px;">
+                        <label style="font-weight:700;color:#dbeeff;">Nombre y número (+2€)
+                            <input id="_opt_dorsal_modal" placeholder="Ej: MESSI 10" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;" />
                         </label>
-                        <label style="grid-column:1/3;font-weight:700;color:#dbeeff;">Parche (+1€)
+                        <label style="font-weight:700;color:#dbeeff;">Parche (+1€)
                             <select id="_opt_parche_select_modal" class="custom-select" style="margin-top:6px;">
                                 <option value="none">Ninguno</option>
                                 <option value="LaLiga">LaLiga</option>
@@ -1618,10 +1640,8 @@
                                 <option value="Otros">Otros</option>
                             </select>
                         </label>
-                        <label id="_opt_parche_otros_wrap_modal" style="grid-column:1/3;display:none;">
-                            <input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.15);color:#fff;font-size:0.95rem;" />
-                        </label>
-                        <label style="grid-column:1/3;"> Talla:
+                        <label id="_opt_parche_otros_wrap_modal" style="display:none;"><input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;" /></label>
+                        <label>Talla:
                             <select id="_opt_talla_modal" class="custom-select input-talla">
                                 <option value="S">S</option>
                                 <option value="M">M</option>
@@ -1633,14 +1653,14 @@
                                 <option value="4XL">4XL (+2€)</option>
                             </select>
                         </label>
-                        <label style="grid-column:1/3;"> Versión (elige una):
+                        <label>Versión:
                             <select id="_opt_version_modal" class="custom-select">
                                 <option value="" disabled selected>Selecciona versión</option>
                                 <option value="fan">FAN</option>
                                 <option value="jugador">JUGADOR (+5€)</option>
                             </select>
                         </label>
-                        <div style="grid-column:1/3;margin-top:20px;display:flex;gap:12px;">
+                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
                             <button id="modalTiendaAdd" type="button" class="btn-primary">Añadir al carrito</button>
                             <button id="modalTiendaCloseInline" type="button" class="btn-secondary">Cerrar</button>
                         </div>
@@ -1712,21 +1732,15 @@
                 const row = document.createElement('div'); row.className = 'cart-item';
                 const parcheLabel = ci.parche ? `<small>Parche: ${ci.parche}</small>` : '';
                 row.innerHTML = `
-                    <div style="display: flex; gap: 16px; align-items: flex-start; width: 100%;">
-                        <img src="${ci.img}" alt="${ci.name}" style="width: 64px; height: 64px; object-fit: cover; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.35);">
-                        <div class="meta" style="flex: 1;"><b>${ci.name}</b><small>${ci.talla} ${ci.dorsal? '· ' + ci.dorsal : ''} ${ci.version !== 'none' ? '· ' + ci.version : ''}</small>${parcheLabel}<small>Extras: €${ci.extra.toFixed(2)}</small></div>
-                        <div style="text-align:right;min-width:140px;">
-                            <div style="font-weight:700;margin-bottom:8px;font-size:1.1rem;color:#fff;background:rgba(42,91,168,0.15);padding:6px 10px;border-radius:8px;display:inline-block;">€${(ci.total * ci.cantidad).toFixed(2)}</div>
-                        </div>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; width: 100%; margin-top: 12px;">
-                        <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;">
-                            <div style="display:flex;gap:8px;align-items:center;">
-                                <button class="decrease" data-key="${key}" aria-label="Disminuir" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(180deg, var(--azul-acento) 0%, #1a3b6d 100%);color:#fff;border:1px solid rgba(255,255,255,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:18px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;">−</button>
-                                <input class="cart-qty-input" data-key="${key}" value="${ci.cantidad}" style="width:48px;height:32px;text-align:center;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-weight:600;" />
-                                <button class="increase" data-key="${key}" aria-label="Aumentar" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(180deg, var(--azul-acento) 0%, #1a3b6d 100%);color:#fff;border:1px solid rgba(255,255,255,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:18px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;">+</button>
-                            </div>
-                            <button class="remove" data-key="${key}" style="height:32px;padding:0 12px;margin-left:10px;border-radius:8px;background:rgba(255,50,50,0.2);color:#ff5050;border:1px solid rgba(255,80,80,0.3);font-weight:600;transition:all 0.2s ease;">Eliminar</button>
+                    <img src="${ci.img}" alt="${ci.name}">
+                    <div class="meta"><b>${ci.name}</b><small>${ci.talla} ${ci.dorsal? '· ' + ci.dorsal : ''} ${ci.version !== 'none' ? '· ' + ci.version : ''}</small>${parcheLabel}<small>Extras: €${ci.extra.toFixed(2)}</small></div>
+                    <div style="text-align:right">
+                        <div style="font-weight:700">€${(ci.total * ci.cantidad).toFixed(2)}</div>
+                        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;justify-content:flex-end;">
+                            <button class="decrease" data-key="${key}" aria-label="Disminuir" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(180deg, var(--azul-acento) 0%, #1a3b6d 100%);color:#fff;border:1px solid rgba(255,255,255,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:18px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;">−</button>
+                            <input class="cart-qty-input" data-key="${key}" value="${ci.cantidad}" style="width:48px;height:32px;text-align:center;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-weight:600;" />
+                            <button class="increase" data-key="${key}" aria-label="Aumentar" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(180deg, var(--azul-acento) 0%, #1a3b6d 100%);color:#fff;border:1px solid rgba(255,255,255,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:18px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;">+</button>
+                            <button class="remove" data-key="${key}" style="margin-left:8px;height:32px;padding:0 12px;border-radius:8px;background:rgba(255,50,50,0.2);color:#ff5050;border:1px solid rgba(255,80,80,0.3);font-weight:600;transition:all 0.2s ease;">Eliminar</button>
                         </div>
                     </div>
                 `;
