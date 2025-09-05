@@ -817,9 +817,9 @@
             <div class="cart-divider" aria-hidden="true"></div>
 
             <div class="cart-totals">
-                <div class="tot-row"><span>Subtotal</span><span><strong id="cartSubtotal">0.00</strong>€</span></div>
-                <div class="tot-row"><span>Gastos envío</span><span id="cartShipping">2.00</span>€</div>
-                <div class="tot-row total"><span>Total</span><span id="cartTotal">0.00</span>€</div>
+                <div class="tot-row"><span>Subtotal</span><span><strong id="cartSubtotal">0.00</strong></span></div>
+                <div class="tot-row"><span>Gastos envío</span><span id="cartShipping">2.00</span></div>
+                <div class="tot-row total"><span>Total</span><span id="cartTotal">0.00</span></div>
             </div>
 
             <div class="cart-actions">
@@ -867,7 +867,7 @@
 
           /* Keep the cart visually on the right side of the page at all times. Make it fixed so it doesn't move
               when the gallery grows. Add max-height/overflow to remain scrollable on small viewports. */
-    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 420px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
+    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 420px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; margin-top: 36px; }
         .cart-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
         .cart-header h3 { margin:0; color:#fff; font-size:1.15rem; letter-spacing:0.4px; }
         .cart-count { background:linear-gradient(90deg,#2e7bed,#144a85); color:#fff; padding:6px 10px; border-radius:999px; font-weight:800; font-size:0.9rem; box-shadow:0 6px 18px rgba(46,123,237,0.18); }
@@ -893,6 +893,35 @@
         .cart-actions .btn-secondary { background:transparent; border:1px solid rgba(255,255,255,0.04); padding:10px 12px; border-radius:10px; color:#d6e9ff; }
         .cart-note { font-size:0.85rem; color:#bcd9ff; margin-top:8px; }
 
+        /* Banner promocional desplegable debajo del carrito */
+        .cart-promo-banner {
+            position: fixed; /* se alinea al carrito con getBoundingClientRect */
+            left: 0; top: 0; /* actualizados dinámicamente */
+            width: auto; /* ajustado al ancho del carrito */
+            box-sizing: border-box;
+            padding: 10px 14px;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.06) inset;
+            opacity: 0;
+            transform: translateY(-8px); /* aparece deslizándose hacia abajo desde el borde inferior del carrito */
+            pointer-events: none; /* no obstruye interacciones */
+            z-index: 1195; /* por debajo de modales y del carrito fijo (1200) */
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        /* Animaciones (300-500ms) */
+        .cart-promo-banner.fast { transition: opacity 0.3s ease, transform 0.3s ease; }
+        .cart-promo-banner.subtle { transition: opacity 0.45s ease, transform 0.45s ease; }
+        .cart-promo-banner.visible { opacity: 1; transform: translateY(0); }
+        /* Temas de color */
+        .cart-promo-banner.theme-3 { background: linear-gradient(180deg, #ff9800 0%, #ff7a00 100%); }
+        .cart-promo-banner.theme-5 { background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%); }
+        .cart-promo-banner .promo-inner { display:flex; align-items:center; justify-content:center; gap:10px; font-size:0.95rem; line-height:1; }
+    .cart-promo-banner .promo-badge { display:inline-flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.16); padding: 6px 10px; border-radius: 999px; font-weight:900; letter-spacing:1px; text-transform:uppercase; color:#fff; font-size:0.95rem; }
+
         /* Keep cart on the right even on narrower viewports but reduce its width and ensure the gallery
            has right padding so content doesn't sit underneath the fixed cart. */
         @media (min-width: 1201px) {
@@ -904,13 +933,15 @@
             .product-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-right: 18px; width: 100%; }
             /* Each competition's products grid shows 3 products per row */
             .competition-products { grid-template-columns: repeat(3, 1fr); }
-            .cart-panel { grid-area: cart; position: relative; right: 0; top: 0; width: 100%; max-width: 420px; align-self: start; transform: none; }
+            .cart-panel { grid-area: cart; position: relative; right: 0; top: 0; width: 100%; max-width: 420px; align-self: start; transform: none; margin-top: 36px; }
             /* Remove right padding so gallery doesn't shift underneath */
             #pedidos.activa .product-gallery { padding-right: 0; }
         }
         @media (max-width: 1200px) {
             .product-gallery-ui { padding-right: 500px; }
-            .cart-panel { position: fixed; width: 400px; right: 12px; top: 90px; }
+            /* Bajar aún más el carrito en pantallas pequeñas para evitar superposiciones
+               cuando aparece el banner promocional (naranja/verde). */
+            .cart-panel { position: fixed; width: 400px; right: 12px; top: 140px; z-index: 1200; }
         }
     /* Small helper for the checkout modal inputs */
     .checkout-input { width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:8px }
@@ -980,6 +1011,69 @@
         .gallery-controls select {
             width: 100%;
         }
+    }
+    </style>
+
+    <style>
+    /* MOBILE: mejoras específicas solo para la sección 'pedidos' (tienda)
+       - layout de una columna para la galería
+       - tarjetas más grandes y separadas para toque cómodo
+       - carrito actúa como bottom-sheet colapsable para no tapar contenido
+       Estos estilos solo afectan a #pedidos y no tocan otras secciones. */
+    @media (max-width: 900px) {
+        /* Rejilla de la UI: header + galería + carrito (pila vertical) */
+        #pedidos.activa .product-gallery-ui {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr auto;
+            grid-template-areas: "header" "gallery" "cart";
+            gap: 14px;
+            padding-right: 0;
+        }
+
+        /* Galería: 2 columnas táctiles por fila, imágenes más altas */
+        #pedidos .product-gallery { grid-template-columns: repeat(2, minmax(140px, 1fr)); gap: 12px; }
+        #pedidos .product-item { padding: 12px; border-radius: 12px; max-width: none; }
+        #pedidos .product-item img { height: 180px; object-fit: cover; border-radius: 8px; }
+
+        /* Espaciado en header/controles */
+        #pedidos .gallery-header, #pedidos .gallery-controls { padding: 8px 6px; }
+
+        /* Carrito: bottom sheet fijo, ancho completo con márgenes, altura limitada y scroll interno */
+        #pedidos .cart-panel {
+            position: fixed !important;
+            left: 12px !important;
+            right: 12px !important;
+            bottom: 12px !important;
+            top: auto !important;
+            width: auto !important;
+            max-width: none !important;
+            max-height: 62vh !important;
+            overflow: auto !important;
+            border-radius: 12px !important;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.45) !important;
+            transition: transform 0.22s ease, visibility 0.22s ease;
+            z-index: 1300 !important;
+            margin-top: 0 !important;
+        }
+
+        /* Estado colapsado: solo se deja visible la cabecera (aprox 64px) */
+        #pedidos .cart-panel.collapsed { transform: translateY(calc(100% - 64px)); }
+
+        /* Cabecera del carrito táctil */
+        #pedidos .cart-header { cursor: pointer; padding: 12px 10px; }
+
+        /* Botones grandes y full-width dentro del carrito */
+        #pedidos .cart-actions { display:flex; gap:8px; }
+        #pedidos .cart-actions .btn-primary, #pedidos .cart-actions .btn-secondary { padding: 12px; font-size: 1rem; border-radius: 10px; }
+
+        /* Ajustes de elementos del carrito para facilitar la lectura */
+        #pedidos .cart-item { padding:10px; gap:10px; }
+        #pedidos .cart-item img { width:56px; height:56px; }
+        #pedidos .cart-items { max-height: calc(62vh - 180px); overflow:auto; }
+
+        /* Aumentar zona de pulsación en filtros/inputs */
+        #pedidos .gallery-controls select, #pedidos .product-search-wrap input { padding: 12px 10px; font-size: 1rem; }
     }
     </style>
 
@@ -1237,8 +1331,8 @@
         // Ofertas por cantidad (no se crean productos nuevos; se aplican automáticamente según cantidad de camisetas)
         // Nota: asumimos que las camisetas son el producto con id 'barca1' o cuyo nombre contiene 'Camiseta'
         const OFFERS = [
-            { size: 5, price: 86.90, shipping: 0, label: 'MEGAPACK 5' },
-            { size: 4, price: 74.90, shipping: 0, label: 'Pack 4' },
+            { size: 5, price: 85.90, shipping: 0, label: 'MEGAPACK 5' },
+            { size: 4, price: 72.90, shipping: 0, label: 'Pack 4' },
             { size: 3, price: 56.90, shipping: 0, label: 'Pack 3' },
             { size: 2, price: 39.80, shipping: 0, label: 'Pack 2' },
             // oferta para 1 unidad promocional (si la tienda tiene 1x en oferta)
@@ -1341,6 +1435,77 @@
 
         // simple debounce helper
         function debounce(fn, wait){ let t = null; return function(){ clearTimeout(t); t = setTimeout(()=> fn.apply(this, arguments), wait); }; }
+
+        // Banner promocional: helpers de creación, posicionamiento y visibilidad
+        const __PROMO = { el: null, type: null, visible: false };
+        function ensurePromoEl(){
+            if (__PROMO.el && document.body.contains(__PROMO.el)) return __PROMO.el;
+            const el = document.createElement('div');
+            el.id = 'cartPromoBanner';
+            el.className = 'cart-promo-banner fast';
+            // Contenido mínimo: el óvalo (.promo-badge) recibirá el texto dinámicamente
+            el.innerHTML = '<div class="promo-inner"><span class="promo-badge"></span></div>';
+            document.body.appendChild(el);
+            __PROMO.el = el; return el;
+        }
+        function positionPromoBanner(){
+            const el = ensurePromoEl();
+            if (!__PROMO.visible) return; // solo si visible
+            const cart = document.getElementById('cartPanel');
+            const pedidos = document.getElementById('pedidos');
+            if (!cart || !pedidos || !pedidos.classList.contains('activa')) { el.style.opacity = '0'; return; }
+            const r = cart.getBoundingClientRect();
+            const left = Math.round(r.left);
+            const width = Math.round(r.width);
+            // Colocar el banner por encima del borde superior del carrito
+            const gap = 8;
+            const bannerH = el.offsetHeight || 0;
+            const topPos = Math.round(r.top) - bannerH - gap;
+            el.style.left = left + 'px';
+            el.style.top = topPos + 'px';
+            el.style.width = width + 'px';
+        }
+        function hidePromoBanner(){
+            const el = ensurePromoEl();
+            __PROMO.visible = false;
+            el.classList.remove('visible');
+        }
+        function showPromoBanner(type){
+            const el = ensurePromoEl();
+            const newType = (type === 5 ? 5 : 3);
+            if (__PROMO.visible && __PROMO.type === newType) { positionPromoBanner(); return; }
+            __PROMO.type = newType;
+            el.classList.remove('theme-3','theme-5','fast','subtle');
+            const badge = el.querySelector('.promo-badge');
+            if (newType === 3){
+                el.classList.add('theme-3','fast');
+                if (badge) badge.textContent = 'PACK POPULAR';
+            } else {
+                el.classList.add('theme-5','subtle');
+                if (badge) badge.textContent = 'MEJOR OFERTA';
+            }
+            __PROMO.visible = true;
+            positionPromoBanner();
+            void el.offsetWidth; // reflow para animación
+            el.classList.add('visible');
+        }
+        function updateCartPromoBanner(){
+            try {
+                const pedidos = document.getElementById('pedidos');
+                if (!pedidos || !pedidos.classList.contains('activa')) { hidePromoBanner(); return; }
+                const shirtCount = (Array.isArray(CART)? CART : []).filter(isShirtItem).length;
+                if (shirtCount === 3) showPromoBanner(3);
+                else if (shirtCount === 5) showPromoBanner(5);
+                else hidePromoBanner();
+                setTimeout(positionPromoBanner, 30);
+                setTimeout(positionPromoBanner, 160);
+            } catch(e) {}
+        }
+        window.addEventListener('resize', debounce(positionPromoBanner, 60));
+        window.addEventListener('scroll', debounce(positionPromoBanner, 60));
+        document.addEventListener('DOMContentLoaded', ()=> setTimeout(positionPromoBanner, 140));
+        // Ajustar tras cambiar sección
+        document.querySelectorAll('.boton-seccion').forEach(b => b.addEventListener('click', ()=> setTimeout(()=> { updateCartPromoBanner(); positionPromoBanner(); }, 240)));
 
         // Variable global para almacenar el estado de ordenamiento y filtrado
         let currentSortOrder = 'default'; // 'default', 'price-asc', 'price-desc'
@@ -1899,9 +2064,9 @@
 
             const total = (CART.length>0) ? (newSubtotal + newShipping) : 0;
 
-            byId('cartSubtotal').textContent = newSubtotal.toFixed(2);
-            byId('cartShipping').textContent = newShipping.toFixed(2);
-            byId('cartTotal').textContent = total.toFixed(2);
+            byId('cartSubtotal').textContent = newSubtotal.toFixed(2) + '€';
+            byId('cartShipping').textContent = newShipping.toFixed(2) + '€';
+            byId('cartTotal').textContent = total.toFixed(2) + '€';
 
             // Si hay una oferta aplicada, mostrar summary del ahorro justo encima de totales
             const totalsContainer = document.querySelector('.cart-totals');
@@ -1973,6 +2138,8 @@
                 }
                 renderCart();
             }));
+            // actualizar banner promocional tras renderizar carrito
+            try { updateCartPromoBanner(); } catch(e) {}
         }
 
         function clearCart(){ CART = []; renderCart(); }
@@ -2236,6 +2403,7 @@
                 cart.style.top = '';
                 cart.style.right = '';
                 cart.style.zIndex = '';
+                try { positionPromoBanner(); } catch(e) {}
                 return;
             }
 
@@ -2259,6 +2427,7 @@
             cart.style.zIndex = 1200;
             // ensure smooth visibility: add small transition only when changing from relative
             cart.style.transition = 'top 0.12s ease, right 0.12s ease';
+            try { positionPromoBanner(); } catch(e) {}
         }
 
         // Update on common events and after section switches
