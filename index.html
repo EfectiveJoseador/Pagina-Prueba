@@ -1381,7 +1381,7 @@
     ], excerpt: '', link: 'productos/Milan9798LR.html' }
 ];
 
-        const EXTRAS = { parche: 1, dorsal: 2, version: 5 };
+        const EXTRAS = { parche: 1, dorsal: 2, versionJugador: 5, version: 5 };
         const SHIPPING = 2.00;
         // Ofertas por cantidad (no se crean productos nuevos; se aplican automáticamente según cantidad de camisetas)
         // Nota: asumimos que las camisetas son el producto con id 'barca1' o cuyo nombre contiene 'Camiseta'
@@ -1851,7 +1851,7 @@
             if (parcheSelect) {
                 parcheSelect.addEventListener('change', function(){
                     if (this.value === 'Otros') { parcheOtrosWrap.style.display = ''; parcheOtrosInput.focus(); }
-                    else { parcheOtrosWrap.style.display = 'none'; }
+                    else { parcheOtrosWrap.style.display = 'none'; parcheOtrosInput.value = ''; }
                 });
             }
 
@@ -1859,7 +1859,14 @@
                 const talla = modal.querySelector('#_opt_talla').value;
                 const dorsal = modal.querySelector('#_opt_dorsal').value.trim();
                 const parcheSel = modal.querySelector('#_opt_parche_select').value;
-                const parcheFinal = (parcheSel === 'Otros') ? (modal.querySelector('#_opt_parche_otros').value.trim() || '') : (parcheSel === 'none' ? '' : parcheSel);
+                let parcheFinal = '';
+                if (parcheSel === 'Otros') {
+                    const otros = modal.querySelector('#_opt_parche_otros').value.trim();
+                    if (!otros) { alert('Indica el parche en el campo "Otros".'); modal.querySelector('#_opt_parche_otros').focus(); return; }
+                    parcheFinal = otros;
+                } else {
+                    parcheFinal = (parcheSel === 'none' ? '' : parcheSel);
+                }
                 const version = modal.querySelector('#_opt_version').value;
                 if (!version) { alert('Selecciona una versión antes de añadir al carrito.'); return; }
                 addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
@@ -1996,7 +2003,7 @@
                 // parche otros toggle
                 const parcheSelectModal = rightCol.querySelector('#_opt_parche_select_modal');
                 const parcheOtrosWrapModal = rightCol.querySelector('#_opt_parche_otros_wrap_modal');
-                if (parcheSelectModal) parcheSelectModal.addEventListener('change', function(){ if (this.value === 'Otros') { parcheOtrosWrapModal.style.display = ''; } else { parcheOtrosWrapModal.style.display = 'none'; } });
+                if (parcheSelectModal) parcheSelectModal.addEventListener('change', function(){ if (this.value === 'Otros') { parcheOtrosWrapModal.style.display = ''; } else { parcheOtrosWrapModal.style.display = 'none'; const inp = rightCol.querySelector('#_opt_parche_otros_modal'); if (inp) inp.value=''; } });
 
                 // Si el producto define versiones y sólo hay una opción, preseleccionarla y ocultar el selector modal
                 try {
@@ -2013,7 +2020,14 @@
                     const talla = rightCol.querySelector('#_opt_talla_modal').value;
                     const dorsal = rightCol.querySelector('#_opt_dorsal_modal').value.trim();
                     const parcheSel = rightCol.querySelector('#_opt_parche_select_modal').value;
-                    const parcheFinal = (parcheSel === 'Otros') ? (rightCol.querySelector('#_opt_parche_otros_modal').value.trim() || '') : (parcheSel === 'none' ? '' : parcheSel);
+                    let parcheFinal = '';
+                    if (parcheSel === 'Otros') {
+                        const otros = rightCol.querySelector('#_opt_parche_otros_modal').value.trim();
+                        if (!otros) { alert('Indica el parche en el campo "Otros".'); rightCol.querySelector('#_opt_parche_otros_modal').focus(); return; }
+                        parcheFinal = otros;
+                    } else {
+                        parcheFinal = (parcheSel === 'none' ? '' : parcheSel);
+                    }
                     const version = rightCol.querySelector('#_opt_version_modal').value;
                     if (!version) { alert('Selecciona una versión antes de añadir al carrito.'); return; }
                     addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
@@ -2271,7 +2285,7 @@
             if (item.parche) extra += EXTRAS.parche;
             if (item.dorsal) extra += EXTRAS.dorsal;
             // apply version surcharge only when version === 'jugador'
-            if (item.version === 'jugador') extra += EXTRAS.version;
+            if (item.version === 'jugador') extra += EXTRAS.versionJugador;
             if (item.talla === 'XXL') extra += 1;
             else if (item.talla === '3XL') extra += 2;
             else if (item.talla === '4XL') extra += 2;
@@ -2293,11 +2307,11 @@
             const list = byId('cartItems');
                 list.innerHTML = '';
             let subtotal = 0;
-            // Agrupar items iguales (por productId + talla + version) para manejar cantidades fácilmente
+            // Agrupar items iguales (por productId + talla + version + dorsal + parche) para manejar cantidades sin perder personalizaciones
             const grouped = {};
             CART.forEach(ci => {
                 subtotal += ci.total;
-                const key = `${ci.productId}::${ci.talla}::${ci.version || 'none'}`;
+                const key = `${ci.productId}::${ci.talla}::${ci.version || 'none'}::${ci.dorsal || 'none'}::${ci.parche || 'none'}`;
                 if (!grouped[key]) grouped[key] = { ...ci, cantidad: 0 };
                 grouped[key].cantidad += 1;
                 // recalcular subtotal por agrupado si queremos mostrar precio por unidad
@@ -2427,42 +2441,42 @@
             list.querySelectorAll('.remove').forEach(btn => btn.addEventListener('click', ()=>{
                 const key = btn.dataset.key;
                 if (!key) return;
-                const [productId, talla, version] = key.split('::');
-                CART = CART.filter(i => !(i.productId === productId && i.talla === talla && (i.version || 'none') === version));
+                const [productId, talla, version, dorsal, parche] = key.split('::');
+                CART = CART.filter(i => !(i.productId === productId && i.talla === talla && (i.version || 'none') === version && (i.dorsal || 'none') === dorsal && (i.parche || 'none') === parche));
                 renderCart();
             }));
             list.querySelectorAll('.increase').forEach(btn => btn.addEventListener('click', ()=>{
                 const key = btn.dataset.key;
                 // añadir una unidad igual a la agrupación (clonar primer ítem de esa agrupación)
-                const [productId, talla, version] = key.split('::');
-                const item = CART.find(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version);
+                const [productId, talla, version, dorsal, parche] = key.split('::');
+                const item = CART.find(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version && (i.dorsal || 'none') === dorsal && (i.parche || 'none') === parche);
                 if (item) CART.push(Object.assign({}, item, { id: Date.now().toString(36) }));
                 renderCart();
             }));
             list.querySelectorAll('.decrease').forEach(btn => btn.addEventListener('click', ()=>{
                 const key = btn.dataset.key;
-                const [productId, talla, version] = key.split('::');
+                const [productId, talla, version, dorsal, parche] = key.split('::');
                 // encontrar una instancia y eliminarla (la última)
                 for (let i = CART.length-1; i>=0; i--) {
                     const it = CART[i];
-                    if (it.productId === productId && it.talla === talla && (it.version || 'none') === version) { CART.splice(i,1); break; }
+                    if (it.productId === productId && it.talla === talla && (it.version || 'none') === version && (it.dorsal || 'none') === dorsal && (it.parche || 'none') === parche) { CART.splice(i,1); break; }
                 }
                 renderCart();
             }));
             list.querySelectorAll('.cart-qty-input').forEach(inp => inp.addEventListener('change', ()=>{
                 const key = inp.dataset.key;
                 const v = Math.max(1, parseInt(inp.value) || 1);
-                const [productId, talla, version] = key.split('::');
+                const [productId, talla, version, dorsal, parche] = key.split('::');
                 // contar actuales
-                const current = CART.filter(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version).length;
+                const current = CART.filter(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version && (i.dorsal || 'none') === dorsal && (i.parche || 'none') === parche).length;
                 if (v > current) {
-                    const item = CART.find(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version);
+                    const item = CART.find(i=> i.productId === productId && i.talla === talla && (i.version || 'none') === version && (i.dorsal || 'none') === dorsal && (i.parche || 'none') === parche);
                     for (let k=0;k < v-current; k++) { if (item) CART.push(Object.assign({}, item, { id: Date.now().toString(36) })); }
                 } else if (v < current) {
                     let toRemove = current - v;
                     for (let i = CART.length-1; i>=0 && toRemove>0; i--) {
                         const it = CART[i];
-                        if (it.productId === productId && it.talla === talla && (it.version || 'none') === version) { CART.splice(i,1); toRemove--; }
+                        if (it.productId === productId && it.talla === talla && (it.version || 'none') === version && (it.dorsal || 'none') === dorsal && (it.parche || 'none') === parche) { CART.splice(i,1); toRemove--; }
                     }
                 }
                 renderCart();
@@ -2527,7 +2541,7 @@
                     item.style.padding = '8px 0';
                     const parche = ci.parche ? `<div style="color:#bcd9ff;font-size:0.95rem">Parche: ${ci.parche} (+€${(ci.parche? EXTRAS.parche:0).toFixed(2)})</div>` : '';
                     const dorsal = ci.dorsal ? `<div style="color:#bcd9ff;font-size:0.95rem">Dorsal: ${ci.dorsal} (+€${(ci.dorsal? EXTRAS.dorsal:0).toFixed(2)})</div>` : '';
-                    const version = (ci.version && ci.version !== 'none') ? (ci.version === 'version' ? `<div style="color:#bcd9ff;font-size:0.95rem">Versión: ${ci.version} (+€${EXTRAS.version.toFixed(2)})</div>` : `<div style="color:#bcd9ff;font-size:0.95rem">Versión: ${ci.version}</div>`) : '';
+                    const version = (ci.version && ci.version !== 'none') ? (ci.version === 'jugador' ? `<div style="color:#bcd9ff;font-size:0.95rem">Versión: ${ci.version} (+€${EXTRAS.versionJugador.toFixed(2)})</div>` : `<div style=\"color:#bcd9ff;font-size:0.95rem\">Versión: ${ci.version}</div>`) : '';
                     item.innerHTML = `
                         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
                             <div style="flex:1">
@@ -3245,7 +3259,7 @@
                     <div style="display:flex;align-items:flex-start;gap:12px;">
                         <div style="flex:1">
                             <strong>Importante:</strong>
-                            <div style="margin-top:6px;color:#111;line-height:1.3;">En la ventana de PayPal selecciona la opción "Enviar a amigos y familiares" si corresponde. Cuando cierres la ventana de PayPal se enviará el pedido automáticamente. Si quieres revisar o modificar tu pedido pulsa "Revisar pedido". Para proceder, pulsa "Abrir PayPal".</div>
+                            <div style="margin-top:6px;color:#111;line-height:1.3;">En la ventana de PayPal selecciona la opción "Enviar a amigos y familiares" si corresponde. Cuando cierres la ventana de PayPal se enviará el pedido automáticamente. Si quieres revisar o modificar tu pedido pulsa "Revisar pedido". Para proceder, pulsa "Abrir PayPal" IMPORTANTE: El pedido se enviará simepre y cuando se reciba el pago correctamente.</div>
                         </div>
                         <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
                             <button id="paypalHintRevisar" class="btn-secondary" style="background:transparent;color:#000;border:1px solid rgba(0,0,0,0.08);padding:8px 12px;border-radius:8px;">Revisar pedido</button>
@@ -3361,11 +3375,19 @@
                             const parts = metaSmall.split('·').map(s=>s.trim()).filter(Boolean);
                             parts.forEach(p => {
                                 if (!talla && /^(S|M|L|XL|XXL|2XL|3XL|4XL|[0-9]{1,2})$/i.test(p)) { talla = p; }
-                                else if (!parche && /[A-Za-z\s]+/.test(p) && p.toLowerCase().indexOf('parche')===-1 && p.length<=30 && /[A-Za-z]/.test(p)) { parche = p; }
                                 else if (!dorsal && /\d+|[A-Z\s]{2,}/.test(p)) { dorsal = p; }
                                 else if (!version && (p.toLowerCase()==='fan' || p.toLowerCase()==='jugador' || p.toLowerCase()==='player')) { version = p; }
                             });
                         }
+                        // Extraer "Parche: ..." desde otros <small> dentro de .meta
+                        try {
+                            const smEls = row.querySelectorAll('.meta small');
+                            Array.from(smEls).forEach(sm => {
+                                const txt = (sm.textContent||'').trim();
+                                const m = txt.match(/^Parche:\s*(.+)$/i);
+                                if (m && !parche) parche = m[1].trim();
+                            });
+                        } catch(e){}
                         let priceTextEl = row.querySelector('div[style*="font-weight:700"]');
                         let totalDisplayed = 0;
                         if (priceTextEl) {
