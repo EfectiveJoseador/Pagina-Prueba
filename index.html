@@ -814,14 +814,14 @@
             @media (min-width: 992px) { #carrito .cart-panel { position: sticky; top: 16px; } }
              @media (min-width: 992px) { #carrito #cartRecoPanel { position: sticky; top: 16px; } }
             #carrito .cart-panel { margin-top: 0 !important; }
-            #carrito #cartRecoPanel { background: rgba(10,31,61,0.9); border:1px solid rgba(46,123,237,0.12); border-radius:14px; padding:12px; }
+            #carrito #cartRecoPanel { background: rgba(10,31,61,0.9); border:1px solid rgba(46,123,237,0.12); border-radius:14px; padding:12px 12px 16px; }
             @media (min-width: 992px) { #carrito #cartRecoPanel { margin-top:16px !important; } }
             #carrito .reco-header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
             #carrito .reco-header h3 { color:#fff; font-size:1.02rem; margin:0; }
             #carrito .reco-nav { display:flex; gap:8px; }
             #carrito .reco-arrow { background: transparent; border: 1px solid rgba(255,255,255,0.12); color:#d6e9ff; border-radius:8px; padding:6px 10px; cursor:pointer; }
             #carrito .reco-arrow:hover { background: rgba(255,255,255,0.07); }
-            #carrito .reco-scroller { display:grid; grid-auto-flow: column; grid-auto-columns: minmax(160px, 1fr); gap:10px; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; padding-bottom:8px; }
+            #carrito .reco-scroller { display:grid; grid-auto-flow: column; grid-auto-columns: minmax(160px, 1fr); gap:10px; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; padding-bottom:4px; }
             #carrito .reco-scroller::-webkit-scrollbar { height:8px; }
             #carrito .reco-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius:6px; }
             #carrito .reco-card { scroll-snap-align:start; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); border:1px solid rgba(255,255,255,0.08); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; cursor:pointer; }
@@ -832,7 +832,7 @@
             #carrito .reco-actions { display:flex; gap:8px; padding:8px 10px 12px; }
             #carrito .reco-actions .btn-primary { flex:1; padding:8px 10px; border-radius:10px; }
             #carrito .reco-actions .btn-secondary { padding:8px 10px; border-radius:10px; }
-            #carrito .reco-hint { color:#9fbfe8; font-size:0.9rem; margin-top:8px; text-align:center; }
+            #carrito .reco-hint { color:#9fbfe8; font-size:0.9rem; margin-top:4px; text-align:center; }
         </style>
         <script>
             (function(){
@@ -3259,7 +3259,7 @@
                     <div style="display:flex;align-items:flex-start;gap:12px;">
                         <div style="flex:1">
                             <strong>Importante:</strong>
-                            <div style="margin-top:6px;color:#111;line-height:1.3;">En la ventana de PayPal selecciona la opción "Enviar a amigos y familiares" si corresponde. Cuando cierres la ventana de PayPal se enviará el pedido automáticamente. Si quieres revisar o modificar tu pedido pulsa "Revisar pedido". Para proceder, pulsa "Abrir PayPal" IMPORTANTE: El pedido se enviará simepre y cuando se reciba el pago correctamente.</div>
+                            <div style="margin-top:6px;color:#111;line-height:1.3;">En la ventana de PayPal selecciona la opción "Enviar a amigos y familiares". Cuando cierres la ventana de PayPal se enviará el pedido automáticamente. Si quieres revisar o modificar tu pedido pulsa "Revisar pedido". Para proceder, pulsa "Abrir PayPal" IMPORTANTE: El pedido se enviará simepre y cuando se reciba el pago correctamente.</div>
                         </div>
                         <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
                             <button id="paypalHintRevisar" class="btn-secondary" style="background:transparent;color:#000;border:1px solid rgba(0,0,0,0.08);padding:8px 12px;border-radius:8px;">Revisar pedido</button>
