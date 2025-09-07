@@ -648,3 +648,109 @@ document.addEventListener('DOMContentLoaded', function() {
     // run once DOM ready
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll); else initAll();
 })();
+
+(function(){
+  // Toast de total del carrito: visible pero discreto, eficiente y reutilizable
+  let toastEl = null;
+  let hideTimer = null;
+
+  function ensureToast(){
+    if (toastEl && document.body.contains(toastEl)) return toastEl;
+    toastEl = document.createElement('div');
+    toastEl.id = 'cartTotalToast';
+    toastEl.className = 'cart-total-toast';
+    toastEl.setAttribute('role', 'status');
+    toastEl.setAttribute('aria-live', 'polite');
+    toastEl.innerHTML = '<span class="icon" aria-hidden="true">🛒</span><span class="text">Total: <strong>0.00</strong>€</span>';
+    document.body.appendChild(toastEl);
+    // Al hacer clic, llevar a la pestaña del carrito y ocultar la burbuja
+    toastEl.addEventListener('click', function(){
+      try {
+        // Oculta inmediatamente para una sensación de respuesta
+        hideNow();
+        const btn = document.querySelector('.boton-seccion[data-seccion="carrito"]');
+        if (btn && typeof btn.click === 'function') {
+          btn.click();
+        } else {
+          // Fallback si no existen listeners
+          document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
+          document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+          const target = document.getElementById('carrito');
+          if (target) target.classList.add('activa');
+          const tabBtn = document.querySelector('[data-seccion="carrito"]');
+          if (tabBtn) tabBtn.classList.add('activo');
+        }
+      } catch(e) { /* noop */ }
+    });
+    return toastEl;
+  }
+
+  function hideNow(){
+    if (!toastEl) return;
+    toastEl.classList.remove('show');
+  }
+
+  window.showCartTotalToast = function(amount){
+    try {
+      const el = ensureToast();
+      // Actualizar cantidad
+      const strong = el.querySelector('strong');
+      if (strong) strong.textContent = (Number(amount) || 0).toFixed(2);
+      // Reiniciar animación
+      el.classList.remove('show');
+      // eslint-disable-next-line no-unused-expressions
+      el.offsetWidth;
+      el.classList.add('show');
+      // Ocultar automáticamente tras 4s (aumentado)
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(hideNow, 4000);
+    } catch(e) { /* silencioso para no afectar UX */ }
+  };
+
+  // =====================
+  // Notificación en pestaña del carrito
+  // =====================
+  let cartNoticeEl = null;
+  let cartNoticeTimer = null;
+
+  function ensureCartNotifier(){
+    const panel = document.getElementById('cartPanel');
+    if (!panel) return null;
+    if (cartNoticeEl && panel.contains(cartNoticeEl)) return cartNoticeEl;
+    const header = panel.querySelector('.cart-header');
+    const el = document.createElement('div');
+    el.id = 'cartTabNotifier';
+    el.className = 'cart-tab-notice';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    el.innerHTML = '<span class="icon" aria-hidden="true">➕</span><span class="text">Producto añadido al carrito</span>';
+    if (header && header.nextSibling) header.parentNode.insertBefore(el, header.nextSibling); else panel.insertAdjacentElement('afterbegin', el);
+    // Permitir cerrar manualmente con clic
+    el.addEventListener('click', function(){ el.classList.remove('show'); });
+    cartNoticeEl = el;
+    return el;
+  }
+
+  // Deshabilitado: no mostrar notificación dentro de la pestaña del carrito
+  window.notifyCart = function(message){ return; };
+})();
+
+// Ensure there is a small helper to update the Carrito button badge from anywhere
+(function(){
+  if (typeof window.updateCartTabBadge === 'function') return;
+  window.updateCartTabBadge = function(total){
+    try {
+      const cartBtn = document.querySelector('.boton-seccion[data-seccion="carrito"]');
+      if (!cartBtn) return;
+      let badge = cartBtn.querySelector('.cart-tab-badge');
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'cart-tab-badge';
+        cartBtn.appendChild(badge);
+      }
+      const v = (typeof total === 'number' ? total : (Array.isArray(window.CART) ? window.CART.length : 0));
+      if (v > 0) { badge.textContent = String(v); badge.classList.remove('hidden'); }
+      else { badge.textContent = '0'; badge.classList.add('hidden'); }
+    } catch (e) { /* noop */ }
+  };
+})();
