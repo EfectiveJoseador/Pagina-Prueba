@@ -1378,7 +1378,50 @@
         'assets/productos/Serie A/Milan9798LR/2.jpg',
         'assets/productos/Serie A/Milan9798LR/3.jpg',
         'assets/productos/Serie A/Milan9798LR/4.jpg'
-    ], excerpt: '', link: 'productos/Milan9798LR.html' }
+    ], excerpt: '', link: 'productos/Milan9798LR.html' },
+
+    { id: 'atleticoKids2526F', name: 'Camiseta Visitante Atlético 25/26 (Kids)', price: 21.90, img: 'assets/productos/La Liga/AtleticoKids2526F/1.jpg', images: [
+        'assets/productos/La Liga/AtleticoKids2526F/1.jpg',
+        'assets/productos/La Liga/AtleticoKids2526F/2.jpg',
+        'assets/productos/La Liga/AtleticoKids2526F/3.jpg',
+        'assets/productos/La Liga/AtleticoKids2526F/4.jpg'
+    ], excerpt: '', link: 'productos/AtleticoKids2526F.html' },
+
+    { id: 'athleticKids2526T', name: 'Camiseta Tercera Athletic Club 25/26 (Kids)', price: 21.90, img: 'assets/productos/La Liga/AthelticKids2526T/1.jpg', images: [
+        'assets/productos/La Liga/AthelticKids2526T/1.jpg',
+        'assets/productos/La Liga/AthelticKids2526T/2.jpg',
+        'assets/productos/La Liga/AthelticKids2526T/3.jpg'
+    ], excerpt: '', link: 'productos/AthleticKids2526T.html' },
+
+    { id: 'marseillaKids2526F', name: 'Camiseta Visitante Marsella 25/26 (Kids)', price: 21.90, img: 'assets/productos/Ligue 1/MarseillaKids2526F/1.jpg', images: [
+        'assets/productos/Ligue 1/MarseillaKids2526F/1.jpg',
+        'assets/productos/Ligue 1/MarseillaKids2526F/2.jpg',
+        'assets/productos/Ligue 1/MarseillaKids2526F/3.jpg',
+        'assets/productos/Ligue 1/MarseillaKids2526F/4.jpg'
+    ], excerpt: '', link: 'productos/MarseillaKids2526F.html' },
+
+    { id: 'unitedKids2526F', name: 'Camiseta Visitante Manchester United 25/26 (Kids)', price: 21.90, img: 'assets/productos/Premier League/UnitedKids2526F/1.jpg', images: [
+        'assets/productos/Premier League/UnitedKids2526F/1.jpg',
+        'assets/productos/Premier League/UnitedKids2526F/2.jpg',
+        'assets/productos/Premier League/UnitedKids2526F/3.jpg',
+        'assets/productos/Premier League/UnitedKids2526F/4.jpg'
+    ], excerpt: '', link: 'productos/UnitedKids2526F.html' },
+
+    { id: 'nbaLakers1', name: 'Camiseta NBA Lakers (Modelo 1)', price: 24.90, img: 'assets/productos/NBA/Lakers1/1.jpeg', images: [
+        'assets/productos/NBA/Lakers1/1.jpeg',
+        'assets/productos/NBA/Lakers1/2.jpeg'
+    ], excerpt: '', link: 'productos/Lakers1.html' },
+
+    { id: 'nbaOklahoma1', name: 'Camiseta NBA Oklahoma (Modelo 1)', price: 24.90, img: 'assets/productos/NBA/Oklahoma/1.jpeg', images: [
+        'assets/productos/NBA/Oklahoma/1.jpeg',
+        'assets/productos/NBA/Oklahoma/2.jpeg'
+    ], excerpt: '', link: 'productos/Oklahoma.html' },
+
+    { id: 'nbaPhila1', name: 'Camiseta NBA Philadelphia (Modelo 1)', price: 24.90, img: 'assets/productos/NBA/Phila1/1.jpeg', images: [
+        'assets/productos/NBA/Phila1/1.jpeg',
+        'assets/productos/NBA/Phila1/2.jpeg',
+        'assets/productos/NBA/Phila1/3.jpeg'
+    ], excerpt: '', link: 'productos/Phila1.html' }
 ];
 
         const EXTRAS = { parche: 1, dorsal: 2, versionJugador: 5, version: 5 };
@@ -1824,7 +1867,7 @@
                         overlay.innerHTML = `
                             <div style="position:relative;width:auto;max-width:98vw;max-height:98vh;background:transparent;border-radius:12px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;overflow:auto;">
                                 <button aria-label="Cerrar" style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:500;transition:all 0.2s ease;font-size:0.9rem;">✕ Cerrar</button>
-                                <img src="assets/images/guia tallas camisetas futbol.png" alt="Guia de tallas" style="height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;">
+                                <img src="assets/images/guias tallas nba.png" alt="Guia de tallas NBA" style="height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;">
                             </div>
                         `;
                         document.body.appendChild(overlay);
@@ -1835,6 +1878,38 @@
                         overlay.addEventListener('click', (e)=>{ if (e.target === overlay) close(); });
                     });
                 }
+                try {
+                    const __isKids = /kids/i.test(product.id) || /\((kids|niños)\)/i.test(product.name);
+                    if (__isKids) {
+                        const tallaSel = modal.querySelector('#_opt_talla');
+                        if (tallaSel) {
+                            tallaSel.innerHTML = `
+                                <option value="16">16</option>
+                                <option value="18">18</option>
+                                <option value="20">20</option>
+                                <option value="22">22</option>
+                                <option value="24">24</option>
+                                <option value="26">26</option>
+                                <option value="28">28</option>
+                            `;
+                        }
+                        const verSel = modal.querySelector('#_opt_version');
+                        const verLabel = verSel ? verSel.parentElement : null;
+                        if (verSel) verSel.value = 'none';
+                        if (verLabel) verLabel.style.display = 'none';
+                    }
+                    const __isNBA = /^nba/i.test(product.id) || /\bNBA\b/i.test(product.name);
+                    if (__isNBA) {
+                        const verSel = modal.querySelector('#_opt_version');
+                        const verLabel = verSel ? verSel.parentElement : null;
+                        if (verLabel) verLabel.style.display = 'none';
+                        const parcheSel = modal.querySelector('#_opt_parche_select');
+                        const parcheLabel = parcheSel ? parcheSel.parentElement : null;
+                        if (parcheLabel) parcheLabel.style.display = 'none';
+                        const otrosWrap = modal.querySelector('#_opt_parche_otros_wrap');
+                        if (otrosWrap) otrosWrap.style.display = 'none';
+                    }
+                } catch(e) {}
             // Si el producto define versiones y sólo hay una opción, preseleccionarla y ocultar el selector
             try {
                 if (product && Array.isArray(product.versions) && product.versions.length === 1) {
@@ -1858,17 +1933,23 @@
             modal.querySelector('#_addCart').addEventListener('click', ()=>{
                 const talla = modal.querySelector('#_opt_talla').value;
                 const dorsal = modal.querySelector('#_opt_dorsal').value.trim();
-                const parcheSel = modal.querySelector('#_opt_parche_select').value;
+                const __isNBA = /^nba/i.test(product.id) || /\bNBA\b/i.test(product.name);
+                // En NBA: dorsal obligatorio y sin parches ni versión
                 let parcheFinal = '';
-                if (parcheSel === 'Otros') {
-                    const otros = modal.querySelector('#_opt_parche_otros').value.trim();
-                    if (!otros) { alert('Indica el parche en el campo "Otros".'); modal.querySelector('#_opt_parche_otros').focus(); return; }
-                    parcheFinal = otros;
-                } else {
-                    parcheFinal = (parcheSel === 'none' ? '' : parcheSel);
+                let version = 'none';
+                if (!__isNBA) {
+                    const parcheSel = modal.querySelector('#_opt_parche_select').value;
+                    if (parcheSel === 'Otros') {
+                        const otros = modal.querySelector('#_opt_parche_otros').value.trim();
+                        if (!otros) { alert('Indica el parche en el campo "Otros".'); modal.querySelector('#_opt_parche_otros').focus(); return; }
+                        parcheFinal = otros;
+                    } else {
+                        parcheFinal = (parcheSel === 'none' ? '' : parcheSel);
+                    }
+                    version = modal.querySelector('#_opt_version').value;
+                    if (!version) { alert('Selecciona una versión antes de añadir al carrito.'); return; }
                 }
-                const version = modal.querySelector('#_opt_version').value;
-                if (!version) { alert('Selecciona una versión antes de añadir al carrito.'); return; }
+                if (__isNBA && !dorsal) { alert('Debes introducir un dorsal para camisetas NBA.'); return; }
                 addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
                 modal.remove();
             });
@@ -1955,8 +2036,39 @@
                     <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
                     <form id="modalTiendaForm" style="display:grid;gap:8px;">
                         <label style="font-weight:700;color:#dbeeff;">Nombre y número (+2€)
-                            <input id="_opt_dorsal_modal" placeholder="Ej: MESSI 10" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;" />
+                            <input id="_opt_dorsal_modal" placeholder="Ej: JAMES 6" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;" />
                         </label>
+                        <label>Talla:
+                            <select id="_opt_talla_modal" class="custom-select input-talla">
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="2XL">2XL (+1€)</option>
+                                <option value="XXL">XXL (+1€)</option>
+                                <option value="3XL">3XL (+2€)</option>
+                                <option value="4XL">4XL (+2€)</option>
+                            </select>
+                        </label>
+                        <div style="margin:4px 0 0 0;">
+                            <button id="_sizeGuideCarousel" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:600;transition:all 0.2s ease;position:relative;padding-bottom:2px;display:inline-block;transform:translateX(4px);border-bottom:2px solid var(--azul-acento);">Guía de tallas</button>
+                        </div>
+                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
+                            <button id="modalTiendaAdd" type="button" class="btn-primary">Añadir al carrito</button>
+                            <button id="modalTiendaCloseInline" type="button" class="btn-secondary">Cerrar</button>
+                        </div>
+                    </form>
+                `;
+
+                // Inserción dinámica de campos según tipo de producto (NBA/Kids)
+                try {
+                    const isNBA = /^nba/i.test(product.id) || /\bNBA\b/i.test(product.name);
+                    const isKids = /kids/i.test(product.id) || /\((kids|niños)\)/i.test(product.name);
+                    const form = rightCol.querySelector('#modalTiendaForm');
+                    if (form && !isNBA) {
+                        // Insertar Parche (no NBA)
+                        if (!rightCol.querySelector('#_opt_parche_select_modal')) {
+                            const parcheHTML = `
                         <label style="font-weight:700;color:#dbeeff;">Parche (+1€)
                             <select id="_opt_parche_select_modal" class="custom-select" style="margin-top:6px;">
                                 <option value="none">Ninguno</option>
@@ -1970,35 +2082,41 @@
                                 <option value="Otros">Otros</option>
                             </select>
                         </label>
-                        <label id="_opt_parche_otros_wrap_modal" style="display:none;"><input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;" /></label>
-                        <label>Talla:
-                            <select id="_opt_talla_modal" class="custom-select input-talla">
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="2XL">2XL (+1€)</option>
-                                <option value="XXL">XXL (+1€)</option>
-                                <option value="3XL">3XL (+2€)</option>
-                                <option value="4XL">4XL (+2€)</option>
-                            </select>
-                        </label>
+                        <label id="_opt_parche_otros_wrap_modal" style="display:none;"><input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;" /></label>`;
+                            const tallaLabel = rightCol.querySelector('#_opt_talla_modal')?.parentElement;
+                            if (tallaLabel) tallaLabel.insertAdjacentHTML('beforebegin', parcheHTML);
+                            else form.insertAdjacentHTML('beforeend', parcheHTML);
+                        }
+                        // Insertar Versión si NO es Kids
+                        if (!isKids && !rightCol.querySelector('#_opt_version_modal')) {
+                            const versionHTML = `
                         <label>Versión:
                             <select id="_opt_version_modal" class="custom-select">
                                 <option value="" disabled selected>Selecciona versión</option>
                                 <option value="fan">FAN</option>
                                 <option value="jugador">JUGADOR (+5€)</option>
                             </select>
-                        </label>
-                        <div style="margin:4px 0 0 0;">
-                            <button id="_sizeGuideCarousel" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:600;transition:all 0.2s ease;position:relative;padding-bottom:2px;display:inline-block;transform:translateX(4px);border-bottom:2px solid var(--azul-acento);">Guía de tallas</button>
-                        </div>
-                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
-                            <button id="modalTiendaAdd" type="button" class="btn-primary">Añadir al carrito</button>
-                            <button id="modalTiendaCloseInline" type="button" class="btn-secondary">Cerrar</button>
-                        </div>
-                    </form>
-                `;
+                        </label>`;
+                            const buttonsRow = form.querySelector('div[style*="justify-content:flex-end"]');
+                            if (buttonsRow) buttonsRow.insertAdjacentHTML('beforebegin', versionHTML);
+                            else form.insertAdjacentHTML('beforeend', versionHTML);
+                        }
+                        // Reemplazar tallas por numéricas si es Kids (16-28)
+                        if (isKids) {
+                            const tSel = rightCol.querySelector('#_opt_talla_modal');
+                            if (tSel) {
+                                tSel.innerHTML = ['16','18','20','22','24','26','28'].map(s=>`<option value="${s}">${s}</option>`).join('');
+                            }
+                        }
+                    } else if (form && isNBA) {
+                        // Si es NBA pero es Kids, aún así tallas pueden ser numéricas si el nombre lo indica
+                        const isKidsNBA = isKids;
+                        if (isKidsNBA) {
+                            const tSel = rightCol.querySelector('#_opt_talla_modal');
+                            if (tSel) tSel.innerHTML = ['16','18','20','22','24','26','28'].map(s=>`<option value="${s}">${s}</option>`).join('');
+                        }
+                    }
+                } catch(e) {}
 
                 // parche otros toggle
                 const parcheSelectModal = rightCol.querySelector('#_opt_parche_select_modal');
@@ -2019,17 +2137,30 @@
                 rightCol.querySelector('#modalTiendaAdd').addEventListener('click', ()=>{
                     const talla = rightCol.querySelector('#_opt_talla_modal').value;
                     const dorsal = rightCol.querySelector('#_opt_dorsal_modal').value.trim();
-                    const parcheSel = rightCol.querySelector('#_opt_parche_select_modal').value;
+                    const isNBA = /^nba/i.test(product.id) || /\bNBA\b/i.test(product.name);
+
                     let parcheFinal = '';
-                    if (parcheSel === 'Otros') {
-                        const otros = rightCol.querySelector('#_opt_parche_otros_modal').value.trim();
-                        if (!otros) { alert('Indica el parche en el campo "Otros".'); rightCol.querySelector('#_opt_parche_otros_modal').focus(); return; }
-                        parcheFinal = otros;
+                    let version = 'none';
+                    if (isNBA) {
+                        // En NBA el dorsal es obligatorio y no hay parches ni versión
+                        if (!dorsal) { alert('Debes introducir un dorsal para camisetas NBA.'); return; }
                     } else {
-                        parcheFinal = (parcheSel === 'none' ? '' : parcheSel);
+                        // No NBA: permitir parches y versión
+                        const parcheSelectEl = rightCol.querySelector('#_opt_parche_select_modal');
+                        if (parcheSelectEl) {
+                            const parcheSel = parcheSelectEl.value;
+                            if (parcheSel === 'Otros') {
+                                const otros = rightCol.querySelector('#_opt_parche_otros_modal').value.trim();
+                                if (!otros) { alert('Indica el parche en el campo "Otros".'); rightCol.querySelector('#_opt_parche_otros_modal').focus(); return; }
+                                parcheFinal = otros;
+                            } else {
+                                parcheFinal = (parcheSel === 'none' ? '' : parcheSel);
+                            }
+                        }
+                        const versionEl = rightCol.querySelector('#_opt_version_modal');
+                        version = versionEl ? versionEl.value : 'fan';
+                        if (versionEl && !version) { alert('Selecciona una versión antes de añadir al carrito.'); return; }
                     }
-                    const version = rightCol.querySelector('#_opt_version_modal').value;
-                    if (!version) { alert('Selecciona una versión antes de añadir al carrito.'); return; }
                     addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
                     // opción: cerrar modal tras añadir
                     stopAutoplay(); modal.remove();
@@ -2045,7 +2176,7 @@
                         overlay.innerHTML = `
                             <div style="position:relative;width:auto;max-width:98vw;max-height:98vh;background:transparent;border-radius:12px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;overflow:auto;">
                                 <button aria-label=\"Cerrar\" style=\"position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;\">Cerrar</button>
-                                <img src=\"assets/images/guia tallas camisetas futbol.png\" alt=\"Guia de tallas\" style=\"height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;\">
+                                <img src=\"assets/images/guias tallas nba.png\" alt=\"Guia de tallas NBA\" style=\"height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;\">
                             </div>
                         `;
                         document.body.appendChild(overlay);
