@@ -28,7 +28,8 @@
     <nav class="navegacion">
         <button class="boton-seccion activo" data-seccion="tienda">Catálogo</button>
         <button class="boton-seccion" data-seccion="pedidos">Tienda</button>
-        <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
+    <button class="boton-seccion" data-seccion="carrito">Carrito</button>
+    <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
     </nav>
 </header>
 
@@ -150,19 +151,7 @@
                         </a>
                     </div>
                 </div>
-                <!-- Tarjeta 9 -->
-                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.8s;" data-link="https://chenzhefuzhuang.x.yupoo.com/collections/3230017">
-                    <div class="catalogo-img-wrap">
-                        <img src="assets/images/mlb.png" alt="MLB" class="catalogo-img">
-                    </div>
-                    <div class="catalogo-info">
-                        <h3>MLB</h3>
-                        <p>Equipación y gorras oficiales de la Major League Baseball.</p>
-                        <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
-                            Ver catálogo <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
+                
             </div>
         </section>
 
@@ -707,7 +696,7 @@
                     <div class="carrusel-img-bg" data-img="assets/clientes/cliente23.jpg" aria-label="Cliente satisfecho 23"></div>
                     <div class="carrusel-img-bg" data-img="assets/clientes/cliente24.jpg" aria-label="Cliente satisfecho 24"></div>
                     <div class="carrusel-img-bg" data-img="assets/clientes/cliente25.jpg" aria-label="Cliente satisfecho 25"></div>
-                    <div class="carrusel-img-bg" data-img="assets/clientes/cliente26.jpg" aria-label="Cliente satisfecho 26"></div>
+                    
                 </div>
                 <button class="carrusel-btn" id="carrusel-next" aria-label="Siguiente">&#8594;</button>
             </div>
@@ -775,8 +764,96 @@
         </div>
     </div>
 </section>
-<!-- Sección Pedidos: Galería de productos y carrito -->
-<section id="pedidos" class="seccion">
+    <section id="carrito" class="seccion">
+        <div class="cart-layout" role="group" aria-label="Carrito y recomendaciones">
+            <aside id="cartPanel" class="cart-panel" aria-label="Carrito de compras">
+                <div class="cart-header">
+                    <h3>Tu Carrito</h3>
+                    <div id="cartCount" class="cart-count" aria-hidden="true">0</div>
+                </div>
+
+                <div id="cartItems" class="cart-items">
+                    <div class="cart-empty">Tu carrito está vacío<br><small>Agrega productos para empezar</small></div>
+                </div>
+
+                <div class="cart-divider" aria-hidden="true"></div>
+
+                <div class="cart-totals">
+                    <div class="tot-row"><span>Subtotal</span><span><strong id="cartSubtotal">0.00</strong></span></div>
+                    <div class="tot-row"><span>Gastos envío</span><span id="cartShipping">2.00</span></div>
+                    <div class="tot-row total"><span>Total</span><span id="cartTotal">0.00</span></div>
+                </div>
+
+                <div class="cart-actions">
+                    <button id="clearCartGallery" class="btn-secondary">Vaciar</button>
+                    <button id="gotoCheckoutBtn" class="btn-primary">Pagar</button>
+                </div>
+
+                <p class="cart-note">Antes de pagar se solicitará correo de PayPal, usuario de Instagram y dirección de envío.</p>
+            </aside>
+            <aside id="cartRecoPanel" class="cart-reco-panel" aria-label="Recomendaciones para ti">
+                <div class="reco-header">
+                    <h3>Te podría gustar</h3>
+                    <div class="reco-nav">
+                        <button class="reco-arrow" id="recoPrev" aria-label="Desplazar recomendaciones a la izquierda">‹</button>
+                        <button class="reco-arrow" id="recoNext" aria-label="Desplazar recomendaciones a la derecha">›</button>
+                    </div>
+                </div>
+                <div id="recoScroller" class="reco-scroller" tabindex="0" role="region" aria-label="Lista de recomendaciones desplazable horizontalmente"></div>
+                <p class="reco-hint">Añade productos al carrito para ver recomendaciones.</p>
+            </aside>
+        </div>
+        <style>
+            /* Estilos locales sólo para la sección Carrito */
+            #carrito .cart-layout { display:grid; grid-template-columns: 1fr; gap:16px; align-items:start; grid-template-areas: 'cart' 'reco'; }
+            #carrito #cartPanel { grid-area: cart; }
+            #carrito #cartRecoPanel { grid-area: reco; }
+            #carrito { scroll-margin-top: 16px; }
+            @media (min-width: 992px) { #carrito .cart-layout { grid-template-columns: minmax(520px, 1fr) clamp(320px, 28vw, 460px); grid-template-areas: 'cart reco'; } }
+            #carrito .cart-panel { max-width: none; max-height: none; }
+            @media (min-width: 992px) { #carrito .cart-panel { position: sticky; top: 16px; } }
+             @media (min-width: 992px) { #carrito #cartRecoPanel { position: sticky; top: 16px; } }
+            #carrito .cart-panel { margin-top: 0 !important; }
+            #carrito #cartRecoPanel { background: rgba(10,31,61,0.9); border:1px solid rgba(46,123,237,0.12); border-radius:14px; padding:12px; }
+            @media (min-width: 992px) { #carrito #cartRecoPanel { margin-top:16px !important; } }
+            #carrito .reco-header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
+            #carrito .reco-header h3 { color:#fff; font-size:1.02rem; margin:0; }
+            #carrito .reco-nav { display:flex; gap:8px; }
+            #carrito .reco-arrow { background: transparent; border: 1px solid rgba(255,255,255,0.12); color:#d6e9ff; border-radius:8px; padding:6px 10px; cursor:pointer; }
+            #carrito .reco-arrow:hover { background: rgba(255,255,255,0.07); }
+            #carrito .reco-scroller { display:grid; grid-auto-flow: column; grid-auto-columns: minmax(160px, 1fr); gap:10px; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; padding-bottom:8px; }
+            #carrito .reco-scroller::-webkit-scrollbar { height:8px; }
+            #carrito .reco-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius:6px; }
+            #carrito .reco-card { scroll-snap-align:start; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); border:1px solid rgba(255,255,255,0.08); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; cursor:pointer; }
+            #carrito .reco-card img { width:100%; aspect-ratio:1/1; object-fit:cover; }
+            #carrito .reco-meta { padding:8px 10px; color:#d6e9ff; min-height:64px; }
+            #carrito .reco-name { font-weight:700; font-size:0.95rem; line-height:1.2; margin-bottom:4px; }
+            #carrito .reco-price { color:#9fe0ff; font-weight:800; }
+            #carrito .reco-actions { display:flex; gap:8px; padding:8px 10px 12px; }
+            #carrito .reco-actions .btn-primary { flex:1; padding:8px 10px; border-radius:10px; }
+            #carrito .reco-actions .btn-secondary { padding:8px 10px; border-radius:10px; }
+            #carrito .reco-hint { color:#9fbfe8; font-size:0.9rem; margin-top:8px; text-align:center; }
+        </style>
+        <script>
+            (function(){
+                const scroller = document.getElementById('recoScroller');
+                const prev = document.getElementById('recoPrev');
+                const next = document.getElementById('recoNext');
+                if (!scroller) return;
+                const scrollBy = () => Math.max(220, scroller.clientWidth * 0.8);
+                prev && prev.addEventListener('click', () => scroller.scrollBy({ left: -scrollBy(), behavior: 'smooth' }));
+                next && next.addEventListener('click', () => scroller.scrollBy({ left: scrollBy(), behavior: 'smooth' }));
+                scroller.addEventListener('wheel', (e) => {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                        scroller.scrollLeft += e.deltaY;
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            })();
+        </script>
+    </section>
+    <!-- Sección Pedidos: Galería de productos y carrito -->
+    <section id="pedidos" class="seccion">
     <!-- Hidden order form (submitted to FormSubmit) - populated programmatically before submit -->
     <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" style="display:none;">
         <input type="hidden" name="_next" value="https://compra-exitosa.vercel.app/">
@@ -804,31 +881,7 @@
 
     <div id="productGallery" class="product-gallery" aria-live="polite"></div>
 
-    <aside id="cartPanel" class="cart-panel" aria-label="Carrito de compras">
-            <div class="cart-header">
-                <h3>Tu Carrito</h3>
-                <div id="cartCount" class="cart-count" aria-hidden="true">0</div>
-            </div>
-
-            <div id="cartItems" class="cart-items">
-                <div class="cart-empty">Tu carrito está vacío<br><small>Agrega productos para empezar</small></div>
-            </div>
-
-            <div class="cart-divider" aria-hidden="true"></div>
-
-            <div class="cart-totals">
-                <div class="tot-row"><span>Subtotal</span><span><strong id="cartSubtotal">0.00</strong></span></div>
-                <div class="tot-row"><span>Gastos envío</span><span id="cartShipping">2.00</span></div>
-                <div class="tot-row total"><span>Total</span><span id="cartTotal">0.00</span></div>
-            </div>
-
-            <div class="cart-actions">
-                <button id="clearCartGallery" class="btn-secondary">Vaciar</button>
-                <button id="gotoCheckoutBtn" class="btn-primary">Pagar</button>
-            </div>
-
-            <p class="cart-note">Antes de pagar se solicitará correo de PayPal, usuario de Instagram y dirección de envío.</p>
-    </aside>
+    
     </div>
 
     <style>
@@ -840,9 +893,9 @@
        prevents automatic wrapping that placed the cart below the products. */
     #pedidos.activa .product-gallery-ui {
         display: grid;
-        grid-template-columns: 1fr 420px;
+        grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
-        grid-template-areas: "header header" "gallery cart";
+        grid-template-areas: "header" "gallery";
         gap: 22px;
         align-items: start;
     }
@@ -867,7 +920,7 @@
 
           /* Keep the cart visually on the right side of the page at all times. Make it fixed so it doesn't move
               when the gallery grows. Add max-height/overflow to remain scrollable on small viewports. */
-    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 420px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; margin-top: 36px; }
+    .cart-panel { background: rgba(10,31,61,0.95); padding: 16px; border-radius: 14px; color: #e6f3ff; border: 1px solid rgba(46,123,237,0.12); position: relative; width: 100%; max-width: 420px; box-sizing: border-box; max-height: calc(100vh - 160px); overflow: auto; }
         .cart-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
         .cart-header h3 { margin:0; color:#fff; font-size:1.15rem; letter-spacing:0.4px; }
         .cart-count { background:linear-gradient(90deg,#2e7bed,#144a85); color:#fff; padding:6px 10px; border-radius:999px; font-weight:800; font-size:0.9rem; box-shadow:0 6px 18px rgba(46,123,237,0.18); }
@@ -925,23 +978,25 @@
         /* Keep cart on the right even on narrower viewports but reduce its width and ensure the gallery
            has right padding so content doesn't sit underneath the fixed cart. */
         @media (min-width: 1201px) {
-            /* Desktop: two-column grid — gallery left, cart right. Header spans both columns. */
-            #pedidos.activa .product-gallery-ui { display: grid; grid-template-columns: 1fr 420px; grid-template-rows: auto 1fr; grid-template-areas: "header header" "gallery cart"; gap: 22px; }
+            /* Desktop: single-column gallery; cart is not reserved here so products use full width */
+            #pedidos.activa .product-gallery-ui { display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; grid-template-areas: "header" "gallery"; gap: 22px; }
             .gallery-header { grid-area: header; }
             .product-gallery { grid-area: gallery; }
-            /* On wide screens maintain the column layout for competition sections */
-            .product-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-right: 18px; width: 100%; }
+            /* Keep four product columns, now spanning the full available width */
+            .product-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding-right: 0; width: 100%; }
+            /* Scale product cards proportionally on desktop for the wider area */
+            #pedidos .product-item { max-width: none; }
+            #pedidos .product-item img { height: clamp(160px, 14vw, 240px); }
             /* Each competition's products grid shows 3 products per row */
             .competition-products { grid-template-columns: repeat(3, 1fr); }
-            .cart-panel { grid-area: cart; position: relative; right: 0; top: 0; width: 100%; max-width: 420px; align-self: start; transform: none; margin-top: 36px; }
-            /* Remove right padding so gallery doesn't shift underneath */
+            /* Cart panel no longer participates in this grid on desktop; increase max width for better UX in its dedicated view */
+            .cart-panel { position: relative; right: 0; top: 0; width: 100%; max-width: 560px; align-self: start; transform: none; margin-top: 36px; }
+            /* Header/controls align to the 4th product column because they share the same grid column */
             #pedidos.activa .product-gallery { padding-right: 0; }
         }
         @media (max-width: 1200px) {
-            .product-gallery-ui { padding-right: 500px; }
-            /* Bajar aún más el carrito en pantallas pequeñas para evitar superposiciones
-               cuando aparece el banner promocional (naranja/verde). */
-            .cart-panel { position: fixed; width: 400px; right: 12px; top: 140px; z-index: 1200; }
+            .product-gallery-ui { padding-right: 0; }
+            .cart-panel { position: relative; width: 100%; right: 0; top: 0; z-index: auto; }
         }
     /* Small helper for the checkout modal inputs */
     .checkout-input { width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:8px }
@@ -1452,8 +1507,10 @@
             const el = ensurePromoEl();
             if (!__PROMO.visible) return; // solo si visible
             const cart = document.getElementById('cartPanel');
-            const pedidos = document.getElementById('pedidos');
-            if (!cart || !pedidos || !pedidos.classList.contains('activa')) { el.style.opacity = '0'; return; }
+            const secCarrito = document.getElementById('carrito');
+            const secPedidos = document.getElementById('pedidos');
+            const sectionActive = (secCarrito && secCarrito.classList.contains('activa')) || (secPedidos && secPedidos.classList.contains('activa'));
+            if (!cart || !sectionActive) { el.style.opacity = '0'; return; }
             const r = cart.getBoundingClientRect();
             const left = Math.round(r.left);
             const width = Math.round(r.width);
@@ -1491,11 +1548,13 @@
         }
         function updateCartPromoBanner(){
             try {
-                const pedidos = document.getElementById('pedidos');
-                if (!pedidos || !pedidos.classList.contains('activa')) { hidePromoBanner(); return; }
+                const secCarrito = document.getElementById('carrito');
+                const secPedidos = document.getElementById('pedidos');
+                const sectionActive = (secCarrito && secCarrito.classList.contains('activa')) || (secPedidos && secPedidos.classList.contains('activa'));
+                if (!sectionActive) { hidePromoBanner(); return; }
                 const shirtCount = (Array.isArray(CART)? CART : []).filter(isShirtItem).length;
-                if (shirtCount === 3) showPromoBanner(3);
-                else if (shirtCount === 5) showPromoBanner(5);
+                if (shirtCount === 5) showPromoBanner(5);
+                else if (shirtCount === 3) showPromoBanner(3);
                 else hidePromoBanner();
                 setTimeout(positionPromoBanner, 30);
                 setTimeout(positionPromoBanner, 160);
@@ -1597,7 +1656,18 @@
             }
             
             const q = filterText ? String(filterText).toLowerCase() : '';
-            let list = PRODUCTS.filter(p => { 
+            // Base aleatoria por carga: se calcula una vez y se reutiliza en renderizados posteriores
+            const base = (function(){
+                if (Array.isArray(window._PRODUCTS_SHUFFLED)) return window._PRODUCTS_SHUFFLED;
+                const copy = Array.isArray(PRODUCTS) ? PRODUCTS.slice() : [];
+                for (let i = copy.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    const tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+                }
+                window._PRODUCTS_SHUFFLED = copy;
+                return copy;
+            })();
+            let list = base.filter(p => { 
                 if (!q) return true; 
                 return (p.name || '').toLowerCase().indexOf(q) !== -1; 
             });
@@ -1716,7 +1786,7 @@
                                     </select>
                                 </label>
                                 <div style="grid-column:1/3;margin-top:4px;">
-                                    <button id="_sizeGuideBasic" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:600;transition:all 0.2s ease;text-decoration:none;position:relative;padding-bottom:2px;">Guía de tallas<span style="position:absolute;bottom:0;left:0;width:0%;height:1px;background:var(--azul-acento);transition:width 0.2s ease;"></span></button>
+                                    <button id="_sizeGuideBasic" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:600;transition:all 0.2s ease;position:relative;padding-bottom:2px;display:inline-block;transform:translateX(4px);border-bottom:2px solid var(--azul-acento);">Guía de tallas</button>
                                 </div>
                             </form>
                             <div style="margin-top:12px;display:flex;gap:8px;">
@@ -1730,6 +1800,16 @@
 
             document.body.appendChild(modal);
 
+                // Visor ampliado: click en la imagen principal para abrir a pantalla completa
+                try {
+                    const imgsForViewer = (Array.isArray(product.images) && product.images.length) ? product.images : [product.img];
+                    const mainImgEl = modal.querySelector('img');
+                    if (mainImgEl) {
+                        mainImgEl.style.cursor = 'zoom-in';
+                        mainImgEl.addEventListener('click', (e)=>{ e.stopPropagation(); openImageViewer(imgsForViewer, 0); });
+                    }
+                } catch(e) {}
+
                 // Cerrar modal al pulsar el botón o al hacer click fuera del panel
                 modal.querySelector('#_closeModal').addEventListener('click', ()=> modal.remove());
                 modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
@@ -1740,11 +1820,11 @@
                     _sizeGuideBtn.addEventListener('click', ()=>{
                         const overlay = document.createElement('div');
                         overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
-                        overlay.style.background='rgba(0,0,0,0.75)'; overlay.style.zIndex=5000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+                        overlay.style.background='rgba(0,0,0,0.85)'; overlay.style.zIndex=5000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
                         overlay.innerHTML = `
-                            <div style="position:relative;width:78vw;max-width:1000px;max-height:85vh;background:#0b1f3e;border-radius:12px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(4px);">
-                                <button aria-label="Cerrar" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:500;transition:all 0.2s ease;font-size:0.9rem;">✕ Cerrar</button>
-                                <img src="assets/images/guia tallas camisetas futbol.png" alt="Guia de tallas" style="max-width:100%;max-height:70vh;object-fit:contain;border-radius:6px;">
+                            <div style="position:relative;width:auto;max-width:98vw;max-height:98vh;background:transparent;border-radius:12px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;overflow:auto;">
+                                <button aria-label="Cerrar" style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:500;transition:all 0.2s ease;font-size:0.9rem;">✕ Cerrar</button>
+                                <img src="assets/images/guia tallas camisetas futbol.png" alt="Guia de tallas" style="height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;">
                             </div>
                         `;
                         document.body.appendChild(overlay);
@@ -1843,6 +1923,8 @@
             const prev = modal.querySelector('#modalTiendaPrev');
             const next = modal.querySelector('#modalTiendaNext');
             const thumbs = modal.querySelector('#modalTiendaThumbs');
+            // Visor ampliado: click en el carrusel para abrir a pantalla completa en el índice actual
+            try { track.style.cursor = 'zoom-in'; track.addEventListener('click', (e)=>{ e.stopPropagation(); openImageViewer(imgs, idx); }); } catch(e) {}
             function update(){ track.style.transform = `translateX(-${idx * 100}%)`; Array.from(thumbs.children).forEach((t,i)=> t.style.outline = i===idx? '3px solid var(--azul-acento)' : 'none'); }
             prev && prev.addEventListener('click', (e)=>{ e.stopPropagation(); idx = (idx-1+slides.length)%slides.length; update(); });
             next && next.addEventListener('click', (e)=>{ e.stopPropagation(); idx = (idx+1)%slides.length; update(); });
@@ -1902,7 +1984,7 @@
                             </select>
                         </label>
                         <div style="margin:4px 0 0 0;">
-                            <button id="_sizeGuideCarousel" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:600;transition:all 0.2s ease;text-decoration:none;position:relative;padding-bottom:2px;">Guía de tallas<span style="position:absolute;bottom:0;left:0;width:0%;height:1px;background:var(--azul-acento);transition:width 0.2s ease;"></span></button>
+                            <button id="_sizeGuideCarousel" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:600;transition:all 0.2s ease;position:relative;padding-bottom:2px;display:inline-block;transform:translateX(4px);border-bottom:2px solid var(--azul-acento);">Guía de tallas</button>
                         </div>
                         <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
                             <button id="modalTiendaAdd" type="button" class="btn-primary">Añadir al carrito</button>
@@ -1945,11 +2027,11 @@
                     sizeGuideBtn2.addEventListener('click', ()=>{
                         const overlay = document.createElement('div');
                         overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
-                        overlay.style.background='rgba(0,0,0,0.75)'; overlay.style.zIndex=5000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+                        overlay.style.background='rgba(0,0,0,0.85)'; overlay.style.zIndex=5000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
                         overlay.innerHTML = `
-                            <div style="position:relative;width:70vw;max-width:1000px;max-height:80vh;background:#0b1f3e;border-radius:10px;padding:10px;box-shadow:0 10px 30px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;">
+                            <div style="position:relative;width:auto;max-width:98vw;max-height:98vh;background:transparent;border-radius:12px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;overflow:auto;">
                                 <button aria-label=\"Cerrar\" style=\"position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;\">Cerrar</button>
-                                <img src=\"assets/images/guia tallas camisetas futbol.png\" alt=\"Guia de tallas\" style=\"max-width:100%;max-height:70vh;object-fit:contain;border-radius:6px;\">
+                                <img src=\"assets/images/guia tallas camisetas futbol.png\" alt=\"Guia de tallas\" style=\"height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;\">
                             </div>
                         `;
                         document.body.appendChild(overlay);
@@ -1961,6 +2043,226 @@
                     });
                 }
             }
+        }
+
+        function openImageViewer(images, startIndex) {
+            if (!Array.isArray(images) || images.length === 0) return;
+            let idx = Math.max(0, Math.min(startIndex || 0, images.length - 1));
+
+            const overlay = document.createElement('div');
+            overlay.id = 'image-viewer-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.left = 0; overlay.style.top = 0; overlay.style.right = 0; overlay.style.bottom = 0;
+            overlay.style.background = 'rgba(0,0,0,0.88)';
+            overlay.style.zIndex = 6000;
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+
+            overlay.innerHTML = `
+                <div id="iv-panel" style="position:relative;width:92vw;max-width:1200px;height:86vh;max-height:900px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:12px;background:rgba(0,0,0,0.1);border:1px solid rgba(255,255,255,0.12);">
+                    <img id="iv-img" src="${images[idx]}" alt="Imagen ${idx+1}" style="max-width:100%;max-height:100%;object-fit:contain;will-change:transform;touch-action:none;user-select:none;cursor:zoom-in;" />
+                    <button id="iv-prev" aria-label="Anterior" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:20px;">‹</button>
+                    <button id="iv-next" aria-label="Siguiente" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:20px;">›</button>
+                    <div id="iv-controls" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:rgba(0,0,0,0.45);padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);align-items:center;">
+                        <button id="iv-toggle" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;">Alternar zoom</button>
+                        <button id="iv-reset" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;">Restablecer</button>
+                        <span id="iv-index" style="color:#fff;opacity:.8;font-size:.9rem;">${idx+1}/${images.length}</span>
+                    </div>
+                    <button id="iv-close" aria-label="Cerrar" style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;">✕ Cerrar</button>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+
+            // Bloquear scroll de fondo mientras el visor está abierto
+            const __prevScrollY = window.scrollY;
+            const __prevOverflow = document.body.style.overflow;
+            const __prevPosition = document.body.style.position;
+            const __prevTop = document.body.style.top;
+            const __prevWidth = document.body.style.width;
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${__prevScrollY}px`;
+            document.body.style.width = '100%';
+
+            const panel = overlay.querySelector('#iv-panel');
+            const img = overlay.querySelector('#iv-img');
+            const btnPrev = overlay.querySelector('#iv-prev');
+            const btnNext = overlay.querySelector('#iv-next');
+            const btnClose = overlay.querySelector('#iv-close');
+            const btnToggle = overlay.querySelector('#iv-toggle');
+            const btnReset = overlay.querySelector('#iv-reset');
+            const idxLabel = overlay.querySelector('#iv-index');
+
+            let scale = 1, tx = 0, ty = 0;
+            const minScale = 1, maxScale = 5;
+            let isPanning = false, startX = 0, startY = 0, lastX = 0, lastY = 0;
+            let lastTapTime = 0;
+            let pinchStartDist = 0, pinchStartScale = 1;
+            let panMovedMouse = false, movedDuringPanTouch = false;
+
+            function applyTransform(){ img.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`; }
+            function resetTransform(){
+                scale = 1; tx = 0; ty = 0;
+                isPanning = false;
+                panMovedMouse = false;
+                movedDuringPanTouch = false;
+                lastPanEnd = 0;
+                lastTapTime = 0;
+                img.style.cursor = 'zoom-in';
+                applyTransform();
+            }
+            function updateIndex(){ if (idxLabel) idxLabel.textContent = `${idx+1}/${images.length}`; }
+            function showImage(newIdx){ idx = (newIdx + images.length) % images.length; img.src = images[idx]; resetTransform(); updateIndex(); }
+
+            // Navegación
+            btnPrev.addEventListener('click', (e)=>{ e.stopPropagation(); showImage(idx - 1); });
+            btnNext.addEventListener('click', (e)=>{ e.stopPropagation(); showImage(idx + 1); });
+
+            // Cerrar
+            function close(){
+                document.removeEventListener('keydown', onKey);
+                overlay.remove();
+                // Restaurar scroll de fondo
+                document.body.style.overflow = __prevOverflow;
+                document.body.style.position = __prevPosition;
+                document.body.style.top = __prevTop;
+                document.body.style.width = __prevWidth;
+                window.scrollTo(0, __prevScrollY);
+            }
+            btnClose.addEventListener('click', (e)=>{ e.stopPropagation(); close(); });
+            // Evitar cierre accidental al hacer pan: sólo cerrar si no hubo pan reciente
+            let lastPanEnd = 0;
+            overlay.addEventListener('click', (e)=>{ if (e.target === overlay && Date.now() - lastPanEnd > 200) close(); });
+            function onKey(e){ if (e.key === 'Escape') close(); else if (e.key === 'ArrowLeft') showImage(idx-1); else if (e.key === 'ArrowRight') showImage(idx+1); }
+            document.addEventListener('keydown', onKey);
+
+            // Alternar zoom con botón
+            btnToggle.addEventListener('click', (e)=>{ e.stopPropagation(); if (scale === 1) { scale = 2; img.style.cursor = 'grab'; } else { resetTransform(); } applyTransform(); });
+            btnReset.addEventListener('click', (e)=>{ e.stopPropagation(); resetTransform(); });
+
+            // Rueda para zoom (desktop)
+            panel.addEventListener('wheel', (e)=>{
+                e.preventDefault();
+                const delta = -e.deltaY; // up -> zoom in
+                const factor = Math.exp(delta * 0.0015);
+                const newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
+                if (newScale !== scale) {
+                    scale = newScale;
+                    img.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+                    applyTransform();
+                }
+            }, { passive: false });
+
+            // Pan con mouse
+            img.addEventListener('mousedown', (e)=>{
+                if (scale <= 1) return;
+                isPanning = true;
+                img.style.cursor = 'grabbing';
+                startX = e.clientX; startY = e.clientY; lastX = tx; lastY = ty;
+                panMovedMouse = false;
+                e.preventDefault();
+            });
+            window.addEventListener('mousemove', (e)=>{
+                if (!isPanning) return;
+                tx = lastX + (e.clientX - startX);
+                ty = lastY + (e.clientY - startY);
+                if (!panMovedMouse) {
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    if (Math.hypot(dx, dy) > 3) panMovedMouse = true;
+                }
+                applyTransform();
+            });
+            window.addEventListener('mouseup', ()=>{ if (isPanning) { isPanning = false; img.style.cursor = 'grab'; lastPanEnd = Date.now(); } });
+
+            // Click simple para alternar zoom
+            img.addEventListener('click', (e)=>{
+                if (Date.now() - lastPanEnd < 250 || panMovedMouse) { e.stopPropagation(); e.preventDefault(); return; }
+                e.preventDefault();
+                if (scale === 1) { scale = 2; img.style.cursor = 'grab'; } else { resetTransform(); }
+                applyTransform();
+            });
+
+            // Doble click para alternar zoom (se mantiene)
+            img.addEventListener('dblclick', (e)=>{
+                if (Date.now() - lastPanEnd < 250 || panMovedMouse) { e.stopPropagation(); e.preventDefault(); return; }
+                e.preventDefault();
+                if (scale === 1) { scale = 2; img.style.cursor = 'grab'; } else { resetTransform(); }
+                applyTransform();
+            });
+
+            // Toque: doble tap y pan, pinch to zoom y swipe para cambiar imagen
+            let swipeStartX = 0, swipeStartY = 0, swipeActive = false;
+            panel.addEventListener('touchstart', (e)=>{
+                if (e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    pinchStartDist = Math.hypot(dx, dy);
+                    pinchStartScale = scale;
+                    swipeActive = false;
+                } else if (e.touches.length === 1) {
+                    swipeStartX = e.touches[0].clientX; swipeStartY = e.touches[0].clientY;
+                    if (scale > 1) {
+                        isPanning = true;
+                        startX = swipeStartX; startY = swipeStartY; lastX = tx; lastY = ty;
+                        movedDuringPanTouch = false;
+                        swipeActive = false;
+                    } else {
+                        // sin zoom: activar swipe
+                        swipeActive = true;
+                    }
+                }
+            }, { passive: false });
+            panel.addEventListener('touchmove', (e)=>{
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    const dist = Math.hypot(dx, dy);
+                    const newScale = Math.min(maxScale, Math.max(minScale, (dist / pinchStartDist) * pinchStartScale));
+                    if (newScale !== scale) { scale = newScale; img.style.cursor = scale > 1 ? 'grab' : 'zoom-in'; applyTransform(); }
+                } else if (e.touches.length === 1) {
+                    if (isPanning) {
+                        e.preventDefault();
+                        const curX = e.touches[0].clientX;
+                        const curY = e.touches[0].clientY;
+                        tx = lastX + (curX - startX);
+                        ty = lastY + (curY - startY);
+                        if (!movedDuringPanTouch) {
+                            const dx = curX - startX; const dy = curY - startY;
+                            if (Math.hypot(dx, dy) > 3) movedDuringPanTouch = true;
+                        }
+                        applyTransform();
+                    } else if (swipeActive) {
+                        const dxSwipe = e.touches[0].clientX - swipeStartX;
+                        const dySwipe = e.touches[0].clientY - swipeStartY;
+                        // iniciar navegación si gesto horizontal predominante
+                        if (Math.abs(dxSwipe) > 24 && Math.abs(dxSwipe) > Math.abs(dySwipe)) {
+                            e.preventDefault();
+                            swipeActive = false;
+                            if (dxSwipe < 0) showImage(idx + 1); else showImage(idx - 1);
+                        }
+                    }
+                }
+            }, { passive: false });
+            panel.addEventListener('touchend', (e)=>{
+                if (e.touches.length === 0) {
+                    const wasPanning = isPanning;
+                    if (isPanning) { isPanning = false; lastPanEnd = Date.now(); }
+                    // Si hubo desplazamiento durante el pan, no tratar como tap
+                    if (movedDuringPanTouch) { movedDuringPanTouch = false; return; }
+                    const now = Date.now();
+                    if (!wasPanning && (now - lastTapTime < 300)) { // doble tap
+                        if (scale === 1) { scale = 2; img.style.cursor = 'grab'; } else { resetTransform(); }
+                        applyTransform();
+                        lastTapTime = 0;
+                    } else {
+                        lastTapTime = now;
+                    }
+                }
+            });
         }
 
         function addToCart(item){
@@ -1977,6 +2279,14 @@
             const cartItem = { id: Date.now().toString(36), productId: item.productId, name: item.name, img: item.img, price: item.price, extra, talla: item.talla, dorsal: item.dorsal, parche: item.parche, version: item.version, total };
             CART.push(cartItem);
             renderCart();
+            try {
+                const totalTxt = byId('cartTotal') ? byId('cartTotal').textContent : '';
+                const totalNum = parseFloat(totalTxt);
+                if (!isNaN(totalNum) && typeof window.showCartTotalToast === 'function') {
+                    window.showCartTotalToast(totalNum);
+                }
+                // Notificación interna de pestaña carrito deshabilitada
+            } catch (e) {}
         }
 
         function renderCart(){
@@ -2014,6 +2324,25 @@
             // actualizar contador visual
             const countEl = byId('cartCount');
             if (countEl) countEl.textContent = CART.length.toString();
+            // actualizar badge permanente del botón Carrito (cantidad total)
+            (function(){
+                const cartBtn = document.querySelector('.boton-seccion[data-seccion="carrito"]');
+                if (!cartBtn) return;
+                let badge = cartBtn.querySelector('.cart-tab-badge');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'cart-tab-badge';
+                    cartBtn.appendChild(badge);
+                }
+                const totalQty = Array.isArray(CART) ? CART.length : 0;
+                if (totalQty > 0) {
+                    badge.textContent = String(totalQty);
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.textContent = '0';
+                    badge.classList.add('hidden');
+                }
+            })();
             // si no hay items mostrar mensaje de vacío
             if (CART.length === 0) {
                 list.innerHTML = '<div class="cart-empty">Tu carrito está vacío<br><small>Agrega productos para empezar</small></div>';
@@ -2140,6 +2469,8 @@
             }));
             // actualizar banner promocional tras renderizar carrito
             try { updateCartPromoBanner(); } catch(e) {}
+            // actualizar recomendaciones junto al carrito
+            try { if (typeof updateRecommendations === 'function') updateRecommendations(); } catch(e) {}
         }
 
         function clearCart(){ CART = []; renderCart(); }
@@ -2309,8 +2640,8 @@
                 wrap.style.width = '100%';
                 wrap.style.boxSizing = 'border-box';
                 wrap.innerHTML = `
-                    <div style="display:flex;align-items:center;gap:10px;width:100%;max-width:820px;">
-                        <div style="background:linear-gradient(90deg, rgba(5,25,55,0.6), rgba(10,31,61,0.6));padding:8px 12px;border-radius:12px;display:flex;align-items:center;gap:10px;width:100%;box-shadow:0 8px 30px rgba(10,31,61,0.25);border:1px solid rgba(255,255,255,0.04);">
+                    <div style="display:flex;align-items:center;gap:10px;width:100%;">
+                            <div style="background:linear-gradient(90deg, rgba(5,25,55,0.6), rgba(10,31,61,0.6));padding:8px 12px;border-radius:12px;display:flex;align-items:center;gap:10px;width:100%;box-shadow:0 8px 30px rgba(10,31,61,0.25);border:1px solid rgba(255,255,255,0.04);">
                             <i class="fas fa-search" style="color:#9fe0ff;font-size:1.05rem;"></i>
                             <input id="productSearch" placeholder="Buscar camiseta por nombre..." style="flex:1;padding:12px 8px;border-radius:8px;border:none;background:transparent;color:#fff;font-size:1.05rem;outline:none;" />
                             <button id="productSearchClear" title="Limpiar" style="background:transparent;border:none;color:#bcd9ff;cursor:pointer;font-weight:700;padding:6px 8px;border-radius:8px;">Limpiar</button>
@@ -2325,6 +2656,49 @@
                 if (clearBtn) clearBtn.addEventListener('click', function(){ if (input) { input.value = ''; renderGallery(''); input.focus(); } });
             }
             renderGallery(); renderCart();
+            if (window.updateCartTabBadge) window.updateCartTabBadge();
+            try { updateRecommendations(); } catch(e) {}
+        }
+    </script>
+</section>
+<section id="reco-helpers" style="display:none">
+    <script>
+        // recomendaciones simples a partir de PRODUCTS
+        function updateRecommendations(){
+            const scroller = document.getElementById('recoScroller');
+            if (!scroller) return;
+            scroller.innerHTML = '';
+            const inCartIds = new Set(CART.map(ci => ci.productId));
+            const recos = (Array.isArray(PRODUCTS) ? PRODUCTS : []).filter(p => !inCartIds.has(p.id)).slice(0, 12);
+            if (!recos.length) {
+                const hint = document.createElement('div');
+                hint.className = 'reco-empty';
+                hint.style.color = '#bcd9ff';
+                hint.style.padding = '8px 0';
+                hint.textContent = 'Añade productos al carrito para ver recomendaciones personalizadas';
+                scroller.appendChild(hint);
+                return;
+            }
+            recos.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'reco-card';
+                // Hacer la tarjeta completa clickeable como en Tienda
+                card.setAttribute('data-id', p.id);
+                card.setAttribute('data-action', 'add');
+                const imgSrc = Array.isArray(p.images) && p.images.length ? p.images[0] : p.img || '';
+                const price = (typeof p.price === 'number') ? `€${p.price.toFixed(2)}` : '';
+                card.innerHTML = `
+                    <img src="${imgSrc}" alt="${p.name}" loading="lazy" />
+                    <div class="reco-meta">
+                        <div class="reco-name">${p.name}</div>
+                        <div class="reco-price">${price}</div>
+                    </div>
+                    <!-- botones eliminados: la tarjeta completa es clickeable -->
+                `;
+                scroller.appendChild(card);
+            });
+            // Usamos el delegado global de clics ([data-action]) igual que en Tienda
+            scroller.onclick = null;
         }
     </script>
 </section>
@@ -2340,9 +2714,39 @@
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+        const PRECIOS_BASE = {
+          1: 25.00,
+          2: 24.00,
+          3: 23.00,
+          4: 22.00,
+          5: 21.00,
+          6: 20.00,
+          7: 19.00,
+          8: 18.00,
+          9: 17.00,
+          10: 16.00,
+          11: 15.50,
+          12: 15.00,
+          13: 14.50,
+          14: 14.00,
+          15: 13.50,
+          16: 13.00,
+          17: 12.50,
+          18: 12.00,
+          19: 11.50,
+          20: 11.00
+        };
+        const EXTRAS = {
+          parche: 3.00,
+          dorsal: 4.00,
+          versionJugador: 5.00
+        };
+        const GASTOS_ENVIO = 5.00;
         // Simplified: all section buttons behave the same. No automatic scrolling or
         // special handling for the 'pedidos' tab — just toggle the active class and
         // refresh cart positioning.
+
         document.querySelectorAll('.boton-seccion').forEach(boton => {
             boton.addEventListener('click', function() {
                 document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
@@ -2396,6 +2800,18 @@
         }
 
         function positionCartBelowHeader(){
+            // Avoid fixed positioning inside the dedicated Cart section to respect its grid layout
+            try {
+                const secCarrito = document.getElementById('carrito');
+                if (secCarrito && secCarrito.classList.contains('activa')) {
+                    cart.style.position = 'relative';
+                    cart.style.top = '';
+                    cart.style.right = '';
+                    cart.style.zIndex = '';
+                    cart.style.transition = '';
+                    return;
+                }
+            } catch(e){}
             // Only use fixed cart on smaller viewports to avoid complex layout shifts on wide desktop
             // On wide desktop the grid already positions the cart in the right column.
             if (window.innerWidth > 1200) {
@@ -2470,6 +2886,7 @@
     
 
     function actualizarPrecio() {
+    if (typeof unidades === 'undefined' || isNaN(unidades) || unidades < 1) { unidades = 1; }
     let precioBase = PRECIOS_BASE[unidades] || 0;
     let total = precioBase;
     let parches = 0;
@@ -2530,37 +2947,40 @@
     }
 
     if (gastosEnvio === 0) {
-        document.getElementById('gastos-envio').innerHTML = '<i class="fas fa-gift" style="color:#28a745;margin-right:0.4em;"></i><strong style="color:#28a745;font-size:1.1em;letter-spacing:1px;">GRATIS</strong>';
+        const ge = document.getElementById('gastos-envio'); if (ge) { ge.innerHTML = '<i class="fas fa-gift" style="color:#28a745;margin-right:0.4em;"></i><strong style="color:#28a745;font-size:1.1em;letter-spacing:1px;">GRATIS</strong>'; }
     } else {
-        document.getElementById('gastos-envio').innerHTML = gastosEnvio.toFixed(2) + '€';
+        const ge = document.getElementById('gastos-envio'); if (ge) { ge.innerHTML = gastosEnvio.toFixed(2) + '€'; }
     }
 
-    document.getElementById('cantidad-unidades').textContent = unidades;
-    document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
-    document.getElementById('precio-base-detalle').textContent = (PRECIOS_BASE[unidades] || 0).toFixed(2);
+    const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+    const setVal = (id, value) => { const el = document.getElementById(id); if (el) el.value = value; };
 
-    document.getElementById('cantidad-unidades-sin-desc').textContent = unidades;
-    document.getElementById('plural-unidades-sin-desc').textContent = unidades > 1 ? 'es' : '';
+    setText('cantidad-unidades', unidades);
+    setText('plural-unidades', unidades > 1 ? 'es' : '');
+    setText('precio-base-detalle', (PRECIOS_BASE[unidades] || 0).toFixed(2));
+
+    setText('cantidad-unidades-sin-desc', unidades);
+    setText('plural-unidades-sin-desc', unidades > 1 ? 'es' : '');
     const precioSinDescuentoUnidad = 25.00;
     const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial + camisetasNBA) * EXTRAS.versionJugador) + totalRecargoTallas;
     const totalSinDescuento = (precioSinDescuentoUnidad * unidades + totalSinDescuentoExtras).toFixed(2);
-    document.getElementById('precio-sin-descuento').textContent = totalSinDescuento;
-    document.getElementById('precioSinDescuentoTotal').textContent = totalSinDescuento;
+    setText('precio-sin-descuento', totalSinDescuento);
+    setText('precioSinDescuentoTotal', totalSinDescuento);
 
-    document.getElementById('cantidad-parches').textContent = parches;
-    document.getElementById('total-parches').textContent = totalParches.toFixed(2);
+    setText('cantidad-parches', parches);
+    setText('total-parches', totalParches.toFixed(2));
 
-    document.getElementById('cantidad-dorsales').textContent = dorsales;
-    document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
+    setText('cantidad-dorsales', dorsales);
+    setText('total-dorsales', totalDorsales.toFixed(2));
 
-    document.getElementById('cantidad-versiones').textContent = totalVersionesCombinadas;
-    document.getElementById('total-versiones').textContent = totalVersionesJugador.toFixed(2);
+    setText('cantidad-versiones', totalVersionesCombinadas);
+    setText('total-versiones', totalVersionesJugador.toFixed(2));
 
-    document.getElementById('cantidad-tallas-extra').textContent = recargoTallas;
-    document.getElementById('total-tallas-extra').textContent = totalRecargoTallas.toFixed(2);
+    setText('cantidad-tallas-extra', recargoTallas);
+    setText('total-tallas-extra', totalRecargoTallas.toFixed(2));
 
-    document.getElementById('precioDisplay').textContent = total.toFixed(2);
-    document.getElementById('precioTotal').value = total.toFixed(2);
+    setText('precioDisplay', total.toFixed(2));
+    setVal('precioTotal', total.toFixed(2));
 
     const precioConDescuento = total.toFixed(2);
     const diferencia = (totalSinDescuento - precioConDescuento).toFixed(2);

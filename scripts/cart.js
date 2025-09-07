@@ -106,6 +106,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!found) pedidoCarrito.push({ talla, cantidad });
         mostrarPedidoStep('pedido-carrito');
         renderPedidoCarrito();
+        // Animación: mostrar total actualizado sin cambiar de pestaña global
+        try {
+            const totalQtyPedido = pedidoCarrito.reduce((a, p) => a + p.cantidad, 0);
+            let totalPedido = pedidoCarrito.reduce((s, p) => s + (p.cantidad * 29.90), 0);
+            if (totalQtyPedido >= 2) {
+                const PACKS = [
+                    { size: 5, price: 86.90 },
+                    { size: 4, price: 74.90 },
+                    { size: 3, price: 56.90 },
+                    { size: 2, price: 39.80 },
+                    { size: 1, price: 19.90 }
+                ];
+                const dp = Array(totalQtyPedido + 1).fill(Infinity);
+                dp[0] = 0;
+                for (let i = 1; i <= totalQtyPedido; i++) {
+                    for (const pk of PACKS) {
+                        if (i - pk.size < 0) continue;
+                        dp[i] = Math.min(dp[i], dp[i - pk.size] + pk.price);
+                    }
+                }
+                totalPedido = dp[totalQtyPedido];
+            }
+            if (window.showCartTotalToast) window.showCartTotalToast(totalPedido);
+            // Notificación en pestaña del carrito deshabilitada
+        } catch (err) { /* noop */ }
     });
     // Volver a detalle desde carrito
     document.getElementById('pedido-volver-detalle').addEventListener('click', function() {
@@ -318,6 +343,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // if (window.localStorage) localStorage.setItem('carrito-camisetazo', JSON.stringify(carrito));
             renderCarrito();
+            // Mostrar toast con el total actualizado sin cambiar de pestaña
+            try {
+                const totalActual = carrito.reduce((s, i) => s + i.cantidad * i.precio, 0);
+                if (window.showCartTotalToast) window.showCartTotalToast(totalActual);
+                // Notificación en pestaña del carrito deshabilitada
+            } catch (e) { /* noop */ }
             // Cambiar a la pestaña carrito
             document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
             document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
