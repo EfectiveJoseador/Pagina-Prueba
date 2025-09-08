@@ -1698,7 +1698,9 @@
                 }
             }
             
-            const q = filterText ? String(filterText).toLowerCase() : '';
+            // Normalizar y eliminar tildes tanto en la consulta como en los nombres de productos
+            const normalizeNoAccents = (s)=> (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            const q = normalizeNoAccents(filterText || '');
             // Base aleatoria por carga: se calcula una vez y se reutiliza en renderizados posteriores
             const base = (function(){
                 if (Array.isArray(window._PRODUCTS_SHUFFLED)) return window._PRODUCTS_SHUFFLED;
@@ -1712,7 +1714,8 @@
             })();
             let list = base.filter(p => { 
                 if (!q) return true; 
-                return (p.name || '').toLowerCase().indexOf(q) !== -1; 
+                const nameNoAccents = normalizeNoAccents(p.name || '');
+                return nameNoAccents.indexOf(q) !== -1; 
             });
             
             // Aplicar filtro por liga
@@ -1778,10 +1781,12 @@
             modal.style.justifyContent = 'center';
             modal.style.background = 'rgba(2,6,23,0.7)';
             modal.style.zIndex = 1200;
+            modal.style.padding = '24px';
+            modal.style.overflow = 'auto';
             modal.innerHTML = `
-                <div style="width:92%;max-width:920px;background:#071735;padding:18px;border-radius:12px;color:#dbeeff;">
+                <div style="width:100%;max-width:780px;background:#071735;padding:16px;border-radius:12px;color:#dbeeff;max-height:86vh;overflow:visible;">
                     <div style="display:flex;gap:14px;align-items:flex-start;">
-                        <img src="${product.img}" alt="${product.name}" style="width:320px;height:320px;object-fit:cover;border-radius:10px;">
+                        <img src="${product.img}" alt="${product.name}" style="width:280px;height:280px;object-fit:cover;border-radius:10px;">
                         <div style="flex:1;">
                             <h3 style="margin-top:0;color:var(--azul-acento);">${product.name}</h3>
                             <p style="color:#d6e9ff;">${product.excerpt}</p>
@@ -1841,6 +1846,10 @@
             `;
 
             document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            // Cerrar al hacer click fuera del panel y restaurar scroll del body
+            modal.addEventListener('click', (e)=>{ if (e.target === modal) { modal.remove(); document.body.style.overflow = ''; } });
+            document.body.style.overflow = 'hidden';
 
                 // Visor ampliado: click en la imagen principal para abrir a pantalla completa
                 try {
@@ -1863,10 +1872,13 @@
                         const overlay = document.createElement('div');
                         overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
                         overlay.style.background='rgba(0,0,0,0.85)'; overlay.style.zIndex=5000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+                        const isNBA = /^nba/i.test(product.id) || /\bNBA\b/i.test(product.name);
+                        const guideSrc = isNBA ? 'assets/images/guias tallas nba.png' : 'assets/images/guia tallas camisetas futbol.png';
+                        const guideAlt = isNBA ? 'Guía de tallas NBA' : 'Guía de tallas Fútbol';
                         overlay.innerHTML = `
                             <div style="position:relative;width:auto;max-width:98vw;max-height:98vh;background:transparent;border-radius:12px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;overflow:auto;">
                                 <button aria-label="Cerrar" style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:500;transition:all 0.2s ease;font-size:0.9rem;">✕ Cerrar</button>
-                                <img src="assets/images/guias tallas nba.png" alt="Guia de tallas NBA" style="height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;">
+                                <img src="${guideSrc}" alt="${guideAlt}" style="height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;">
                             </div>
                         `;
                         document.body.appendChild(overlay);
@@ -1907,7 +1919,7 @@
                         if (parcheLabel) parcheLabel.style.display = 'none';
                         const otrosWrap = modal.querySelector('#_opt_parche_otros_wrap');
                         if (otrosWrap) otrosWrap.style.display = 'none';
-                    }
+                        }
                 } catch(e) {}
             // Si el producto define versiones y sólo hay una opción, preseleccionarla y ocultar el selector
             try {
@@ -1951,6 +1963,7 @@
                 if (__isNBA && !dorsal) { alert('Debes introducir un dorsal para camisetas NBA.'); return; }
                 addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
                 modal.remove();
+                document.body.style.overflow = '';
             });
         }
 
@@ -1966,15 +1979,17 @@
             modal.style.justifyContent = 'center';
             modal.style.background = 'rgba(2,6,23,0.78)';
             modal.style.zIndex = 1400;
+            modal.style.padding = '24px';
+            modal.style.overflow = 'auto';
 
             // Build carousel HTML dynamically from product.images (fallback to [product.img])
             const imgs = Array.isArray(product.images) && product.images.length ? product.images : [product.img];
-            const slidesHtml = imgs.map((src, i) => `<img src="${src}" alt="${i+1}" style="flex:0 0 100%;width:100%;max-height:520px;object-fit:cover;border-radius:6px;">`).join('');
-            const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" style="width:72px;height:72px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
+            const slidesHtml = imgs.map((src, i) => `<img src="${src}" alt="${i+1}" style="flex:0 0 100%;width:100%;max-height:440px;object-fit:cover;border-radius:6px;">`).join('');
+            const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" style="width:56px;height:56px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
 
             modal.innerHTML = `
-                <div style="width:94%;max-width:1120px;background:#071735;padding:14px;border-radius:12px;color:#dbeeff;display:grid;grid-template-columns:1fr 360px;gap:16px;">
-                    <div style="background:rgba(10,31,61,0.6);padding:12px;border-radius:10px;">
+                <div style="width:100%;max-width:960px;background:#071735;padding:12px;border-radius:12px;color:#dbeeff;display:grid;grid-template-columns:1fr 320px;gap:14px;max-height:88vh;overflow:visible;">
+                    <div style="background:rgba(10,31,61,0.6);padding:10px;border-radius:10px;">
                         <div id="modalTiendaCarousel" style="position:relative;overflow:hidden;border-radius:8px;">
                             <button id="modalTiendaPrev" aria-label="Anterior" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.4);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;">‹</button>
                             <div class="carousel-track" style="display:flex;transition:transform .35s ease;">
@@ -1986,7 +2001,7 @@
                             ${thumbsHtml}
                         </div>
                     </div>
-                    <div style="background:rgba(10,31,61,0.9);padding:16px;border-radius:10px;border:1px solid rgba(42,91,168,0.12);">
+                    <div style="background:rgba(10,31,61,0.9);padding:16px;border-radius:10px;border:1px solid rgba(42,91,168,0.12);overflow:visible;">
                         <h3 style="color:var(--azul-acento);margin-top:0;">${product.name}</h3>
                         <p style="color:#d6e9ff;">${product.excerpt}</p>
                         <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
@@ -1999,9 +2014,10 @@
             `;
 
             document.body.appendChild(modal);
-                document.getElementById('modalTiendaClose').addEventListener('click', ()=> { modal.remove(); });
+            document.body.style.overflow = 'hidden';
+                document.getElementById('modalTiendaClose').addEventListener('click', ()=> { modal.remove(); document.body.style.overflow = ''; });
                 // Cerrar modal al hacer click fuera del panel principal
-                modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+                modal.addEventListener('click', (e) => { if (e.target === modal) { modal.remove(); document.body.style.overflow = ''; } });
 
             // Carousel logic (scoped to modal)
             const track = modal.querySelector('.carousel-track');
@@ -2033,7 +2049,7 @@
                     <h3 style="color:var(--azul-acento);margin-top:0;">${product.name}</h3>
                     <p style="color:#d6e9ff;">${product.excerpt}</p>
                     <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:12px 0;">€${product.price.toFixed(2)}</div>
-                    <form id="modalTiendaForm" style="display:grid;gap:8px;">
+                    <form id="modalTiendaForm" style="display:grid;gap:8px;overflow:visible;">
                         <label style="font-weight:700;color:#dbeeff;">Nombre y número (+2€)
                             <input id="_opt_dorsal_modal" placeholder="Ej: JAMES 6" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:6px;" />
                         </label>
@@ -2095,9 +2111,15 @@
                                 <option value="jugador">JUGADOR (+5€)</option>
                             </select>
                         </label>`;
-                            const buttonsRow = form.querySelector('div[style*="justify-content:flex-end"]');
-                            if (buttonsRow) buttonsRow.insertAdjacentHTML('beforebegin', versionHTML);
-                            else form.insertAdjacentHTML('beforeend', versionHTML);
+                            // Insertar la versión por encima del botón "Guía de tallas" para mejorar la jerarquía visual
+                            const sizeGuideRow = form.querySelector('#_sizeGuideCarousel')?.closest('div');
+                            if (sizeGuideRow) {
+                                sizeGuideRow.insertAdjacentHTML('beforebegin', versionHTML);
+                            } else {
+                                const buttonsRow = form.querySelector('div[style*="justify-content:flex-end"]');
+                                if (buttonsRow) buttonsRow.insertAdjacentHTML('beforebegin', versionHTML);
+                                else form.insertAdjacentHTML('beforeend', versionHTML);
+                            }
                         }
                         // Reemplazar tallas por numéricas si es Kids (16-28)
                         if (isKids) {
@@ -2109,9 +2131,18 @@
                     } else if (form && isNBA) {
                         // Si es NBA pero es Kids, aún así tallas pueden ser numéricas si el nombre lo indica
                         const isKidsNBA = isKids;
+                        const tSel = rightCol.querySelector('#_opt_talla_modal');
                         if (isKidsNBA) {
-                            const tSel = rightCol.querySelector('#_opt_talla_modal');
                             if (tSel) tSel.innerHTML = ['16','18','20','22','24','26','28'].map(s=>`<option value="${s}">${s}</option>`).join('');
+                        } else {
+                            // Quitar tallas 3XL, 4XL y duplicado XXL en NBA (adulto). Mantener 2XL
+                            if (tSel) {
+                                ['3XL','4XL'].forEach(val => {
+                                    const opt = tSel.querySelector(`option[value="${val}"]`);
+                                    if (opt) opt.remove();
+                                });
+                                if (['3XL','4XL'].includes(tSel.value)) tSel.value = '2XL';
+                            }
                         }
                     }
                 } catch(e) {}
@@ -2161,9 +2192,9 @@
                     }
                     addToCart({ productId: product.id, name: product.name, price: product.price, img: product.img, talla, dorsal, parche: parcheFinal, version });
                     // opción: cerrar modal tras añadir
-                    stopAutoplay(); modal.remove();
+                    stopAutoplay(); modal.remove(); document.body.style.overflow = '';
                 });
-                rightCol.querySelector('#modalTiendaCloseInline').addEventListener('click', ()=> { stopAutoplay(); modal.remove(); });
+                rightCol.querySelector('#modalTiendaCloseInline').addEventListener('click', ()=> { stopAutoplay(); modal.remove(); document.body.style.overflow = ''; });
 
                 const sizeGuideBtn2 = rightCol.querySelector('#_sizeGuideCarousel');
                 if (sizeGuideBtn2){
@@ -2171,10 +2202,13 @@
                         const overlay = document.createElement('div');
                         overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
                         overlay.style.background='rgba(0,0,0,0.85)'; overlay.style.zIndex=5000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+                        const isNBA2 = /^nba/i.test(product.id) || /\bNBA\b/i.test(product.name);
+                        const guideSrc2 = isNBA2 ? 'assets/images/guias tallas nba.png' : 'assets/images/guia tallas camisetas futbol.png';
+                        const guideAlt2 = isNBA2 ? 'Guía de tallas NBA' : 'Guía de tallas Fútbol';
                         overlay.innerHTML = `
                             <div style="position:relative;width:auto;max-width:98vw;max-height:98vh;background:transparent;border-radius:12px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;overflow:auto;">
                                 <button aria-label=\"Cerrar\" style=\"position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;\">Cerrar</button>
-                                <img src=\"assets/images/guias tallas nba.png\" alt=\"Guia de tallas NBA\" style=\"height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;\">
+                                <img src=\"${guideSrc2}\" alt=\"${guideAlt2}\" style=\"height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;\">
                             </div>
                         `;
                         document.body.appendChild(overlay);
@@ -2701,7 +2735,7 @@
             }
             renderSummary();
 
-            modal.querySelector('#checkoutCancel').addEventListener('click', ()=> modal.remove());
+            modal.querySelector('#checkoutCancel').addEventListener('click', ()=> { modal.remove(); document.body.style.overflow = ''; });
 
             modal.querySelector('#checkoutConfirm').addEventListener('click', ()=>{
                 const name = modal.querySelector('#checkoutContactName').value.trim();
@@ -3062,7 +3096,6 @@
         }
         if (versionJugador) versionesJugador++;
         if (versionEspecial) versionesEspecial++;
-
         if (talla === '3XL') {
             recargoTallas++;
             totalRecargoTallas += 2;
