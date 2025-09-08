@@ -1814,7 +1814,6 @@
                                         <option value="M">M</option>
                                         <option value="L">L</option>
                                         <option value="XL">XL</option>
-                                        <option value="XXL">XXL (+1€)</option>
                                         <option value="2XL">2XL (+1€)</option>
                                         <option value="3XL">3XL (+2€)</option>
                                         <option value="4XL">4XL (+2€)</option>
@@ -2045,7 +2044,6 @@
                                 <option value="L">L</option>
                                 <option value="XL">XL</option>
                                 <option value="2XL">2XL (+1€)</option>
-                                <option value="XXL">XXL (+1€)</option>
                                 <option value="3XL">3XL (+2€)</option>
                                 <option value="4XL">4XL (+2€)</option>
                             </select>
@@ -2417,7 +2415,6 @@
             if (item.dorsal) extra += EXTRAS.dorsal;
             // apply version surcharge only when version === 'jugador'
             if (item.version === 'jugador') extra += EXTRAS.versionJugador;
-            if (item.talla === 'XXL') extra += 1;
             else if (item.talla === '3XL') extra += 2;
             else if (item.talla === '4XL') extra += 2;
             const total = (item.price + extra);
@@ -3066,10 +3063,7 @@
         if (versionJugador) versionesJugador++;
         if (versionEspecial) versionesEspecial++;
 
-        if (talla === 'XXL') {
-            recargoTallas++;
-            totalRecargoTallas += 1;
-        } else if (talla === '3XL') {
+        if (talla === '3XL') {
             recargoTallas++;
             totalRecargoTallas += 2;
         } else if (talla === '4XL') {
@@ -3505,7 +3499,7 @@
                         if (metaSmall) {
                             const parts = metaSmall.split('·').map(s=>s.trim()).filter(Boolean);
                             parts.forEach(p => {
-                                if (!talla && /^(S|M|L|XL|XXL|2XL|3XL|4XL|[0-9]{1,2})$/i.test(p)) { talla = p; }
+                                if (!talla && /^(S|M|L|XL|2XL|3XL|4XL|[0-9]{1,2})$/i.test(p)) { talla = p; }
                                 else if (!dorsal && /\d+|[A-Z\s]{2,}/.test(p)) { dorsal = p; }
                                 else if (!version && (p.toLowerCase()==='fan' || p.toLowerCase()==='jugador' || p.toLowerCase()==='player')) { version = p; }
                             });
