@@ -535,29 +535,35 @@ document.addEventListener('DOMContentLoaded', function() {
         menu.setAttribute('role','listbox');
         menu.tabIndex = -1;
 
-        // populate
-        Array.from(select.options).forEach(function(opt, idx){
-            const item = document.createElement('div');
-            item.className = 'custom-dropdown-item';
-            item.setAttribute('role','option');
-            item.dataset.value = opt.value;
-            item.dataset.index = idx;
-            item.textContent = opt.text;
-            if (opt.disabled) item.setAttribute('aria-disabled','true');
-            if (opt.selected) item.setAttribute('aria-selected','true');
-            item.addEventListener('click', function(e){
-                if (opt.disabled) return;
-                // mark selected in native select
-                select.selectedIndex = idx;
-                select.dispatchEvent(new Event('change', {bubbles:true}));
-                // update UI
-                menu.querySelectorAll('[aria-selected="true"]').forEach(n => n.removeAttribute('aria-selected'));
-                item.setAttribute('aria-selected','true');
-                labelSpan.textContent = item.textContent;
-                closeMenu();
+        function clearMenu(){
+            while (menu.firstChild) menu.removeChild(menu.firstChild);
+        }
+        function populateMenuFromSelect(){
+            clearMenu();
+            Array.from(select.options).forEach(function(opt, idx){
+                const item = document.createElement('div');
+                item.className = 'custom-dropdown-item';
+                item.setAttribute('role','option');
+                item.dataset.value = opt.value;
+                item.dataset.index = idx;
+                item.textContent = opt.text;
+                if (opt.disabled) item.setAttribute('aria-disabled','true');
+                if (opt.selected) item.setAttribute('aria-selected','true');
+                item.addEventListener('click', function(e){
+                    if (opt.disabled) return;
+                    // mark selected in native select
+                    select.selectedIndex = idx;
+                    select.dispatchEvent(new Event('change', {bubbles:true}));
+                    // update UI
+                    menu.querySelectorAll('[aria-selected="true"]').forEach(n => n.removeAttribute('aria-selected'));
+                    item.setAttribute('aria-selected','true');
+                    labelSpan.textContent = item.textContent;
+                    closeMenu();
+                });
+                menu.appendChild(item);
             });
-            menu.appendChild(item);
-        });
+        }
+        populateMenuFromSelect();
 
         function openMenu(){
             // Cerrar el dropdown actualmente abierto si existe y es diferente al actual
@@ -577,18 +583,27 @@ document.addEventListener('DOMContentLoaded', function() {
             wrapper.classList.add('open');
             button.setAttribute('aria-expanded','true');
             caret.innerHTML = '<i class="fas fa-chevron-up"></i>';
-            // position if near bottom
+            // position and size based on space
             const rect = wrapper.getBoundingClientRect();
             const spaceBelow = window.innerHeight - rect.bottom;
-            if (spaceBelow < 220) {
+            const spaceAbove = rect.top;
+            const desiredMax = 300; // px, default CSS
+            if (spaceBelow < 220 && spaceAbove > spaceBelow) {
+                // open upward
                 menu.style.bottom = (rect.height + 10) + 'px';
                 menu.style.top = 'auto';
+                const mh = Math.max(120, Math.min(desiredMax, spaceAbove - 16));
+                menu.style.maxHeight = mh + 'px';
             } else {
+                // open downward
                 menu.style.top = '100%';
                 menu.style.bottom = 'auto';
+                const mh = Math.max(120, Math.min(desiredMax, spaceBelow - 16));
+                menu.style.maxHeight = mh + 'px';
             }
             document.addEventListener('click', onDocClick);
             document.addEventListener('keydown', onKeyDown);
+            window.addEventListener('scroll', onScrollClose, { passive: true });
         }
         function closeMenu(){
             if (currentOpenDropdown === wrapper) {
@@ -599,11 +614,13 @@ document.addEventListener('DOMContentLoaded', function() {
             caret.innerHTML = '<i class="fas fa-chevron-down"></i>';
             document.removeEventListener('click', onDocClick);
             document.removeEventListener('keydown', onKeyDown);
+            window.removeEventListener('scroll', onScrollClose);
         }
         function onDocClick(e){ if (!wrapper.contains(e.target)) closeMenu(); }
         function onKeyDown(e){
             if (e.key === 'Escape') closeMenu();
         }
+        function onScrollClose(){ closeMenu(); }
 
         button.addEventListener('click', function(e){
             e.preventDefault();
@@ -622,10 +639,23 @@ document.addEventListener('DOMContentLoaded', function() {
             if (chosen) chosen.setAttribute('aria-selected','true');
         });
 
+        // Observe option list changes and repopulate
+        const optionsObserver = new MutationObserver((muts)=>{
+            let needsRepopulate = false;
+            muts.forEach(m=>{ if (m.type === 'childList') needsRepopulate = true; });
+            if (needsRepopulate) {
+                populateMenuFromSelect();
+                // ensure label reflects current selection
+                const opt = select.options[select.selectedIndex];
+                labelSpan.textContent = opt ? opt.text : '';
+            }
+        });
+        optionsObserver.observe(select, { childList: true, subtree: true });
+
         // insert wrapper after select
         select.parentNode.insertBefore(wrapper, select.nextSibling);
-    wrapper.appendChild(button);
-    wrapper.appendChild(menu);
+        wrapper.appendChild(button);
+        wrapper.appendChild(menu);
     }
 
     // initialize existing selects
