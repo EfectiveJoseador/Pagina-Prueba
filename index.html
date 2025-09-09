@@ -4,16 +4,24 @@
     <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Camisetazo - Tienda deportiva premium: camisetas de fútbol, NBA, NFL y más. Calidad superior, envíos rápidos y atención personalizada.">
+    <meta property="og:title" content="Camisetazo - Tienda Deportiva Premium">
+    <meta property="og:description" content="Explora nuestro catálogo premium: camisetas de fútbol, NBA, NFL, zapatillas y más. Envío express y pago seguro.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/logos/logo.jpg">
     <title>Camisetazo - Tienda Deportiva Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">        
     <link rel="stylesheet" href="styles/styles.css">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+<!-- Deshabilitado en local: Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script> -->
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-GS53GWE2Z0');
+  // Stub de gtag inofensivo en local
+  window.gtag = function(){ /* noop en local */ };
+  // Config deshabilitada en local
+  // gtag('js', new Date());
+  // gtag('config', 'G-GS53GWE2Z0');
 </script>
 </head>
 <body>
@@ -21,7 +29,7 @@
     <div class="contenedor-principal">
         <header>
     <div class="brand-header">
-        <img src="assets/logos/logo.jpg" alt="Logo Camisetazo" class="logo">
+        <img src="assets/logos/logo.jpg" alt="Logo Camisetazo" class="logo" loading="lazy" width="120" height="120">
         <div class="brand-title">CAMISETAZO</div>
         <div class="brand-subtitle">Tienda Deportiva Premium</div>
     </div>
@@ -43,7 +51,7 @@
                 <!-- Tarjeta 1 -->
                 <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable futbol-dropdown" data-link="https://2020soccer.x.yupoo.com/albums">
                     <div class="catalogo-img-wrap">
-                        <img src="assets/images/camfut.png" alt="Camisetas" class="catalogo-img">
+                        <img src="assets/images/camfut.png" alt="Camisetas" class="catalogo-img" loading="lazy" width="120" height="120">
                     </div>
                     <div class="catalogo-info">
                         <h3>Camisetas Fútbol</h3>
@@ -52,23 +60,23 @@
                             Ver opciones <i class="fas fa-chevron-down"></i>
                         </button>
                         <div class="futbol-dropdown-menu">
-                            <a href="https://2020soccer.x.yupoo.com/albums" target="_blank">GENERAL</a>
-                            <a href="https://classic-football-fhirts052.x.yupoo.com/" target="_blank">RETRO</a>
-                            <a href="https://yongfa1688.x.yupoo.com/" target="_blank">NUEVA TEMPORADA</a>
-                            <a href="https://aosendi.x.yupoo.com/albums" target="_blank">CONJUNTOS</a>
-                            <a href="https://dongshanstore.x.yupoo.com/" target="_blank">CONJUNTOS 2</a>
+                            <a href="https://2020soccer.x.yupoo.com/albums" target="_blank" rel="noopener noreferrer">GENERAL</a>
+                            <a href="https://classic-football-fhirts052.x.yupoo.com/" target="_blank" rel="noopener noreferrer">RETRO</a>
+                            <a href="https://yongfa1688.x.yupoo.com/" target="_blank" rel="noopener noreferrer">NUEVA TEMPORADA</a>
+                            <a href="https://aosendi.x.yupoo.com/albums" target="_blank" rel="noopener noreferrer">CONJUNTOS</a>
+                            <a href="https://dongshanstore.x.yupoo.com/" target="_blank" rel="noopener noreferrer">CONJUNTOS 2</a>
                         </div>
                     </div>
                 </div>
                 <!-- Tarjeta 2 -->
                 <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.1s;" data-link="https://eu1688.x.yupoo.com/albums">
                     <div class="catalogo-img-wrap">
-                        <img src="assets/images/zap.png" alt="Zapatillas" class="catalogo-img">
+                        <img src="assets/images/zap.png" alt="Zapatillas" class="catalogo-img" loading="lazy" width="120" height="120">
                     </div>
                     <div class="catalogo-info">
                         <h3>Zapatillas</h3>
                         <p>Modelos exclusivos y últimas tendencias en sneakers deportivas.</p>
-                        <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                        <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">
                             Ver catálogo <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -76,12 +84,12 @@
                 <!-- Tarjeta 3 -->
                 <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.2s;" data-link="https://x.yupoo.com/photos/05941188/albums">
                     <div class="catalogo-img-wrap">
-                        <img src="assets/images/nba.png" alt="NBA" class="catalogo-img nba-img">
+                        <img src="assets/images/nba.png" alt="NBA" class="catalogo-img nba-img" loading="lazy" width="250" height="160">
                     </div>
                     <div class="catalogo-info">
                         <h3>NBA</h3>
                         <p>Camisetas y productos oficiales de la mejor liga de baloncesto.</p>
-                        <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                        <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">
                             Ver catálogo <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -89,12 +97,12 @@
                 <!-- Tarjeta 4 -->
                 <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.3s;" data-link="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk">
                     <div class="catalogo-img-wrap">
-                        <img src="assets/images/airpods.png" alt="AirPods" class="catalogo-img">
+                        <img src="assets/images/airpods.png" alt="AirPods" class="catalogo-img" loading="lazy" width="120" height="120">
                     </div>
                     <div class="catalogo-info">
                         <h3>AirPods</h3>
                         <p>Audio inalámbrico de alta calidad, compatibles con todos tus dispositivos.</p>
-                        <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                        <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="catalogo-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">
                             Ver catálogo <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -102,12 +110,12 @@
                 <!-- Tarjeta 5 -->
                 <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.4s;" data-link="https://zuqiuliu.x.yupoo.com">
                     <div class="catalogo-img-wrap">
-                        <img src="assets/images/botfut.png" alt="Botas Fútbol" class="catalogo-img">
+                        <img src="assets/images/botfut.png" alt="Botas Fútbol" class="catalogo-img" loading="lazy" width="120" height="120">
                     </div>
                     <div class="catalogo-info">
                         <h3>Botas Fútbol</h3>
                         <p>Botas de fútbol profesionales para todos los terrenos y estilos.</p>
-                        <a href="https://zuqiuliu.x.yupoo.com" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                        <a href="https://zuqiuliu.x.yupoo.com" class="catalogo-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">
                             Ver catálogo <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -115,12 +123,12 @@
                 <!-- Tarjeta 6 -->
                 <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.5s;" data-link="https://x.yupoo.com/photos/yiyisports2016/collections/3551571">
                     <div class="catalogo-img-wrap">
-                        <img src="assets/images/f1.png" alt="F1" class="catalogo-img">
+                        <img src="assets/images/f1.png" alt="F1" class="catalogo-img" loading="lazy" width="120" height="120">
                     </div>
                     <div class="catalogo-info">
                         <h3>F1</h3>
                         <p>Merchandising y ropa oficial de Fórmula 1 para verdaderos fans.</p>
-                        <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                        <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="catalogo-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">
                             Ver catálogo <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -128,12 +136,12 @@
                 <!-- Tarjeta 7 -->
                 <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.6s;" data-link="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing">
                     <div class="catalogo-img-wrap">
-                        <img src="assets/images/ps4.png" alt="Mandos PS4" class="catalogo-img">
+                        <img src="assets/images/ps4.png" alt="Mandos PS4" class="catalogo-img" loading="lazy" width="120" height="120">
                     </div>
                     <div class="catalogo-info">
                         <h3>Mandos PS4</h3>
                         <p>Mandos y accesorios para PlayStation 4, máxima precisión y calidad.</p>
-                        <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                        <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="catalogo-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">
                             Ver catálogo <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -141,12 +149,12 @@
                 <!-- Tarjeta 8 -->
                 <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" style="animation-delay: 0.7s;" data-link="https://nfl-world.x.yupoo.com/">
                     <div class="catalogo-img-wrap">
-                        <img src="assets/images/nfl.png" alt="NFL" class="catalogo-img">
+                        <img src="assets/images/nfl.png" alt="NFL" class="catalogo-img" loading="lazy" width="120" height="120">
                     </div>
                     <div class="catalogo-info">
                         <h3>NFL</h3>
                         <p>Jerseys y artículos oficiales de la National Football League.</p>
-                        <a href="https://nfl-world.x.yupoo.com/" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
+                        <a href="https://nfl-world.x.yupoo.com/" class="catalogo-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">
                             Ver catálogo <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -663,7 +671,7 @@
         <div class="quienes-somos-instagram">
             <i class="fab fa-instagram"></i>
             <h3>Síguenos en Instagram</h3>
-            <a href="https://www.instagram.com/camisetazo._/" target="_blank">@camisetazo._ ➔</a>
+            <a href="https://www.instagram.com/camisetazo._/" target="_blank" rel="noopener noreferrer">@camisetazo._ ➔</a>
             <p>Novedades diarias | Ofertas exclusivas</p>
         </div>
         <div class="clientes-carrusel-section">
@@ -1361,11 +1369,11 @@
         'assets/productos/Bundesliga/Munich2526L/3.jpg',
         'assets/productos/Bundesliga/Munich2526L/4.jpg'
     ], excerpt: '', link: 'productos/munich2526L.html' },
-    { id: 'Paris2526L', name: 'Camiseta Local PSG 25/26', price: 19.90, img: 'assets/productos/Ligue 1/Paris2526L/1.jpg', images: [
-        'assets/productos/Ligue 1/Paris2526L/1.jpg',
-        'assets/productos/Ligue 1/Paris2526L/2.jpg',
-        'assets/productos/Ligue 1/Paris2526L/3.jpg',
-        'assets/productos/Ligue 1/Paris2526L/4.jpg'
+    { id: 'Paris2526L', name: 'Camiseta Local PSG 25/26', price: 19.90, img: 'assets/productos/Ligue 1/PSG2526L/1.jpg', images: [
+        'assets/productos/Ligue 1/PSG2526L/1.jpg',
+        'assets/productos/Ligue 1/PSG2526L/2.jpg',
+        'assets/productos/Ligue 1/PSG2526L/3.jpg',
+        'assets/productos/Ligue 1/PSG2526L/4.jpg'
     ], excerpt: '', link: 'productos/Paris2526L.html' },
     { id: 'CrystalPalace2526L', name: 'Camiseta Local Crystal Palace 25/26', price: 19.90, img: 'assets/productos/Premier League/CrystalPalace2526L/1.jpg', images: [
         'assets/productos/Premier League/CrystalPalace2526L/1.jpg',
@@ -1373,34 +1381,34 @@
         'assets/productos/Premier League/CrystalPalace2526L/3.jpg',
         'assets/productos/Premier League/CrystalPalace2526L/4.jpg'
     ], excerpt: '', link: 'productos/CrystalPalace2526L.html' },
-    { id: 'Milan9798LR', name: 'Camiseta Local Milan 97/98', price: 19.90, img: 'assets/productos/Serie A/Milan9798LR/1.jpg', images: [
+    { id: 'Milan9798LR', name: 'Camiseta Retro Milan 97/98 Local', price: 24.90, img: 'assets/productos/Serie A/Milan9798LR/1.jpg', images: [
         'assets/productos/Serie A/Milan9798LR/1.jpg',
         'assets/productos/Serie A/Milan9798LR/2.jpg',
         'assets/productos/Serie A/Milan9798LR/3.jpg',
         'assets/productos/Serie A/Milan9798LR/4.jpg'
-    ], excerpt: '', link: 'productos/Milan9798LR.html' },
+    ], excerpt: '', link: 'productos/Milan9798LR.html', versions: ['fan'], isRetro: true },
 
-    { id: 'atleticoKids2526F', name: 'Camiseta Visitante Atlético 25/26 (Kids)', price: 21.90, img: 'assets/productos/La Liga/AtleticoKids2526F/1.jpg', images: [
+    { id: 'atleticoKids2526F', name: 'Camiseta Visitante Atlético 25/26 (niños)', price: 21.90, img: 'assets/productos/La Liga/AtleticoKids2526F/1.jpg', images: [
         'assets/productos/La Liga/AtleticoKids2526F/1.jpg',
         'assets/productos/La Liga/AtleticoKids2526F/2.jpg',
         'assets/productos/La Liga/AtleticoKids2526F/3.jpg',
         'assets/productos/La Liga/AtleticoKids2526F/4.jpg'
     ], excerpt: '', link: 'productos/AtleticoKids2526F.html' },
 
-    { id: 'athleticKids2526T', name: 'Camiseta Tercera Athletic Club 25/26 (Kids)', price: 21.90, img: 'assets/productos/La Liga/AthelticKids2526T/1.jpg', images: [
+    { id: 'athleticKids2526T', name: 'Camiseta Tercera Athletic Club 25/26 (niños)', price: 21.90, img: 'assets/productos/La Liga/AthelticKids2526T/1.jpg', images: [
         'assets/productos/La Liga/AthelticKids2526T/1.jpg',
         'assets/productos/La Liga/AthelticKids2526T/2.jpg',
         'assets/productos/La Liga/AthelticKids2526T/3.jpg'
     ], excerpt: '', link: 'productos/AthleticKids2526T.html' },
 
-    { id: 'marseillaKids2526F', name: 'Camiseta Visitante Marsella 25/26 (Kids)', price: 21.90, img: 'assets/productos/Ligue 1/MarseillaKids2526F/1.jpg', images: [
+    { id: 'marseillaKids2526F', name: 'Camiseta Visitante Marsella 25/26 (niños)', price: 21.90, img: 'assets/productos/Ligue 1/MarseillaKids2526F/1.jpg', images: [
         'assets/productos/Ligue 1/MarseillaKids2526F/1.jpg',
         'assets/productos/Ligue 1/MarseillaKids2526F/2.jpg',
         'assets/productos/Ligue 1/MarseillaKids2526F/3.jpg',
         'assets/productos/Ligue 1/MarseillaKids2526F/4.jpg'
     ], excerpt: '', link: 'productos/MarseillaKids2526F.html' },
 
-    { id: 'unitedKids2526F', name: 'Camiseta Visitante Manchester United 25/26 (Kids)', price: 21.90, img: 'assets/productos/Premier League/UnitedKids2526F/1.jpg', images: [
+    { id: 'unitedKids2526F', name: 'Camiseta Visitante Manchester United 25/26 (niños)', price: 21.90, img: 'assets/productos/Premier League/UnitedKids2526F/1.jpg', images: [
         'assets/productos/Premier League/UnitedKids2526F/1.jpg',
         'assets/productos/Premier League/UnitedKids2526F/2.jpg',
         'assets/productos/Premier League/UnitedKids2526F/3.jpg',
@@ -1421,7 +1429,204 @@
         'assets/productos/NBA/Phila1/1.jpeg',
         'assets/productos/NBA/Phila1/2.jpeg',
         'assets/productos/NBA/Phila1/3.jpeg'
-    ], excerpt: '', link: 'productos/Phila1.html' }
+    ], excerpt: '', link: 'productos/Phila1.html' },
+
+    { id: 'Barcelona2526T', name: 'Camiseta Tercera Barcelona 25/26', price: 19.90, img: 'assets/productos/La Liga/Barcelona2526T/1.jpg', images: [
+        'assets/productos/La Liga/Barcelona2526T/1.jpg',
+        'assets/productos/La Liga/Barcelona2526T/2.jpg',
+        'assets/productos/La Liga/Barcelona2526T/3.jpg',
+        'assets/productos/La Liga/Barcelona2526T/4.jpg'
+    ], excerpt: '', link: 'productos/Barcelona2526T.html' },
+
+    { id: 'LasPalmas2526F', name: 'Camiseta Visitante Las Palmas 25/26', price: 19.90, img: 'assets/productos/La Liga/LasPalmas2526F/1.jpg', images: [
+        'assets/productos/La Liga/LasPalmas2526F/1.jpg',
+        'assets/productos/La Liga/LasPalmas2526F/2.jpg',
+        'assets/productos/La Liga/LasPalmas2526F/3.jpg',
+        'assets/productos/La Liga/LasPalmas2526F/4.jpg'
+    ], excerpt: '', link: 'productos/LasPalmas2526F.html' },
+
+    { id: 'Atletico9596TR', name: 'Camiseta Retro Atlético 95/96 Tercera', price: 24.90, img: 'assets/productos/La Liga/Atletico9596TR/1.jpg', images: [
+        'assets/productos/La Liga/Atletico9596TR/1.jpg',
+        'assets/productos/La Liga/Atletico9596TR/2.jpg',
+        'assets/productos/La Liga/Atletico9596TR/3.jpg',
+        'assets/productos/La Liga/Atletico9596TR/4.jpg'
+    ], excerpt: '', link: 'productos/atletico9596TR.html', versions: ['fan'], isRetro: true },
+
+    { id: 'Barcelona9697LR', name: 'Camiseta Retro Barcelona 96/97 Local', price: 24.90, img: 'assets/productos/La Liga/Barcelona9697LR/1.jpg', images: [
+        'assets/productos/La Liga/Barcelona9697LR/1.jpg',
+        'assets/productos/La Liga/Barcelona9697LR/2.jpg',
+        'assets/productos/La Liga/Barcelona9697LR/3.jpg',
+        'assets/productos/La Liga/Barcelona9697LR/4.jpg'
+    ], excerpt: '', link: 'productos/barcelona9697LR.html', versions: ['fan'], isRetro: true },
+
+    { id: 'Sevilla2526L', name: 'Camiseta Local Sevilla 25/26', price: 19.90, img: 'assets/productos/La Liga/Sevilla2526L/1.jpg', images: [
+        'assets/productos/La Liga/Sevilla2526L/1.jpg',
+        'assets/productos/La Liga/Sevilla2526L/2.jpg',
+        'assets/productos/La Liga/Sevilla2526L/3.jpg',
+        'assets/productos/La Liga/Sevilla2526L/4.jpg'
+    ], excerpt: '', link: 'productos/Sevilla2526L.html' },
+
+    { id: 'Schalke2526L', name: 'Camiseta Local Schalke 25/26', price: 19.90, img: 'assets/productos/Bundesliga/Schalke2526L/1.jpg', images: [
+        'assets/productos/Bundesliga/Schalke2526L/1.jpg',
+        'assets/productos/Bundesliga/Schalke2526L/2.jpg',
+        'assets/productos/Bundesliga/Schalke2526L/3.jpg',
+        'assets/productos/Bundesliga/Schalke2526L/4.jpg'
+    ], excerpt: '', link: 'productos/Schalke2526L.html' },
+
+    { id: 'Flamengo2526T', name: 'Camiseta Tercera Flamengo 25/26', price: 19.90, img: 'assets/productos/Brasileirão Série A/Flamengo2526T/1.jpg', images: [
+        'assets/productos/Brasileirão Série A/Flamengo2526T/1.jpg',
+        'assets/productos/Brasileirão Série A/Flamengo2526T/2.jpg',
+        'assets/productos/Brasileirão Série A/Flamengo2526T/3.jpg',
+        'assets/productos/Brasileirão Série A/Flamengo2526T/4.jpg'
+    ], excerpt: '', link: 'productos/Flamengo2526T.html' },
+
+    { id: 'AlNassr2526L', name: 'Camiseta Local Al-Nassr 25/26', price: 19.90, img: 'assets/productos/Liga Arabe/Al-Nassr2526L/1.jpg', images: [
+        'assets/productos/Liga Arabe/Al-Nassr2526L/1.jpg',
+        'assets/productos/Liga Arabe/Al-Nassr2526L/2.jpg',
+        'assets/productos/Liga Arabe/Al-Nassr2526L/3.jpg',
+        'assets/productos/Liga Arabe/Al-Nassr2526L/4.jpg'
+    ], excerpt: '', link: 'productos/AlNassr2526L.html' },
+
+    { id: 'Boca0102LR', name: 'Camiseta Retro Boca Juniors 01/02 Local', price: 24.90, img: 'assets/productos/SAF (Argentina)/Boca0102LR/1.jpeg', images: [
+        'assets/productos/SAF (Argentina)/Boca0102LR/1.jpeg',
+        'assets/productos/SAF (Argentina)/Boca0102LR/2.jpeg',
+        'assets/productos/SAF (Argentina)/Boca0102LR/3.jpeg'
+    ], excerpt: '', link: 'productos/Boca0102LR.html', versions: ['fan'], isRetro: true },
+
+    { id: 'Monaco2526F', name: 'Camiseta Visitante Monaco 25/26', price: 19.90, img: 'assets/productos/Ligue 1/Monaco2526F/1.jpg', images: [
+        'assets/productos/Ligue 1/Monaco2526F/1.jpg',
+        'assets/productos/Ligue 1/Monaco2526F/2.jpg',
+        'assets/productos/Ligue 1/Monaco2526F/3.jpg',
+        'assets/productos/Ligue 1/Monaco2526F/4.jpg'
+    ], excerpt: '', link: 'productos/Monaco2526F.html' },
+
+    { id: 'Lazio2526F', name: 'Camiseta Visitante Lazio 25/26', price: 19.90, img: 'assets/productos/Serie A/Lazio2526F/1.jpg', images: [
+        'assets/productos/Serie A/Lazio2526F/1.jpg',
+        'assets/productos/Serie A/Lazio2526F/2.jpg',
+        'assets/productos/Serie A/Lazio2526F/3.jpg',
+        'assets/productos/Serie A/Lazio2526F/4.jpg'
+    ], excerpt: '', link: 'productos/Lazio2526F.html' },
+
+    { id: 'RomaKids2526L', name: 'Camiseta Local Roma 25/26 (niños)', price: 21.90, img: 'assets/productos/Serie A/RomaKids2526L/1.jpg', images: [
+        'assets/productos/Serie A/RomaKids2526L/1.jpg',
+        'assets/productos/Serie A/RomaKids2526L/2.jpg',
+        'assets/productos/Serie A/RomaKids2526L/3.jpg'
+    ], excerpt: '', link: 'productos/RomaKids2526L.html' },
+
+    { id: 'Espana0809LR', name: 'Camiseta Retro España 08/09 Local', price: 24.90, img: 'assets/productos/Internacional/España0809LR/1.jpeg', images: [
+        'assets/productos/Internacional/España0809LR/1.jpeg',
+        'assets/productos/Internacional/España0809LR/2.jpeg',
+        'assets/productos/Internacional/España0809LR/3.jpeg',
+        'assets/productos/Internacional/España0809LR/4.jpeg'
+    ], excerpt: '', link: 'productos/Espana0809LR.html', versions: ['fan'], isRetro: true },
+
+    { id: 'Espana2425L', name: 'Camiseta Local España 24/25', price: 19.90, img: 'assets/productos/Internacional/España2425L/1.jpg', images: [
+        'assets/productos/Internacional/España2425L/1.jpg',
+        'assets/productos/Internacional/España2425L/2.jpg',
+        'assets/productos/Internacional/España2425L/3.jpg',
+        'assets/productos/Internacional/España2425L/4.jpg'
+    ], excerpt: '', link: 'productos/Espana2425L.html' },
+
+    { id: 'Francia9899LR', name: 'Camiseta Retro Francia 98/99 Local', price: 24.90, img: 'assets/productos/Internacional/Francia9899LR/1.jpg', images: [
+        'assets/productos/Internacional/Francia9899LR/1.jpg',
+        'assets/productos/Internacional/Francia9899LR/2.jpg',
+        'assets/productos/Internacional/Francia9899LR/3.jpg',
+        'assets/productos/Internacional/Francia9899LR/4.jpg'
+    ], excerpt: '', link: 'productos/Francia9899LR.html', versions: ['fan'], isRetro: true },
+
+    { id: 'Holanda9899LR', name: 'Camiseta Retro Holanda 98/99 Local', price: 24.90, img: 'assets/productos/Internacional/Holanda9899LR/1.jpg', images: [
+        'assets/productos/Internacional/Holanda9899LR/1.jpg',
+        'assets/productos/Internacional/Holanda9899LR/2.jpg',
+        'assets/productos/Internacional/Holanda9899LR/3.jpg'
+    ], excerpt: '', link: 'productos/Holanda9899LR.html', versions: ['fan'], isRetro: true },
+
+    { id: 'PSG2526T', name: 'Camiseta Tercera PSG 25/26', price: 19.90, img: 'assets/productos/Ligue 1/PSG2526T/1.jpg', images: [
+        'assets/productos/Ligue 1/PSG2526T/1.jpg',
+        'assets/productos/Ligue 1/PSG2526T/2.jpg',
+        'assets/productos/Ligue 1/PSG2526T/3.jpg',
+        'assets/productos/Ligue 1/PSG2526T/4.jpg'
+    ], excerpt: '', link: 'productos/PSG2526T.html' },
+
+    { id: 'Arsenal2525L', name: 'Camiseta Local Arsenal 25/25', price: 19.90, img: 'assets/productos/Premier League/Arsenal2525L/1.jpg', images: [
+        'assets/productos/Premier League/Arsenal2525L/1.jpg',
+        'assets/productos/Premier League/Arsenal2525L/2.jpg',
+        'assets/productos/Premier League/Arsenal2525L/3.jpg',
+        'assets/productos/Premier League/Arsenal2525L/4.jpg'
+    ], excerpt: '', link: 'productos/Arsenal2525L.html' },
+
+    { id: 'Arsenal2526F', name: 'Camiseta Visitante Arsenal 25/26', price: 19.90, img: 'assets/productos/Premier League/Arsenal2526F/1.jpg', images: [
+        'assets/productos/Premier League/Arsenal2526F/1.jpg',
+        'assets/productos/Premier League/Arsenal2526F/2.jpg',
+        'assets/productos/Premier League/Arsenal2526F/3.jpg',
+        'assets/productos/Premier League/Arsenal2526F/4.jpg'
+    ], excerpt: '', link: 'productos/Arsenal2526F.html' },
+
+    { id: 'AstonVilla2526L', name: 'Camiseta Local Aston Villa 25/26', price: 19.90, img: 'assets/productos/Premier League/AstonVilla2526L/1.jpg', images: [
+        'assets/productos/Premier League/AstonVilla2526L/1.jpg',
+        'assets/productos/Premier League/AstonVilla2526L/2.jpg',
+        'assets/productos/Premier League/AstonVilla2526L/3.jpg',
+        'assets/productos/Premier League/AstonVilla2526L/4.jpg'
+    ], excerpt: '', link: 'productos/AstonVilla2526L.html' },
+
+    { id: 'Chealsea2526L', name: 'Camiseta Local Chelsea 25/26', price: 19.90, img: 'assets/productos/Premier League/Chealsea2526L/1.jpg', images: [
+        'assets/productos/Premier League/Chealsea2526L/1.jpg',
+        'assets/productos/Premier League/Chealsea2526L/2.jpg',
+        'assets/productos/Premier League/Chealsea2526L/3.jpg',
+        'assets/productos/Premier League/Chealsea2526L/4.jpg'
+    ], excerpt: '', link: 'productos/Chealsea2526L.html' },
+
+    { id: 'ManCity2526F', name: 'Camiseta Visitante Manchester City 25/26', price: 19.90, img: 'assets/productos/Premier League/ManCity2526F/1.jpg', images: [
+        'assets/productos/Premier League/ManCity2526F/1.jpg',
+        'assets/productos/Premier League/ManCity2526F/2.jpg',
+        'assets/productos/Premier League/ManCity2526F/3.jpg',
+        'assets/productos/Premier League/ManCity2526F/4.jpg'
+    ], excerpt: '', link: 'productos/ManCity2526F.html' },
+
+    { id: 'ManUnited2526L', name: 'Camiseta Local Manchester United 25/26', price: 19.90, img: 'assets/productos/Premier League/ManUnited2526L/1.jpg', images: [
+        'assets/productos/Premier League/ManUnited2526L/1.jpg',
+        'assets/productos/Premier League/ManUnited2526L/2.jpg'
+    ], excerpt: '', link: 'productos/ManUnited2526L.html' },
+
+    { id: 'Newcastle2526L', name: 'Camiseta Local Newcastle 25/26', price: 19.90, img: 'assets/productos/Premier League/Newcastle2526L/1.jpg', images: [
+        'assets/productos/Premier League/Newcastle2526L/1.jpg',
+        'assets/productos/Premier League/Newcastle2526L/2.jpg',
+        'assets/productos/Premier League/Newcastle2526L/3.jpg',
+        'assets/productos/Premier League/Newcastle2526L/4.jpg'
+    ], excerpt: '', link: 'productos/Newcastle2526L.html' },
+
+    { id: 'Napoli2526L', name: 'Camiseta Local Napoli 25/26', price: 19.90, img: 'assets/productos/Serie A/Napoli2526L/1.jpg', images: [
+        'assets/productos/Serie A/Napoli2526L/1.jpg',
+        'assets/productos/Serie A/Napoli2526L/2.jpg',
+        'assets/productos/Serie A/Napoli2526L/3.jpg',
+        'assets/productos/Serie A/Napoli2526L/4.jpg'
+    ], excerpt: '', link: 'productos/Napoli2526L.html' },
+
+    { id: 'Albacete2526L', name: 'Camiseta Local Albacete 25/26', price: 19.90, img: 'assets/productos/La Liga/Albacete2526L/1.jpg', images: [
+        'assets/productos/La Liga/Albacete2526L/1.jpg',
+        'assets/productos/La Liga/Albacete2526L/2.jpg',
+        'assets/productos/La Liga/Albacete2526L/3.jpg',
+        'assets/productos/La Liga/Albacete2526L/4.jpg'
+    ], excerpt: '', link: 'productos/Albacete2526L.html' },
+
+    { id: 'MalagaKids2526L', name: 'Camiseta Local Málaga 25/26 (niños)', price: 21.90, img: 'assets/productos/La Liga/MalagaKids2526L/1.jpg', images: [
+        'assets/productos/La Liga/MalagaKids2526L/1.jpg',
+        'assets/productos/La Liga/MalagaKids2526L/2.jpg',
+        'assets/productos/La Liga/MalagaKids2526L/3.jpg'
+    ], excerpt: '', link: 'productos/MalagaKids2526L.html' },
+
+    { id: 'River2526L', name: 'Camiseta Local River Plate 25/26', price: 19.90, img: 'assets/productos/SAF (Argentina)/River2526L/1.jpg', images: [
+        'assets/productos/SAF (Argentina)/River2526L/1.jpg',
+        'assets/productos/SAF (Argentina)/River2526L/2.jpg',
+        'assets/productos/SAF (Argentina)/River2526L/3.jpg',
+        'assets/productos/SAF (Argentina)/River2526L/4.jpg'
+    ], excerpt: '', link: 'productos/River2526L.html' },
+
+    { id: 'RiverKids2526L', name: 'Camiseta Local River Plate 25/26 (niños)', price: 21.90, img: 'assets/productos/SAF (Argentina)/RiverKids2526L/1.jpeg', images: [
+        'assets/productos/SAF (Argentina)/RiverKids2526L/1.jpeg',
+        'assets/productos/SAF (Argentina)/RiverKids2526L/2.jpg',
+        'assets/productos/SAF (Argentina)/RiverKids2526L/3.jpg',
+        'assets/productos/SAF (Argentina)/RiverKids2526L/4.jpg'
+    ], excerpt: '', link: 'productos/RiverKids2526L.html' }
 ];
 
         const EXTRAS = { parche: 1, dorsal: 2, versionJugador: 5, version: 5 };
@@ -1612,6 +1817,85 @@
         // Variable global para almacenar el estado de ordenamiento y filtrado
         let currentSortOrder = 'default'; // 'default', 'price-asc', 'price-desc'
         let currentLeagueFilter = 'all'; // 'all', 'La Liga', 'Premier League', etc.
+        let currentTeamFilter = 'all'; // 'all' o nombre de equipo específico
+        
+        // Helpers de normalización y extracción de liga/equipo
+        function normalizeNoAccentsGlobal(s){
+            return (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        }
+        function canonicalizeTeamName(name){
+            const raw = (name || '').toString().trim();
+            if (!raw) return '';
+            // Eliminar paréntesis vacíos como "()" y espacios extra
+            let s = raw.replace(/\(\s*\)/g, '').replace(/\s{2,}/g,' ').trim();
+            const key = normalizeNoAccentsGlobal(s);
+            const map = new Map([
+                ['atletico', 'Atlético de Madrid'],
+                ['atlético', 'Atlético de Madrid'],
+                ['atleti', 'Atlético de Madrid'],
+                ['atletico madrid', 'Atlético de Madrid'],
+                ['atletico de madrid', 'Atlético de Madrid'],
+                ['real madrid', 'Real Madrid'],
+                ['fc barcelona', 'Barcelona'],
+                ['barcelona', 'Barcelona'],
+                ['athletic', 'Athletic Club'],
+                ['athletic club', 'Athletic Club'],
+                ['athletic bilbao', 'Athletic Club'],
+                ['athletic de bilbao', 'Athletic Club']
+            ]);
+            if (map.has(key)) return map.get(key);
+            return s;
+        }
+        function getLeagueFromProduct(p){
+            try{
+                const imgPath = p && (p.img || (p.images && p.images[0]) || '');
+                const m = (imgPath||'').match(/assets\/productos\/([^/]+)\//i);
+                return m ? m[1] : 'Otros';
+            }catch(e){ return 'Otros'; }
+        }
+        function extractTeamFromName(name){
+            let s = (name || '').replace(/\bCamiseta\b/gi,'').replace(/\bNBA\b/gi,'');
+            s = s.replace(/\b(Local|Visitante|Tercera|Retro|Kids|niños)\b/gi,'');
+            s = s.replace(/\(\s*(Kids|niños)\s*\)/gi,'');
+            s = s.replace(/\(\s*Modelo\s*\d+\s*\)/gi,'');
+            s = s.replace(/\b\d{2}\/\d{2}\b/g,'');
+            s = s.replace(/\b\d{2}\d{2}\b/g,'');
+            s = s.replace(/\b\d{4}\b/g,'');
+            s = s.replace(/\s{2,}/g,' ').trim();
+            return s;
+        }
+        function getTeamFromProduct(p){
+            try{
+                const nameTeam = extractTeamFromName(p && p.name);
+                if (nameTeam && nameTeam.length >= 2) return nameTeam;
+                const imgPath = p && (p.img || (p.images && p.images[0]) || '');
+                const m = (imgPath||'').match(/assets\/productos\/[^/]+\/([^/]+)\//i);
+                let folder = m ? m[1] : '';
+                // limpiar sufijos de temporada y tipo de camiseta
+                folder = folder.replace(/(Kids|LR|FR|TR)$/i,'');
+                folder = folder.replace(/\d{2,4}/g,'');
+                // normalizar claves conocidas
+                const normas = [
+                    ['RealMadrid','Real Madrid'], ['Barcelona','Barcelona'], ['Athletic','Athletic Club'], ['Atletico','Atlético'],
+                    ['Betis','Betis'], ['Celta','Celta'], ['Elche','Elche'], ['Espanyol','Espanyol'], ['Getafe','Getafe'],
+                    ['Girona','Girona'], ['Granada','Granada'], ['LasPalmas','Las Palmas'], ['Leganes','Leganés'], ['Levante','Levante'],
+                    ['Malaga','Málaga'], ['Mallorca','Mallorca'], ['Osasuna','Osasuna'], ['Oviedo','Oviedo'], ['Rayo','Rayo Vallecano'],
+                    ['RealSociedad','Real Sociedad'], ['Sevilla','Sevilla'], ['Valencia','Valencia'], ['Valladolid','Valladolid'],
+                    ['Alaves','Alavés'], ['Villarreal','Villarreal'], ['Munich','Bayern Munich'], ['Paris','PSG'],
+                    ['CrystalPalace','Crystal Palace'], ['Milan','Milan'], ['Lazio','Lazio'], ['Roma','Roma'], ['Schalke','Schalke'],
+                    ['Flamengo','Flamengo'], ['Al-Nassr','Al-Nassr'], ['Boca','Boca Juniors'], ['Monaco','Monaco'],
+                    ['Espana','España'], ['Francia','Francia'], ['Holanda','Holanda'], ['Lakers','Lakers'],
+                    ['Oklahoma','Oklahoma City Thunder'], ['Phila','Philadelphia 76ers']
+                ];
+                for (const [k,v] of normas){
+                    const rk = new RegExp('^'+k+'$', 'i');
+                    if (rk.test(folder)) return v;
+                }
+                // fallback: separar camelCase
+                const inferred = (folder||'').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[\-_]/g,' ').trim();
+                return inferred || 'Otros';
+            }catch(e){ return 'Otros'; }
+        }
         
         // Función para crear los controles de filtrado y ordenamiento
         function createGalleryControls(container) {
@@ -1631,16 +1915,380 @@
             controlsContainer.id = 'galleryControls';
             controlsContainer.className = 'gallery-controls';
             
-            // Crear el selector de ligas
+            // Crear el selector de ligas (dropdown personalizado con submenús)
             const leagueFilter = document.createElement('div');
             leagueFilter.className = 'league-filter';
             leagueFilter.innerHTML = `
-                <label for="leagueSelect">Filtrar por liga:</label>
-                <select id="leagueSelect">
-                    <option value="all">Todas las ligas</option>
-                    ${leagues.sort().map(league => `<option value="${league}">${league}</option>`).join('')}
-                </select>
+                <label>Filtrar por liga:</label>
+                <div class="league-dropdown" id="leagueDropdown">
+                    <button type="button" class="dropdown-toggle" id="leagueDropdownToggle">Todas las ligas</button>
+                    <div class="dropdown-menu" id="leagueDropdownMenu"></div>
+                </div>
             `;
+
+            // Construir menú de ligas con submenús de equipos (hover)
+            (function(){
+                // Inyectar estilos específicos si no existen
+                const styleId = 'leagueSubmenuStyles';
+                if (!document.getElementById(styleId)){
+                    const st = document.createElement('style');
+                    st.id = styleId;
+                    st.textContent = `
+                    /* Dropdown de ligas con submenú por equipos */
+                    .gallery-controls .league-dropdown { position: relative; display: inline-block; }
+                    .gallery-controls .league-dropdown .dropdown-toggle { padding: 8px 12px; padding-right: 32px; position: relative; border-radius: 6px; background: #071735; color: #fff; border: 1px solid #2e7bed; cursor: pointer; min-width: 220px; text-align:left; }
+                    .gallery-controls .league-dropdown .dropdown-toggle::after { content: '▾'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #9fe0ff; pointer-events: none; font-size: 14px; }
+                    .gallery-controls .league-dropdown.open .dropdown-toggle { box-shadow: 0 0 8px rgba(46,123,237,0.4); border-color: var(--azul-acento); }
+                    .gallery-controls .league-dropdown.open .dropdown-toggle::after { transform: translateY(-50%) rotate(180deg); }
+                    .gallery-controls .league-dropdown .dropdown-menu { position: absolute; top: 100%; left: 0; min-width: 240px; background: #071735; border: 1px solid #2e7bed; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.35); padding: 6px 0; display: none; z-index: 1200; max-height: none; overflow: visible; }
+                    .gallery-controls .league-dropdown.open .dropdown-menu { display: block; }
+                    .gallery-controls .dropdown-item { padding: 8px 12px; color: #fff; cursor: pointer; white-space: nowrap; line-height: 1.2; }
+                    .gallery-controls .dropdown-item:hover { background: rgba(46,123,237,0.12); }
+                    .gallery-controls .dropdown-item.has-sub { position: relative; padding-right: 28px; }
+                    .gallery-controls .dropdown-item.has-sub::after { content: '›'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #9fe0ff; }
+                    .gallery-controls .submenu { position: absolute; top: 0; left: 100%; min-width: 240px; background: #071735; border: 1px solid #2e7bed; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.35); padding: 6px 0; display: none; z-index: 1201; max-height: none; overflow: visible; }
+                    .gallery-controls .dropdown-item.has-sub:hover > .submenu { display: block; }
+                    .gallery-controls .dropdown-menu.fixed-open, .gallery-controls .submenu.fixed-open { position: fixed !important; max-height: none !important; overflow: visible !important; transform-origin: top left; }
+                    .gallery-controls .dropdown-menu.columns, .gallery-controls .submenu.columns { column-gap: 8px; }
+                    @media (max-width: 768px){
+                        .gallery-controls .league-dropdown .dropdown-menu, .gallery-controls .submenu { position: static; box-shadow:none; border-radius:8px; border-width:1px; }
+                        .gallery-controls .dropdown-item.has-sub::after { display:none; }
+                    }
+                    `;
+                    document.head.appendChild(st);
+                }
+
+                const dd = leagueFilter.querySelector('#leagueDropdown');
+                const toggle = leagueFilter.querySelector('#leagueDropdownToggle');
+                const menu = leagueFilter.querySelector('#leagueDropdownMenu');
+                if (!dd || !toggle || !menu) return;
+
+                // Construir mapa Liga -> equipos (deduplicado por nombre normalizado)
+                const leagueMap = new Map();
+                (Array.isArray(PRODUCTS) ? PRODUCTS : []).forEach(p => {
+                    const league = getLeagueFromProduct(p);
+                    const team = getTeamFromProduct(p);
+                    if (!leagueMap.has(league)) leagueMap.set(league, new Map());
+                    const canonical = canonicalizeTeamName(team);
+                    const key = normalizeNoAccentsGlobal(canonical);
+                    if (key){
+                        const m = leagueMap.get(league);
+                        if (!m.has(key)) m.set(key, canonical);
+                    }
+                });
+                const leaguesSorted = Array.from(leagueMap.keys()).sort((a,b)=> a.localeCompare(b));
+
+                // Opción: Todas las ligas
+                const itemAll = document.createElement('div');
+                itemAll.className = 'dropdown-item';
+                itemAll.textContent = 'Todas las ligas';
+                itemAll.addEventListener('click', () => {
+                    currentLeagueFilter = 'all';
+                    currentTeamFilter = 'all';
+                    toggle.textContent = 'Todas las ligas';
+                    renderGallery(document.getElementById('productSearch')?.value || '');
+                    closeDropdown();
+                });
+                menu.appendChild(itemAll);
+
+                // Ligas con submenú de equipos
+                leaguesSorted.forEach(league => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'dropdown-item has-sub';
+                    wrapper.textContent = league;
+                    // Al hacer clic en la competición, filtrar por toda la liga
+                    wrapper.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        currentLeagueFilter = league;
+                        currentTeamFilter = 'all';
+                        toggle.textContent = `Liga: ${league}`;
+                        renderGallery(document.getElementById('productSearch')?.value || '');
+                        closeDropdown();
+                    });
+
+                    const submenu = document.createElement('div');
+                    submenu.className = 'submenu';
+
+                    // Entrada de "Todos los equipos" para esa liga
+                    const subAll = document.createElement('div');
+                    subAll.className = 'dropdown-item';
+                    subAll.textContent = 'Todos los equipos';
+                    subAll.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        currentLeagueFilter = league;
+                        currentTeamFilter = 'all';
+                        toggle.textContent = `Liga: ${league}`;
+                        renderGallery(document.getElementById('productSearch')?.value || '');
+                        closeDropdown();
+                    });
+                    submenu.appendChild(subAll);
+
+                    const teamsMap = leagueMap.get(league) || new Map();
+                    const teams = Array.from(teamsMap.values())
+                        .map(v => canonicalizeTeamName(v))
+                        .filter((v,i,arr)=> arr.findIndex(x => normalizeNoAccentsGlobal(x) === normalizeNoAccentsGlobal(v)) === i)
+                        .sort((a,b)=> a.localeCompare(b));
+                    teams.forEach(team => {
+                        const tItem = document.createElement('div');
+                        tItem.className = 'dropdown-item';
+                        tItem.textContent = team;
+                        tItem.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            currentLeagueFilter = league;
+                        currentTeamFilter = canonicalizeTeamName(team);
+                        toggle.textContent = `Equipo: ${canonicalizeTeamName(team)}`;
+                        renderGallery(document.getElementById('productSearch')?.value || '');
+                            closeDropdown();
+                        });
+                        submenu.appendChild(tItem);
+                    });
+
+                    wrapper.appendChild(submenu);
+                    menu.appendChild(wrapper);
+                });
+
+                // Helpers para posicionar y evitar scroll
+                function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+                function layoutColumns(container, maxWidth){
+                    const items = Array.from(container.children);
+                    const firstItem = items.find(el => el.classList && el.classList.contains('dropdown-item')) || items[0];
+                    const tempDisplay = container.style.display;
+                    const tempVis = container.style.visibility;
+                    container.style.display = 'block';
+                    container.style.visibility = 'hidden';
+                    const itemHeight = firstItem ? (firstItem.getBoundingClientRect().height || 32) : 32;
+                    const totalItems = items.length || 1;
+                    const margin = 8;
+                    const maxColumnsByWidth = Math.max(1, Math.floor((maxWidth - 2*margin) / 260));
+                    const columnsByHeight = Math.ceil((totalItems * itemHeight) / (window.innerHeight - 2*margin));
+                    const columns = clamp(columnsByHeight, 1, maxColumnsByWidth);
+                    container.classList.add('columns');
+                    container.style.columnCount = String(columns);
+                    container.style.columnWidth = '240px';
+                    const width = Math.min(columns * 260, maxWidth - 2*margin);
+                    container.style.width = width + 'px';
+                    container.style.display = tempDisplay;
+                    container.style.visibility = tempVis;
+                    return width;
+                }
+                function positionFixed(container, anchorRect, preferBelow = true){
+                    const margin = 8;
+                    container.classList.add('fixed-open');
+                    container.style.position = 'fixed';
+                    container.style.display = 'block';
+                    container.style.visibility = 'hidden';
+                    // Ajustar columnas antes de medir tamaño total
+                    layoutColumns(container, window.innerWidth);
+                    const rect = container.getBoundingClientRect();
+                    // Calcular escala para que quepa en pantalla sin scroll
+                    const scale = Math.min(1,
+                        (window.innerWidth - 2*margin) / rect.width,
+                        (window.innerHeight - 2*margin) / rect.height
+                    );
+                    container.style.transform = (scale < 1 ? `scale(${scale})` : 'none');
+                    const effWidth = rect.width * scale;
+                    const effHeight = rect.height * scale;
+                    let left = clamp(anchorRect.left, margin, window.innerWidth - effWidth - margin);
+                    let topCandidate = preferBelow ? (anchorRect.bottom + margin) : (anchorRect.top - effHeight - margin);
+                    if (preferBelow && (topCandidate + effHeight + margin > window.innerHeight)){
+                        // No cabe abajo, intentar arriba
+                        topCandidate = Math.max(margin, anchorRect.top - effHeight - margin);
+                    }
+                    if (!preferBelow && (topCandidate < margin)){
+                        // No cabe arriba, intentar abajo
+                        topCandidate = clamp(anchorRect.bottom + margin, margin, window.innerHeight - effHeight - margin);
+                    }
+                    const top = clamp(topCandidate, margin, window.innerHeight - effHeight - margin);
+                    container.style.left = left + 'px';
+                    container.style.top = top + 'px';
+                    container.style.visibility = 'visible';
+                }
+                function clearFixed(container){
+                    container.classList.remove('fixed-open','columns');
+                    container.style.removeProperty('position');
+                    container.style.removeProperty('left');
+                    container.style.removeProperty('top');
+                    container.style.removeProperty('width');
+                    container.style.removeProperty('column-count');
+                    container.style.removeProperty('column-width');
+                    container.style.removeProperty('display');
+                    container.style.removeProperty('visibility');
+                }
+
+                // Toggle abrir/cerrar menú de ligas con posicionamiento fijo y sin scroll
+                let resizeHandler;
+                function openDropdown(){
+                    dd.classList.add('open');
+                    const anchor = toggle.getBoundingClientRect();
+                    positionFixed(menu, anchor, true);
+                    // Recalcular en resize
+                    resizeHandler = () => positionFixed(menu, toggle.getBoundingClientRect(), true);
+                    window.addEventListener('resize', resizeHandler);
+                    window.addEventListener('scroll', resizeHandler, { passive: true });
+                }
+                function closeDropdown(){
+                    dd.classList.remove('open');
+                    clearFixed(menu);
+                    // Limpiar cualquier submenú abierto
+                    menu.querySelectorAll('.submenu').forEach(sm => { clearFixed(sm); sm.style.display=''; });
+                    if (resizeHandler){
+                        window.removeEventListener('resize', resizeHandler);
+                        window.removeEventListener('scroll', resizeHandler);
+                        resizeHandler = null;
+                    }
+                }
+                // Cierre por proximidad: cierra si el cursor se aleja más de 20px del área del toggle + menú + submenús visibles
+                let __lastMouseX = 0, __lastMouseY = 0;
+                (function(){
+                    const PADDING = 20;
+                    let proximityTimer = null;
+                    function within(rect, x, y){
+                        return x >= rect.left - PADDING && x <= rect.right + PADDING && y >= rect.top - PADDING && y <= rect.bottom + PADDING;
+                    }
+                    function withinAny(rects, x, y){
+                        for (const r of rects){
+                            if (within(r, x, y)) return true;
+                        }
+                        return false;
+                    }
+                    function collectRects(){
+                        const rects = [ toggle.getBoundingClientRect(), menu.getBoundingClientRect() ];
+                        menu.querySelectorAll('.submenu.fixed-open').forEach(sm => {
+                            rects.push(sm.getBoundingClientRect());
+                        });
+                        return rects;
+                    }
+                    function onMove(e){
+                        if (!dd.classList.contains('open')) return;
+                        const rects = collectRects();
+                        const x = e.clientX, y = e.clientY;
+                        if (!withinAny(rects, x, y)){
+                            if (proximityTimer) clearTimeout(proximityTimer);
+                            proximityTimer = setTimeout(() => {
+                                const rects2 = collectRects();
+                                const x2 = e.clientX, y2 = e.clientY;
+                                if (!withinAny(rects2, x2, y2)) closeDropdown();
+                            }, 30);
+                        } else if (proximityTimer){
+                            clearTimeout(proximityTimer);
+                            proximityTimer = null;
+                        }
+                    }
+                    document.addEventListener('mousemove', onMove, { passive: true });
+                    document.addEventListener('mousemove', (e)=>{ __lastMouseX = e.clientX; __lastMouseY = e.clientY; }, { passive: true });
+                })();
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (dd.classList.contains('open')) closeDropdown(); else openDropdown();
+                });
+                document.addEventListener('click', () => closeDropdown());
+
+                // Posicionamiento de submenús en escritorio (hover) y alternativa móvil con botón táctil
+                const wrappers = menu.querySelectorAll('.dropdown-item.has-sub');
+                const supportsHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+                wrappers.forEach(wrapper => {
+                    const submenu = wrapper.querySelector('.submenu');
+                    if (!submenu) return;
+
+                    if (supportsHover){
+                        let hoverWrapper = false;
+                        let hoverSubmenu = false;
+                        let hideTimeout = null;
+
+                        function positionSubmenu(){
+                            submenu.style.display = 'block';
+                            const wRect = wrapper.getBoundingClientRect();
+                            submenu.classList.add('fixed-open');
+                            layoutColumns(submenu, window.innerWidth);
+                            const sRect = submenu.getBoundingClientRect();
+                            const margin = 8;
+                            let left = wRect.right + margin;
+                            if (left + sRect.width + margin > window.innerWidth){
+                                left = Math.max(margin, wRect.left - margin - sRect.width);
+                            }
+                            let top = clamp(wRect.top, margin, window.innerHeight - sRect.height - margin);
+                            submenu.style.position = 'fixed';
+                            submenu.style.left = left + 'px';
+                            submenu.style.top = top + 'px';
+                        }
+                        function scheduleHide(){
+                            if (hideTimeout) clearTimeout(hideTimeout);
+                            hideTimeout = setTimeout(() => {
+                                if (!hoverWrapper && !hoverSubmenu){
+                                    const rects = [ wrapper.getBoundingClientRect(), submenu.getBoundingClientRect() ];
+                                    const inside = rects.some(r => __lastMouseX >= r.left - 20 && __lastMouseX <= r.right + 20 && __lastMouseY >= r.top - 20 && __lastMouseY <= r.bottom + 20);
+                                    if (!inside){
+                                        clearFixed(submenu);
+                                        submenu.style.display = '';
+                                    }
+                                }
+                            }, 30);
+                        }
+
+                        wrapper.addEventListener('mouseenter', () => {
+                            hoverWrapper = true;
+                            menu.querySelectorAll('.submenu').forEach(sm => { if (sm !== submenu) { clearFixed(sm); sm.style.display=''; } });
+                            positionSubmenu();
+                        });
+                        wrapper.addEventListener('mouseleave', () => {
+                            hoverWrapper = false;
+                            scheduleHide();
+                        });
+                        submenu.addEventListener('mouseenter', () => {
+                            hoverSubmenu = true;
+                            positionSubmenu();
+                        });
+                        submenu.addEventListener('mouseleave', () => {
+                            hoverSubmenu = false;
+                            scheduleHide();
+                        });
+                    } else {
+                        // Móvil / táctil: botón flecha para abrir el submenú
+                        submenu.style.display = 'none';
+                        let btn = wrapper.querySelector('.submenu-toggle');
+                        if (!btn){
+                            btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'submenu-toggle';
+                            btn.setAttribute('aria-label', 'Mostrar equipos');
+                            btn.setAttribute('aria-expanded', 'false');
+                            btn.textContent = '›';
+                            wrapper.appendChild(btn);
+                        }
+                        btn.addEventListener('click', (e)=>{
+                            e.stopPropagation();
+                            const willOpen = !wrapper.classList.contains('open');
+                            // Cerrar otros submenús abiertos
+                            menu.querySelectorAll('.dropdown-item.has-sub.open').forEach(w => {
+                                if (w !== wrapper){
+                                    w.classList.remove('open');
+                                    const sm = w.querySelector('.submenu');
+                                    if (sm) sm.style.display = 'none';
+                                    const b = w.querySelector('.submenu-toggle');
+                                    if (b) b.setAttribute('aria-expanded','false');
+                                }
+                            });
+                            wrapper.classList.toggle('open');
+                            submenu.style.display = willOpen ? 'block' : 'none';
+                            btn.setAttribute('aria-expanded', String(willOpen));
+                        });
+                    }
+                });
+                // Estilos móviles para el botón flecha
+                if (!document.getElementById('leagueTouchStyles')){
+                    const st2 = document.createElement('style');
+                    st2.id = 'leagueTouchStyles';
+                    st2.textContent = `
+                    @media (max-width: 768px){
+                        .gallery-controls .dropdown-item.has-sub { position: relative; }
+                        .gallery-controls .dropdown-item.has-sub .submenu { display: none; margin-top: 4px; }
+                        .gallery-controls .dropdown-item.has-sub.open > .submenu { display: block; }
+                        .gallery-controls .dropdown-item.has-sub .submenu-toggle{ position:absolute; right:6px; top:50%; transform:translateY(-50%); background: transparent; border:1px solid rgba(255,255,255,0.15); color:#9fe0ff; border-radius:8px; padding:4px 8px; cursor:pointer; }
+                    }
+                    `;
+                    document.head.appendChild(st2);
+                }
+            })();
             
             // Crear el selector de ordenamiento
             const sortOrder = document.createElement('div');
@@ -1651,12 +2299,25 @@
                     <option value="default">Por defecto</option>
                     <option value="price-asc">Precio: menor a mayor</option>
                     <option value="price-desc">Precio: mayor a menor</option>
+                    <option value="name-asc">Nombre: A-Z</option>
+                    <option value="name-desc">Nombre: Z-A</option>
+                    <option value="team-asc">Equipo: A-Z</option>
+                    <option value="team-desc">Equipo: Z-A</option>
                 </select>
             `;
             
             // Agregar los controles al contenedor
             controlsContainer.appendChild(leagueFilter);
             controlsContainer.appendChild(sortOrder);
+
+            // Contador de productos
+            const countEl = document.createElement('div');
+            countEl.id = 'productCount';
+            countEl.className = 'product-count';
+            countEl.setAttribute('aria-live', 'polite');
+            // Inicialmente muestra todos
+            countEl.textContent = `Mostrando ${Array.isArray(PRODUCTS) ? PRODUCTS.length : 0} de ${Array.isArray(PRODUCTS) ? PRODUCTS.length : 0} productos`;
+            controlsContainer.appendChild(countEl);
             
             // Buscar el contenedor del buscador para insertar los controles debajo
             const searchWrap = document.querySelector('.product-search-wrap');
@@ -1668,11 +2329,7 @@
                 container.insertBefore(controlsContainer, container.firstChild);
             }
             
-            // Agregar event listeners
-            document.getElementById('leagueSelect').addEventListener('change', function(e) {
-                currentLeagueFilter = e.target.value;
-                renderGallery(document.getElementById('productSearch')?.value || '');
-            });
+            // Agregar event listeners (solo sort, el filtro por liga se maneja en el dropdown personalizado)
             
             document.getElementById('sortSelect').addEventListener('change', function(e) {
                 currentSortOrder = e.target.value;
@@ -1721,11 +2378,15 @@
             // Aplicar filtro por liga
             if (currentLeagueFilter !== 'all') {
                 list = list.filter(p => {
-                    const imgPath = p.img || (p.images && p.images.length > 0 ? p.images[0] : '');
-                    const match = imgPath.match(/assets\/productos\/([^/]+)\//i);
-                    const league = match ? match[1] : 'Otros';
+                    const league = getLeagueFromProduct(p);
                     return league === currentLeagueFilter;
                 });
+            }
+            
+            // Filtrar por equipo específico si está seleccionado
+            if (currentTeamFilter !== 'all') {
+                const target = canonicalizeTeamName(currentTeamFilter);
+                list = list.filter(p => normalizeNoAccentsGlobal(canonicalizeTeamName(getTeamFromProduct(p))) === normalizeNoAccentsGlobal(target));
             }
             
             // Aplicar ordenamiento
@@ -1733,6 +2394,26 @@
                 list.sort((a, b) => a.price - b.price);
             } else if (currentSortOrder === 'price-desc') {
                 list.sort((a, b) => b.price - a.price);
+            } else if (currentSortOrder === 'name-asc' || currentSortOrder === 'name-desc') {
+                list.sort((a, b) => {
+                    const an = normalizeNoAccentsGlobal(a.name || '');
+                    const bn = normalizeNoAccentsGlobal(b.name || '');
+                    return currentSortOrder === 'name-asc' ? an.localeCompare(bn) : bn.localeCompare(an);
+                });
+            } else if (currentSortOrder === 'team-asc' || currentSortOrder === 'team-desc') {
+                list.sort((a, b) => {
+                    const ta = normalizeNoAccentsGlobal(canonicalizeTeamName(getTeamFromProduct(a)) || '');
+                    const tb = normalizeNoAccentsGlobal(canonicalizeTeamName(getTeamFromProduct(b)) || '');
+                    return currentSortOrder === 'team-asc' ? ta.localeCompare(tb) : tb.localeCompare(ta);
+                });
+            }
+            
+            // Actualizar contador de productos
+            const totalCount = Array.isArray(PRODUCTS) ? PRODUCTS.length : 0;
+            const currentCount = list.length;
+            const countBox = document.getElementById('productCount');
+            if (countBox) {
+                countBox.textContent = `Mostrando ${currentCount} de ${totalCount} productos`;
             }
             
             // Mostrar todos los productos juntos
@@ -1748,8 +2429,8 @@
                         el.innerHTML = `
                             <div class="pedido-mini-card" data-images='${imgsJson}'>
                                 <div style="display:flex;justify-content:center;">
-                                    <div style="max-width:800px;width:100%;">
-                                        <img class="pedido-carrusel-img" src="${p.images[0]}" alt="${p.name}" style="width:100%;height:auto;display:block;border-radius:8px;">
+                                    <div style="max-width:800px;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:8px;">
+                                        <img class="pedido-carrusel-img" src="${p.images[0]}" alt="${p.name}" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;display:block;">
                                     </div>
                                 </div>
                                 <h4 style="margin-top:6px">${p.name}</h4>
@@ -1760,7 +2441,9 @@
                         `;
                     } else {
                         el.innerHTML = `
-                                <img src="${p.img}" alt="${p.name}">
+                                <div style="width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:8px;">
+                                    <img src="${p.img}" alt="${p.name}" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;display:block;">
+                                </div>
                                 <h4>${p.name}</h4>
                                 <div class="price">€${p.price.toFixed(2)}</div>
                                 <div class="excerpt">${p.excerpt}</div>
@@ -1782,11 +2465,11 @@
             modal.style.background = 'rgba(2,6,23,0.7)';
             modal.style.zIndex = 1200;
             modal.style.padding = '24px';
-            modal.style.overflow = 'auto';
+            modal.style.overflow = 'hidden';
             modal.innerHTML = `
-                <div style="width:100%;max-width:780px;background:#071735;padding:16px;border-radius:12px;color:#dbeeff;max-height:86vh;overflow:visible;">
+                <div style="width:100%;max-width:780px;background:#071735;padding:16px;border-radius:12px;color:#dbeeff;overflow:visible;">
                     <div style="display:flex;gap:14px;align-items:flex-start;">
-                        <img src="${product.img}" alt="${product.name}" style="width:280px;height:280px;object-fit:cover;border-radius:10px;">
+                        <img src="${product.img}" alt="${product.name}" loading="lazy" width="1512" height="1512" style="width:280px;height:280px;object-fit:cover;border-radius:10px;">
                         <div style="flex:1;">
                             <h3 style="margin-top:0;color:var(--azul-acento);">${product.name}</h3>
                             <p style="color:#d6e9ff;">${product.excerpt}</p>
@@ -1806,6 +2489,7 @@
                                         <option value="Bundesliga">Bundesliga</option>
                                         <option value="Champions League">Champions League</option>
                                         <option value="Europa League">Europa League</option>
+                                        <option value="Eurocopa">Eurocopa</option>
                                         <option value="Otros">Otros</option>
                                     </select>
                                 </label>
@@ -1847,9 +2531,53 @@
 
             document.body.appendChild(modal);
             document.body.style.overflow = 'hidden';
+            if (!document.getElementById('modalTiendaResponsiveStyles')){
+                const st = document.createElement('style'); st.id = 'modalTiendaResponsiveStyles';
+                st.textContent = `
+                 @media (max-width: 768px){
+                     #modal-tienda-carrusel{ padding:12px !important; align-items:flex-start !important; overflow-x:hidden !important; }
+                     #modal-tienda-carrusel .tienda-panel{ grid-template-columns:1fr !important; max-width:100% !important; width:100% !important; overflow:hidden !important; box-sizing:border-box !important; }
+                     #modal-tienda-carrusel .tienda-panel img{ max-width:100% !important; height:auto !important; }
+                     #modalTiendaThumbs{ flex-wrap: wrap; }
+                 }
+                 @media (max-width: 480px){
+                     #modal-tienda-carrusel{ padding:0 !important; }
+                     #modal-tienda-carrusel .tienda-panel{ max-width:100vw !important; width:100vw !important; height:100dvh !important; max-height:100dvh !important; border-radius:0 !important; display:flex !important; flex-direction:column !important; gap:8px !important; overflow:hidden !important; }
+                     #modal-tienda-carrusel .tienda-panel > div{ border-radius:0 !important; }
+                     #modal-tienda-carrusel .tienda-panel > div:last-child{ flex:1 1 auto !important; overflow:auto !important; display:flex !important; flex-direction:column !important; }
+                     #modal-tienda-carrusel .tienda-panel > div:first-child{ flex:0 0 auto !important; }
+                     #modalTiendaCarousel{ width:100% !important; max-height:52vh !important; aspect-ratio:auto !important; }
+                     #modalTiendaCarousel .carousel-track > div{ aspect-ratio:auto !important; height:auto !important; }
+                     #modalTiendaCarousel img{ width:100% !important; height:auto !important; object-fit:cover !important; }
+                     #modalTiendaThumbs{ overflow-x:auto !important; -webkit-overflow-scrolling:touch !important; justify-content:flex-start !important; gap:8px !important; padding:6px 8px !important; }
+                     #modal-tienda-carrusel #modalTiendaPersonalizar{ position:sticky !important; bottom:0 !important; margin-top:auto !important; }
+                 }
+                 `;
+                document.head.appendChild(st);
+            }
+
+            // Ajuste automático para que el panel quepa completo sin scroll
+            const panel = modal.firstElementChild;
+            function __fitPanel(){
+                if (!panel) return;
+                panel.style.transformOrigin = 'center center';
+                const availH = Math.max(0, window.innerHeight - 48);
+                const availW = Math.max(0, window.innerWidth - 48);
+                const rectH = panel.scrollHeight;
+                const rectW = panel.scrollWidth;
+                const scale = Math.min(1, (availH > 0 ? availH / rectH : 1), (availW > 0 ? availW / rectW : 1));
+                panel.style.transform = `scale(${scale})`;
+            }
+            __fitPanel();
+            window.addEventListener('resize', __fitPanel);
+
             // Cerrar al hacer click fuera del panel y restaurar scroll del body
-            modal.addEventListener('click', (e)=>{ if (e.target === modal) { modal.remove(); document.body.style.overflow = ''; } });
-            document.body.style.overflow = 'hidden';
+            function __closeProductModal(){
+                window.removeEventListener('resize', __fitPanel);
+                modal.remove();
+                document.body.style.overflow = '';
+            }
+            modal.addEventListener('click', (e)=>{ if (e.target === modal) { __closeProductModal(); } });
 
                 // Visor ampliado: click en la imagen principal para abrir a pantalla completa
                 try {
@@ -1873,12 +2601,13 @@
                         overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
                         overlay.style.background='rgba(0,0,0,0.85)'; overlay.style.zIndex=5000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
                         const isNBA = /^nba/i.test(product.id) || /\bNBA\b/i.test(product.name);
-                        const guideSrc = isNBA ? 'assets/images/guias tallas nba.png' : 'assets/images/guia tallas camisetas futbol.png';
-                        const guideAlt = isNBA ? 'Guía de tallas NBA' : 'Guía de tallas Fútbol';
+                        const isKids = /kids/i.test(product.id) || /\((kids|niños)\)/i.test(product.name);
+                        const guideSrc = isKids ? 'assets/images/guia tallas niños.png' : (isNBA ? 'assets/images/guias tallas nba.png' : 'assets/images/guia tallas camisetas futbol.png');
+                        const guideAlt = isKids ? 'Guía de tallas Niños' : (isNBA ? 'Guía de tallas NBA' : 'Guía de tallas Fútbol');
                         overlay.innerHTML = `
                             <div style="position:relative;width:auto;max-width:98vw;max-height:98vh;background:transparent;border-radius:12px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;overflow:auto;">
                                 <button aria-label="Cerrar" style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:500;transition:all 0.2s ease;font-size:0.9rem;">✕ Cerrar</button>
-                                <img src="${guideSrc}" alt="${guideAlt}" style="height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;">
+                                <img src="${guideSrc}" alt="${guideAlt}" loading="lazy" style="${isKids ? 'height:65vh;max-height:65vh;max-width:88vw;width:auto;object-fit:contain;border-radius:6px;display:block;' : 'height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;'}">
                             </div>
                         `;
                         document.body.appendChild(overlay);
@@ -1940,6 +2669,33 @@
                     else { parcheOtrosWrap.style.display = 'none'; parcheOtrosInput.value = ''; }
                 });
             }
+            // Aviso con enlace clickable cuando el usuario selecciona versión JUGADOR (modal básico)
+             const versionSelectBasic = modal.querySelector('#_opt_version');
+             if (versionSelectBasic) {
+                 versionSelectBasic.addEventListener('change', function(){
+                     if (this.value === 'jugador') {
+                         const overlay = document.createElement('div');
+                         overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
+                         overlay.style.background='rgba(0,0,0,0.55)'; overlay.style.zIndex=6000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+                         overlay.innerHTML = `
+                             <div style="max-width:520px;background:#071735;color:#dbeeff;padding:16px 18px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.4);font-size:0.95rem;line-height:1.45;">
+                                 <div style="margin-bottom:12px;">
+                                     Has seleccionado la versión JUGADOR. Debes encontrar la camiseta en el siguiente enlace:<br>
+                                     <a href="https://hxltds.x.yupoo.com/" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;text-decoration:underline;word-break:break-all;">https://hxltds.x.yupoo.com/</a>.<br>
+                                     Si no la encuentras, contáctanos primero por Instagram.
+                                 </div>
+                                 <div style="display:flex;justify-content:flex-end;gap:8px;">
+                                     <button id="jugadorNoticeClose" type="button" style="background:#1f2a44;border:none;color:#dbeeff;padding:8px 12px;border-radius:8px;cursor:pointer;">Cerrar</button>
+                                     <a href="https://hxltds.x.yupoo.com/" target="_blank" rel="noopener noreferrer" style="background:#2563eb;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;">Abrir enlace</a>
+                                 </div>
+                             </div>`;
+                         document.body.appendChild(overlay);
+                         overlay.addEventListener('click', (e)=>{ if (e.target === overlay) overlay.remove(); });
+                         const closeBtn = overlay.querySelector('#jugadorNoticeClose');
+                         if (closeBtn) closeBtn.addEventListener('click', ()=> overlay.remove());
+                     }
+                 });
+             }
 
             modal.querySelector('#_addCart').addEventListener('click', ()=>{
                 const talla = modal.querySelector('#_opt_talla').value;
@@ -1977,18 +2733,17 @@
             modal.style.display = 'flex';
             modal.style.alignItems = 'center';
             modal.style.justifyContent = 'center';
-            modal.style.background = 'rgba(2,6,23,0.78)';
-            modal.style.zIndex = 1400;
+            modal.style.background = 'rgba(2,6,23,0.78)'; modal.style.zIndex = 1400;
             modal.style.padding = '24px';
             modal.style.overflow = 'auto';
 
             // Build carousel HTML dynamically from product.images (fallback to [product.img])
             const imgs = Array.isArray(product.images) && product.images.length ? product.images : [product.img];
-            const slidesHtml = imgs.map((src, i) => `<img src="${src}" alt="${i+1}" style="flex:0 0 100%;width:100%;max-height:440px;object-fit:cover;border-radius:6px;">`).join('');
-            const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" style="width:56px;height:56px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
+            const slidesHtml = imgs.map((src, i) => `<div style="flex:0 0 100%;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:6px;"><img src="${src}" alt="Imagen ${i+1} de ${imgs.length}" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('');
+            const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" alt="Miniatura ${i+1} de ${imgs.length}" loading="lazy" style="width:56px;height:56px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
 
             modal.innerHTML = `
-                <div style="width:100%;max-width:960px;background:#071735;padding:12px;border-radius:12px;color:#dbeeff;display:grid;grid-template-columns:1fr 320px;gap:14px;max-height:88vh;overflow:visible;">
+                <div class="tienda-panel" style="width:100%;max-width:960px;background:#071735;padding:12px;border-radius:12px;color:#dbeeff;display:grid;grid-template-columns:1fr 320px;gap:14px;overflow:visible;">
                     <div style="background:rgba(10,31,61,0.6);padding:10px;border-radius:10px;">
                         <div id="modalTiendaCarousel" style="position:relative;overflow:hidden;border-radius:8px;">
                             <button id="modalTiendaPrev" aria-label="Anterior" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.4);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;">‹</button>
@@ -2015,9 +2770,31 @@
 
             document.body.appendChild(modal);
             document.body.style.overflow = 'hidden';
-                document.getElementById('modalTiendaClose').addEventListener('click', ()=> { modal.remove(); document.body.style.overflow = ''; });
-                // Cerrar modal al hacer click fuera del panel principal
-                modal.addEventListener('click', (e) => { if (e.target === modal) { modal.remove(); document.body.style.overflow = ''; } });
+
+            // Ajuste automático de escala para que el panel del carrusel quepa sin scroll
+            const panel = modal.firstElementChild;
+            function __fitTiendaPanel(){
+                if (!panel) return;
+                panel.style.transformOrigin = 'center center';
+                if (window.innerWidth <= 768){ panel.style.transform = 'none'; return; }
+                const availH = Math.max(0, window.innerHeight - 48);
+                const availW = Math.max(0, window.innerWidth - 48);
+                const rectH = panel.scrollHeight;
+                const rectW = panel.scrollWidth;
+                const scale = Math.min(1, (availH > 0 ? availH / rectH : 1), (availW > 0 ? availW / rectW : 1));
+                panel.style.transform = scale < 1 ? `scale(${scale})` : 'none';
+            }
+            __fitTiendaPanel();
+            window.addEventListener('resize', __fitTiendaPanel);
+
+            function __closeTienda(){
+                window.removeEventListener('resize', __fitTiendaPanel);
+                modal.remove();
+                document.body.style.overflow = '';
+            }
+            document.getElementById('modalTiendaClose').addEventListener('click', ()=> { __closeTienda(); });
+            // Cerrar modal al hacer click fuera del panel principal
+            modal.addEventListener('click', (e) => { if (e.target === modal) { __closeTienda(); } });
 
             // Carousel logic (scoped to modal)
             const track = modal.querySelector('.carousel-track');
@@ -2093,6 +2870,7 @@
                                 <option value="Bundesliga">Bundesliga</option>
                                 <option value="Champions League">Champions League</option>
                                 <option value="Europa League">Europa League</option>
+                                <option value="Eurocopa">Eurocopa</option>
                                 <option value="Otros">Otros</option>
                             </select>
                         </label>
@@ -2151,6 +2929,33 @@
                 const parcheSelectModal = rightCol.querySelector('#_opt_parche_select_modal');
                 const parcheOtrosWrapModal = rightCol.querySelector('#_opt_parche_otros_wrap_modal');
                 if (parcheSelectModal) parcheSelectModal.addEventListener('change', function(){ if (this.value === 'Otros') { parcheOtrosWrapModal.style.display = ''; } else { parcheOtrosWrapModal.style.display = 'none'; const inp = rightCol.querySelector('#_opt_parche_otros_modal'); if (inp) inp.value=''; } });
+                // Aviso con enlace clickable cuando el usuario selecciona versión JUGADOR (modal carrusel)
+                const versionSelectModal = rightCol.querySelector('#_opt_version_modal');
+                if (versionSelectModal) {
+                    versionSelectModal.addEventListener('change', function(){
+                        if (this.value === 'jugador') {
+                            const overlay = document.createElement('div');
+                            overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
+                            overlay.style.background='rgba(0,0,0,0.55)'; overlay.style.zIndex=6000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+                            overlay.innerHTML = `
+                                <div style="max-width:520px;background:#071735;color:#dbeeff;padding:16px 18px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.4);font-size:0.95rem;line-height:1.45;">
+                                    <div style="margin-bottom:12px;">
+                                        Has seleccionado la versión JUGADOR. Debes encontrar la camiseta en el siguiente enlace:<br>
+                                        <a href="https://hxltds.x.yupoo.com/" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;text-decoration:underline;word-break:break-all;">https://hxltds.x.yupoo.com/</a>.<br>
+                                        Si no la encuentras, contáctanos primero por Instagram.
+                                    </div>
+                                    <div style="display:flex;justify-content:flex-end;gap:8px;">
+                                        <button id="jugadorNoticeClose2" type="button" style="background:#1f2a44;border:none;color:#dbeeff;padding:8px 12px;border-radius:8px;cursor:pointer;">Cerrar</button>
+                                        <a href="https://hxltds.x.yupoo.com/" target="_blank" rel="noopener noreferrer" style="background:#2563eb;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;">Abrir enlace</a>
+                                    </div>
+                                </div>`;
+                            document.body.appendChild(overlay);
+                            overlay.addEventListener('click', (e)=>{ if (e.target === overlay) overlay.remove(); });
+                            const closeBtn = overlay.querySelector('#jugadorNoticeClose2');
+                            if (closeBtn) closeBtn.addEventListener('click', ()=> overlay.remove());
+                        }
+                    });
+                }
 
                 // Si el producto define versiones y sólo hay una opción, preseleccionarla y ocultar el selector modal
                 try {
@@ -2203,12 +3008,13 @@
                         overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
                         overlay.style.background='rgba(0,0,0,0.85)'; overlay.style.zIndex=5000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
                         const isNBA2 = /^nba/i.test(product.id) || /\bNBA\b/i.test(product.name);
-                        const guideSrc2 = isNBA2 ? 'assets/images/guias tallas nba.png' : 'assets/images/guia tallas camisetas futbol.png';
-                        const guideAlt2 = isNBA2 ? 'Guía de tallas NBA' : 'Guía de tallas Fútbol';
+const isKids2 = /kids/i.test(product.id) || /\((kids|niños)\)/i.test(product.name);
+const guideSrc2 = isKids2 ? 'assets/images/guia tallas niños.png' : (isNBA2 ? 'assets/images/guias tallas nba.png' : 'assets/images/guia tallas camisetas futbol.png');
+const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de tallas NBA' : 'Guía de tallas Fútbol');
                         overlay.innerHTML = `
                             <div style="position:relative;width:auto;max-width:98vw;max-height:98vh;background:transparent;border-radius:12px;padding:0;box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;overflow:auto;">
                                 <button aria-label=\"Cerrar\" style=\"position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;\">Cerrar</button>
-                                <img src=\"${guideSrc2}\" alt=\"${guideAlt2}\" style=\"height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;\">
+                                <img src=\"${guideSrc2}\" alt=\"${guideAlt2}\" loading=\"lazy\" style=\"${isKids2 ? 'height:65vh;max-height:65vh;max-width:88vw;width:auto;object-fit:contain;border-radius:6px;display:block;' : 'height:80vh;max-height:80vh;max-width:98vw;width:auto;object-fit:contain;border-radius:6px;display:block;'}\">
                             </div>
                         `;
                         document.body.appendChild(overlay);
@@ -2238,7 +3044,7 @@
 
             overlay.innerHTML = `
                 <div id="iv-panel" style="position:relative;width:92vw;max-width:1200px;height:86vh;max-height:900px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:12px;background:rgba(0,0,0,0.1);border:1px solid rgba(255,255,255,0.12);">
-                    <img id="iv-img" src="${images[idx]}" alt="Imagen ${idx+1}" style="max-width:100%;max-height:100%;object-fit:contain;will-change:transform;touch-action:none;user-select:none;cursor:zoom-in;" />
+                    <img id="iv-img" src="${images[idx]}" alt="Imagen ${idx+1}" loading="lazy" width="1512" height="1512" style="max-width:100%;max-height:100%;object-fit:contain;will-change:transform;touch-action:none;user-select:none;cursor:zoom-in;" />
                     <button id="iv-prev" aria-label="Anterior" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:20px;">‹</button>
                     <button id="iv-next" aria-label="Siguiente" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:20px;">›</button>
                     <div id="iv-controls" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:rgba(0,0,0,0.45);padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);align-items:center;">
@@ -2672,7 +3478,7 @@
                     <h3 style="margin-top:0;color:var(--azul-acento);">Resumen de pedido y datos de envío</h3>
                     <div style="margin-bottom:10px;color:#cfe7ff">Total a pagar: <strong>€${total.toFixed(2)}</strong></div>
                     <div id="checkoutSummary" style="background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;margin-bottom:12px;max-height:200px;overflow:auto;"></div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+                    <div id="checkoutGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
                         <input id="checkoutContactName" class="checkout-input" placeholder="Contact Name:" />
                         <input id="checkoutAddressLine" class="checkout-input" placeholder="Address Line:" />
                         <input id="checkoutCity" class="checkout-input" placeholder="City:" />
@@ -2690,6 +3496,20 @@
                 </div>
             `;
             document.body.appendChild(modal);
+
+            // Estilos responsive para el modal de checkout en móviles
+            if (!document.getElementById('checkoutResponsiveStyles')){
+                const stc = document.createElement('style'); stc.id = 'checkoutResponsiveStyles';
+                stc.textContent = `
+                @media (max-width: 768px){
+                    #checkoutModal{ align-items:flex-start !important; padding:12px !important; }
+                    #checkoutModal > div{ width:100% !important; max-width:100% !important; }
+                    #checkoutGrid{ grid-template-columns:1fr !important; }
+                    #checkoutSummary{ max-height:40vh !important; }
+                }
+                `;
+                document.head.appendChild(stc);
+            }
 
             // render summary (itemized)
             const summary = modal.querySelector('#checkoutSummary');
@@ -2864,7 +3684,9 @@
                 const imgSrc = Array.isArray(p.images) && p.images.length ? p.images[0] : p.img || '';
                 const price = (typeof p.price === 'number') ? `€${p.price.toFixed(2)}` : '';
                 card.innerHTML = `
-                    <img src="${imgSrc}" alt="${p.name}" loading="lazy" />
+                    <div style="width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:8px;">
+                        <img src="${imgSrc}" alt="${p.name}" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;display:block;">
+                    </div>
                     <div class="reco-meta">
                         <div class="reco-name">${p.name}</div>
                         <div class="reco-price">${price}</div>
@@ -3213,6 +4035,29 @@
                 hiddenInput.value = activo ? 'Sí' : 'No';
 
                 if (activo) {
+                    // Aviso al activar versión JUGADOR (con enlace clickable)
+                    (function(){
+                        const overlay = document.createElement('div');
+                        overlay.style.position='fixed'; overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0;
+                        overlay.style.background='rgba(0,0,0,0.55)'; overlay.style.zIndex=6000; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+                        overlay.innerHTML = `
+                            <div style="max-width:520px;background:#071735;color:#dbeeff;padding:16px 18px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.4);font-size:0.95rem;line-height:1.45;">
+                                <div style="margin-bottom:12px;">
+                                    Has seleccionado la versión JUGADOR. Debes encontrar la camiseta en el siguiente enlace:<br>
+                                    <a href=\"https://hxltds.x.yupoo.com/\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#60a5fa;text-decoration:underline;word-break:break-all;\">https://hxltds.x.yupoo.com/</a>.<br>
+                                    Si no la encuentras, contáctanos primero por Instagram.
+                                </div>
+                                <div style="display:flex;justify-content:flex-end;gap:8px;">
+                                    <button id="jugadorNoticeClose3" type="button" style="background:#1f2a44;border:none;color:#dbeeff;padding:8px 12px;border-radius:8px;cursor:pointer;">Cerrar</button>
+                                    <a href=\"https://hxltds.x.yupoo.com/\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"background:#2563eb;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;\">Abrir enlace</a>
+                                </div>
+                            </div>`;
+                        document.body.appendChild(overlay);
+                        overlay.addEventListener('click', (e)=>{ if (e.target === overlay) overlay.remove(); });
+                        const closeBtn = overlay.querySelector('#jugadorNoticeClose3');
+                        if (closeBtn) closeBtn.addEventListener('click', ()=> overlay.remove());
+                    })();
+
                     if (botonNBA.classList.contains('activo')) {
                         botonNBA.classList.remove('activo');
                         botonNBA.querySelector('span').textContent = 'DESACTIVADO';
@@ -3686,7 +4531,7 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
         }
         const link = card.getAttribute('data-link');
         if (link) {
-            window.open(link, '_blank');
+            const win = window.open(link, '_blank', 'noopener,noreferrer'); if (win) { try { win.opener = null; } catch(_){} }
         }
     });
 });
@@ -3695,7 +4540,103 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
 
 });
 </script>
-<script src="scripts/scripts.js"></script>
-<script defer src="https://analytics.vercel.com/script.js"></script>
+
+<!-- Barra de pestañas inferior (solo móvil) -->
+<nav class="bottom-nav" aria-label="Navegación inferior" role="navigation">
+  <!-- Catálogo (sección: tienda) -->
+  <button class="bottom-nav__btn" data-seccion="tienda" aria-label="Ir a Catálogo">
+    <span class="icon" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 7h18l-1.5 10.5a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 7V5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v2" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </span>
+    <span class="label">Catálogo</span>
+  </button>
+  <!-- Tienda (sección: pedidos) -->
+  <button class="bottom-nav__btn" data-seccion="pedidos" aria-label="Ir a Tienda">
+    <span class="icon" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 7h16l-1 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 7Z" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M6 7l2-3h8l2 3" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </span>
+    <span class="label">Tienda</span>
+  </button>
+  <!-- Carrito -->
+  <button class="bottom-nav__btn" data-seccion="carrito" aria-label="Ir a Carrito">
+    <span class="icon" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 5h2l1.6 9.5a2 2 0 0 0 2 1.7h7.8a2 2 0 0 0 2-1.7L20 9H7" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="9" cy="20" r="1.6" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="17" cy="20" r="1.6" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </span>
+    <span class="label">Carrito</span>
+    <span class="cart-tab-badge hidden" aria-hidden="true">0</span>
+  </button>
+  <!-- ¿Quiénes Somos? -->
+  <button class="bottom-nav__btn" data-seccion="quienes-somos" aria-label="Ir a ¿Quiénes Somos?">
+    <span class="icon" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M4 20a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </span>
+    <span class="label">Nosotros</span>
+  </button>
+</nav>
+<script>
+(function(){
+  const bottomNav = document.querySelector('.bottom-nav');
+  if (!bottomNav) return;
+
+  const bottomButtons = Array.from(bottomNav.querySelectorAll('.bottom-nav__btn'));
+  function activateSection(id){
+    const topBtn = document.querySelector('.boton-seccion[data-seccion="'+id+'"]');
+    if (topBtn) topBtn.click();
+  }
+  bottomButtons.forEach(btn => btn.addEventListener('click', () => activateSection(btn.dataset.seccion)));
+  document.querySelectorAll('.boton-seccion').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.seccion;
+      bottomButtons.forEach(b => {
+        const isActive = b.dataset.seccion === id;
+        b.classList.toggle('activo', isActive);
+        if (isActive) { b.setAttribute('aria-current', 'page'); } else { b.removeAttribute('aria-current'); }
+      });
+    });
+  });
+  const activeSection = document.querySelector('.seccion.activa');
+  if (activeSection){
+    const id = activeSection.id;
+    bottomButtons.forEach(b => {
+      const isActive = b.dataset.seccion === id;
+      b.classList.toggle('activo', isActive);
+      if (isActive) { b.setAttribute('aria-current', 'page'); } else { b.removeAttribute('aria-current'); }
+    });
+  }
+  const orig = window.updateCartTabBadge;
+  window.updateCartTabBadge = function(total){
+    try {
+      if (typeof orig === 'function') orig(total);
+      const btn = bottomNav.querySelector('.bottom-nav__btn[data-seccion="carrito"]');
+      if (!btn) return;
+      let badge = btn.querySelector('.cart-tab-badge');
+      if (!badge){ badge = document.createElement('span'); badge.className='cart-tab-badge'; btn.appendChild(badge); }
+      const v = (typeof total === 'number' ? total : (Array.isArray(window.CART) ? window.CART.length : 0));
+      if (v > 0){ badge.textContent=String(v); badge.classList.remove('hidden'); }
+      else { badge.textContent='0'; badge.classList.add('hidden'); }
+    } catch(e) {}
+  };
+  if (typeof window.updateCartTabBadge === 'function') {
+    window.updateCartTabBadge(Array.isArray(window.CART) ? window.CART.length : 0);
+  }
+})();
+</script>
+
+<script defer src="scripts/scripts.js"></script>
+<!-- Analytics deshabilitado en entorno local para evitar errores en consola -->
+<!-- <script defer src="https://analytics.vercel.com/script.js"></script> -->
 </body>
 </html>

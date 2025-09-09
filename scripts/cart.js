@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pedidoCarrito.forEach((prod, idx) => {
             items.innerHTML += `
                 <div class="carrito-item">
-                    <img src="assets/productos/Barcelona2526L/1.jpg" class="carrito-img" alt="Camiseta Barcelona">
+                    <img src="assets/productos/Barcelona2526L/1.jpg" class="carrito-img" alt="Camiseta Barcelona 25-26 Local" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;border-radius:8px;display:block;">
                     <div>
                         <b>Camiseta Barcelona 25-26 Local</b><br>
                         Talla: ${prod.talla}<br>
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
             total += subtotal;
             lista.innerHTML += `
                 <div class="carrito-item" style="display:flex;align-items:center;gap:1em;margin-bottom:1em;background:rgba(20,40,80,0.7);border-radius:12px;padding:1em;">
-                    <img src="${item.img}" alt="${item.nombre}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;">
+                    <img src="${item.img}" alt="${item.nombre}" loading="lazy" style="width:64px;height:64px;object-fit:cover;border-radius:8px;">
                     <div style="flex:1;">
                         <b style="color:#fff;">${item.nombre}</b><br>
                         <span style="color:#b8c6e0;">Talla: ${item.talla}</span><br>

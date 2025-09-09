@@ -66,20 +66,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!imagenes.length) return;
         imagenes.forEach(div => {
             const imgUrl = div.getAttribute('data-img');
-            fetch(imgUrl, { method: 'HEAD' })
-                .then(resp => {
-                    if (resp.ok) existentes.push(div);
-                })
-                .catch(() => {})
-                .finally(() => {
-                    pendientes--;
-                    if (pendientes === 0) inicializarCarruselConExistentes(existentes);
-                });
+            // Crear imagen para probar carga sin ensuciar la consola
+            const tester = new Image();
+            tester.onload = () => { existentes.push(div); finalize(); };
+            tester.onerror = () => { finalize(); };
+            // Forzar carga sin usar fetch HEAD para evitar CORS/abort en local
+            tester.src = imgUrl;
+            function finalize(){
+                pendientes--;
+                if (pendientes === 0) inicializarCarruselConExistentes(existentes);
+            }
         });
         function inicializarCarruselConExistentes(existentes) {
             existentes.forEach(div => {
                 const imgUrl = div.getAttribute('data-img');
                 div.style.backgroundImage = `url('${imgUrl}')`;
+                // Evitar que errores de fondo propaguen mensajes
+                div.onerror = null;
             });
             const prevBtn = document.getElementById('carrusel-prev');
             const nextBtn = document.getElementById('carrusel-next');
@@ -424,11 +427,32 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-    inicializarCarruselClientes();
+    let carruselInitDone = false;
+    function ensureInitCarrusel(){
+        if (carruselInitDone) return;
+        carruselInitDone = true;
+        inicializarCarruselClientes();
+    }
+    const carruselRoot = document.querySelector('.carrusel-imagenes') || document.querySelector('#quienes-somos .carrusel-imagenes');
+    if (carruselRoot && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries, obs) => {
+            if (entries.some(en => en.isIntersecting)) {
+                ensureInitCarrusel();
+                obs.disconnect();
+            }
+        }, { root: null, threshold: 0.1 });
+        io.observe(carruselRoot);
+    } else {
+        // Fallback: inicializar tras un pequeño retraso
+        setTimeout(ensureInitCarrusel, 200);
+    }
     document.querySelectorAll('.boton-seccion').forEach(btn => {
         btn.addEventListener('click', function() {
             if (this.dataset.seccion === 'quienes-somos') {
-                setTimeout(inicializarCarruselClientes, 100);
+                setTimeout(() => {
+                    const target = document.querySelector('.carrusel-imagenes');
+                    if (target) ensureInitCarrusel();
+                }, 50);
             }
         });
     });
