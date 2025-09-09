@@ -20,10 +20,10 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
 
         body::before {
@@ -519,6 +519,21 @@
             border-top-left-radius: 18px;
             border-top-right-radius: 18px;
         }
+
+/* Barra inferior móvil minimalista */
+.bottom-nav{ display:none; }
+@media (max-width: 800px){
+  .navegacion { display: none; }
+  .bottom-nav{ position: fixed; left: 0; right: 0; bottom: 0; height: 64px; background: rgba(10,20,40,0.95); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-around; align-items: center; z-index: 2000; backdrop-filter: saturate(140%) blur(10px); padding-bottom: env(safe-area-inset-bottom, 0); }
+  .bottom-nav__btn{ flex:1; height: 100%; background: transparent; color: #e8eef7; border: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; font-weight: 600; letter-spacing: .3px; position: relative; }
+  .bottom-nav__btn .icon{ display: inline-flex; width: 24px; height: 24px; }
+  .bottom-nav__btn.activo{ color: var(--azul-acento); }
+  .bottom-nav__btn:active{ transform: translateY(1px); }
+  .bottom-nav .cart-tab-badge{ position: absolute; top: 8px; right: calc(50% - 6px); transform: translateX(50%); min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: #ff9800; color: #fff; font-size: 11px; font-weight: 800; line-height: 18px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+  .bottom-nav .cart-tab-badge.hidden{ display:none; }
+  body{ padding-bottom: calc(72px + env(safe-area-inset-bottom, 0)); }
+}
+/* Ajustes fin barra inferior móvil */
         .catalogo-img {
             width: 120px;
             height: 120px;
