@@ -822,7 +822,7 @@
             @media (min-width: 992px) { #carrito .cart-panel { position: sticky; top: 16px; } }
              @media (min-width: 992px) { #carrito #cartRecoPanel { position: sticky; top: 16px; } }
             #carrito .cart-panel { margin-top: 0 !important; }
-            #carrito #cartRecoPanel { background: rgba(10,31,61,0.9); border:1px solid rgba(46,123,237,0.12); border-radius:14px; padding:12px 12px 16px; }
+            #carrito #cartRecoPanel { background: rgba(10,31,61,0.9); border:1px solid rgba(46,123,237,0.12); border-radius:14px; padding:12px 12px 0px; }
             @media (min-width: 992px) { #carrito #cartRecoPanel { margin-top:16px !important; } }
             #carrito .reco-header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
             #carrito .reco-header h3 { color:#fff; font-size:1.02rem; margin:0; }
@@ -1025,7 +1025,7 @@
                 
                 /* Panel de recomendaciones optimizado */
                 #carrito #cartRecoPanel {
-                    padding: clamp(12px, 3vw, 16px);
+                    padding: 12px 12px 4px;
                     background: rgba(10,31,61,0.9);
                     border: 1px solid rgba(46,123,237,0.12);
                 }
@@ -2172,6 +2172,36 @@
             }catch(e){ return 'Otros'; }
         }
         
+        // Extraer el año (inicio de temporada) de un producto, p.ej. "2023/24", "23/24", "2024"
+        function getSeasonYearFromProduct(p){
+            try{
+                // Forzar NBA como temporada 25/26 (año base 2025) para que aparezcan como recientes
+                try {
+                    const league = getLeagueFromProduct(p);
+                    if ((league || '').toLowerCase() === 'nba') return 2025;
+                } catch (e) {}
+                const candidates = [];
+                const consider = [];
+                if (p && p.name) consider.push(p.name);
+                const imgPath = p && (p.img || (Array.isArray(p.images) && p.images[0]) || '');
+                if (imgPath) consider.push(imgPath);
+                for (const sRaw of consider){
+                    const s = String(sRaw);
+                    // Patrones tipo 2023/24 o 2023/2024 -> usar el primer año como año de temporada
+                    let m = s.match(/\b(20\d{2})\s*\/\s*(\d{2,4})\b/);
+                    if (m){ const y = parseInt(m[1],10); if (!Number.isNaN(y)) candidates.push(y); }
+                    // Patrones tipo 23/24 -> asumir 2000+23 = 2023
+                    m = s.match(/\b(\d{2})\s*\/\s*(\d{2})\b/);
+                    if (m){ const y = 2000 + parseInt(m[1],10); if (!Number.isNaN(y)) candidates.push(y); }
+                    // Año suelto 20xx
+                    m = s.match(/\b(20\d{2})\b/);
+                    if (m){ const y = parseInt(m[1],10); if (!Number.isNaN(y)) candidates.push(y); }
+                }
+                if (candidates.length) return Math.max(...candidates);
+                return 0;
+            }catch(e){ return 0; }
+        }
+        
         // Función para crear los controles de filtrado y ordenamiento
         function createGalleryControls(container) {
             // Obtener todas las ligas disponibles
@@ -2321,7 +2351,7 @@
                     wrapper.className = 'dropdown-item has-sub';
                     wrapper.textContent = league;
                     // Al hacer clic en la competición, filtrar por toda la liga
-                    wrapper.addEventListener('click', (e) => {
+                    wrapper.addEventListener('click', (e) => {º
                         e.stopPropagation();
                         currentLeagueFilter = league;
                         currentTeamFilter = 'all';
@@ -2633,6 +2663,8 @@
                     <option value="name-desc">Nombre: Z-A</option>
                     <option value="team-asc">Equipo: A-Z</option>
                     <option value="team-desc">Equipo: Z-A</option>
+                    <option value="season-desc">Temporada: más reciente</option>
+                    <option value="season-asc">Temporada: más antigua</option>
                 </select>
             `;
             
@@ -2736,6 +2768,12 @@
                     const tb = normalizeNoAccentsGlobal(canonicalizeTeamName(getTeamFromProduct(b)) || '');
                     return currentSortOrder === 'team-asc' ? ta.localeCompare(tb) : tb.localeCompare(ta);
                 });
+            } else if (currentSortOrder === 'season-desc' || currentSortOrder === 'season-asc') {
+                list.sort((a, b) => {
+                    const ya = getSeasonYearFromProduct(a) || 0;
+                    const yb = getSeasonYearFromProduct(b) || 0;
+                    return currentSortOrder === 'season-desc' ? (yb - ya) : (ya - yb);
+                });
             }
             
             // Actualizar contador de productos
@@ -2799,8 +2837,18 @@
             modal.style.maxWidth = '100vw';
             modal.style.overflow = 'hidden';
             modal.innerHTML = `
-                <div style="width:100%;max-width:280px;background:#071735;padding:8px;border-radius:8px;color:#dbeeff;overflow:visible;box-sizing:border-box;">
+                <div class="product-modal-container" style="width:100%;max-width:280px;background:#071735;padding:8px;border-radius:8px;color:#dbeeff;overflow:visible;box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
                 <style>
+                @media (min-width: 992px) {
+                    .product-modal-container {
+                        max-width: calc(100vw - 300px) !important;
+                        max-height: calc(100vh - 300px) !important;
+                        width: calc(100vw - 300px) !important;
+                        padding: 40px !important;
+                        margin: 150px !important;
+                        border-radius: 20px !important;
+                    }
+                }
                 @media (max-width: 768px) {
                     #modal-tienda-carrusel > div > div {
                         max-width: 240px !important;
@@ -2824,20 +2872,33 @@
                         padding: 4px !important;
                     }
                 }
+                
+                /* Estilos para desktop - aumentar tamaño de título y precio */
+                @media (min-width: 769px) {
+                    .product-title-desktop {
+                        font-size: 2.5rem !important;
+                    }
+                    .product-excerpt-desktop {
+                        font-size: 1.6rem !important;
+                    }
+                    .product-price-desktop {
+                        font-size: 2.2rem !important;
+                    }
+                }
                 </style>
                     <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
-                        <img src="${product.img}" alt="${product.name}" loading="lazy" width="1512" height="1512" style="width:100px;height:100px;object-fit:cover;border-radius:6px;margin:0 auto;">
+                        <img src="${product.img}" alt="${product.name}" loading="lazy" width="1512" height="1512" style="width:100%;max-width:400px;aspect-ratio:1/1;object-fit:cover;border-radius:16px;margin:0 auto;">
                         <div style="width:100%;">
-                            <h3 style="margin:0;color:var(--azul-acento);font-size:0.9rem;text-align:center;">${product.name}</h3>
-                            <p style="color:#d6e9ff;font-size:0.75rem;margin:2px 0;text-align:center;">${product.excerpt}</p>
-                            <p style="font-weight:800;font-size:0.9rem;color:#9fe0ff;margin:2px 0;text-align:center;">€${product.price.toFixed(2)}</p>
-                            <form id="_personalizeForm" style="margin-top:4px;display:grid;grid-template-columns:1fr;gap:4px;align-items:start;font-size:0.75rem;">
-                                <label style="font-weight:600;color:#dbeeff;font-size:0.7rem;">Nombre y número (+2€)
-                                    <input id="_opt_dorsal" placeholder="Ej: MESSI 10" style="width:100%;padding:4px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:2px;font-size:0.7rem;" />
-                                </label>
+                            <h3 style="margin:0;color:var(--azul-acento);font-size:2rem;text-align:center;" class="product-title-desktop">${product.name}</h3>
+                            <p style="color:#d6e9ff;font-size:1.3rem;margin:8px 0;text-align:center;" class="product-excerpt-desktop">${product.excerpt}</p>
+                            <p style="font-weight:800;font-size:1.8rem;color:#9fe0ff;margin:8px 0;text-align:center;" class="product-price-desktop">€${product.price.toFixed(2)}</p>
+                            <form id="_personalizeForm" style="margin-top:16px;display:grid;grid-template-columns:1fr;gap:16px;align-items:start;font-size:1.2rem;">
+                                <label style="font-weight:600;color:#dbeeff;font-size:1.6rem;">Nombre y número (+2€)
+                                     <input id="_opt_dorsal" placeholder="Ej: MESSI 10" style="width:100%;padding:16px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:12px;font-size:1.3rem;" />
+                                 </label>
 
-                                <label style="font-weight:600;color:#dbeeff;font-size:0.7rem;">Parche (+1€)
-                                    <select id="_opt_parche_select" class="custom-select" style="margin-top:2px;width:100%;padding:4px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:0.7rem;">
+                                <label style="font-weight:600;color:#dbeeff;font-size:1.6rem;">Parche (+1€)
+                                    <select id="_opt_parche_select" class="custom-select" style="margin-top:8px;width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:1.1rem;">
                                         <option value="none">Ninguno</option>
                                         <option value="LaLiga">LaLiga</option>
                                         <option value="Premier League">Premier League</option>
@@ -2850,12 +2911,12 @@
                                         <option value="Otros">Otros</option>
                                     </select>
                                 </label>
-                                <label id="_opt_parche_otros_wrap" style="display:none;font-size:0.7rem;">
-                                    <input id="_opt_parche_otros" placeholder="Indica el parche" style="width:100%;padding:4px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:0.7rem;" />
+                                <label id="_opt_parche_otros_wrap" style="display:none;font-size:1.6rem;">
+                                    <input id="_opt_parche_otros" placeholder="Indica el parche" style="width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:1.1rem;" />
                                 </label>
 
-                                <label style="font-weight:600;color:#dbeeff;font-size:0.7rem;"> Talla:
-                                    <select id="_opt_talla" class="custom-select input-talla" style="margin-top:2px;width:100%;padding:4px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:0.7rem;">
+                                <label style="font-weight:600;color:#dbeeff;font-size:1.6rem;"> Talla:
+                                    <select id="_opt_talla" class="custom-select input-talla" style="margin-top:8px;width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:1.1rem;">
                                         <option value="S">S</option>
                                         <option value="M">M</option>
                                         <option value="L">L</option>
@@ -2866,20 +2927,20 @@
                                     </select>
                                 </label>
 
-                                <label style="font-weight:600;color:#dbeeff;font-size:0.7rem;"> Versión (elige una):
-                                    <select id="_opt_version" class="custom-select" style="margin-top:2px;width:100%;padding:4px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:0.7rem;">
+                                <label style="font-weight:600;color:#dbeeff;font-size:1.6rem;"> Versión (elige una):
+                                    <select id="_opt_version" class="custom-select" style="margin-top:8px;width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:1.1rem;">
                                         <option value="" disabled selected>Selecciona versión</option>
                                         <option value="fan">FAN</option>
                                         <option value="jugador">JUGADOR (+5€)</option>
                                     </select>
                                 </label>
-                                <div style="margin-top:2px;text-align:center;">
-                                    <button id="_sizeGuideBasic" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:0.65rem;font-weight:600;transition:all 0.2s ease;position:relative;padding-bottom:1px;display:inline-block;border-bottom:1px solid var(--azul-acento);">Guía de tallas</button>
+                                <div style="margin-top:12px;text-align:center;">
+                                    <button id="_sizeGuideBasic" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:1.5rem;font-weight:600;transition:all 0.2s ease;position:relative;padding-bottom:4px;display:inline-block;border-bottom:2px solid var(--azul-acento);">Guía de tallas</button>
                                 </div>
                             </form>
-                            <div style="margin-top:4px;display:flex;flex-direction:column;gap:3px;">
-                                <button id="_addCart" class="btn-primary" style="padding:4px;font-size:0.7rem;">Personalizar y Comprar</button>
-                                <button id="_closeModal" class="btn-secondary" style="padding:4px;font-size:0.7rem;">Cerrar</button>
+                            <div style="margin-top:20px;display:flex;flex-direction:column;gap:16px;">
+                                <button id="_addCart" class="btn-primary" style="padding:18px;font-size:1.4rem;">Personalizar y Comprar</button>
+                                <button id="_closeModal" class="btn-secondary" style="padding:16px;font-size:1.3rem;">Cerrar</button>
                             </div>
                         </div>
                     </div>
@@ -2963,11 +3024,17 @@
                         }
                     }
                 } else {
-                    // En desktop, mantener el ajuste original pero con tamaño reducido
+                    // En desktop, ocupar casi toda la pantalla con 150px de margen
                     panel.style.transformOrigin = 'center center';
-                    panel.style.maxWidth = '280px';
-                    const availH = Math.max(0, window.innerHeight - 48);
-                    const availW = Math.max(0, window.innerWidth - 48);
+                    panel.style.maxWidth = 'calc(100vw - 300px)';
+                    panel.style.maxHeight = 'calc(100vh - 300px)';
+                    panel.style.width = 'calc(100vw - 300px)';
+                    panel.style.padding = '40px';
+                    panel.style.margin = '150px';
+                    panel.style.borderRadius = '20px';
+                    panel.style.overflow = 'auto';
+                    const availH = Math.max(0, window.innerHeight - 300);
+                    const availW = Math.max(0, window.innerWidth - 300);
                     const rectH = panel.scrollHeight;
                     const rectW = panel.scrollWidth;
                     const scale = Math.min(1, (availH > 0 ? availH / rectH : 1), (availW > 0 ? availW / rectW : 1));
@@ -3145,7 +3212,7 @@
 
             // Build carousel HTML dynamically from product.images (fallback to [product.img])
             const imgs = Array.isArray(product.images) && product.images.length ? product.images : [product.img];
-            const slidesHtml = imgs.map((src, i) => `<div style="flex:0 0 100%;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:4px;"><img src="${src}" alt="Imagen ${i+1} de ${imgs.length}" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('');
+            const slidesHtml = imgs.map((src, i) => `<div style="flex:0 0 100%;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:4px;min-width:100%;"><img src="${src}" alt="Imagen ${i+1} de ${imgs.length}" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('');
             const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" alt="Miniatura ${i+1} de ${imgs.length}" loading="lazy" style="width:40px;height:40px;object-fit:cover;border-radius:4px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
 
             modal.innerHTML = `
@@ -3204,7 +3271,7 @@
 
             // Carousel logic (scoped to modal)
             const track = modal.querySelector('.carousel-track');
-            const slides = Array.from(track.querySelectorAll('img'));
+            const slides = Array.from(track.querySelectorAll('div[style*="flex:0 0 100%"]'));
             let idx = 0;
             const prev = modal.querySelector('#modalTiendaPrev');
             const next = modal.querySelector('#modalTiendaNext');
@@ -3229,15 +3296,15 @@
             const rightCol = modal.querySelector('div[style*="background:rgba(10,31,61,0.9)"]');
             if (rightCol) {
                 rightCol.innerHTML = `
-                    <h3 style="color:var(--azul-acento);margin-top:0;font-size:1rem;">${product.name}</h3>
-                    <p style="color:#d6e9ff;font-size:0.8rem;margin:4px 0;">${product.excerpt}</p>
-                    <div style="font-weight:800;color:#9fe0ff;font-size:1.1rem;margin:6px 0;">€${product.price.toFixed(2)}</div>
+                    <h3 style="color:var(--azul-acento);margin-top:0;font-size:1.4rem;" class="product-title-desktop">${product.name}</h3>
+                    <p style="color:#d6e9ff;font-size:1.2rem;margin:4px 0;" class="product-excerpt-desktop">${product.excerpt}</p>
+                    <div style="font-weight:800;color:#9fe0ff;font-size:1.4rem;margin:6px 0;" class="product-price-desktop">€${product.price.toFixed(2)}</div>
                     <form id="modalTiendaForm" style="display:grid;gap:4px;overflow:visible;font-size:0.8rem;">
-                        <label style="font-weight:700;color:#dbeeff;font-size:0.75rem;">Nombre y número (+2€)
-                            <input id="_opt_dorsal_modal" placeholder="Ej: JAMES 6" style="width:100%;padding:4px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:3px;font-size:0.75rem;" />
-                        </label>
-                        <label style="font-size:0.75rem;">Talla:
-                            <select id="_opt_talla_modal" class="custom-select input-talla" style="margin-top:3px;padding:4px;border-radius:4px;font-size:0.75rem;">
+                        <label style="font-weight:700;color:#dbeeff;font-size:1.3rem;">Nombre y número (+2€)
+                             <input id="_opt_dorsal_modal" placeholder="Ej: JAMES 6" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-top:8px;font-size:1.0rem;" />
+                         </label>
+                        <label style="font-size:1.3rem;">Talla:
+                            <select id="_opt_talla_modal" class="custom-select input-talla" style="margin-top:3px;padding:4px;border-radius:4px;font-size:1.0rem;">
                                 <option value="S">S</option>
                                 <option value="M">M</option>
                                 <option value="L">L</option>
@@ -3248,11 +3315,11 @@
                             </select>
                         </label>
                         <div style="margin:2px 0 0 0;">
-                            <button id="_sizeGuideCarousel" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:0.7rem;font-weight:600;transition:all 0.2s ease;position:relative;padding-bottom:1px;display:inline-block;transform:translateX(2px);border-bottom:1px solid var(--azul-acento);">Guía de tallas</button>
+                            <button id="_sizeGuideCarousel" type="button" style="background:transparent;color:var(--azul-acento);border:none;padding:0;cursor:pointer;font-family:inherit;font-size:1.2rem;font-weight:600;transition:all 0.2s ease;position:relative;padding-bottom:1px;display:inline-block;transform:translateX(2px);border-bottom:1px solid var(--azul-acento);">Guía de tallas</button>
                         </div>
                         <div style="display:flex;gap:4px;justify-content:flex-end;margin-top:4px;">
-                            <button id="modalTiendaAdd" type="button" class="btn-primary" style="padding:4px 8px;font-size:0.75rem;">Añadir al carrito</button>
-                            <button id="modalTiendaCloseInline" type="button" class="btn-secondary" style="padding:4px 8px;font-size:0.75rem;">Cerrar</button>
+                            <button id="modalTiendaAdd" type="button" class="btn-primary" style="padding:4px 8px;font-size:1.0rem;">Añadir al carrito</button>
+                            <button id="modalTiendaCloseInline" type="button" class="btn-secondary" style="padding:4px 8px;font-size:1.0rem;">Cerrar</button>
                         </div>
                     </form>
                 `;
@@ -3266,8 +3333,8 @@
                         // Insertar Parche (no NBA)
                         if (!rightCol.querySelector('#_opt_parche_select_modal')) {
                             const parcheHTML = `
-                        <label style="font-weight:700;color:#dbeeff;font-size:0.75rem;">Parche (+1€)
-                            <select id="_opt_parche_select_modal" class="custom-select" style="margin-top:3px;padding:4px;border-radius:4px;font-size:0.75rem;">
+                        <label style="font-weight:700;color:#dbeeff;font-size:1.3rem;">Parche (+1€)
+                            <select id="_opt_parche_select_modal" class="custom-select" style="margin-top:3px;padding:4px;border-radius:4px;font-size:1.0rem;">
                                 <option value="none">Ninguno</option>
                                 <option value="LaLiga">LaLiga</option>
                                 <option value="Premier League">Premier League</option>
@@ -3280,7 +3347,7 @@
                                 <option value="Otros">Otros</option>
                             </select>
                         </label>
-                        <label id="_opt_parche_otros_wrap_modal" style="display:none;font-size:0.75rem;"><input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:4px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:0.75rem;" /></label>`;
+                        <label id="_opt_parche_otros_wrap_modal" style="display:none;font-size:1.3rem;"><input id="_opt_parche_otros_modal" placeholder="Indica el parche" style="width:100%;padding:4px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:1.0rem;" /></label>`;
                             const tallaLabel = rightCol.querySelector('#_opt_talla_modal')?.parentElement;
                             if (tallaLabel) tallaLabel.insertAdjacentHTML('beforebegin', parcheHTML);
                             else form.insertAdjacentHTML('beforeend', parcheHTML);
@@ -3288,8 +3355,8 @@
                         // Insertar Versión si NO es Kids
                         if (!isKids && !rightCol.querySelector('#_opt_version_modal')) {
                             const versionHTML = `
-                        <label style="font-size:0.75rem;">Versión:
-                            <select id="_opt_version_modal" class="custom-select" style="margin-top:3px;padding:4px;border-radius:4px;font-size:0.75rem;">
+                        <label style="font-size:1.3rem;">Versión:
+                            <select id="_opt_version_modal" class="custom-select" style="margin-top:3px;padding:4px;border-radius:4px;font-size:1.0rem;">
                                 <option value="" disabled selected>Selecciona versión</option>
                                 <option value="fan">FAN</option>
                                 <option value="jugador">JUGADOR (+5€)</option>

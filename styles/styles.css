@@ -627,6 +627,67 @@
             gap: 3.5rem; /* Más separación entre iconos */
             margin-bottom: 1.5rem;
         }
+
+        /* Estilos para modales de personalización en escritorio */
+        @media (min-width: 801px) {
+            /* Modal de personalización simple */
+            .modal-personalizacion {
+                max-width: calc(100vw - 300px) !important;
+                width: 100% !important;
+                margin: 0 auto;
+            }
+            
+            /* Modal de carrusel/tienda */
+            #modal-tienda-carrusel .tienda-panel {
+                max-width: calc(100vw - 300px) !important;
+                width: 100% !important;
+                grid-template-columns: 1fr 400px !important;
+                gap: 20px !important;
+            }
+            
+            #modal-tienda-carrusel .tienda-panel > div:first-child {
+                max-width: none !important;
+                width: 100% !important;
+            }
+            
+            #modal-tienda-carrusel .tienda-panel > div:last-child {
+                max-width: none !important;
+                width: 100% !important;
+            }
+            
+            /* Ajustes para la modal de personalización simple */
+            .modal-personalizacion > div {
+                max-width: none !important;
+                width: 100% !important;
+            }
+            
+            /* Aumentar tamaño de imagen en modal */
+            .modal-personalizacion img {
+                width: 350px !important;
+                height: 350px !important;
+            }
+            
+            /* Mejorar espaciado interno */
+            .modal-personalizacion > div > div {
+                gap: 20px !important;
+            }
+            
+            /* Ajustar formulario para aprovechar espacio */
+            #_personalizeForm {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 15px !important;
+            }
+            
+            /* Modal específica de carrusel - ajustes adicionales */
+            #modal-tienda-carrusel {
+                padding: 24px !important;
+            }
+            
+            #modal-tienda-carrusel .tienda-panel {
+                padding: 24px !important;
+                border-radius: 12px !important;
+            }
+        }
 .redes-sociales a,
 .redes_sociales a {
     color: rgba(255, 255, 255, 0.8);
