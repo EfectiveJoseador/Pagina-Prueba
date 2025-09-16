@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Autenticación - Prueba</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .auth-section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      background: #4285f4;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 5px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #3367d6;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .logout-btn {
+      background: #dc3545;
+    }
+    .logout-btn:hover {
+      background: #c82333;
+    }
+    .user-info {
+      background: #e8f5e8;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px 0;
+    }
+    .users-list {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px 0;
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    .success {
+      background: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    li:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 Firebase Autenticación con Google</h1>
+    
+    <div class="auth-section">
+      <h3>Estado de Autenticación</h3>
+      <div id="auth-status">Verificando estado...</div>
+      
+      <div id="auth-buttons">
+        <button id="login-btn">🔑 Iniciar Sesión con Google</button>
+        <button id="logout-btn" class="logout-btn" style="display: none;">🚪 Cerrar Sesión</button>
+      </div>
+    </div>
+
+    <div class="auth-section">
+      <h3>Gestión de Usuarios</h3>
+      <button id="add-user-btn" disabled>👤 Añadir Usuario a Base de Datos</button>
+      <button id="load-users-btn">📋 Cargar Lista de Usuarios</button>
+      
+      <div id="output"></div>
+    </div>
+
+    <div class="auth-section">
+      <h3>Pruebas de Integración</h3>
+      <button id="test-products-btn">🛍️ Probar Productos</button>
+      <button id="test-cart-btn" disabled>🛒 Probar Carrito</button>
+      <button id="test-orders-btn" disabled>📦 Probar Pedidos</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import {
+      getDatabase, ref, set, get, push, query, orderByChild, limitToLast
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    import {
+      getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+
+    // Configuración Firebase (usando tu configuración existente)
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7rdqxu0OpdDReiT7hQE8-zTTID2hR0K0",
+      authDomain: "camisetazousers.firebaseapp.com",
+      databaseURL: "https://camisetazousers-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "camisetazousers",
+      storageBucket: "camisetazousers.firebasestorage.app",
+      messagingSenderId: "964741829009",
+      appId: "1:964741829009:web:2d6c8e7dcb850b94beca30",
+      measurementId: "G-7XZL0L37ES"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const analytics = getAnalytics(app);
+    const provider = new GoogleAuthProvider();
+
+    // Configurar proveedor de Google
+    provider.addScope('profile');
+    provider.addScope('email');
+
+    // Referencias DOM
+    const authStatus = document.getElementById('auth-status');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const addUserBtn = document.getElementById('add-user-btn');
+    const loadUsersBtn = document.getElementById('load-users-btn');
+    const testProductsBtn = document.getElementById('test-products-btn');
+    const testCartBtn = document.getElementById('test-cart-btn');
+    const testOrdersBtn = document.getElementById('test-orders-btn');
+    const output = document.getElementById('output');
+
+    // Función para mostrar mensajes
+    function showMessage(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = type;
+      div.textContent = message;
+      output.appendChild(div);
+      setTimeout(() => div.remove(), 5000);
+    }
+
+    // Función para actualizar UI según estado de autenticación
+    function updateUI(user) {
+      if (user) {
+        authStatus.innerHTML = `
+          <div class="user-info">
+            <strong>✅ Sesión Iniciada</strong><br>
+            <strong>Nombre:</strong> ${user.displayName || 'Sin nombre'}<br>
+            <strong>Email:</strong> ${user.email}<br>
+            <strong>UID:</strong> ${user.uid}
+          </div>
+        `;
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        addUserBtn.disabled = false;
+        testCartBtn.disabled = false;
+        testOrdersBtn.disabled = false;
+      } else {
+        authStatus.innerHTML = '<div class="error">❌ No has iniciado sesión</div>';
+        loginBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        addUserBtn.disabled = true;
+        testCartBtn.disabled = true;
+        testOrdersBtn.disabled = true;
+      }
+    }
+
+    // Iniciar sesión con Google
+    loginBtn.addEventListener('click', async () => {
+      try {
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Iniciando sesión...';
+        
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        showMessage(`¡Bienvenido ${user.displayName}!`, 'success');
+        
+        // Registrar evento en Analytics
+        if (analytics) {
+          // logEvent(analytics, 'login', { method: 'google' });
+        }
+      } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        showMessage(`Error: ${error.message}`, 'error');
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = '🔑 Iniciar Sesión con Google';
+      }
+    });
+
+    // Cerrar sesión
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        showMessage('Sesión cerrada correctamente', 'success');
+        output.innerHTML = '';
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    });
+
+    // Añadir usuario a la base de datos
+    addUserBtn.addEventListener('click', async () => {
+      try {
+        if (!auth.currentUser) {
+          showMessage('Debes iniciar sesión primero', 'error');
+          return;
+        }
+
+        addUserBtn.disabled = true;
+        addUserBtn.textContent = 'Añadiendo...';
+
+        const userData = {
+          uid: auth.currentUser.uid,
+          nombre: auth.currentUser.displayName,
+          email: auth.currentUser.email,
+          fechaRegistro: new Date(),
+          ultimoAcceso: new Date(),
+          photoURL: auth.currentUser.photoURL
+        };
+
+        await addDoc(collection(db, 'usuarios'), userData);
+        showMessage('Usuario añadido a la base de datos', 'success');
+      } catch (error) {
+        console.error('Error al añadir usuario:', error);
+        showMessage(`Error: ${error.message}`, 'error');
+      } finally {
+        addUserBtn.disabled = false;
+        addUserBtn.textContent = '👤 Añadir Usuario a Base de Datos';
+      }
+    });
+
+    // Cargar lista de usuarios
+    loadUsersBtn.addEventListener('click', async () => {
+      try {
+        loadUsersBtn.disabled = true;
+        loadUsersBtn.textContent = 'Cargando...';
+
+        const q = query(collection(db, 'usuarios'), orderBy('fechaRegistro', 'desc'), limit(10));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+          showMessage('No hay usuarios registrados', 'error');
+          return;
+        }
+
+        let html = '<div class="users-list"><h4>👥 Usuarios Registrados (últimos 10):</h4><ul>';
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const fecha = data.fechaRegistro?.toDate?.()?.toLocaleDateString() || 'Fecha no disponible';
+          html += `
+            <li>
+              <strong>${data.nombre || 'Sin nombre'}</strong><br>
+              📧 ${data.email}<br>
+              📅 Registrado: ${fecha}
+            </li>
+          `;
+        });
+        html += '</ul></div>';
+        
+        const existingList = output.querySelector('.users-list');
+        if (existingList) existingList.remove();
+        
+        output.insertAdjacentHTML('beforeend', html);
+        showMessage(`${querySnapshot.size} usuarios cargados`, 'success');
+      } catch (error) {
+        console.error('Error al cargar usuarios:', error);
+        showMessage(`Error: ${error.message}`, 'error');
+      } finally {
+        loadUsersBtn.disabled = false;
+        loadUsersBtn.textContent = '📋 Cargar Lista de Usuarios';
+      }
+    });
+
+    // Probar funcionalidad de productos
+    testProductsBtn.addEventListener('click', async () => {
+      try {
+        // Verificar si existe la clase ProductsDB
+        if (typeof window.productsDB !== 'undefined') {
+          await window.productsDB.addSampleProducts();
+          showMessage('Productos de muestra añadidos', 'success');
+        } else {
+          showMessage('Módulo de productos no cargado. Verifica que firebase-products.js esté incluido.', 'error');
+        }
+      } catch (error) {
+        console.error('Error al probar productos:', error);
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    });
+
+    // Probar funcionalidad del carrito
+    testCartBtn.addEventListener('click', async () => {
+      try {
+        if (typeof window.cartManager !== 'undefined') {
+          // Añadir producto de prueba al carrito
+          const testProduct = {
+            id: 'test-product-1',
+            name: 'Camiseta de Prueba',
+            price: 25.99,
+            image: '/assets/productos/test.jpg'
+          };
+          
+          await window.cartManager.addItem(testProduct, 1, 'M');
+          showMessage('Producto añadido al carrito de prueba', 'success');
+        } else {
+          showMessage('Módulo de carrito no cargado. Verifica que firebase-cart.js esté incluido.', 'error');
+        }
+      } catch (error) {
+        console.error('Error al probar carrito:', error);
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    });
+
+    // Probar funcionalidad de pedidos
+    testOrdersBtn.addEventListener('click', async () => {
+      try {
+        if (typeof window.ordersManager !== 'undefined') {
+          const stats = await window.ordersManager.getUserOrderStats(auth.currentUser.uid);
+          showMessage(`Estadísticas de pedidos: ${stats.totalOrders} pedidos, ${stats.totalSpent}€ gastados`, 'success');
+        } else {
+          showMessage('Módulo de pedidos no cargado. Verifica que firebase-orders.js esté incluido.', 'error');
+        }
+      } catch (error) {
+        console.error('Error al probar pedidos:', error);
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    });
+
+    // Escuchar cambios de estado de autenticación
+    onAuthStateChanged(auth, (user) => {
+      updateUI(user);
+      
+      if (user) {
+        console.log('Usuario autenticado:', {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName
+        });
+      } else {
+        console.log('Usuario no autenticado');
+      }
+    });
+
+    // Hacer servicios disponibles globalmente para pruebas
+    window.firebaseApp = app;
+    window.firebaseDB = db;
+    window.firebaseAuth = auth;
+    window.firebaseAnalytics = analytics;
+
+    console.log('🔥 Firebase Auth Test inicializado correctamente');
+  </script>
+</body>
+</html>
