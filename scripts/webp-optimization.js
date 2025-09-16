@@ -180,15 +180,10 @@
     }
 
     async function optimizeAllImages() {
-        console.log('WebP optimization temporarily disabled');
-        return;
-        
         const images = document.querySelectorAll('img');
         const promises = Array.from(images).map(img => optimizeImage(img));
-        
         try {
             await Promise.all(promises);
-            
             if (config.enablePerformanceMonitoring) {
                 logPerformanceMetrics();
             }
@@ -198,8 +193,35 @@
     }
 
     function observeNewImages() {
-        console.log('WebP image monitoring temporarily disabled');
-        return null;
+        try {
+            const observer = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    if (mutation.type === 'childList') {
+                        mutation.addedNodes.forEach(node => {
+                            if (node && node.tagName === 'IMG') {
+                                optimizeImage(node);
+                            } else if (node && node.querySelectorAll) {
+                                node.querySelectorAll('img').forEach(img => optimizeImage(img));
+                            }
+                        });
+                    } else if (mutation.type === 'attributes' && mutation.target && mutation.target.tagName === 'IMG') {
+                        if (mutation.attributeName === 'src' || mutation.attributeName === 'data-src' || mutation.attributeName === 'data-lazy-src') {
+                            optimizeImage(mutation.target);
+                        }
+                    }
+                });
+            });
+            observer.observe(document.documentElement || document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src', 'data-src', 'data-lazy-src']
+            });
+            return observer;
+        } catch (e) {
+            console.warn('Image observer failed to start:', e);
+            return null;
+        }
     }
 
     

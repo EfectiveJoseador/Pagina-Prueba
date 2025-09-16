@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
@@ -13,15 +13,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">        
     <link rel="stylesheet" href="styles/styles.css">
-<!-- Deshabilitado en local: Google Analytics -->
-<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script> -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  // Stub de gtag inofensivo en local
-  window.gtag = function(){ /* noop en local */ };
-  // Config deshabilitada en local
-  // gtag('js', new Date());
-  // gtag('config', 'G-GS53GWE2Z0');
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-GS53GWE2Z0');
 </script>
 </head>
 <body>
@@ -1155,6 +1152,9 @@
         <input type="hidden" name="postal" id="form_postal">
         <input type="hidden" name="phone" id="form_phone">
         <input type="hidden" name="instagram" id="form_instagram">
+        <!-- Campos recomendados para FormSubmit -->
+        <input type="text" name="_honey" style="display:none">
+        <input type="hidden" name="_replyto" id="form_replyto">
     <!-- removed JSON payload: keep only the human-readable summary to avoid large payloads in FormSubmit -->
     <!-- Human-readable cart summary for email clarity -->
     <input type="hidden" name="cart_items_text" id="form_cart_items_text">
@@ -4851,6 +4851,12 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         copyIfExists('#checkoutPostal', 'form_postal');
         copyIfExists('#checkoutPhone', 'form_phone');
         copyIfExists('#checkoutInstagram', 'form_instagram');
+        // Establecer _replyto desde el email del cliente
+        try {
+            const replyEl = document.getElementById('form_replyto');
+            const srcEmail = document.querySelector('#checkoutPaypalEmail') || document.querySelector('#emailPaypal');
+            if (replyEl && srcEmail && srcEmail.value) replyEl.value = srcEmail.value.trim();
+        } catch(e){}
     // fallbacks legacy
     copyIfExists('#emailPaypal', 'form_emailPaypal');
     // (usuario field removed) copyIfExists('#usuario', 'form_usuario');
@@ -4941,35 +4947,56 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     // Debug: precio_total value
     try { console.log('enviarFormulario: precio_total =', precioTotalEl ? precioTotalEl.value : '(no input)'); } catch(e){}
 
-        // Enviar el form usando un iframe oculto para evitar navegación fuera de la página
+        // Intentar primero envío AJAX a FormSubmit para diagnosticar errores y evitar navegación
         try {
-            let iframe = document.querySelector('iframe[name="formsubmit_iframe"]');
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.name = 'formsubmit_iframe';
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-            }
-
-            // marcar como enviado
+            const ajaxUrl = pedidoFormEl.action.replace('formsubmit.co/', 'formsubmit.co/ajax/');
+            const formData = new FormData(pedidoFormEl);
             pedidoFormEl.dataset.submitted = '1';
-            pedidoFormEl.target = 'formsubmit_iframe';
-
-            const onLoadHandler = () => {
-                setTimeout(() => {
+            console.log('enviarFormulario: intentando AJAX ->', ajaxUrl);
+            fetch(ajaxUrl, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } })
+                .then(res => { if (!res.ok) throw new Error('HTTP '+res.status); return res.json().catch(()=>({})); })
+                .then(data => {
+                    console.log('FormSubmit AJAX success:', data);
                     mostrarExito('Pedido enviado correctamente.');
                     try { if (typeof clearCart === 'function') clearCart(); } catch (e) {}
                     pedidoFormEl.dataset.submitted = '0';
-                }, 600);
-                iframe.removeEventListener('load', onLoadHandler);
-            };
-            iframe.addEventListener('load', onLoadHandler);
-
-            console.log('enviarFormulario: submitting form to', pedidoFormEl.action, 'target=', pedidoFormEl.target);
-            pedidoFormEl.submit();
+                    // Redirigir si hay _next
+                    const nextEl = pedidoFormEl.querySelector('input[name="_next"]');
+                    if (nextEl && nextEl.value) {
+                        window.location.href = nextEl.value;
+                    }
+                })
+                .catch(err => {
+                    console.warn('FormSubmit AJAX falló, usando fallback por iframe:', err);
+                    // Fallback: enviar con iframe oculto para no salir de la página
+                    try {
+                        let iframe = document.querySelector('iframe[name="formsubmit_iframe"]');
+                        if (!iframe) {
+                            iframe = document.createElement('iframe');
+                            iframe.name = 'formsubmit_iframe';
+                            iframe.style.display = 'none';
+                            document.body.appendChild(iframe);
+                        }
+                        pedidoFormEl.target = 'formsubmit_iframe';
+                        const onLoadHandler = () => {
+                            setTimeout(() => {
+                                mostrarExito('Pedido enviado correctamente.');
+                                try { if (typeof clearCart === 'function') clearCart(); } catch (e) {}
+                                pedidoFormEl.dataset.submitted = '0';
+                            }, 600);
+                            iframe.removeEventListener('load', onLoadHandler);
+                        };
+                        iframe.addEventListener('load', onLoadHandler);
+                        console.log('enviarFormulario: submitting (fallback) to', pedidoFormEl.action, 'target=', pedidoFormEl.target);
+                        pedidoFormEl.submit();
+                    } catch (err2) {
+                        console.error('Error enviando formulario (fallback):', err2);
+                        mostrarExito('Error al enviar el pedido. Intenta de nuevo o contacta por Instagram.');
+                        pedidoFormEl.dataset.submitted = '0';
+                    }
+                });
         } catch (err) {
-            console.error('Error enviando formulario:', err);
-            mostrarExito('Error al enviar el pedido. Intenta de nuevo o contacta por Instagram.');
+            console.error('Error preparando envío AJAX:', err);
             pedidoFormEl.dataset.submitted = '0';
         }
     }
@@ -5134,8 +5161,10 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
 })();
 </script>
 
+<script defer src="scripts/cookie-consent.js"></script>
+<script defer src="scripts/webp-optimization.js"></script>
+<script defer src="scripts/register-sw.js"></script>
 <script defer src="scripts/scripts.js"></script>
-<!-- Analytics deshabilitado en entorno local para evitar errores en consola -->
-<!-- <script defer src="https://analytics.vercel.com/script.js"></script> -->
+<script defer src="https://analytics.vercel.com/script.js"></script>
 </body>
 </html>

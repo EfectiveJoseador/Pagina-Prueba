@@ -786,7 +786,20 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Deshabilitado: no mostrar notificación dentro de la pestaña del carrito
-  window.notifyCart = function(message){ return; };
+  // window.notifyCart = function(message){ return; };
+  window.notifyCart = function(message){
+    try {
+      const el = ensureCartNotifier();
+      if (!el) return;
+      const txt = el.querySelector('.text');
+      if (txt && message) txt.textContent = message;
+      el.classList.add('show');
+      if (cartNoticeTimer) clearTimeout(cartNoticeTimer);
+      cartNoticeTimer = setTimeout(() => {
+        el.classList.remove('show');
+      }, 2500);
+    } catch(e) { /* noop */ }
+  };
 })();
 
 // Ensure there is a small helper to update the Carrito button badge from anywhere
