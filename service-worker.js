@@ -46,8 +46,14 @@ self.addEventListener('fetch', (event) => {
   
   if (event.request.method !== 'GET') return;
   
-  
-  if (event.request.url.includes('analytics.vercel.com')) return;
+  // Permitir requests de Vercel Analytics y Google Analytics sin interferencia
+  if (
+    event.request.url.includes('analytics.vercel.com') ||
+    event.request.url.includes('www.googletagmanager.com') ||
+    event.request.url.includes('formsubmit.co')
+  ) {
+    return; // fall back to network without caching intercept
+  }
   
   event.respondWith(
     fetch(event.request)
