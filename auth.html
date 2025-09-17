@@ -123,7 +123,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getAuth, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
     // 1) Configuración Firebase
@@ -165,7 +165,12 @@
         case 'auth/user-not-found': return 'No existe una cuenta con ese email.';
         case 'auth/wrong-password': return 'Contraseña incorrecta.';
         case 'auth/too-many-requests': return 'Demasiados intentos. Inténtalo más tarde.';
-        default: return 'Ocurrió un error inesperado. Intenta de nuevo.';
+        case 'auth/network-request-failed': return 'No hay conexión o fue interrumpida. Verifica tu red.';
+        case 'auth/internal-error': return 'Error interno de autenticación. Intenta más tarde.';
+        case 'auth/invalid-credential': return 'Las credenciales no son válidas o han expirado.';
+        case 'auth/invalid-continue-uri': return 'URL de retorno no válida. Revisa dominios autorizados.';
+        case 'auth/unauthorized-continue-uri': return 'El dominio de retorno no está autorizado en Firebase.';
+        default: return `Ocurrió un error inesperado. Código: ${code || 'desconocido'}.`;
       }
     }
 
@@ -211,7 +216,8 @@
         await signInWithEmailAndPassword(auth, email, pass);
         loginMsg.className = 'ok'; loginMsg.textContent = 'Sesión iniciada correctamente.';
       } catch(err){
-        loginMsg.className = 'err'; loginMsg.textContent = mapAuthError(err?.code) + (err?.code? '' : '');
+        console.error('Login error:', err);
+        loginMsg.className = 'err'; loginMsg.textContent = mapAuthError(err?.code);
       } finally {
         btn.disabled = false; btn.textContent = prev;
       }
@@ -230,6 +236,7 @@
         await sendPasswordResetEmail(auth, email);
         loginMsg.className='ok'; loginMsg.textContent='Hemos enviado un correo para restablecer tu contraseña.';
       }catch(err){
+        console.error('Password reset error:', err);
         loginMsg.className='err'; loginMsg.textContent=mapAuthError(err?.code);
       }finally{ btn.disabled=false; btn.textContent=prev; }
     });
@@ -268,9 +275,27 @@
           email,
           createdAt: new Date().toISOString()
         });
-        regMsg.className='ok'; regMsg.textContent='Cuenta creada correctamente. Ya has iniciado sesión.';
+        // Enviar correo de verificación (con fallback si el dominio no está autorizado)
+        let verifOk = false;
+        try{
+          await sendEmailVerification(cred.user, { url: window.location.origin + '/' });
+          verifOk = true;
+        }catch(e){
+          if (e?.code === 'auth/invalid-continue-uri' || e?.code === 'auth/unauthorized-continue-uri'){
+            try{ await sendEmailVerification(cred.user); verifOk = true; }
+            catch(e2){ console.error('Fallback sendEmailVerification error:', e2); }
+          } else {
+            console.error('sendEmailVerification error:', e);
+          }
+        }
+        if (verifOk){
+          regMsg.className='ok'; regMsg.textContent='Cuenta creada correctamente. Te hemos enviado un correo de verificación. Revisa tu bandeja de entrada y el spam.';
+        } else {
+          regMsg.className='ok'; regMsg.textContent='Cuenta creada correctamente. No pudimos enviar el correo de verificación ahora; podrás reenviarlo más tarde.';
+        }
         selectTab('login');
       }catch(err){
+        console.error('Register error:', err);
         regMsg.className='err'; regMsg.textContent=mapAuthError(err?.code);
       }finally{ btn.disabled=false; btn.textContent=prev; }
     });
