@@ -35,7 +35,7 @@
         <button class="boton-seccion" data-seccion="pedidos">Tienda</button>
     <button class="boton-seccion" data-seccion="carrito">Carrito</button>
     <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
-<button class="boton-seccion" data-seccion="identificarse">Identificarse</button>
+    <button class="boton-seccion" data-seccion="identificarse">Identificarse</button>
     </nav>
 </header>
 
@@ -770,285 +770,6 @@
         </div>
     </div>
 </section>
-
-<!-- Sección Identificarse -->
-<section id="identificarse" class="seccion">
-  <style>
-    /* Estilos locales para la sección Identificarse, coherentes con la estética del sitio */
-    #identificarse .auth-wrap {
-      max-width: 960px;
-      margin: 2.5rem auto;
-      background: linear-gradient(135deg, rgba(10,31,61,0.92) 70%, rgba(42,91,168,0.13) 100%);
-      backdrop-filter: blur(16px);
-      border-radius: 24px;
-      padding: clamp(18px, 3vw, 28px);
-      border: 2px solid var(--azul-acento);
-      box-shadow: 0 8px 40px rgba(42,91,168,0.13), 0 2px 12px rgba(0,0,0,0.10);
-      position: relative;
-      animation: aparecer 0.7s;
-    }
-    #identificarse .auth-header {
-      text-align: center; margin-bottom: 1.2rem;
-    }
-    #identificarse .auth-header h2{
-      color: var(--azul-acento);
-      font-size: 2.1rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-      margin: 0 0 0.35rem 0;
-    }
-    #identificarse .auth-header p{
-      color: #b8c6e0; margin: 0; font-size: 1rem;
-    }
-    #identificarse .auth-grid {
-      display: grid; grid-template-columns: 1fr 0.9fr; gap: 18px; align-items: start;
-    }
-    @media (max-width: 920px){ #identificarse .auth-grid { grid-template-columns: 1fr; } }
-
-    #identificarse .auth-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(42,91,168,0.22);
-      border-radius: 16px;
-      padding: clamp(14px, 2.5vw, 20px);
-      box-shadow: 0 4px 16px rgba(42,91,168,0.10);
-    }
-
-    #identificarse .tabs { display:flex; gap:8px; background: rgba(20,40,80,0.25); padding: 6px; border-radius: 12px; border:1px solid rgba(42,91,168,0.20); }
-    #identificarse .tab { flex:1; text-align:center; padding: 10px 12px; border-radius: 10px; cursor:pointer; user-select:none; font-weight:800; color:#d6e9ff; }
-    #identificarse .tab[aria-selected="true"] { background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%); color: var(--azul-acento); border: 2px solid var(--azul-acento); box-shadow: 0 6px 24px rgba(42,91,168,0.13); }
-
-    #identificarse form { display:grid; gap: 12px; margin-top: 14px; }
-    #identificarse label { font-weight: 600; color: #e0e0e0; }
-    #identificarse input { width:100%; padding: 12px; border:2px solid var(--azul-acento); border-radius: 10px; background: rgba(255,255,255,0.13); color: #fff; outline:none; }
-    #identificarse input:focus { border-color: #4a90e2; box-shadow: 0 0 10px rgba(74,144,226,0.3); background: rgba(255,255,255,0.18); }
-
-    #identificarse .actions { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:4px; }
-    #identificarse .btn { background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%); color:#fff; border:none; padding: 12px 16px; border-radius: 12px; font-weight:800; cursor:pointer; letter-spacing:.2px; box-shadow: 0 2px 12px rgba(42,91,168,0.10); }
-    #identificarse .btn[disabled]{ opacity:.6; cursor:not-allowed; }
-    #identificarse .btn.secondary { background: transparent; border:1px solid rgba(255,255,255,0.25); color:#cfe7ff; }
-
-    #identificarse .msg { border-radius: 10px; padding: 10px; font-size: .95rem; }
-    #identificarse .msg.err { background: rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.35); color:#fecaca; }
-    #identificarse .msg.ok { background: rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.35); color:#bbf7d0; }
-
-    #identificarse .hint { color:#9fbfe8; font-size:.92rem; }
-    #identificarse .small { font-size:.85rem; color:#a8c6e0; }
-    #identificarse .hidden { display:none !important; }
-
-    #identificarse .tips { background: rgba(255,255,255,0.06); border: 1px solid rgba(42,91,168,0.18); border-radius: 14px; padding: 14px; }
-    #identificarse .tips h3 { margin: 0 0 6px 0; color:#e6f2ff; font-size:1.05rem; }
-    #identificarse .tips ul { margin: 0; padding-left: 1.2rem; color:#b8c6e0; }
-  </style>
-
-  <div class="auth-wrap">
-    <div class="auth-header">
-      <h2>Identifícate</h2>
-      <p>Inicia sesión o crea tu cuenta para guardar pedidos y acumular puntos.</p>
-    </div>
-
-    <div class="auth-grid">
-      <div class="auth-card" aria-labelledby="id-tab-login id-tab-register">
-        <div class="tabs" role="tablist" aria-label="Autenticación">
-          <button id="id-tab-login" class="tab" role="tab" aria-selected="true" aria-controls="id-panel-login">Iniciar sesión</button>
-          <button id="id-tab-register" class="tab" role="tab" aria-selected="false" aria-controls="id-panel-register">Crear cuenta</button>
-        </div>
-
-        <div id="id-panel-login" role="tabpanel" aria-labelledby="id-tab-login">
-          <form id="id-form-login" novalidate>
-            <div>
-              <label for="id-login-email">Email</label>
-              <input id="id-login-email" name="email" type="email" autocomplete="email" required />
-              <div id="id-login-email-error" class="small hidden"></div>
-            </div>
-            <div>
-              <label for="id-login-pass">Contraseña</label>
-              <input id="id-login-pass" name="password" type="password" autocomplete="current-password" required minlength="6" />
-              <div id="id-login-pass-error" class="small hidden"></div>
-            </div>
-            <div class="actions">
-              <button id="id-btn-login" class="btn" type="submit">Entrar</button>
-              <a id="id-btn-forgot" class="hint" href="#">¿Olvidaste tu contraseña?</a>
-            </div>
-            <div id="id-login-msg" class="msg hidden"></div>
-          </form>
-        </div>
-
-        <div id="id-panel-register" class="hidden" role="tabpanel" aria-labelledby="id-tab-register">
-          <form id="id-form-register" novalidate>
-            <div class="row">
-              <div>
-                <label for="id-reg-email">Email</label>
-                <input id="id-reg-email" name="email" type="email" autocomplete="email" required />
-                <div id="id-reg-email-error" class="small hidden"></div>
-              </div>
-              <div>
-                <label for="id-reg-pass">Contraseña</label>
-                <input id="id-reg-pass" name="password" type="password" autocomplete="new-password" required minlength="6" />
-                <div class="small">Mínimo 6 caracteres</div>
-                <div id="id-reg-pass-error" class="small hidden"></div>
-              </div>
-            </div>
-            <div>
-              <label for="id-reg-pass2">Confirmar contraseña</label>
-              <input id="id-reg-pass2" name="password2" type="password" autocomplete="new-password" required minlength="6" />
-              <div id="id-reg-pass2-error" class="small hidden"></div>
-            </div>
-            <div class="actions">
-              <button id="id-btn-register" class="btn" type="submit">Crear cuenta</button>
-              <button id="id-btn-clear" class="btn secondary" type="button">Limpiar</button>
-            </div>
-            <div id="id-reg-msg" class="msg hidden"></div>
-          </form>
-        </div>
-      </div>
-
-      <aside class="tips" aria-label="Consejos de seguridad">
-        <h3>Consejos de seguridad</h3>
-        <ul>
-          <li>No compartas tu contraseña.</li>
-          <li>Usa una contraseña robusta y única.</li>
-          <li>Te mantendremos autenticado de forma segura en este dispositivo.</li>
-        </ul>
-        <p class="small" style="margin-top:8px;">Al crear una cuenta aceptas nuestra política de privacidad.</p>
-      </aside>
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-
-    // Permite inyectar la config desde fuera; si no existe, usa defaults (clave pública)
-    const defaultConfig = {
-      apiKey: "AIzaSyB7rdqxu0OpdDReiT7hQE8-zTTID2hR0K0",
-      authDomain: "camisetazousers.firebaseapp.com",
-      databaseURL: "https://camisetazousers-default-rtdb.europe-west1.firebasedatabase.app/",
-      projectId: "camisetazousers",
-      storageBucket: "camisetazousers.firebasestorage.app",
-      messagingSenderId: "964741829009",
-      appId: "1:964741829009:web:2d6c8e7dcb850b94beca30",
-      measurementId: "G-7XZL0L37ES"
-    };
-    const firebaseConfig = window.FIREBASE_CONFIG || defaultConfig;
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app, window.FIREBASE_DB_URL || firebaseConfig.databaseURL);
-    await setPersistence(auth, browserLocalPersistence);
-
-    const $ = (s) => document.querySelector(s);
-    const show = (el) => el.classList.remove('hidden');
-    const hide = (el) => el.classList.add('hidden');
-
-    function emailValido(email){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(String(email||'').trim()); }
-    function mapAuthError(code){
-      switch(code){
-        case 'auth/email-already-in-use': return 'Este email ya está registrado.';
-        case 'auth/invalid-email': return 'El email no es válido.';
-        case 'auth/operation-not-allowed': return 'Operación no permitida. Contacta soporte.';
-        case 'auth/weak-password': return 'La contraseña es demasiado débil (mínimo 6 caracteres).';
-        case 'auth/user-disabled': return 'Esta cuenta fue deshabilitada.';
-        case 'auth/user-not-found': return 'No existe una cuenta con ese email.';
-        case 'auth/wrong-password': return 'Contraseña incorrecta.';
-        case 'auth/too-many-requests': return 'Demasiados intentos. Inténtalo más tarde.';
-        default: return 'Ocurrió un error inesperado. Intenta de nuevo.';
-      }
-    }
-
-    // Tabs accesibles
-    const tabLogin = $('#id-tab-login');
-    const tabRegister = $('#id-tab-register');
-    const panelLogin = $('#id-panel-login');
-    const panelRegister = $('#id-panel-register');
-    function selectTab(which){
-      const loginSelected = which === 'login';
-      tabLogin.setAttribute('aria-selected', String(loginSelected));
-      tabRegister.setAttribute('aria-selected', String(!loginSelected));
-      if (loginSelected){ hide(panelRegister); show(panelLogin); }
-      else { hide(panelLogin); show(panelRegister); }
-    }
-    tabLogin.addEventListener('click', ()=> selectTab('login'));
-    tabRegister.addEventListener('click', ()=> selectTab('register'));
-
-    // Login
-    const loginForm = $('#id-form-login');
-    const loginEmail = $('#id-login-email');
-    const loginPass = $('#id-login-pass');
-    const loginMsg = $('#id-login-msg');
-    loginForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      loginMsg.className = 'msg hidden'; loginMsg.textContent='';
-      $('#id-login-email-error').className = 'small hidden'; $('#id-login-pass-error').className='small hidden';
-      const email = loginEmail.value.trim();
-      const pass = loginPass.value;
-      let ok = true;
-      if (!emailValido(email)){ ok=false; const el=$('#id-login-email-error'); el.textContent='Introduce un email válido.'; el.className='small'; }
-      if (!pass || pass.length < 6){ ok=false; const el=$('#id-login-pass-error'); el.textContent='La contraseña debe tener al menos 6 caracteres.'; el.className='small'; }
-      if (!ok) return;
-      const btn = $('#id-btn-login'); const prev = btn.textContent; btn.disabled=true; btn.textContent='Accediendo...';
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        loginMsg.className='msg ok'; loginMsg.textContent='Sesión iniciada correctamente.';
-      } catch(err){
-        loginMsg.className='msg err'; loginMsg.textContent = mapAuthError(err?.code);
-      } finally { btn.disabled=false; btn.textContent=prev; }
-    });
-
-    // Reset de contraseña
-    $('#id-btn-forgot').addEventListener('click', async (e)=>{
-      e.preventDefault();
-      const email = (loginEmail.value||'').trim();
-      loginMsg.className = 'msg hidden'; loginMsg.textContent='';
-      if (!emailValido(email)){
-        const el=$('#id-login-email-error'); el.textContent='Introduce un email válido para recuperar tu contraseña.'; el.className='small'; return;
-      }
-      const btn = $('#id-btn-login'); const prev = btn.textContent; btn.disabled=true; btn.textContent='Enviando email...';
-      try { await sendPasswordResetEmail(auth, email); loginMsg.className='msg ok'; loginMsg.textContent='Hemos enviado un correo para restablecer tu contraseña.'; }
-      catch(err){ loginMsg.className='msg err'; loginMsg.textContent=mapAuthError(err?.code); }
-      finally { btn.disabled=false; btn.textContent=prev; }
-    });
-
-    // Registro
-    const regForm = $('#id-form-register');
-    const regEmail = $('#id-reg-email');
-    const regPass = $('#id-reg-pass');
-    const regPass2 = $('#id-reg-pass2');
-    const regMsg = $('#id-reg-msg');
-    $('#id-btn-clear').addEventListener('click', ()=>{
-      regForm.reset(); regMsg.className='msg hidden'; regMsg.textContent='';
-      ['#id-reg-email-error','#id-reg-pass-error','#id-reg-pass2-error'].forEach(s=>{ const el=$(s); el.textContent=''; el.className='small hidden'; });
-    });
-    regForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      regMsg.className='msg hidden'; regMsg.textContent='';
-      ['#id-reg-email-error','#id-reg-pass-error','#id-reg-pass2-error'].forEach(s=>{ const el=$(s); el.textContent=''; el.className='small hidden'; });
-      const email = regEmail.value.trim();
-      const p1 = regPass.value; const p2 = regPass2.value;
-      let ok = true;
-      if (!emailValido(email)){ ok=false; const el=$('#id-reg-email-error'); el.textContent='Introduce un email válido.'; el.className='small'; }
-      if (!p1 || p1.length < 6){ ok=false; const el=$('#id-reg-pass-error'); el.textContent='La contraseña debe tener al menos 6 caracteres.'; el.className='small'; }
-      if (p1 !== p2){ ok=false; const el=$('#id-reg-pass2-error'); el.textContent='Las contraseñas no coinciden.'; el.className='small'; }
-      if (!ok) return;
-      const btn = $('#id-btn-register'); const prev = btn.textContent; btn.disabled=true; btn.textContent='Creando cuenta...';
-      try{
-        const cred = await createUserWithEmailAndPassword(auth, email, p1);
-        const uid = cred.user.uid;
-        await set(ref(db, `users/${uid}`), { email, createdAt: new Date().toISOString() });
-        regMsg.className='msg ok'; regMsg.textContent='Cuenta creada correctamente. Ya has iniciado sesión.';
-        selectTab('login');
-      }catch(err){ regMsg.className='msg err'; regMsg.textContent=mapAuthError(err?.code); }
-      finally { btn.disabled=false; btn.textContent=prev; }
-    });
-
-    onAuthStateChanged(auth, (user)=>{
-      if (user){ console.log('Usuario autenticado', { uid:user.uid, email:user.email }); }
-      else { console.log('No autenticado'); }
-    });
-  </script>
-</section>
-
     <section id="carrito" class="seccion">
         <div class="cart-layout" role="group" aria-label="Carrito y recomendaciones">
             <aside id="cartPanel" class="cart-panel" aria-label="Carrito de compras">
@@ -4479,6 +4200,451 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         }
     </script>
 </section>
+<!-- Sección Identificarse -->
+<section id="identificarse" class="seccion">
+  <style>
+    .ident-ui{max-width:960px;margin:0 auto 2.5rem auto;background:rgba(20,40,80,0.18);border-radius:22px;box-shadow:0 4px 32px rgba(42,91,168,0.10),0 1.5px 8px rgba(0,0,0,0.08);padding:2rem 1.25rem 1.5rem 1.25rem;border:1.5px solid rgba(42,91,168,0.13);animation:aparecer .8s}
+    .ident-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .ident-header img{width:44px;height:44px;border-radius:10px;object-fit:cover}
+    .ident-title{color:var(--azul-acento,#9fe0ff);font-size:1.6rem;font-weight:800;letter-spacing:.2px;margin:0}
+    .ident-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    @media (max-width:860px){.ident-grid{grid-template-columns:1fr}}
+    .ident-card{background:rgba(42,91,168,0.13);border:1px solid rgba(42,91,168,0.18);border-radius:16px;padding:16px}
+    .ident-tabs{display:flex;gap:6px;background:rgba(10,31,61,.55);padding:6px;border-radius:10px;border:1px solid rgba(42,91,168,.18)}
+    .ident-tab{flex:1;text-align:center;padding:10px 12px;border-radius:8px;cursor:pointer;user-select:none;font-weight:700;color:#cfe7ff}
+    .ident-tab[aria-selected="true"]{background:#123161;color:#fff;border:1px solid rgba(99,143,211,.35)}
+    .ident-form{display:grid;gap:12px;margin-top:14px}
+    .ident-form label{font-weight:600;font-size:.95rem;color:#cde2ff}
+    .ident-form input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(99,143,211,.25);background:#081a36;color:#fff;outline:none}
+    .ident-form input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.18)}
+    .ident-row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+    @media (max-width:560px){.ident-row{grid-template-columns:1fr}}
+    .ident-actions{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:4px}
+    .btn-ident{background:#3b82f6;color:#fff;border:none;padding:12px 16px;border-radius:10px;font-weight:800;cursor:pointer;letter-spacing:.2px}
+    .btn-ident[disabled]{opacity:.6;cursor:not-allowed}
+    .btn-ident.secondary{background:transparent;border:1px solid rgba(99,143,211,.35);color:#cfe7ff}
+    .msg-err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:#fecaca;padding:10px;border-radius:10px;font-size:.95rem}
+    .msg-ok{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#bbf7d0;padding:10px;border-radius:10px;font-size:.95rem}
+    .ident-help{color:#9cc6ff;font-size:.9rem}
+    .ident-small{font-size:.85rem;color:#a8c3ff}
+    .hidden{display:none !important}
+    .orders-list{display:grid;gap:12px;margin-top:6px}
+    .order-card{display:flex;gap:12px;align-items:center;background:rgba(42,91,168,0.13);border:1px solid rgba(42,91,168,0.18);border-radius:12px;padding:12px}
+    .order-meta{display:flex;flex-direction:column;gap:2px}
+    .order-id{font-weight:800;color:#fff}
+    .order-date{color:#cfe7ff;font-size:.9rem}
+    .order-total{margin-left:auto;font-weight:800;color:#9fe0ff}
+    .order-status{font-size:.85rem;color:#a8c3ff}
+  </style>
+  <div class="ident-ui" id="auth-section">
+    <div class="ident-header">
+      <img src="assets/logos/logo.jpg" alt="Camisetazo" loading="lazy" width="44" height="44"/>
+      <h2 class="ident-title">Identificarse</h2>
+    </div>
+    <p class="ident-small" style="margin-top:-6px;margin-bottom:14px;opacity:.9">Accede a tu cuenta o crea una nueva para gestionar pedidos y recompensas.</p>
+
+    <div class="ident-grid">
+      <section class="ident-card">
+        <div class="ident-tabs" role="tablist" aria-label="Autenticación">
+          <button id="tab-login" class="ident-tab" role="tab" aria-selected="true" aria-controls="panel-login">Iniciar sesión</button>
+          <button id="tab-register" class="ident-tab" role="tab" aria-selected="false" aria-controls="panel-register">Crear cuenta</button>
+        </div>
+
+        <div id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+          <form id="form-login" class="ident-form" novalidate>
+            <div>
+              <label for="login-email">Email</label>
+              <input id="login-email" name="email" type="email" autocomplete="email" required />
+              <div id="login-email-error" class="ident-small hidden"></div>
+            </div>
+            <div>
+              <label for="login-password">Contraseña</label>
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="6" />
+              <div id="login-password-error" class="ident-small hidden"></div>
+            </div>
+            <div class="ident-actions">
+              <button id="btn-login" class="btn-ident" type="submit">Entrar</button>
+              <a id="btn-forgot" class="ident-help" href="javascript:void(0)">¿Olvidaste tu contraseña?</a>
+            </div>
+            <div id="login-msg" class="hidden"></div>
+          </form>
+        </div>
+
+        <div id="panel-register" class="hidden" role="tabpanel" aria-labelledby="tab-register">
+          <form id="form-register" class="ident-form" novalidate>
+            <div class="ident-row">
+              <div>
+                <label for="reg-email">Email</label>
+                <input id="reg-email" name="email" type="email" autocomplete="email" required />
+                <div id="reg-email-error" class="ident-small hidden"></div>
+              </div>
+              <div>
+                <label for="reg-password">Contraseña</label>
+                <input id="reg-password" name="password" type="password" autocomplete="new-password" required minlength="6" />
+                <div class="ident-small">Mínimo 6 caracteres</div>
+                <div id="reg-password-error" class="ident-small hidden"></div>
+              </div>
+            </div>
+            <div>
+              <label for="reg-password2">Confirmar contraseña</label>
+              <input id="reg-password2" name="password2" type="password" autocomplete="new-password" required minlength="6" />
+              <div id="reg-password2-error" class="ident-small hidden"></div>
+            </div>
+            <div class="ident-actions">
+              <button id="btn-register" class="btn-ident" type="submit">Crear cuenta</button>
+              <button id="btn-clear-reg" class="btn-ident secondary" type="button">Limpiar</button>
+            </div>
+            <div id="reg-msg" class="hidden"></div>
+          </form>
+        </div>
+      </section>
+
+      <aside class="ident-card">
+        <h3 style="margin-top:0;color:#cfe7ff">Consejos de seguridad</h3>
+        <ul class="ident-small" style="margin-top:6px;line-height:1.6">
+          <li>No compartas tu contraseña.</li>
+          <li>Usa una contraseña única y robusta.</li>
+          <li>Te mantendremos autenticado de forma segura en este dispositivo.</li>
+        </ul>
+        <p class="ident-small">Al crear una cuenta aceptas nuestra política de privacidad.</p>
+      </aside>
+    </div>
+    <div id="verify-cta" class="ident-card hidden" role="region" aria-live="polite" style="margin-top:12px">
+      <div class="ident-small" id="verify-msg" style="margin-bottom:10px">
+        Te hemos enviado un correo de verificación. Revisa tu bandeja de entrada y sigue el enlace para activar tu cuenta.
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="btn-resend-verif" class="btn-ident" type="button">Reenviar verificación</button>
+        <button id="btn-verified-refresh" class="btn-ident secondary" type="button">Ya verifiqué</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="profile-section" class="ident-ui hidden" aria-live="polite">
+    <div class="ident-header">
+      <img id="profile-avatar" src="assets/logos/logo.jpg" alt="Avatar" loading="lazy" width="44" height="44" style="border-radius:10px;object-fit:cover;"/>
+      <div>
+        <h2 class="ident-title" id="profile-title">Perfil</h2>
+        <div class="ident-small" id="profile-email"></div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
+        <button id="btn-ver-pedidos" class="btn-ident secondary" type="button">Pedidos</button>
+        <button id="btn-ver-cuenta" class="btn-ident secondary" type="button">Cuenta</button>
+        <button id="btn-logout" class="btn-ident" type="button">Cerrar sesión</button>
+      </div>
+    </div>
+    <section id="profile-orders" class="ident-card">
+      <div id="orders-empty" class="ident-small hidden">Todavía no tienes pedidos.</div>
+      <div id="orders-list" class="orders-list"></div>
+    </section>
+    <section id="profile-account" class="ident-card hidden">
+      <p class="ident-small">Desde aquí podrás administrar los datos de tu cuenta (próximamente).</p>
+    </section>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+    import { getAuth, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signOut, sendEmailVerification, reload } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+    // Configuración Firebase (proyecto camisetazo-puntos)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYPvmvzzNxtTFOVpPXKRvUhoHBjBTCVBE",
+      authDomain: "camisetazo-puntos.firebaseapp.com",
+      databaseURL: "https://camisetazo-puntos-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "camisetazo-puntos",
+      storageBucket: "camisetazo-puntos.firebasestorage.app",
+      messagingSenderId: "652477026185",
+      appId: "1:652477026185:web:4a05e015da74d4541d1b58",
+      measurementId: "G-GS53GWE2Z0"
+    };
+
+    // Inicializar Firebase (evitar doble init)
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch(_){}
+    const auth = getAuth(app);
+    const db = getDatabase(app, firebaseConfig.databaseURL);
+    await setPersistence(auth, browserLocalPersistence);
+
+    // Utils DOM (scoped al contenedor para evitar colisiones)
+    const root = document.getElementById('auth-section');
+    const $ = (sel) => root.querySelector(sel);
+    const show = (el) => el.classList.remove('hidden');
+    const hide = (el) => el.classList.add('hidden');
+
+    function emailValido(email){
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i; return re.test(String(email||'').trim());
+    }
+    function mapAuthError(code){
+      switch(code){
+        case 'auth/email-already-in-use': return 'Este email ya está registrado.';
+        case 'auth/invalid-email': return 'El email no es válido.';
+        case 'auth/operation-not-allowed': return 'Operación no permitida. Contacta soporte.';
+        case 'auth/weak-password': return 'La contraseña es demasiado débil (mínimo 6 caracteres).';
+        case 'auth/user-disabled': return 'Esta cuenta fue deshabilitada.';
+        case 'auth/user-not-found': return 'No existe una cuenta con ese email.';
+        case 'auth/wrong-password': return 'Contraseña incorrecta.';
+        case 'auth/too-many-requests': return 'Demasiados intentos. Inténtalo más tarde.';
+        case 'auth/network-request-failed': return 'Fallo de red. Revisa tu conexión e inténtalo de nuevo.';
+        case 'auth/internal-error': return 'Error interno del servidor. Intenta de nuevo más tarde.';
+        case 'auth/invalid-credential': return 'Credenciales inválidas o sesión caducada. Vuelve a intentarlo.';
+        case 'auth/invalid-continue-uri':
+        case 'auth/unauthorized-continue-uri': return 'Dominio de retorno no autorizado. Añádelo en Firebase > Authentication > Settings > Authorized domains.';
+        default: return `Ocurrió un error inesperado. Código: ${code || 'desconocido'}.`;
+      }
+    }
+
+    // Tabs accesibles
+    const tabLogin = $('#tab-login');
+    const tabRegister = $('#tab-register');
+    const panelLogin = $('#panel-login');
+    const panelRegister = $('#panel-register');
+    function selectTab(which){
+      const loginSelected = which === 'login';
+      tabLogin.setAttribute('aria-selected', String(loginSelected));
+      tabRegister.setAttribute('aria-selected', String(!loginSelected));
+      if (loginSelected){ hide(panelRegister); show(panelLogin); }
+      else { hide(panelLogin); show(panelRegister); }
+    }
+    tabLogin.addEventListener('click', ()=> selectTab('login'));
+    tabRegister.addEventListener('click', ()=> selectTab('register'));
+
+    // Login
+    const loginForm = $('#form-login');
+    const loginEmail = $('#login-email');
+    const loginPass = $('#login-password');
+    const loginMsg = $('#login-msg');
+    loginForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      loginMsg.className='hidden'; loginMsg.textContent='';
+      $('#login-email-error').className='ident-small hidden'; $('#login-password-error').className='ident-small hidden';
+      const email = loginEmail.value.trim();
+      const pass = loginPass.value;
+      let ok = true;
+      if (!emailValido(email)){ ok=false; const el=$('#login-email-error'); el.textContent='Introduce un email válido.'; el.className='ident-small'; }
+      if (!pass || pass.length < 6){ ok=false; const el=$('#login-password-error'); el.textContent='La contraseña debe tener al menos 6 caracteres.'; el.className='ident-small'; }
+      if (!ok) return;
+      const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent='Accediendo...';
+      try { await signInWithEmailAndPassword(auth, email, pass); loginMsg.className='msg-ok'; loginMsg.textContent='Sesión iniciada correctamente.'; }
+      catch(err){ loginMsg.className='msg-err'; loginMsg.textContent = mapAuthError(err?.code); }
+      finally { btn.disabled=false; btn.textContent=prev; }
+    });
+
+    // Recuperar contraseña
+    $('#btn-forgot').addEventListener('click', async ()=>{
+      const email = (loginEmail.value||'').trim();
+      loginMsg.className='hidden'; loginMsg.textContent='';
+      if (!emailValido(email)){ const el=$('#login-email-error'); el.textContent='Introduce un email válido para recuperar tu contraseña.'; el.className='ident-small'; return; }
+      const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent='Enviando email...';
+      try { await sendPasswordResetEmail(auth, email); loginMsg.className='msg-ok'; loginMsg.textContent='Hemos enviado un correo para restablecer tu contraseña.'; }
+      catch(err){ loginMsg.className='msg-err'; loginMsg.textContent=mapAuthError(err?.code); }
+      finally { btn.disabled=false; btn.textContent=prev; }
+    });
+
+    // Registro
+    const regForm = $('#form-register');
+    const regEmail = $('#reg-email');
+    const regPass = $('#reg-password');
+    const regPass2 = $('#reg-password2');
+    const regMsg = $('#reg-msg');
+    $('#btn-clear-reg').addEventListener('click', ()=>{ regForm.reset(); regMsg.className='hidden'; regMsg.textContent=''; ['#reg-email-error','#reg-password-error','#reg-password2-error'].forEach(s=>{ const el=$(s); el.textContent=''; el.className='ident-small hidden'; }); });
+    regForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      regMsg.className='hidden'; regMsg.textContent='';
+      ['#reg-email-error','#reg-password-error','#reg-password2-error'].forEach(s=>{ const el=$(s); el.textContent=''; el.className='ident-small hidden'; });
+      const email = regEmail.value.trim();
+      const p1 = regPass.value; const p2 = regPass2.value;
+      let ok = true;
+      if (!emailValido(email)){ ok=false; const el=$('#reg-email-error'); el.textContent='Introduce un email válido.'; el.className='ident-small'; }
+      if (!p1 || p1.length < 6){ ok=false; const el=$('#reg-password-error'); el.textContent='La contraseña debe tener al menos 6 caracteres.'; el.className='ident-small'; }
+      if (p1 !== p2){ ok=false; const el=$('#reg-password2-error'); el.textContent='Las contraseñas no coinciden.'; el.className='ident-small'; }
+      if (!ok) return;
+      const btn = $('#btn-register'); const prev = btn.textContent; btn.disabled = true; btn.textContent='Creando cuenta...';
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, p1);
+        const uid = cred.user.uid;
+        let profileSaved = true;
+        try {
+          await set(ref(db, `users/${uid}`), { email, createdAt: new Date().toISOString() });
+        } catch (e) {
+          profileSaved = false;
+          console.error('Error guardando perfil en RTDB:', e);
+        }
+        let verifOk = true;
+        try{
+          await sendEmailVerification(cred.user, { url: window.location.origin + window.location.pathname });
+        }catch(err){
+          verifOk = false;
+          const code = err?.code || '';
+          let msg = 'No se pudo enviar el correo de verificación.';
+          if (code === 'auth/too-many-requests') msg = 'Demasiados intentos de verificación. Espera unos minutos y vuelve a intentarlo.';
+          if (code === 'auth/invalid-continue-uri' || code === 'auth/unauthorized-continue-uri'){
+            msg = 'El dominio de retorno no está autorizado. Añádelo en Firebase > Authentication > Settings > Authorized domains.';
+            // Intento de fallback sin continue URL
+            try{ await sendEmailVerification(cred.user); verifOk = true; }catch(_){ }
+          }
+          regMsg.className='msg-err'; regMsg.textContent=msg;
+        }
+        if (verifOk){
+          regMsg.className='msg-ok';
+          regMsg.textContent = profileSaved ? 'Cuenta creada. Te enviamos un email para verificar tu cuenta.' : 'Cuenta creada. Te enviamos un email para verificar tu cuenta. Nota: no pudimos guardar tu perfil aún (permiso denegado). Se guardará después de verificar.';
+        }
+        const cta = document.getElementById('verify-cta'); if (cta) cta.classList.remove('hidden');
+        selectTab('login');
+      } catch(err){ regMsg.className='msg-err'; regMsg.textContent=mapAuthError(err?.code); }
+      finally { btn.disabled=false; btn.textContent=prev; }
+    });
+
+    // Estado de autenticación y UI de perfil
+    function updateIdentityLabels(user){
+      try{
+        const topBtn = document.querySelector('.boton-seccion[data-seccion="identificarse"]');
+        if (topBtn) topBtn.textContent = user ? 'Perfil' : 'Identificarse';
+        const bottomBtn = document.querySelector('.bottom-nav__btn[data-seccion="identificarse"]');
+        if (bottomBtn){
+          const lab = bottomBtn.querySelector('.label');
+          if (lab) lab.textContent = user ? 'Perfil' : 'Acceso';
+          bottomBtn.setAttribute('aria-label', user ? 'Ir a Perfil' : 'Ir a Identificarse');
+        }
+      }catch(e){}
+    }
+
+    const profileUI = document.getElementById('profile-section');
+    const profileEmailEl = document.getElementById('profile-email');
+    const profileAvatarEl = document.getElementById('profile-avatar');
+    const ordersListEl = document.getElementById('orders-list');
+    const ordersEmptyEl = document.getElementById('orders-empty');
+    const profileOrdersPanel = document.getElementById('profile-orders');
+    const profileAccountPanel = document.getElementById('profile-account');
+
+    function renderOrdersList(orders){
+      ordersListEl.innerHTML = '';
+      if (!orders || orders.length === 0){
+        ordersEmptyEl.classList.remove('hidden');
+        return;
+      }
+      ordersEmptyEl.classList.add('hidden');
+      orders.forEach(o => {
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        const dateStr = o.date ? new Date(o.date).toLocaleString() : (o.createdAt ? new Date(o.createdAt).toLocaleString() : '');
+        const totalStr = typeof o.total === 'number' ? `${o.total.toFixed(2)}€` : (o.total || '—');
+        const statusStr = o.status || 'pendiente';
+        card.innerHTML = `
+          <div class="order-meta">
+            <div class="order-id">Pedido #${o.id || '—'}</div>
+            <div class="order-date">${dateStr}</div>
+            <div class="order-status">Estado: ${statusStr}</div>
+          </div>
+          <div class="order-total">${totalStr}</div>
+        `;
+        ordersListEl.appendChild(card);
+      });
+    }
+
+    async function loadUserOrders(uid){
+      try{
+        if (!uid) { renderOrdersList([]); return; }
+        const snap = await get(ref(db, `ordersByUser/${uid}`));
+        if (!snap.exists()){ renderOrdersList([]); return; }
+        const obj = snap.val() || {};
+        const arr = Object.entries(obj).map(([id, data])=>({ id, ...(data||{}) }));
+        arr.sort((a,b)=> new Date(b.date||b.createdAt||0) - new Date(a.date||a.createdAt||0));
+        renderOrdersList(arr);
+      }catch(err){ console.error('Error cargando pedidos:', err); renderOrdersList([]); }
+    }
+
+    // Helpers globales: guardar pedido y refrescar listado en Perfil
+    window.saveOrderToRTDB = async (orderData)=>{
+      try{
+        const u = auth.currentUser; if (!u) return null;
+        if (!u.emailVerified){ console.warn('Bloqueado: email no verificado'); return null; }
+        const uid = u.uid;
+        const id = orderData && orderData.id ? String(orderData.id) : (Date.now().toString(36) + Math.random().toString(36).slice(2,8));
+        const payload = Object.assign({ uid, id, createdAt: new Date().toISOString(), status: 'recibido' }, orderData || {});
+        await set(ref(db, `ordersByUser/${uid}/${id}`), payload);
+        return id;
+      }catch(e){ console.error('saveOrderToRTDB error:', e); return null; }
+    };
+    window.refreshProfileOrders = async ()=>{ try{ const u = auth.currentUser; if (u) await loadUserOrders(u.uid); }catch(e){ console.error('refreshProfileOrders error:', e); } };
+
+    // Navegación dentro de Perfil
+    (function(){
+      const btnVerPedidos = document.getElementById('btn-ver-pedidos');
+      const btnVerCuenta = document.getElementById('btn-ver-cuenta');
+      if (btnVerPedidos && btnVerCuenta){
+        btnVerPedidos.addEventListener('click', ()=>{ profileAccountPanel.classList.add('hidden'); profileOrdersPanel.classList.remove('hidden'); });
+        btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profileAccountPanel.classList.remove('hidden'); });
+      }
+      const btnLogout = document.getElementById('btn-logout');
+      if (btnLogout){ btnLogout.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){ console.error(e); } }); }
+    })();
+
+    onAuthStateChanged(auth, async (user)=>{
+      updateIdentityLabels(user);
+      const authUIEl = document.getElementById('auth-section');
+      const verifyCta = document.getElementById('verify-cta');
+      if (user){
+        if (!user.emailVerified){
+          // Usuario autenticado pero NO verificado: mostrar CTA verificación y bloquear Perfil
+          if (verifyCta) verifyCta.classList.remove('hidden');
+          if (profileUI) profileUI.classList.add('hidden');
+          if (authUIEl) authUIEl.classList.remove('hidden');
+          if (profileEmailEl) profileEmailEl.textContent = user.email || '';
+        } else {
+          // Usuario verificado: UI de Perfil normal
+          if (verifyCta) verifyCta.classList.add('hidden');
+          if (profileEmailEl) profileEmailEl.textContent = user.email || '';
+          if (profileAvatarEl) profileAvatarEl.src = user.photoURL || 'assets/logos/logo.jpg';
+          if (authUIEl) authUIEl.classList.add('hidden');
+          if (profileUI) profileUI.classList.remove('hidden');
+          await loadUserOrders(user.uid);
+        }
+      } else {
+        if (verifyCta) verifyCta.classList.add('hidden');
+        if (profileUI) profileUI.classList.add('hidden');
+        if (authUIEl) authUIEl.classList.remove('hidden');
+        renderOrdersList([]);
+        profileAccountPanel.classList.add('hidden');
+        profileOrdersPanel.classList.remove('hidden');
+      }
+    });
+
+    // Handlers de verificación: reenviar y refrescar estado
+    (function(){
+      const btnResend = document.getElementById('btn-resend-verif');
+      const btnRefresh = document.getElementById('btn-verified-refresh');
+      const verifyMsg = document.getElementById('verify-msg');
+      if (btnResend){
+        btnResend.addEventListener('click', async ()=>{
+          const u = auth.currentUser; if (!u) return;
+          try{
+            await sendEmailVerification(u, { url: window.location.origin + window.location.pathname });
+            if (verifyMsg){ verifyMsg.className='ok'; verifyMsg.textContent = 'Hemos reenviado el correo de verificación.'; }
+          }catch(e){
+            console.error('Resend verification error:', e);
+            if (e?.code === 'auth/invalid-continue-uri' || e?.code === 'auth/unauthorized-continue-uri'){
+              try{
+                await sendEmailVerification(u);
+                if (verifyMsg){ verifyMsg.className='ok'; verifyMsg.textContent = 'Hemos reenviado el correo de verificación.'; }
+                return;
+              }catch(e2){ console.error('Resend verification fallback error:', e2); }
+            }
+            if (verifyMsg){ verifyMsg.className='err'; verifyMsg.textContent = mapAuthError(e?.code); }
+          }
+        });
+      }
+      if (btnRefresh){
+        btnRefresh.addEventListener('click', async ()=>{
+          const u = auth.currentUser; if (!u) return;
+          try{ await reload(u); }catch(_){ }
+        });
+      }
+    })();
+  </script>
+</section>
+
 <footer>
     <div class="redes_sociales">
         <a href="https://www.instagram.com/camisetazo._/"><i class="fab fa-instagram"></i></a>
@@ -5240,6 +5406,26 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                     mostrarExito('Pedido enviado correctamente.');
                     try { if (typeof clearCart === 'function') clearCart(); } catch (e) {}
                     pedidoFormEl.dataset.submitted = '0';
+                    // Guardar pedido en RTDB si el usuario está autenticado y refrescar panel Perfil
+                    try {
+                      const getVal = (id)=>{ const el = document.getElementById(id); return el ? (el.value||'').trim() : ''; };
+                      const totalNum = (precioTotalEl && precioTotalEl.value) ? parseFloat(String(precioTotalEl.value).replace(',', '.')) : 0;
+                      const orderPayload = {
+                        total: Number.isFinite(totalNum) ? totalNum : 0,
+                        itemsText: (document.getElementById('form_cart_items_text')||{}).value || '',
+                        contactName: getVal('form_contactName'),
+                        shippingAddress: getVal('form_direccion'),
+                        city: getVal('form_city'),
+                        country: getVal('form_country'),
+                        postal: getVal('form_postal'),
+                        emailPaypal: getVal('form_emailPaypal')
+                      };
+                      if (window.saveOrderToRTDB) {
+                        window.saveOrderToRTDB(orderPayload).then(()=>{
+                          if (window.refreshProfileOrders) window.refreshProfileOrders();
+                        }).catch(err=>console.error('saveOrderToRTDB promise error:', err));
+                      }
+                    } catch(e) { console.warn('No se pudo guardar el pedido en RTDB:', e); }
                     // Redirigir si hay _next
                     const nextEl = pedidoFormEl.querySelector('input[name="_next"]');
                     if (nextEl && nextEl.value) {
@@ -5263,6 +5449,26 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                                 mostrarExito('Pedido enviado correctamente.');
                                 try { if (typeof clearCart === 'function') clearCart(); } catch (e) {}
                                 pedidoFormEl.dataset.submitted = '0';
+                                // Guardar pedido en RTDB si el usuario está autenticado y refrescar panel Perfil
+                                try {
+                                  const getVal = (id)=>{ const el = document.getElementById(id); return el ? (el.value||'').trim() : ''; };
+                                  const totalNum = (precioTotalEl && precioTotalEl.value) ? parseFloat(String(precioTotalEl.value).replace(',', '.')) : 0;
+                                  const orderPayload = {
+                                    total: Number.isFinite(totalNum) ? totalNum : 0,
+                                    itemsText: (document.getElementById('form_cart_items_text')||{}).value || '',
+                                    contactName: getVal('form_contactName'),
+                                    shippingAddress: getVal('form_direccion'),
+                                    city: getVal('form_city'),
+                                    country: getVal('form_country'),
+                                    postal: getVal('form_postal'),
+                                    emailPaypal: getVal('form_emailPaypal')
+                                  };
+                                  if (window.saveOrderToRTDB) {
+                                    window.saveOrderToRTDB(orderPayload).then(()=>{
+                                      if (window.refreshProfileOrders) window.refreshProfileOrders();
+                                    }).catch(err=>console.error('saveOrderToRTDB promise error:', err));
+                                  }
+                                } catch(e) { console.warn('No se pudo guardar el pedido en RTDB:', e); }
                             }, 600);
                             iframe.removeEventListener('load', onLoadHandler);
                         };
@@ -5395,13 +5601,13 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
   <button class="bottom-nav__btn" data-seccion="identificarse" aria-label="Ir a Identificarse">
     <span class="icon" aria-hidden="true">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M4 22a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M12 14v4" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M10 16h4" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M10 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M20 21v-2a5 5 0 0 0-5-5h-1" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M7 7l-4 4 4 4" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M3 11h9" stroke="currentColor" stroke-width="1.5"/>
       </svg>
     </span>
-    <span class="label">Identif.</span>
+    <span class="label">Acceso</span>
   </button>
 </nav>
 <script>
