@@ -88,6 +88,21 @@
     }
 
     
+    // Añadido: comprobar si una URL de imagen carga correctamente
+    function testImage(url) {
+        return new Promise(resolve => {
+            try {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+            } catch (e) {
+                resolve(false);
+            }
+        });
+    }
+
+    
     function createPictureElement(img, originalSrc) {
         const picture = document.createElement('picture');
         
@@ -167,7 +182,67 @@
                 testImg.src = getOptimizedImageUrl(originalSrc, optimalFormat);
             } else {
                 
-                const picture = createPictureElement(img, originalSrc);
+                // Nuevo: comprobar qué formatos optimizados existen antes de crear <picture>
+                const avifUrl = getOptimizedImageUrl(originalSrc, 'avif');
+                const webpUrl = getOptimizedImageUrl(originalSrc, 'webp');
+                const [avifOk, webpOk] = await Promise.all([
+                    testImage(avifUrl),
+                    testImage(webpUrl)
+                ]);
+
+                // NUEVO: Evitar envolver con <picture> en tarjetas que dependen de .product-item > img
+                const isCardImage = !!(img.closest && img.closest('.product-item, .pedido-mini-card'));
+                if (isCardImage) {
+                    let newSrc = originalSrc;
+                    if (avifSupported && avifOk) newSrc = avifUrl; else if (webpSupported && webpOk) newSrc = webpUrl;
+                    img.src = newSrc;
+                    imageCache.set(originalSrc, newSrc);
+                    if (config.enablePerformanceMonitoring) {
+                        performanceMetrics.imagesProcessed++;
+                        performanceMetrics.loadTime += performance.now() - startTime;
+                    }
+                    return;
+                }
+
+                if (!avifOk && !webpOk) {
+                    // Ninguna versión optimizada existe: mantener la imagen original
+                    imageCache.set(originalSrc, originalSrc);
+                    if (config.enablePerformanceMonitoring) {
+                        performanceMetrics.imagesProcessed++;
+                        performanceMetrics.loadTime += performance.now() - startTime;
+                    }
+                    return;
+                }
+
+                // Crear <picture> pero solo añadir los <source> que realmente existen
+                const picture = document.createElement('picture');
+
+                // Copiar atributos (clases, id, etc.) al <picture>
+                ['class', 'id', 'title'].forEach(attr => {
+                    if (img.hasAttribute(attr)) {
+                        picture.setAttribute(attr, img.getAttribute(attr));
+                    }
+                });
+
+                if (avifOk) {
+                    const avifSource = document.createElement('source');
+                    avifSource.srcset = avifUrl;
+                    avifSource.type = 'image/avif';
+                    picture.appendChild(avifSource);
+                }
+                if (webpOk) {
+                    const webpSource = document.createElement('source');
+                    webpSource.srcset = webpUrl;
+                    webpSource.type = 'image/webp';
+                    picture.appendChild(webpSource);
+                }
+
+                // Imagen fallback (la misma IMG con su src original y clases intactas)
+                const fallbackImg = img.cloneNode(true);
+                fallbackImg.src = originalSrc;
+                picture.appendChild(fallbackImg);
+
+                // Reemplazar en el DOM
                 img.parentNode.replaceChild(picture, img);
                 
                 imageCache.set(originalSrc, 'picture-element');
