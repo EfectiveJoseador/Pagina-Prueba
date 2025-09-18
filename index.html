@@ -1985,23 +1985,40 @@
             // Si hay más de 1 camiseta, envío gratis global; si no, sumar shipping para nonShirtItems si existen
             const newShipping = (shirtCount > 1) ? 0 : (shirtsOfferShipping + (nonShirtItems.length>0 ? SHIPPING : 0));
 
-            // Aplicar descuento por puntos de fidelidad
+            // Aplicar descuentos comprados (no niveles)
             let adjustedSubtotal = newSubtotal;
             let loyaltyApplied = null;
             try{
-              const pts = Number(window.USER_POINTS || 0);
-              const tier = computeLoyaltyTier(pts);
-              if (tier.key === 'free' && shirtCount > 0){
-                // camiseta gratis: restar el precio base de 1 camiseta
-                const baseOffer = (OFFERS && OFFERS.find(o=>o.size===1) && OFFERS.find(o=>o.size===1).price) ? OFFERS.find(o=>o.size===1).price : 19.90;
-                adjustedSubtotal = Math.max(0, adjustedSubtotal - baseOffer);
-                loyaltyApplied = { type:'free_shirt', value: baseOffer };
-              } else if (tier.percent > 0){
-                const discount = adjustedSubtotal * tier.percent;
-                adjustedSubtotal = Math.max(0, adjustedSubtotal - discount);
-                loyaltyApplied = { type:'percent', value: discount, percent: tier.percent };
+              const rewards = Array.isArray(window.USER_ACTIVE_REWARDS) ? window.USER_ACTIVE_REWARDS : [];
+              // Elegir el mejor descuento disponible: prioridad Camiseta gratis; si no, mayor porcentaje
+              let chosen = null;
+              const free = rewards.find(r => String(r.kind) === 'freeShirt' && !r.used);
+              if (free && shirtCount > 0) {
+                chosen = free;
+              } else {
+                const order = { discount20: 0.20, discount15: 0.15, discount10: 0.10 };
+                chosen = rewards
+                  .filter(r => r.kind && String(r.kind).startsWith('discount') && !r.used)
+                  .sort((a,b)=> (order[String(b.kind)]||0) - (order[String(a.kind)]||0))[0] || null;
               }
-            }catch(_){ }
+              if (chosen) {
+                window.__APPLIED_REWARD = chosen; // global para marcarlo al confirmar compra
+                if (String(chosen.kind) === 'freeShirt' && shirtCount > 0) {
+                  const baseOffer = (OFFERS && OFFERS.find(o=>o.size===1) && OFFERS.find(o=>o.size===1).price) ? OFFERS.find(o=>o.size===1).price : 19.90;
+                  const value = baseOffer;
+                  adjustedSubtotal = Math.max(0, adjustedSubtotal - value);
+                  loyaltyApplied = { type:'reward', rewardId: chosen.id, rewardKind: chosen.kind, label: chosen.label, value };
+                } else {
+                  const kind = String(chosen.kind);
+                  const percent = (kind === 'discount20') ? 0.20 : (kind === 'discount15') ? 0.15 : 0.10;
+                  const value = adjustedSubtotal * percent;
+                  adjustedSubtotal = Math.max(0, adjustedSubtotal - value);
+                  loyaltyApplied = { type:'reward', rewardId: chosen.id, rewardKind: chosen.kind, label: chosen.label, value, percent };
+                }
+              } else {
+                window.__APPLIED_REWARD = null;
+              }
+            }catch(_){ window.__APPLIED_REWARD = null; }
 
             const newTotal = adjustedSubtotal + newShipping;
 
@@ -4568,9 +4585,10 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     
     /* Order styles */
     .orders-list {
-      display: grid;
-      gap: 16px;
-      margin-top: 8px;
+      margin-top: 16px;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
     }
     
     .order-card {
@@ -4649,7 +4667,56 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     #auth-section {
       display: grid;
       place-items: center;
-      padding: 12px 16px;
+      padding: 20px 16px;
+      min-height: 500px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    /* Asegurar que el contenedor principal del perfil no se superponga */
+    #profile-section {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    
+    /* Evitar desbordamiento horizontal */
+    * {
+      max-width: 100%;
+    }
+    
+    /* Mejoras visuales finales */
+    .seccion.activa {
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Asegurar scroll suave */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Mejorar legibilidad en móvil */
+    @media (max-width: 768px) {
+      #auth-section {
+        padding: 12px 8px;
+      }
+      
+      #profile-section {
+        padding: 12px 8px;
+      }
     }
   </style>
   <div id="auth-section">
@@ -4750,42 +4817,66 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
   <style>
     /* Perfil: layout y espaciados coherentes con Identificarse */
+    #profile-section .profile-header-container {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      margin-bottom: 20px;
+    }
+    
     #profile-section .ident-header {
       flex-direction: row;
       align-items: center;
       text-align: left;
-      gap: 12px;
-      margin-bottom: 0; /* pegar a las pestañas */
+      gap: 16px;
+      margin-bottom: 20px;
     }
+    
     #profile-section .ident-header img {
-      width: 64px;
-      height: 64px;
-      border-radius: 14px;
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
       object-fit: cover;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      border: 2px solid rgba(99, 102, 241, 0.3);
     }
-    #profile-section .ident-header > div:nth-child(2) .ident-title { margin: 0; }
+    
+    #profile-section .ident-header > div:nth-child(2) .ident-title { 
+      margin: 0;
+      font-size: 28px;
+    }
+    
+    #profile-section .ident-header .ident-small {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
 
     /* Contenedor de acciones (botones de pestañas) */
     #profile-section .profile-actions {
-      margin-left: auto;
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
+      width: 100%;
     }
     /* Botones del perfil: icono + etiqueta, espaciado y estados */
     #profile-section .profile-actions .btn-ident {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 16px;
       border-radius: 12px;
       background: rgba(15, 23, 42, 0.5);
       color: #e5e7eb;
       border: 1px solid rgba(148, 163, 184, 0.25);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .08s ease;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
     }
     #profile-section .profile-actions .btn-ident.secondary {
       background: rgba(30, 41, 59, 0.55);
@@ -4861,6 +4952,10 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
     /* Panel de puntos: separación de líneas */
     #profile-section #points-summary { gap: 10px; }
+    /* Ocultar niveles y progreso (eliminamos niveles Bronce/Plata/etc.) */
+    #profile-section .points-progress-section,
+    #profile-section .points-tiers,
+    #profile-section #points-tier-line { display: none !important; }
 
     /* Responsive: apilar cabecera y centrar acciones en móvil */
     @media (max-width: 520px) {
@@ -4871,36 +4966,113 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
   </style>
 
   <div id="profile-section" class="ident-ui hidden" aria-live="polite">
-    <div class="ident-header">
-      <img id="profile-avatar" src="assets/logos/logo.jpg" alt="Avatar" loading="lazy" width="44" height="44" style="border-radius:10px;object-fit:cover;"/>
-      <div>
-        <h2 class="ident-title" id="profile-title">Perfil</h2>
-        <div class="ident-small" id="profile-email"></div>
+    <div class="profile-header-container">
+      <div class="profile-header ident-header" role="banner">
+        <img src="assets/logos/logo.jpg" alt="Camisetazo" loading="lazy" width="48" height="48"/>
+        <div>
+          <h2 class="ident-title">Perfil</h2>
+          <div class="ident-small" id="profile-email"></div>
+        </div>
       </div>
       <div class="profile-actions">
-        <button id="btn-ver-pedidos" class="btn-ident secondary" type="button"><span class="btn-icon" aria-hidden="true">🛒</span><span class="btn-label">Pedidos</span></button>
+        <button id="btn-ver-pedidos" class="btn-ident secondary active" type="button"><span class="btn-icon" aria-hidden="true">🛒</span><span class="btn-label">Pedidos</span></button>
         <button id="btn-ver-puntos" class="btn-ident secondary" type="button"><span class="btn-icon" aria-hidden="true">🏅</span><span class="btn-label">Puntos</span></button>
         <button id="btn-ver-cuenta" class="btn-ident secondary" type="button"><span class="btn-icon" aria-hidden="true">👤</span><span class="btn-label">Cuenta</span></button>
         <button id="btn-logout" class="btn-ident" type="button"><span class="btn-icon" aria-hidden="true">🚪</span><span class="btn-label">Cerrar sesión</span></button>
       </div>
     </div>
     <div class="profile-card">
-      <section id="profile-orders" class="ident-card">
-        <div id="orders-empty" class="ident-small hidden">Todavía no tienes pedidos.</div>
-        <div id="orders-list" class="orders-list"></div>
+      <section id="profile-orders" class="ident-card" style="padding:0;background:transparent;border:none;">
+        <div id="orders-empty" class="hidden" style="padding:20px;">Todavía no tienes pedidos.</div>
+        <div id="orders-list" class="orders-list" style="display:flex;flex-direction:column;gap:16px;"></div>
       </section>
-      <section id="profile-points" class="ident-card hidden">
-        <div id="points-summary" class="ident-small" style="display:flex;flex-direction:column;gap:8px">
-          <div><strong>Puntos acumulados:</strong> <span id="points-total">0</span></div>
-          <div id="points-tier-line">Nivel actual: —</div>
-          <div style="height:8px;background:#0d2a47;border-radius:6px;overflow:hidden">
-            <div id="points-progress" style="height:100%;width:0%;background:#2db67c;transition:width .35s ease"></div>
+      
+      <section id="profile-points" class="ident-card hidden" style="padding:0;background:transparent;border:none;">
+        <div class="points-container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:16px; padding:24px; box-shadow: 0 10px 40px rgba(102,126,234,0.3);">
+          <div class="points-header" style="margin-bottom:24px;">
+            <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Programa de Fidelidad</h3>
+            <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0;">Acumula puntos con cada compra y obtén descuentos exclusivos</p>
           </div>
-          <div id="points-next-msg" class="ident-small" style="opacity:.85"></div>
+          
+          <div class="points-stats" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:24px;">
+            <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:16px;">
+              <div style="color:rgba(255,255,255,0.7);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Puntos Disponibles</div>
+              <div style="color:#fff;font-size:32px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                <span id="points-total">0</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#ffd700" style="opacity:0.9;">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:16px;">
+              <div style="color:rgba(255,255,255,0.7);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Puntos Acumulados</div>
+              <div style="color:#fff;font-size:28px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                <span id="points-lifetime">0</span>
+              </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:16px;">
+              <div style="color:rgba(255,255,255,0.7);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Puntos Canjeados</div>
+              <div style="color:#fff;font-size:28px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                <span id="points-spent">0</span>
+              </div>
+            </div>
+            
+          </div>
+          
+          
+          
+          
+          
+          <div class="points-shop" style="margin-top:24px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:16px;">
+            <h4 style="color:#fff;margin:0 0 12px 0;font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px;">🛍️ Tienda de Canje</h4>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;">
+                <div style="color:#fff;font-weight:600;margin-bottom:6px;">10% de descuento</div>
+                <div style="color:#ffd700;font-size:12px;margin-bottom:10px;">20 pts</div>
+                <button onclick="redeemReward('discount10', 20, '10% de descuento')" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
+              </div>
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;">
+                <div style="color:#fff;font-weight:600;margin-bottom:6px;">15% de descuento</div>
+                <div style="color:#ffd700;font-size:12px;margin-bottom:10px;">40 pts</div>
+                <button onclick="redeemReward('discount15', 40, '15% de descuento')" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
+              </div>
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;">
+                <div style="color:#fff;font-weight:600;margin-bottom:6px;">20% de descuento</div>
+                <div style="color:#ffd700;font-size:12px;margin-bottom:10px;">60 pts</div>
+                <button onclick="redeemReward('discount20', 60, '20% de descuento')" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
+              </div>
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;">
+                <div style="color:#fff;font-weight:600;margin-bottom:6px;">Camiseta gratis 🔥</div>
+                <div style="color:#ffd700;font-size:12px;margin-bottom:10px;">100 pts</div>
+                <button onclick="redeemReward('freeShirt', 100, 'Camiseta gratis')" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
+              </div>
+            </div>
+            <div id="redeem-msg" style="margin-top:12px;color:#fff;font-size:13px;"></div>
+            <div class="owned-discounts" style="margin-top:16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;">
+              <button id="toggle-owned-discounts" style="width:100%;background:transparent;border:none;color:#fff;text-align:left;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                <span>🧾 Descuentos para cuando haga la proxima compra</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5H7z"/></svg>
+              </button>
+              <div id="owned-discounts-list" style="display:none;padding:12px 14px;color:#e2e8f0;font-size:14px;">
+                <div style="color:#94a3b8;">No tienes descuentos comprados aún.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-      <section id="profile-account" class="ident-card hidden">
-        <p class="ident-small">Desde aquí podrás administrar los datos de tu cuenta (próximamente).</p>
+      
+      <section id="profile-account" class="ident-card hidden" style="padding:0;background:transparent;border:none;">
+        <div style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:16px;padding:32px;box-shadow:0 10px 40px rgba(102,126,234,0.3);text-align:center;">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style="margin:0 auto 16px;opacity:0.9;">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/>
+          </svg>
+          <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Mi Cuenta</h3>
+          <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0 0 24px 0;">Gestión completa de tu perfil y preferencias</p>
+          <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;">
+            <p style="color:rgba(255,255,255,0.9);font-size:14px;margin:0;">🚀 Esta sección estará disponible próximamente</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:12px;margin:8px 0 0 0;">Podrás gestionar tu información personal, métodos de pago y preferencias de envío.</p>
+          </div>
+        </div>
       </section>
     </div>
 
@@ -4928,6 +5100,9 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     const auth = getAuth(app);
     const db = getDatabase(app, firebaseConfig.databaseURL);
     await setPersistence(auth, browserLocalPersistence);
+    
+    // Hacer auth global para que otras partes del código puedan acceder
+    window.auth = auth;
 
     // Utils DOM (scoped al contenedor para evitar colisiones)
     const root = document.getElementById('auth-section');
@@ -5086,30 +5261,449 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       ordersListEl.innerHTML = '';
       if (!orders || orders.length === 0){
         ordersEmptyEl.classList.remove('hidden');
+        ordersEmptyEl.innerHTML = `
+          <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);border-radius:16px;padding:48px 24px;text-align:center;">
+            <div style="width:80px;height:80px;margin:0 auto 20px;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(102,126,234,0.3);">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" fill="white" opacity="0.7"/>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 1 1 0 000 2v16a2 2 0 002 2h8a2 2 0 002-2V5a1 1 0 100-2 2 2 0 012 2v16a4 4 0 01-4 4H6a4 4 0 01-4-4V5z" fill="white"/>
+              </svg>
+            </div>
+            <h3 style="color:#2d3748;font-size:20px;font-weight:700;margin:0 0 8px 0;font-family:'Segoe UI', system-ui, sans-serif;">No tienes pedidos aún</h3>
+            <p style="color:#718096;font-size:14px;margin:0;font-family:'Segoe UI', system-ui, sans-serif;">Cuando realices tu primera compra, aparecerá aquí</p>
+            <div style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(0,0,0,0.1);">
+              <p style="color:#a0aec0;font-size:12px;margin:0;">💡 Recuerda iniciar sesión antes de comprar para acumular puntos</p>
+            </div>
+          </div>
+        `;
         return;
       }
       ordersEmptyEl.classList.add('hidden');
-      orders.forEach(o => {
+      
+      // Añadir estilos específicos para las tarjetas de pedidos con tipografía profesional
+      if (!document.getElementById('order-cards-styles')) {
+        const style = document.createElement('style');
+        style.id = 'order-cards-styles';
+        style.textContent = `
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+          .order-card {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 0;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 20px rgba(96, 165, 250, 0.15);
+          }
+          .order-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(96, 165, 250, 0.3);
+            border-color: #667eea;
+          }
+          .order-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+          }
+          .order-card-header {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .order-card-body {
+            padding: 20px 24px;
+            background: rgba(15, 23, 42, 0.6);
+          }
+          .order-status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          }
+          .order-status-pendiente-de-confirmacion { background: rgba(156, 163, 175, 0.2); color: #9ca3af; border: 1px solid rgba(156, 163, 175, 0.3); }
+          .order-status-confirmado { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+          .order-status-entregado { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+          .order-status-recibido { background: rgba(118, 75, 162, 0.2); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.3); }
+          .order-status-processing { background: rgba(243, 156, 18, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+          .order-status-shipped { background: rgba(52, 152, 219, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.3); }
+          .order-status-delivered { background: rgba(39, 174, 96, 0.2); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+          .order-status-cancelled { background: rgba(231, 76, 60, 0.2); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); }
+          .order-expand-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 12px 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
+          }
+          .order-expand-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.3);
+          }
+          .order-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            box-shadow: inset 0 2px 8px rgba(96, 165, 250, 0.1);
+          }
+          .order-details.expanded {
+            max-height: 800px;
+          }
+          .order-details-inner {
+            padding: 20px 24px;
+          }
+          .order-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+          }
+          .order-detail-row:last-child {
+            border-bottom: none;
+          }
+          .order-detail-label {
+            color: #94a3b8;
+            font-weight: 500;
+          }
+          .order-detail-value {
+            color: #e2e8f0;
+            text-align: right;
+            font-weight: 600;
+            max-width: 60%;
+            word-wrap: break-word;
+          }
+          .order-products-box {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+            word-break: break-word;
+            box-shadow: 0 2px 8px rgba(96, 165, 250, 0.1);
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      
+      orders.forEach((o, index) => {
         const card = document.createElement('div');
         card.className = 'order-card';
-        const dateStr = o.date ? new Date(o.date).toLocaleString() : (o.createdAt ? new Date(o.createdAt).toLocaleString() : '');
-        const totalStr = typeof o.total === 'number' ? `${o.total.toFixed(2)}€` : (o.total || '—');
-        const statusStr = o.status || 'pendiente';
-        const itemsBlock = o.itemsText ? `<div class="order-items" style="margin-top:8px;white-space:pre-wrap;background:#0d2a47;padding:8px;border-radius:8px">${o.itemsText}</div>` : '';
-        const points = (typeof o.pointsEarned === 'number') ? o.pointsEarned : (function(txt){ if (!txt) return 0; return txt.split('\n').reduce((sum, line)=>{ const m = line.match(/(\d+)x\s/i); const qty = m ? parseInt(m[1],10) : 0; return sum + (qty*10); }, 0); })(o.itemsText||'');
-        const ptsHtml = `<div class="order-points" style="margin-top:6px;color:#7ce0a3;font-weight:700">+${points} pts</div>`;
+        
+        // Formatear fecha
+        const dateStr = o.date ? new Date(o.date).toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }) : (o.createdAt ? new Date(o.createdAt).toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }) : 'Fecha desconocida');
+        
+        const totalStr = typeof o.total === 'number' ? `€${o.total.toFixed(2)}` : (o.total || '€0.00');
+        const status = o.status || 'recibido';
+        const statusClass = `order-status-${status.toLowerCase().replace(/\s+/g, '-')}`;
+        const statusText = {
+          'pendiente-de-confirmacion': 'Pendiente de Confirmación',
+          'confirmado': 'Confirmado',
+          'entregado': 'Entregado',
+          'recibido': 'Recibido',
+          'processing': 'Procesando',
+          'shipped': 'Enviado',
+          'delivered': 'Entregado',
+          'cancelled': 'Cancelado'
+        }[status.toLowerCase()] || status;
+        
+        // Calcular puntos
+        const points = (typeof o.pointsEarned === 'number') ? o.pointsEarned : 
+          (o.shirtsCount ? o.shirtsCount * 10 : 0);
+        
+        // Crear número de pedido más corto y legible
+        const shortId = o.id ? o.id.substring(0, 8).toUpperCase() : `ORD${(index + 1).toString().padStart(4, '0')}`;
+        
+        // Crear icono según el estado
+        const statusIcon = {
+          'pendiente-de-confirmacion': '⏳',
+          'confirmado': '✅',
+          'entregado': '🎉',
+          'recibido': '📦',
+          'processing': '⏳',
+          'shipped': '🚚',
+          'delivered': '✅',
+          'cancelled': '❌'
+        }[status.toLowerCase()] || '📦';
+        
         card.innerHTML = `
-          <div class="order-meta">
-            <div class="order-id">Pedido #${o.id || '—'}</div>
-            <div class="order-date">${dateStr}</div>
-            <div class="order-status">Estado: ${statusStr}</div>
+          <div class="order-card-header">
+            <div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">
+                  ${statusIcon}
+                </div>
+                <div>
+                  <div style="font-weight:700;color:#ffffff;font-size:18px;margin-bottom:2px;font-family:'Inter', sans-serif;">
+                    Pedido #${shortId}
+                  </div>
+                  <div style="color:rgba(255,255,255,0.85);font-size:13px;font-family:'Inter', sans-serif;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="display:inline;margin-right:4px;vertical-align:middle;">
+                      <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" fill="currentColor" opacity="0.6"/>
+                    </svg>
+                    ${dateStr}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span class="order-status-badge ${statusClass}">
+              <span style="display:inline-block;width:6px;height:6px;background:currentColor;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>
+              ${statusText}
+            </span>
           </div>
-          <div class="order-total">${totalStr}</div>
-          ${itemsBlock}
-          ${ptsHtml}
+          
+          <div class="order-card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(99,102,241,0.2);">
+              <div>
+                <div style="color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;font-weight:500;">Total del pedido</div>
+                <div style="font-size:32px;font-weight:700;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Inter', sans-serif;">${totalStr}</div>
+              </div>
+              ${points > 0 ? `
+                <div style="text-align:center;">
+                  <div style="background:linear-gradient(135deg, #f6d365 0%, #fda085 100%);border-radius:12px;padding:12px 20px;box-shadow:0 4px 12px rgba(253,160,133,0.3);">
+                    <div style="color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;font-weight:600;">Puntos ganados</div>
+                    <div style="color:#fff;font-size:24px;font-weight:700;">+${points}</div>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+            
+            ${o.shirtsCount && o.shirtsCount > 0 ? `
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));gap:12px;margin-bottom:16px;">
+                <div style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:12px;text-align:center;">
+                  <div style="font-size:20px;margin-bottom:4px;">👕</div>
+                  <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Camisetas</div>
+                  <div style="color:#e2e8f0;font-size:20px;font-weight:700;">${o.shirtsCount}</div>
+                </div>
+                ${o.total > 0 ? `
+                  <div style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:12px;text-align:center;">
+                    <div style="font-size:20px;margin-bottom:4px;">💰</div>
+                    <div style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Por unidad</div>
+                    <div style="color:#e2e8f0;font-size:20px;font-weight:700;">€${(o.total/o.shirtsCount).toFixed(2)}</div>
+                  </div>
+                ` : ''}
+              </div>
+            ` : ''}
+            
+            ${status.toLowerCase() === 'confirmado' ? `
+              <div style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);border-radius:12px;padding:20px;margin-bottom:16px;text-align:center;box-shadow:0 4px 12px rgba(16,185,129,0.3);">
+                <div style="font-size:24px;margin-bottom:8px;">🎉</div>
+                <h3 style="color:#fff;font-size:18px;font-weight:700;margin:0 0 12px 0;">¡Gana Puntos con cada Compra!</h3>
+                <p style="color:rgba(255,255,255,0.9);font-size:14px;margin:0 0 16px 0;">Compra en Camisetazo y envía una foto de tu pedido cuando lo recibas.<br/>¡Te damos <strong>10 puntos por cada camiseta</strong> comprada! 💥</p>
+                <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;margin-bottom:16px;">
+                  <p style="color:#fff;font-size:14px;margin:0;">📸 <strong>Ejemplo:</strong> Si compras ${o.shirtsCount || 5} camisetas, obtienes <strong>${(o.shirtsCount || 5) * 10} puntos</strong>.</p>
+                </div>
+                <div style="text-align:left;">
+                  <h4 style="color:#fff;font-size:16px;font-weight:600;margin:0 0 12px 0;">🎁 Premios por Puntos</h4>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:8px;">
+                    <div style="background:rgba(255,255,255,0.1);border-radius:6px;padding:8px;text-align:center;">
+                      <div style="color:#fbbf24;font-weight:700;">20 pts</div>
+                      <div style="color:#fff;font-size:12px;">10% dto</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.1);border-radius:6px;padding:8px;text-align:center;">
+                      <div style="color:#fbbf24;font-weight:700;">40 pts</div>
+                      <div style="color:#fff;font-size:12px;">15% dto</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.1);border-radius:6px;padding:8px;text-align:center;">
+                      <div style="color:#fbbf24;font-weight:700;">60 pts</div>
+                      <div style="color:#fff;font-size:12px;">20% dto</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.1);border-radius:6px;padding:8px;text-align:center;">
+                      <div style="color:#ffd700;font-weight:700;">100 pts</div>
+                      <div style="color:#fff;font-size:12px;">🔥 Gratis</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+            
+            <button class="order-expand-btn" onclick="toggleOrderDetails('${o.id || shortId}')">
+              <span style="display:flex;align-items:center;gap:8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 4c0-3.86 3.14-7 7-7s7 3.14 7 7-3.14 7-7 7-7-3.14-7-7z" fill="currentColor" opacity="0.9"/>
+                  <path d="M12 10v4M10 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Ver detalles completos
+              </span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" id="arrow-${o.id || shortId}" style="transition:transform 0.3s;">
+                <path d="M7 10l5 5 5-5H7z"/>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="order-details" id="details-${o.id || shortId}">
+            <div class="order-details-inner">
+              ${o.itemsText ? `
+                <div style="margin-bottom:20px;padding:16px;background:rgba(96,165,250,0.05);border-radius:12px;border:1px solid rgba(96,165,250,0.1);">
+                  <h4 style="color:#e2e8f0;font-size:16px;font-weight:600;margin:0 0 12px 0;font-family:'Inter', sans-serif;display:flex;align-items:center;gap:8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 4V2c0-.55.45-1 1-1h8c.55 0 1 .45 1 1v2h4c.55 0 1 .45 1 1s-.45 1-1 1H3c-.55 0-1-.45-1-1s.45-1 1-1h4zm10 0V2H7v2h10zm-1 15c0 .55-.45 1-1 1H9c-.55 0-1-.45-1-1V8h8v11z" fill="#60a5fa"/>
+                    </svg>
+                    Productos del pedido
+                  </h4>
+                  <div class="order-products-box">${o.itemsText}</div>
+                </div>
+              ` : ''}
+              
+              ${o.contactName || o.emailPaypal || o.shippingAddress ? `
+                <div style="margin-bottom:20px;padding:16px;background:rgba(96,165,250,0.05);border-radius:12px;border:1px solid rgba(96,165,250,0.1);">
+                  <h4 style="color:#e2e8f0;font-size:16px;font-weight:600;margin:0 0 12px 0;font-family:'Inter', sans-serif;display:flex;align-items:center;gap:8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#60a5fa"/>
+                    </svg>
+                    Información del cliente
+                  </h4>
+                  <div style="background:rgba(30,41,59,0.5);border:1px solid rgba(99,102,241,0.15);border-radius:8px;padding:16px;box-shadow:0 2px 8px rgba(96,165,250,0.1);">
+                    ${o.contactName ? `
+                      <div class="order-detail-row">
+                        <span class="order-detail-label">👤 Nombre</span>
+                        <span class="order-detail-value">${o.contactName}</span>
+                      </div>
+                    ` : ''}
+                    ${o.emailPaypal ? `
+                      <div class="order-detail-row">
+                        <span class="order-detail-label">📧 Email</span>
+                        <span class="order-detail-value" style="word-break:break-all;">${o.emailPaypal}</span>
+                      </div>
+                    ` : ''}
+                    ${o.phone ? `
+                      <div class="order-detail-row">
+                        <span class="order-detail-label">📞 Teléfono</span>
+                        <span class="order-detail-value">${o.phone}</span>
+                      </div>
+                    ` : ''}
+                    ${o.instagram ? `
+                      <div class="order-detail-row">
+                        <span class="order-detail-label">📸 Instagram</span>
+                        <span class="order-detail-value">${o.instagram}</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+              ` : ''}
+              
+              ${o.shippingAddress || o.city || o.country || o.postal ? `
+                <div style="padding:16px;background:rgba(96,165,250,0.05);border-radius:12px;border:1px solid rgba(96,165,250,0.1);">
+                  <h4 style="color:#e2e8f0;font-size:16px;font-weight:600;margin:0 0 12px 0;font-family:'Inter', sans-serif;display:flex;align-items:center;gap:8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#60a5fa"/>
+                    </svg>
+                    Dirección de envío
+                  </h4>
+                  <div style="background:rgba(30,41,59,0.5);border:1px solid rgba(99,102,241,0.15);border-radius:8px;padding:16px;box-shadow:0 2px 8px rgba(96,165,250,0.1);">
+                    ${o.shippingAddress ? `
+                      <div class="order-detail-row">
+                        <span class="order-detail-label">🏠 Dirección</span>
+                        <span class="order-detail-value">${o.shippingAddress}</span>
+                      </div>
+                    ` : ''}
+                    ${o.city || o.state || o.country ? `
+                      <div class="order-detail-row">
+                        <span class="order-detail-label">🗺️ Ubicación</span>
+                        <span class="order-detail-value">${[o.city, o.state, o.country].filter(Boolean).join(', ')}</span>
+                      </div>
+                    ` : ''}
+                    ${o.postal ? `
+                      <div class="order-detail-row">
+                        <span class="order-detail-label">📬 C.P.</span>
+                        <span class="order-detail-value">${o.postal}</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
         `;
         ordersListEl.appendChild(card);
       });
+      
+      // Añadir función global para expandir/colapsar detalles con animación suave
+      if (!window.toggleOrderDetails) {
+        window.toggleOrderDetails = function(orderId) {
+          const details = document.getElementById(`details-${orderId}`);
+          const arrow = document.getElementById(`arrow-${orderId}`);
+          if (details) {
+            const isExpanded = details.classList.contains('expanded');
+            
+            // Cerrar todos los demás detalles abiertos
+            document.querySelectorAll('.order-details.expanded').forEach(d => {
+              if (d.id !== `details-${orderId}`) {
+                d.classList.remove('expanded');
+                const otherId = d.id.replace('details-', '');
+                const otherArrow = document.getElementById(`arrow-${otherId}`);
+                if (otherArrow) otherArrow.style.transform = '';
+              }
+            });
+            
+            // Toggle el actual
+            if (!isExpanded) {
+              details.classList.add('expanded');
+              if (arrow) arrow.style.transform = 'rotate(180deg)';
+              
+              // Scroll suave al elemento expandido
+              setTimeout(() => {
+                const card = details.closest('.order-card');
+                if (card) {
+                  const rect = card.getBoundingClientRect();
+                  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                  const targetTop = rect.top + scrollTop - 100;
+                  
+                  window.scrollTo({
+                    top: targetTop,
+                    behavior: 'smooth'
+                  });
+                }
+              }, 100);
+            } else {
+              details.classList.remove('expanded');
+              if (arrow) arrow.style.transform = '';
+            }
+          }
+        };
+      }
     }
 
     function computeLoyaltyTier(points){
@@ -5124,61 +5718,290 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     function updatePointsPanel(points){
       try{
         const totalEl = document.getElementById('points-total');
+        const lifeEl = document.getElementById('points-lifetime');
+        const spentEl = document.getElementById('points-spent');
         const tierLine = document.getElementById('points-tier-line');
         const nextMsg = document.getElementById('points-next-msg');
         const progress = document.getElementById('points-progress');
-        if (!totalEl || !tierLine || !nextMsg || !progress) return;
-        const p = Number(points||0);
-        const tier = computeLoyaltyTier(p);
-        totalEl.textContent = String(p);
-        tierLine.textContent = `Nivel actual: ${tier.label}`;
-        if (tier.key === 'free') { progress.style.width = '100%'; nextMsg.textContent = '¡Has alcanzado el máximo nivel! Disfruta de una camiseta gratis en tu próxima compra con camisetas.'; return; }
-        let base = 0, target = 20;
-        if (p < 20) { base = 0; target = 20; }
-        else if (p < 40) { base = 20; target = 40; }
-        else if (p < 60) { base = 40; target = 60; }
-        else { base = 60; target = 100; }
-        const pct = Math.max(0, Math.min(100, ((p - base) / (target - base)) * 100));
-        progress.style.width = pct.toFixed(1) + '%';
-        nextMsg.textContent = `Te faltan ${Math.max(0, target - p)} puntos para ${target===100? 'Camiseta gratis' : `alcanzar ${computeLoyaltyTier(target).label}`}`;
+        if (!totalEl) return;
+        
+        const isObj = points && typeof points === 'object';
+        const available = isObj ? Number(points.available || 0) : Number(points || 0);
+        const lifetime = isObj ? Number(points.lifetime || 0) : Number(window.USER_POINTS || available || 0);
+        const spent = isObj ? Number(points.spent || Math.max(0, lifetime - available)) : Math.max(0, lifetime - available);
+
+        if (lifeEl) lifeEl.textContent = String(lifetime);
+        if (spentEl) spentEl.textContent = String(spent);
+
+        // Animación del contador de puntos (disponibles)
+        const currentPoints = parseInt(totalEl.textContent) || 0;
+        const targetPoints = available;
+        const increment = (targetPoints - currentPoints) / 20;
+        let step = 0;
+        
+        if (currentPoints !== targetPoints) {
+          const counter = setInterval(() => {
+            step++;
+            const newValue = Math.round(currentPoints + increment * step);
+            totalEl.textContent = String(newValue);
+            if (step >= 20) {
+              clearInterval(counter);
+              totalEl.textContent = String(targetPoints);
+            }
+          }, 30);
+        }
+        
+        // Opcional: Tier y progreso (solo si existen elementos en el DOM)
+        if (tierLine && nextMsg && progress) {
+          const tier = computeLoyaltyTier(lifetime);
+          const tierEmoji = {
+            'none': '⭐',
+            '10': '🌟',
+            '15': '✨',
+            '20': '🏆',
+            'free': '💎'
+          }[tier.key] || '⭐';
+          tierLine.innerHTML = `${tierEmoji} ${tier.label}`;
+          if (tier.key === 'free') { 
+            progress.style.width = '100%'; 
+            nextMsg.innerHTML = '<span style="color:#ffd700;">🎉 ¡Máximo nivel alcanzado!</span>';
+          } else {
+            let base = 0, target = 20;
+            const p = lifetime;
+            if (p < 20) { base = 0; target = 20; }
+            else if (p < 40) { base = 20; target = 40; }
+            else if (p < 60) { base = 40; target = 60; }
+            else { base = 60; target = 100; }
+            const pct = Math.max(0, Math.min(100, ((p - base) / (target - base)) * 100));
+            progress.style.width = pct.toFixed(1) + '%';
+            const pointsNeeded = Math.max(0, target - p);
+            nextMsg.innerHTML = `<strong>${pointsNeeded}</strong> pts`;
+          }
+        }
       }catch(e){ console.error('updatePointsPanel error', e); }
     }
 
     async function loadUserOrders(uid){
       try{
-        if (!uid) { renderOrdersList([]); updatePointsPanel(0); window.USER_POINTS = 0; return; }
+        if (!uid) { 
+          renderOrdersList([]); 
+          window.USER_POINTS = 0; window.USER_POINTS_LIFETIME = 0; window.USER_POINTS_SPENT = 0; window.USER_POINTS_AVAILABLE = 0;
+          updatePointsPanel({ available:0, lifetime:0, spent:0 }); 
+          return; 
+        }
         const snap = await get(ref(db, `ordersByUser/${uid}`));
-        if (!snap.exists()){ renderOrdersList([]); updatePointsPanel(0); window.USER_POINTS = 0; return; }
+        if (!snap.exists()){ 
+          renderOrdersList([]); 
+          window.USER_POINTS = 0; window.USER_POINTS_LIFETIME = 0; window.USER_POINTS_SPENT = 0; window.USER_POINTS_AVAILABLE = 0;
+          updatePointsPanel({ available:0, lifetime:0, spent:0 }); 
+          return; 
+        }
         const obj = snap.val() || {};
         const arr = Object.entries(obj).map(([id, data])=>({ id, ...(data||{}) }));
         arr.sort((a,b)=> new Date(b.date||b.createdAt||0) - new Date(a.date||a.createdAt||0));
-        const totalPoints = arr.reduce((sum, o)=>{
-          if (typeof o.pointsEarned === 'number') return sum + o.pointsEarned;
-          if (o.itemsText){
-            const add = o.itemsText.split('\n').reduce((s,line)=>{ const m=line.match(/(\d+)x\s/i); return s + (m? parseInt(m[1],10)*10 : 0); }, 0);
-            return sum + add;
+        
+        // Contar puntos solo de pedidos confirmados
+        const lifetimePoints = arr.reduce((sum, o)=>{
+          const st = String(o.status || '').toLowerCase();
+          if (st === 'confirmado') {
+            if (typeof o.pointsEarned === 'number') return sum + o.pointsEarned;
+            if (o.itemsText){
+              const add = o.itemsText.split('\n').reduce((s,line)=>{ const m=line.match(/(\d+)x\s/i); return s + (m? parseInt(m[1],10)*10 : 0); }, 0);
+              return sum + add;
+            }
           }
           return sum;
         }, 0);
-        window.USER_POINTS = totalPoints;
-        updatePointsPanel(totalPoints);
+
+        // Leer puntos canjeados del usuario
+        let spentPoints = 0;
+        try {
+          const spentSnap = await get(ref(db, `loyaltyByUser/${uid}/spentPoints`));
+          spentPoints = Number(spentSnap.exists() ? spentSnap.val() : 0) || 0;
+        } catch(_){ spentPoints = 0; }
+
+        const availablePoints = Math.max(0, lifetimePoints - spentPoints);
+
+        // Leer redenciones del usuario y construir rewards activos (no usados)
+        let activeRewards = [];
+        try {
+          const redSnap = await get(ref(db, `loyaltyByUser/${uid}/redemptions`));
+          if (redSnap.exists()){
+            const objR = redSnap.val() || {};
+            const all = Object.entries(objR).map(([id, r])=>({ id, ...(r||{}) }));
+            activeRewards = all.filter(r => !r.used);
+            // Renderizar lista en el panel
+            renderOwnedDiscounts(activeRewards);
+          } else {
+            renderOwnedDiscounts([]);
+          }
+        }catch(e){ console.warn('No se pudieron leer las redenciones', e); renderOwnedDiscounts([]); }
+        
+        // Globals
+        window.USER_POINTS = lifetimePoints; // usado por descuentos automáticos
+        window.USER_POINTS_LIFETIME = lifetimePoints;
+        window.USER_POINTS_SPENT = spentPoints;
+        window.USER_POINTS_AVAILABLE = availablePoints;
+        window.USER_ACTIVE_REWARDS = activeRewards;
+
+        updatePointsPanel({ available: availablePoints, lifetime: lifetimePoints, spent: spentPoints });
         renderOrdersList(arr);
-      }catch(err){ console.error('Error cargando pedidos:', err); renderOrdersList([]); updatePointsPanel(0); }
+      }catch(err){ 
+        console.error('Error cargando pedidos:', err); 
+        renderOrdersList([]); 
+        window.USER_POINTS = 0; window.USER_POINTS_LIFETIME = 0; window.USER_POINTS_SPENT = 0; window.USER_POINTS_AVAILABLE = 0;
+        window.USER_ACTIVE_REWARDS = [];
+        updatePointsPanel({ available:0, lifetime:0, spent:0 }); 
+      }
     }
 
     // Helpers globales: guardar pedido y refrescar listado en Perfil
     window.saveOrderToRTDB = async (orderData)=>{
       try{
-        const u = auth.currentUser; if (!u) return null;
-        if (!u.emailVerified){ console.warn('Bloqueado: email no verificado'); return null; }
+        const u = auth.currentUser; 
+        if (!u) {
+          console.log('saveOrderToRTDB: No hay usuario autenticado');
+          return null;
+        }
+        if (!u.emailVerified){ 
+          console.warn('saveOrderToRTDB: Email no verificado, guardando de todos modos');
+          // Cambiado para permitir guardar pedidos aunque el email no esté verificado
+        }
+        
         const uid = u.uid;
         const id = orderData && orderData.id ? String(orderData.id) : (Date.now().toString(36) + Math.random().toString(36).slice(2,8));
-        const payload = Object.assign({ uid, id, createdAt: new Date().toISOString(), status: 'recibido' }, orderData || {});
+        
+        // Calcular puntos basándose en el número de camisetas si no están especificados
+        let pointsEarned = orderData.pointsEarned;
+        if (typeof pointsEarned !== 'number' || pointsEarned === 0) {
+          // Intentar calcular desde shirtsCount o desde itemsText
+          if (orderData.shirtsCount && orderData.shirtsCount > 0) {
+            pointsEarned = orderData.shirtsCount * 10;
+          } else if (orderData.itemsText) {
+            // Contar camisetas desde el texto de items
+            const lines = orderData.itemsText.split('\n');
+            let totalShirts = 0;
+            lines.forEach(line => {
+              const match = line.match(/(\d+)x\s/);
+              if (match) {
+                totalShirts += parseInt(match[1], 10);
+              }
+            });
+            pointsEarned = totalShirts * 10;
+          } else {
+            pointsEarned = 0;
+          }
+        }
+        
+        const payload = Object.assign(
+          { 
+            uid, 
+            id, 
+            createdAt: new Date().toISOString(), 
+            date: new Date().toISOString(),
+            status: 'pendiente-de-confirmacion', // Nuevo estado por defecto
+            pointsEarned: pointsEarned,
+            appliedReward: (orderData && orderData.appliedReward) ? orderData.appliedReward : (window.__APPLIED_REWARD ? {
+              id: window.__APPLIED_REWARD.id,
+              kind: window.__APPLIED_REWARD.kind,
+              label: window.__APPLIED_REWARD.label || '',
+            } : null)
+          }, 
+          orderData || {}
+        );
+        
+        console.log('saveOrderToRTDB: Guardando pedido con payload:', payload);
         await set(ref(db, `ordersByUser/${uid}/${id}`), payload);
+        console.log('saveOrderToRTDB: Pedido guardado exitosamente con ID:', id);
+        // Si hay un descuento aplicado, marcarlo como usado
+        try{
+          const ar = window.__APPLIED_REWARD;
+          if (ar && ar.id) {
+            await set(ref(db, `loyaltyByUser/${uid}/redemptions/${ar.id}/used`), true);
+            await set(ref(db, `loyaltyByUser/${uid}/redemptions/${ar.id}/usedAt`), new Date().toISOString());
+            window.__APPLIED_REWARD = null;
+          }
+        }catch(eMark){ console.warn('No se pudo marcar el descuento como usado:', eMark); }
         return id;
-      }catch(e){ console.error('saveOrderToRTDB error:', e); return null; }
+      }catch(e){ 
+        console.error('saveOrderToRTDB error:', e); 
+        return null; 
+      }
     };
     window.refreshProfileOrders = async ()=>{ try{ const u = auth.currentUser; if (u) await loadUserOrders(u.uid); }catch(e){ console.error('refreshProfileOrders error:', e); } };
+    window.redeemReward = async (kind, cost, label)=>{
+      try{
+        const u = auth.currentUser; 
+        const msgEl = document.getElementById('redeem-msg');
+        if (!u){ if (msgEl){ msgEl.textContent = 'Inicia sesión para canjear.'; msgEl.style.color = '#fecaca'; } return; }
+        const available = Number(window.USER_POINTS_AVAILABLE || 0);
+        if (available < Number(cost||0)) { if (msgEl){ msgEl.textContent = 'No tienes puntos suficientes.'; msgEl.style.color = '#fecaca'; } return; }
+
+        // Leer puntos canjeados actuales
+        const spentRef = ref(db, `loyaltyByUser/${u.uid}/spentPoints`);
+        let currentSpent = 0;
+        try{ const s = await get(spentRef); if (s.exists()) currentSpent = Number(s.val()) || 0; }catch(_){ currentSpent = 0; }
+
+        const newSpent = currentSpent + Number(cost||0);
+        const rid = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+        const redemptionRef = ref(db, `loyaltyByUser/${u.uid}/redemptions/${rid}`);
+
+        await Promise.all([
+          set(spentRef, newSpent),
+          set(redemptionRef, { id: rid, kind: String(kind||''), label: String(label||''), points: Number(cost||0), createdAt: new Date().toISOString(), uid: u.uid, used: false })
+        ]);
+
+        const lifetime = Number(window.USER_POINTS_LIFETIME || 0);
+        const availableNew = Math.max(0, lifetime - newSpent);
+        window.USER_POINTS_SPENT = newSpent;
+        window.USER_POINTS_AVAILABLE = availableNew;
+
+        // Refrescar lista de redenciones
+        try {
+          const redSnap = await get(ref(db, `loyaltyByUser/${u.uid}/redemptions`));
+          let activeRewards = [];
+          if (redSnap.exists()){
+            const objR = redSnap.val() || {};
+            const all = Object.entries(objR).map(([id, r])=>({ id, ...(r||{}) }));
+            activeRewards = all.filter(r => !r.used);
+          }
+          window.USER_ACTIVE_REWARDS = activeRewards;
+          renderOwnedDiscounts(activeRewards);
+        } catch(e){ console.warn('refresh redemptions after redeem error', e); }
+
+        updatePointsPanel({ available: availableNew, lifetime, spent: newSpent });
+        if (msgEl){ msgEl.textContent = `Canjeado: ${label} (-${cost} pts)`; msgEl.style.color = '#bbf7d0'; }
+      }catch(e){
+        console.error('redeemReward error', e);
+        const msgEl = document.getElementById('redeem-msg'); if (msgEl){ msgEl.textContent = 'Error al canjear. Inténtalo de nuevo.'; msgEl.style.color = '#fecaca'; }
+      }
+    };
+
+    // Renderizar lista de descuentos comprados (no usados)
+    function renderOwnedDiscounts(rewards){
+      try{
+        const list = document.getElementById('owned-discounts-list');
+        if (!list) return;
+        const items = Array.isArray(rewards) ? rewards.filter(r=>!r.used) : [];
+        if (items.length === 0){
+          list.innerHTML = '<div style="color:#94a3b8;">No tienes descuentos comprados aún.</div>';
+          return;
+        }
+        const badge = (k)=> k==='freeShirt' ? '🔥 Gratis' : (k==='discount20'?'20% dto': k==='discount15'?'15% dto':'10% dto');
+        list.innerHTML = items.map(r=>`
+          <div class="owned-discount-item" style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span>🎟️</span>
+              <div>
+                <div style="color:#fff;font-weight:600;">${r.label || badge(String(r.kind))}</div>
+                <div style="color:#94a3b8;font-size:12px;">${r.points||0} pts • Disponible</div>
+              </div>
+            </div>
+            <span style="color:#22c55e;font-size:12px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);padding:4px 8px;border-radius:999px;">Se aplicará automáticamente</span>
+          </div>
+        `).join('');
+      }catch(e){ console.error('renderOwnedDiscounts error', e); }
+    }
 
     // Navegación dentro de Perfil
     (function(){
@@ -5193,6 +6016,23 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
       const btnLogout = document.getElementById('btn-logout');
       if (btnLogout){ btnLogout.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){ console.error(e); } }); }
       
+      // Toggle lista de descuentos comprados
+      try{
+        const toggleBtn = document.getElementById('toggle-owned-discounts');
+        const listEl = document.getElementById('owned-discounts-list');
+        const arrow = toggleBtn ? toggleBtn.querySelector('svg') : null;
+        if (toggleBtn && listEl){
+          let open = false;
+          listEl.style.display = 'none';
+          toggleBtn.addEventListener('click', ()=>{
+            open = !open;
+            listEl.style.display = open ? 'block' : 'none';
+            if (arrow) arrow.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+            if (arrow) arrow.style.transition = 'transform 0.25s ease';
+          });
+        }
+      }catch(e){ console.warn('toggle owned discounts init error', e); }
+
       // Funcionalidad de mostrar/ocultar contraseña
       document.querySelectorAll('.password-toggle').forEach(button => {
         button.addEventListener('click', function() {
@@ -6094,6 +6934,18 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
                     mostrarExito('Pedido enviado correctamente.');
                     try { if (typeof clearCart === 'function') clearCart(); } catch (e) {}
                     pedidoFormEl.dataset.submitted = '0';
+                    
+                    // Mostrar mensaje adicional si el usuario no está autenticado
+                    if (!window.auth || !window.auth.currentUser) {
+                      setTimeout(() => {
+                        const nota = document.createElement('div');
+                        nota.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f39c12;color:#fff;padding:12px 20px;border-radius:8px;z-index:200001;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,0.15);max-width:90%;text-align:center;';
+                        nota.innerHTML = '💡 <strong>Consejo:</strong> Inicia sesión para guardar tus pedidos y acumular puntos para descuentos.';
+                        document.body.appendChild(nota);
+                        setTimeout(() => nota.remove(), 7000);
+                      }, 1500);
+                    }
+                    
                     // Guardar pedido en RTDB si el usuario está autenticado y refrescar panel Perfil
                     try {
                       const getVal = (id)=>{ const el = document.getElementById(id); return el ? (el.value||'').trim() : ''; };
@@ -6105,11 +6957,15 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
                         contactName: getVal('form_contactName'),
                         shippingAddress: getVal('form_direccion'),
                         city: getVal('form_city'),
+                        state: getVal('form_state'),
                         country: getVal('form_country'),
                         postal: getVal('form_postal'),
+                        phone: getVal('form_phone'),
+                        instagram: getVal('form_instagram'),
                         emailPaypal: getVal('form_emailPaypal'),
                         shirtsCount: shirtCount,
-                        pointsEarned: shirtCount * 10
+                        pointsEarned: shirtCount * 10,
+                        cartItems: window.CART ? JSON.stringify(window.CART) : '[]'
                       };
                       if (window.saveOrderToRTDB) {
                         window.saveOrderToRTDB(orderPayload).then(()=>{
@@ -6140,19 +6996,38 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
                                 mostrarExito('Pedido enviado correctamente.');
                                 try { if (typeof clearCart === 'function') clearCart(); } catch (e) {}
                                 pedidoFormEl.dataset.submitted = '0';
+                                
+                                // Mostrar mensaje adicional si el usuario no está autenticado
+                                if (!window.auth || !window.auth.currentUser) {
+                                  setTimeout(() => {
+                                    const nota = document.createElement('div');
+                                    nota.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f39c12;color:#fff;padding:12px 20px;border-radius:8px;z-index:200001;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,0.15);max-width:90%;text-align:center;';
+                                    nota.innerHTML = '💡 <strong>Consejo:</strong> Inicia sesión para guardar tus pedidos y acumular puntos para descuentos.';
+                                    document.body.appendChild(nota);
+                                    setTimeout(() => nota.remove(), 7000);
+                                  }, 1500);
+                                }
+                                
                                 // Guardar pedido en RTDB si el usuario está autenticado y refrescar panel Perfil
                                 try {
                                   const getVal = (id)=>{ const el = document.getElementById(id); return el ? (el.value||'').trim() : ''; };
                                   const totalNum = (precioTotalEl && precioTotalEl.value) ? parseFloat(String(precioTotalEl.value).replace(',', '.')) : 0;
+                                  const shirtCount = (function(){ try { const c = computeCartTotals(); return (c && c.appliedOffer && c.appliedOffer.count) ? c.appliedOffer.count : 0; } catch(_) { return 0; } })();
                                   const orderPayload = {
                                     total: Number.isFinite(totalNum) ? totalNum : 0,
                                     itemsText: (document.getElementById('form_cart_items_text')||{}).value || '',
                                     contactName: getVal('form_contactName'),
                                     shippingAddress: getVal('form_direccion'),
                                     city: getVal('form_city'),
+                                    state: getVal('form_state'),
                                     country: getVal('form_country'),
                                     postal: getVal('form_postal'),
-                                    emailPaypal: getVal('form_emailPaypal')
+                                    phone: getVal('form_phone'),
+                                    instagram: getVal('form_instagram'),
+                                    emailPaypal: getVal('form_emailPaypal'),
+                                    shirtsCount: shirtCount,
+                                    pointsEarned: shirtCount * 10,
+                                    cartItems: window.CART ? JSON.stringify(window.CART) : '[]'
                                   };
                                   if (window.saveOrderToRTDB) {
                                     window.saveOrderToRTDB(orderPayload).then(()=>{
