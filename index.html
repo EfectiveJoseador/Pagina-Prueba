@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
@@ -660,7 +660,15 @@
         content: none !important;
         display: none !important;
     }
-    </style>
+      /* Panel de puntos: separación de líneas */
+     #profile-section #points-summary { gap: 10px; }
+
+     /* Responsive: apilar cabecera y centrar acciones en móvil */
+     @media (max-width: 520px) {
+       #profile-section .ident-header { flex-direction: column; text-align: center; gap: 10px; }
+       #profile-section .profile-actions { width: 100%; justify-content: center; margin-left: 0; margin-bottom: 0; }
+     }
+   </style>
     <div class="quienes-somos-ui animate__animated animate__fadeIn">
         <h2>Nuestra Historia</h2>
         <p>
@@ -1976,7 +1984,26 @@
             const newSubtotal = nonShirtSubtotal + shirtsOfferCost;
             // Si hay más de 1 camiseta, envío gratis global; si no, sumar shipping para nonShirtItems si existen
             const newShipping = (shirtCount > 1) ? 0 : (shirtsOfferShipping + (nonShirtItems.length>0 ? SHIPPING : 0));
-            const newTotal = newSubtotal + newShipping;
+
+            // Aplicar descuento por puntos de fidelidad
+            let adjustedSubtotal = newSubtotal;
+            let loyaltyApplied = null;
+            try{
+              const pts = Number(window.USER_POINTS || 0);
+              const tier = computeLoyaltyTier(pts);
+              if (tier.key === 'free' && shirtCount > 0){
+                // camiseta gratis: restar el precio base de 1 camiseta
+                const baseOffer = (OFFERS && OFFERS.find(o=>o.size===1) && OFFERS.find(o=>o.size===1).price) ? OFFERS.find(o=>o.size===1).price : 19.90;
+                adjustedSubtotal = Math.max(0, adjustedSubtotal - baseOffer);
+                loyaltyApplied = { type:'free_shirt', value: baseOffer };
+              } else if (tier.percent > 0){
+                const discount = adjustedSubtotal * tier.percent;
+                adjustedSubtotal = Math.max(0, adjustedSubtotal - discount);
+                loyaltyApplied = { type:'percent', value: discount, percent: tier.percent };
+              }
+            }catch(_){ }
+
+            const newTotal = adjustedSubtotal + newShipping;
 
             // Map user-defined estimated savings per number of camisetas (base table)
             const SAVINGS_TABLE = { 1: 2.00, 2: 5.00, 3: 13.00, 4: 15.00, 5: 25.00 };
@@ -2009,7 +2036,7 @@
             const fallbackSavings = Math.max(0, originalTotal - newTotal);
             const savings = (shirtCount > 0) ? computeSavingsByDecomposition(shirtCount) : 0;
 
-            return { subtotal: newSubtotal, shipping: newShipping, total: newTotal, appliedOffer: { count: shirtCount, detail: best, priceSurplus: shirtPriceSurplus }, savings };
+            return { subtotal: adjustedSubtotal, shipping: newShipping, total: newTotal, appliedOffer: { count: shirtCount, detail: best, priceSurplus: shirtPriceSurplus }, savings, loyaltyApplied };
         }
 
         // simple debounce helper
@@ -2214,6 +2241,13 @@
                 if (!leagues.includes(league)) {
                     leagues.push(league);
                 }
+                // Reposition cart after layout settles to avoid visual jumps (delays are small)
+                try {
+                    if (typeof positionCartBelowHeader === 'function') {
+                        setTimeout(positionCartBelowHeader, 120);
+                        setTimeout(positionCartBelowHeader, 420);
+                    }
+                } catch(e){}
             });
             
             // Crear el contenedor de controles
@@ -4156,6 +4190,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             try { updateRecommendations(); } catch(e) {}
         }
     </script>
+  </div>
 </section>
 <section id="reco-helpers" style="display:none">
     <script>
@@ -4208,9 +4243,9 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     #identificarse.seccion.activa {
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 80vh;
-      padding: 1.25rem 1rem;
+      align-items: flex-start;
+      min-height: 0;
+      padding: 0.5rem 1rem;
       background: transparent;
     }
     
@@ -4296,15 +4331,12 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     }
     
-    .ident-tabs {
-      display: flex;
-      gap: 8px;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 6px;
-      border-radius: 16px;
-      border: 1px solid rgba(99, 102, 241, 0.15);
-      margin-bottom: 1.5rem;
-    }
+    .ident-tabs { margin-bottom: 12px; }
+    #profile-section .ident-card { margin-top: 0; }
+    #profile-section #profile-orders, #profile-section #profile-points, #profile-section #profile-account { margin-top: 0; }
+    #profile-section .order-meta { margin-top: 2px; }
+    #profile-section .order-points { margin-top: 4px !important; }
+
     
     .ident-tab {
       flex: 1;
@@ -4716,6 +4748,128 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     </div>
   </div>
 
+  <style>
+    /* Perfil: layout y espaciados coherentes con Identificarse */
+    #profile-section .ident-header {
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 12px;
+      margin-bottom: 0; /* pegar a las pestañas */
+    }
+    #profile-section .ident-header img {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      object-fit: cover;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+    #profile-section .ident-header > div:nth-child(2) .ident-title { margin: 0; }
+
+    /* Contenedor de acciones (botones de pestañas) */
+    #profile-section .profile-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    /* Botones del perfil: icono + etiqueta, espaciado y estados */
+    #profile-section .profile-actions .btn-ident {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.5);
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .08s ease;
+    }
+    #profile-section .profile-actions .btn-ident.secondary {
+      background: rgba(30, 41, 59, 0.55);
+    }
+    #profile-section .profile-actions .btn-ident:hover {
+      background: rgba(51, 65, 85, 0.65);
+      border-color: rgba(148, 163, 184, 0.35);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      transform: translateY(-1px);
+    }
+    #profile-section .profile-actions .btn-ident:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    #profile-section .profile-actions .btn-ident:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+      border-color: rgba(99, 102, 241, 0.6);
+    }
+    #profile-section .profile-actions .btn-icon {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+    #profile-section .profile-actions .btn-label {
+      line-height: 1;
+    }
+
+    /* Estado activo para botones de pestañas del perfil */
+    #profile-section .profile-actions .btn-ident.active {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+      border-color: rgba(99, 102, 241, 0.35);
+    }
+    #profile-section .profile-actions .btn-ident.secondary.active {
+      filter: saturate(1.2);
+    }
+
+    /* Tarjetas internas del perfil */
+    #profile-section .ident-card {
+      padding: 20px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: linear-gradient(180deg, rgba(15,23,42,0.65), rgba(15,23,42,0.55));
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    /* Listado de pedidos dentro del perfil */
+    #profile-section .orders-list { gap: 12px; margin-top: 6px; }
+    #profile-section .order-card {
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding: 12px;
+    }
+
+    /* Contenedor de tarjeta del perfil para consistencia visual */
+    #profile-section .profile-card {
+      max-width: 960px; /* cubrir más ancho en desktop */
+      width: 100%;
+      margin: 16px auto 0; /* separación sutil debajo de los botones */
+      display: grid;
+      gap: 20px;
+    }
+
+    /* En pantallas grandes, ordenar el layout en dos columnas cuando sea útil (por ahora una columna para simplicidad) */
+    @media (min-width: 992px) {
+      #profile-section .profile-card {
+        max-width: 1040px; /* ligeramente más ancho en pantallas grandes */
+      }
+    }
+
+    /* Panel de puntos: separación de líneas */
+    #profile-section #points-summary { gap: 10px; }
+
+    /* Responsive: apilar cabecera y centrar acciones en móvil */
+    @media (max-width: 520px) {
+      #profile-section .ident-header { flex-direction: column; text-align: center; gap: 12px; }
+      #profile-section .profile-actions { width: 100%; justify-content: center; margin-left: 0; margin-bottom: 0; }
+      #profile-section .profile-actions .btn-ident { width: 100%; justify-content: center; }
+    }
+  </style>
+
   <div id="profile-section" class="ident-ui hidden" aria-live="polite">
     <div class="ident-header">
       <img id="profile-avatar" src="assets/logos/logo.jpg" alt="Avatar" loading="lazy" width="44" height="44" style="border-radius:10px;object-fit:cover;"/>
@@ -4723,20 +4877,32 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         <h2 class="ident-title" id="profile-title">Perfil</h2>
         <div class="ident-small" id="profile-email"></div>
       </div>
-      <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
-        <button id="btn-ver-pedidos" class="btn-ident secondary" type="button">Pedidos</button>
-        <button id="btn-ver-cuenta" class="btn-ident secondary" type="button">Cuenta</button>
-        <button id="btn-logout" class="btn-ident" type="button">Cerrar sesión</button>
+      <div class="profile-actions">
+        <button id="btn-ver-pedidos" class="btn-ident secondary" type="button"><span class="btn-icon" aria-hidden="true">🛒</span><span class="btn-label">Pedidos</span></button>
+        <button id="btn-ver-puntos" class="btn-ident secondary" type="button"><span class="btn-icon" aria-hidden="true">🏅</span><span class="btn-label">Puntos</span></button>
+        <button id="btn-ver-cuenta" class="btn-ident secondary" type="button"><span class="btn-icon" aria-hidden="true">👤</span><span class="btn-label">Cuenta</span></button>
+        <button id="btn-logout" class="btn-ident" type="button"><span class="btn-icon" aria-hidden="true">🚪</span><span class="btn-label">Cerrar sesión</span></button>
       </div>
     </div>
-    <section id="profile-orders" class="ident-card">
-      <div id="orders-empty" class="ident-small hidden">Todavía no tienes pedidos.</div>
-      <div id="orders-list" class="orders-list"></div>
-    </section>
-    <section id="profile-account" class="ident-card hidden">
-      <p class="ident-small">Desde aquí podrás administrar los datos de tu cuenta (próximamente).</p>
-    </section>
-  </div>
+    <div class="profile-card">
+      <section id="profile-orders" class="ident-card">
+        <div id="orders-empty" class="ident-small hidden">Todavía no tienes pedidos.</div>
+        <div id="orders-list" class="orders-list"></div>
+      </section>
+      <section id="profile-points" class="ident-card hidden">
+        <div id="points-summary" class="ident-small" style="display:flex;flex-direction:column;gap:8px">
+          <div><strong>Puntos acumulados:</strong> <span id="points-total">0</span></div>
+          <div id="points-tier-line">Nivel actual: —</div>
+          <div style="height:8px;background:#0d2a47;border-radius:6px;overflow:hidden">
+            <div id="points-progress" style="height:100%;width:0%;background:#2db67c;transition:width .35s ease"></div>
+          </div>
+          <div id="points-next-msg" class="ident-small" style="opacity:.85"></div>
+        </div>
+      </section>
+      <section id="profile-account" class="ident-card hidden">
+        <p class="ident-small">Desde aquí podrás administrar los datos de tu cuenta (próximamente).</p>
+      </section>
+    </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -4914,6 +5080,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     const ordersEmptyEl = document.getElementById('orders-empty');
     const profileOrdersPanel = document.getElementById('profile-orders');
     const profileAccountPanel = document.getElementById('profile-account');
+    const profilePointsPanel = document.getElementById('profile-points');
 
     function renderOrdersList(orders){
       ordersListEl.innerHTML = '';
@@ -4928,6 +5095,9 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         const dateStr = o.date ? new Date(o.date).toLocaleString() : (o.createdAt ? new Date(o.createdAt).toLocaleString() : '');
         const totalStr = typeof o.total === 'number' ? `${o.total.toFixed(2)}€` : (o.total || '—');
         const statusStr = o.status || 'pendiente';
+        const itemsBlock = o.itemsText ? `<div class="order-items" style="margin-top:8px;white-space:pre-wrap;background:#0d2a47;padding:8px;border-radius:8px">${o.itemsText}</div>` : '';
+        const points = (typeof o.pointsEarned === 'number') ? o.pointsEarned : (function(txt){ if (!txt) return 0; return txt.split('\n').reduce((sum, line)=>{ const m = line.match(/(\d+)x\s/i); const qty = m ? parseInt(m[1],10) : 0; return sum + (qty*10); }, 0); })(o.itemsText||'');
+        const ptsHtml = `<div class="order-points" style="margin-top:6px;color:#7ce0a3;font-weight:700">+${points} pts</div>`;
         card.innerHTML = `
           <div class="order-meta">
             <div class="order-id">Pedido #${o.id || '—'}</div>
@@ -4935,21 +5105,65 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             <div class="order-status">Estado: ${statusStr}</div>
           </div>
           <div class="order-total">${totalStr}</div>
+          ${itemsBlock}
+          ${ptsHtml}
         `;
         ordersListEl.appendChild(card);
       });
     }
 
+    function computeLoyaltyTier(points){
+      const p = Number(points||0);
+      if (p >= 100) return { key:'free', label:'Camiseta gratis', percent:0, nextAt:null, toNext:0 };
+      if (p >= 60) return { key:'20', label:'20% de descuento', percent:0.20, nextAt:100, toNext:100 - p };
+      if (p >= 40) return { key:'15', label:'15% de descuento', percent:0.15, nextAt:60, toNext:60 - p };
+      if (p >= 20) return { key:'10', label:'10% de descuento', percent:0.10, nextAt:40, toNext:40 - p };
+      return { key:'none', label:'Sin descuento', percent:0, nextAt:20, toNext:Math.max(0, 20 - p) };
+    }
+
+    function updatePointsPanel(points){
+      try{
+        const totalEl = document.getElementById('points-total');
+        const tierLine = document.getElementById('points-tier-line');
+        const nextMsg = document.getElementById('points-next-msg');
+        const progress = document.getElementById('points-progress');
+        if (!totalEl || !tierLine || !nextMsg || !progress) return;
+        const p = Number(points||0);
+        const tier = computeLoyaltyTier(p);
+        totalEl.textContent = String(p);
+        tierLine.textContent = `Nivel actual: ${tier.label}`;
+        if (tier.key === 'free') { progress.style.width = '100%'; nextMsg.textContent = '¡Has alcanzado el máximo nivel! Disfruta de una camiseta gratis en tu próxima compra con camisetas.'; return; }
+        let base = 0, target = 20;
+        if (p < 20) { base = 0; target = 20; }
+        else if (p < 40) { base = 20; target = 40; }
+        else if (p < 60) { base = 40; target = 60; }
+        else { base = 60; target = 100; }
+        const pct = Math.max(0, Math.min(100, ((p - base) / (target - base)) * 100));
+        progress.style.width = pct.toFixed(1) + '%';
+        nextMsg.textContent = `Te faltan ${Math.max(0, target - p)} puntos para ${target===100? 'Camiseta gratis' : `alcanzar ${computeLoyaltyTier(target).label}`}`;
+      }catch(e){ console.error('updatePointsPanel error', e); }
+    }
+
     async function loadUserOrders(uid){
       try{
-        if (!uid) { renderOrdersList([]); return; }
+        if (!uid) { renderOrdersList([]); updatePointsPanel(0); window.USER_POINTS = 0; return; }
         const snap = await get(ref(db, `ordersByUser/${uid}`));
-        if (!snap.exists()){ renderOrdersList([]); return; }
+        if (!snap.exists()){ renderOrdersList([]); updatePointsPanel(0); window.USER_POINTS = 0; return; }
         const obj = snap.val() || {};
         const arr = Object.entries(obj).map(([id, data])=>({ id, ...(data||{}) }));
         arr.sort((a,b)=> new Date(b.date||b.createdAt||0) - new Date(a.date||a.createdAt||0));
+        const totalPoints = arr.reduce((sum, o)=>{
+          if (typeof o.pointsEarned === 'number') return sum + o.pointsEarned;
+          if (o.itemsText){
+            const add = o.itemsText.split('\n').reduce((s,line)=>{ const m=line.match(/(\d+)x\s/i); return s + (m? parseInt(m[1],10)*10 : 0); }, 0);
+            return sum + add;
+          }
+          return sum;
+        }, 0);
+        window.USER_POINTS = totalPoints;
+        updatePointsPanel(totalPoints);
         renderOrdersList(arr);
-      }catch(err){ console.error('Error cargando pedidos:', err); renderOrdersList([]); }
+      }catch(err){ console.error('Error cargando pedidos:', err); renderOrdersList([]); updatePointsPanel(0); }
     }
 
     // Helpers globales: guardar pedido y refrescar listado en Perfil
@@ -4970,9 +5184,11 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     (function(){
       const btnVerPedidos = document.getElementById('btn-ver-pedidos');
       const btnVerCuenta = document.getElementById('btn-ver-cuenta');
-      if (btnVerPedidos && btnVerCuenta){
-        btnVerPedidos.addEventListener('click', ()=>{ profileAccountPanel.classList.add('hidden'); profileOrdersPanel.classList.remove('hidden'); });
-        btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profileAccountPanel.classList.remove('hidden'); });
+      const btnVerPuntos = document.getElementById('btn-ver-puntos');
+      if (btnVerPedidos && btnVerCuenta && btnVerPuntos){
+        btnVerPedidos.addEventListener('click', ()=>{ profileAccountPanel.classList.add('hidden'); profilePointsPanel.classList.add('hidden'); profileOrdersPanel.classList.remove('hidden'); btnVerPedidos.classList.add('active'); btnVerPuntos.classList.remove('active'); btnVerCuenta.classList.remove('active'); });
+        btnVerPuntos.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profileAccountPanel.classList.add('hidden'); profilePointsPanel.classList.remove('hidden'); btnVerPuntos.classList.add('active'); btnVerPedidos.classList.remove('active'); btnVerCuenta.classList.remove('active'); });
+btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profilePointsPanel.classList.add('hidden'); profileAccountPanel.classList.remove('hidden'); btnVerCuenta.classList.add('active'); btnVerPedidos.classList.remove('active'); btnVerPuntos.classList.remove('active'); });
       }
       const btnLogout = document.getElementById('btn-logout');
       if (btnLogout){ btnLogout.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){ console.error(e); } }); }
@@ -5024,6 +5240,26 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           if (profileAvatarEl) profileAvatarEl.src = user.photoURL || 'assets/logos/logo.jpg';
           if (authUIEl) authUIEl.classList.add('hidden');
           if (profileUI) profileUI.classList.remove('hidden');
+
+          // Desplazar suavemente la tarjeta de perfil a la vista cuando la sesión está iniciada
+          try {
+            const identSection = document.getElementById('identificarse');
+            if (identSection) {
+              setTimeout(() => {
+                try {
+                  const card = identSection.querySelector('#profile-section .profile-card') || identSection.querySelector('#profile-section') || identSection;
+                  if (card && typeof card.scrollIntoView === 'function') {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                  } else {
+                    const rect = identSection.getBoundingClientRect();
+                    const y = (rect.top + window.scrollY) - 16;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                  }
+                } catch(e){}
+              }, 120);
+            }
+          } catch(e){}
+
           await loadUserOrders(user.uid);
         }
       } else {
@@ -5140,14 +5376,24 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                     }, 120);
                 }
 
-                // Reposition cart after layout settles to avoid visual jumps (delays are small)
+                // Si el usuario está autenticado y la vista activa es Identificarse (modo perfil), también hacemos scroll a la tarjeta de perfil
                 try {
-                    if (typeof positionCartBelowHeader === 'function') {
-                        setTimeout(positionCartBelowHeader, 120);
-                        setTimeout(positionCartBelowHeader, 420);
+                    const isIdentSection = seccionId === 'identificarse';
+                    const isProfileVisible = document.getElementById('profile-section')?.classList?.contains('hidden') === false;
+                    if (isIdentSection && isProfileVisible) {
+                        setTimeout(() => {
+                            try {
+                                const identSection = document.getElementById('identificarse');
+                                const card = identSection?.querySelector('#profile-section .profile-card') || identSection?.querySelector('#profile-section') || identSection;
+                                if (card && typeof card.scrollIntoView === 'function') {
+                                    card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                                }
+                            } catch(e){}
+                        }, 140);
                     }
                 } catch(e){}
-            });
+
+        });
         });
 
     // Posicionar el carrito fijo debajo del nav (botones de sección). Fallback a header si no existe nav.
@@ -5852,6 +6098,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                     try {
                       const getVal = (id)=>{ const el = document.getElementById(id); return el ? (el.value||'').trim() : ''; };
                       const totalNum = (precioTotalEl && precioTotalEl.value) ? parseFloat(String(precioTotalEl.value).replace(',', '.')) : 0;
+                      const shirtCount = (function(){ try { const c = computeCartTotals(); return (c && c.appliedOffer && c.appliedOffer.count) ? c.appliedOffer.count : 0; } catch(_) { return 0; } })();
                       const orderPayload = {
                         total: Number.isFinite(totalNum) ? totalNum : 0,
                         itemsText: (document.getElementById('form_cart_items_text')||{}).value || '',
@@ -5860,7 +6107,9 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                         city: getVal('form_city'),
                         country: getVal('form_country'),
                         postal: getVal('form_postal'),
-                        emailPaypal: getVal('form_emailPaypal')
+                        emailPaypal: getVal('form_emailPaypal'),
+                        shirtsCount: shirtCount,
+                        pointsEarned: shirtCount * 10
                       };
                       if (window.saveOrderToRTDB) {
                         window.saveOrderToRTDB(orderPayload).then(()=>{
