@@ -792,8 +792,30 @@
 
                 <div class="cart-divider" aria-hidden="true"></div>
 
+                <div class="cart-discount-section">
+                    <div class="discount-dropdown-container">
+                        <button id="discountDropdownBtn" class="discount-dropdown-btn">
+                            <span id="discountBtnText">Aplicar descuento</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div id="discountDropdown" class="discount-dropdown-menu hidden">
+                            <div class="discount-dropdown-header">
+                                <h4>Tus descuentos disponibles</h4>
+                            </div>
+                            <div id="discountList" class="discount-list">
+                                <div class="discount-empty">No tienes descuentos disponibles</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="appliedDiscount" class="applied-discount hidden">
+                        <span id="appliedDiscountText"></span>
+                        <button id="removeDiscountBtn" class="remove-discount-btn">×</button>
+                    </div>
+                </div>
+
                 <div class="cart-totals">
                     <div class="tot-row"><span>Subtotal</span><span><strong id="cartSubtotal">0.00</strong></span></div>
+                    <div class="tot-row"><span>Descuento</span><span id="cartDiscount">-0.00</span></div>
                     <div class="tot-row"><span>Gastos envío</span><span id="cartShipping">2.00</span></div>
                     <div class="tot-row total"><span>Total</span><span id="cartTotal">0.00</span></div>
                 </div>
@@ -847,6 +869,168 @@
             #carrito .reco-actions .btn-primary { flex:1; padding:8px 10px; border-radius:10px; }
             #carrito .reco-actions .btn-secondary { padding:8px 10px; border-radius:10px; }
             #carrito .reco-hint { color:#9fbfe8; font-size:0.9rem; margin-top:4px; text-align:center; }
+
+            /* Estilos para el desplegable de descuentos */
+            .cart-discount-section {
+                margin: 16px 0;
+                padding: 12px;
+                background: rgba(255,255,255,0.02);
+                border-radius: 12px;
+                border: 1px solid rgba(255,255,255,0.05);
+            }
+
+            .discount-dropdown-container {
+                position: relative;
+                margin-bottom: 12px;
+            }
+
+            .discount-dropdown-btn {
+                width: 100%;
+                padding: 12px 16px;
+                background: linear-gradient(180deg, var(--azul-acento) 0%, #1a3b6d 100%);
+                color: #fff;
+                border: 1px solid rgba(255,255,255,0.12);
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                transition: all 0.2s ease;
+            }
+
+            .discount-dropdown-btn:hover {
+                background: linear-gradient(180deg, #2e7bed 0%, #1a3b6d 100%);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            }
+
+            .discount-dropdown-btn.active {
+                background: linear-gradient(180deg, #ff9500 0%, #cc7700 100%);
+            }
+
+            .dropdown-arrow {
+                font-size: 12px;
+                transition: transform 0.2s ease;
+            }
+
+            .discount-dropdown-btn.active .dropdown-arrow {
+                transform: rotate(180deg);
+            }
+
+            .discount-dropdown-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(10,31,61,0.95);
+                border: 1px solid rgba(46,123,237,0.2);
+                border-radius: 8px;
+                margin-top: 4px;
+                max-height: 300px;
+                overflow-y: auto;
+                z-index: 1000;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            }
+
+            .discount-dropdown-header {
+                padding: 12px 16px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .discount-dropdown-header h4 {
+                margin: 0;
+                color: #fff;
+                font-size: 0.95rem;
+                font-weight: 700;
+            }
+
+            .discount-list {
+                padding: 8px;
+            }
+
+            .discount-item {
+                padding: 12px;
+                margin: 4px 0;
+                background: rgba(255,255,255,0.03);
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                border: 1px solid rgba(255,255,255,0.05);
+            }
+
+            .discount-item:hover {
+                background: rgba(255,255,255,0.06);
+                border-color: rgba(46,123,237,0.3);
+            }
+
+            .discount-item-title {
+                font-weight: 600;
+                color: #fff;
+                font-size: 0.9rem;
+                margin-bottom: 4px;
+            }
+
+            .discount-item-description {
+                color: #bcd9ff;
+                font-size: 0.8rem;
+                line-height: 1.3;
+            }
+
+            .discount-item-code {
+                color: #9fe0ff;
+                font-size: 0.75rem;
+                margin-top: 4px;
+                font-family: monospace;
+            }
+
+            .discount-empty {
+                padding: 20px;
+                text-align: center;
+                color: #9fbfe8;
+                font-size: 0.9rem;
+            }
+
+            .applied-discount {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px;
+                background: linear-gradient(90deg, rgba(255,200,100,0.1), rgba(255,180,0,0.05));
+                border: 1px solid rgba(255,180,0,0.3);
+                border-radius: 8px;
+                margin-top: 8px;
+            }
+
+            .applied-discount span {
+                color: #ffd966;
+                font-weight: 600;
+                font-size: 0.9rem;
+            }
+
+            .remove-discount-btn {
+                background: rgba(255,80,80,0.2);
+                color: #ff5050;
+                border: 1px solid rgba(255,80,80,0.3);
+                border-radius: 4px;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                    justify-content: center;
+                cursor: pointer;
+                font-size: 16px;
+                line-height: 1;
+                transition: all 0.2s ease;
+            }
+
+            .remove-discount-btn:hover {
+                background: rgba(255,80,80,0.3);
+                color: #ff8080;
+            }
+
+            .hidden {
+                display: none !important;
+            }
 
             /* Optimización móvil mejorada del carrito */
             @media (max-width: 768px) {
@@ -2750,6 +2934,108 @@
                 renderGallery(document.getElementById('productSearch')?.value || '');
             });
         }
+
+        // Función para abrir el selector de direcciones guardadas
+        function openAddressSelector() {
+            if (!window.USER_ADDRESSES || !window.USER_ADDRESSES.length) {
+                alert('No tienes direcciones guardadas. Ve a tu perfil para agregar una.');
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); z-index: 9999; display: flex;
+                align-items: center; justify-content: center; padding: 20px;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: #0f172a; border-radius: 16px; padding: 24px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto; border: 1px solid rgba(99, 102, 241, 0.2);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="color: #fff; margin: 0; font-size: 1.5rem;">Seleccionar Dirección</h3>
+                        <button id="closeAddressSelector" style="background: none; border: none; color: #94a3b8; font-size: 24px; cursor: pointer;">&times;</button>
+                    </div>
+                    <div id="addressSelectorList" style="margin-bottom: 20px;"></div>
+                    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                        <button id="cancelAddressSelection" class="btn-secondary">Cancelar</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+
+            // Renderizar direcciones
+            const listContainer = modal.querySelector('#addressSelectorList');
+            window.USER_ADDRESSES.forEach((address, index) => {
+                const addressItem = document.createElement('div');
+                addressItem.style.cssText = `
+                    background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(99, 102, 241, 0.15);
+                    border-radius: 12px; padding: 16px; margin-bottom: 12px; cursor: pointer;
+                    transition: all 0.3s ease;
+                `;
+                
+                addressItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="color: #fff; font-weight: 600; margin-bottom: 4px;">${address.name}</div>
+                            <div style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.4;">
+                                ${address.address}<br>
+                                ${address.city}, ${address.state}<br>
+                                ${address.country} ${address.postal}<br>
+                                ${address.phone}
+                            </div>
+                        </div>
+                        <button class="select-address-btn" data-index="${index}" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Usar</button>
+                    </div>
+                `;
+                
+                listContainer.appendChild(addressItem);
+            });
+
+            // Event listeners
+            modal.querySelector('#closeAddressSelector').addEventListener('click', () => {
+                modal.remove();
+                document.body.style.overflow = '';
+            });
+
+            modal.querySelector('#cancelAddressSelection').addEventListener('click', () => {
+                modal.remove();
+                document.body.style.overflow = '';
+            });
+
+            // Seleccionar dirección
+            modal.querySelectorAll('.select-address-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    const selectedAddress = window.USER_ADDRESSES[index];
+                    
+                    // Llenar el formulario de checkout con la dirección seleccionada
+                    const checkoutModal = document.getElementById('checkoutModal');
+                    if (checkoutModal) {
+                        checkoutModal.querySelector('#checkoutContactName').value = selectedAddress.name;
+                        checkoutModal.querySelector('#checkoutAddressLine').value = selectedAddress.address;
+                        checkoutModal.querySelector('#checkoutCity').value = selectedAddress.city;
+                        checkoutModal.querySelector('#checkoutState').value = selectedAddress.state;
+                        checkoutModal.querySelector('#checkoutCountry').value = selectedAddress.country;
+                        checkoutModal.querySelector('#checkoutPostal').value = selectedAddress.postal;
+                        checkoutModal.querySelector('#checkoutPhone').value = selectedAddress.phone;
+                    }
+                    
+                    modal.remove();
+                    document.body.style.overflow = '';
+                    showToast('Dirección seleccionada correctamente');
+                });
+            });
+
+            // Cerrar al hacer clic fuera
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                    document.body.style.overflow = '';
+                }
+            });
+        }
         
         function renderGallery(filterText){
             const container = byId('productGallery');
@@ -3898,11 +4184,63 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                 appliedOffer = { count: shirtCount, detail: best, shirtsOfferCost, shirtsOfferShipping };
             }
 
-            const total = (CART.length>0) ? (newSubtotal + newShipping) : 0;
+            // Calcular descuento aplicado
+            let discountAmount = 0;
+            let discountDescription = '';
+            
+            if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.used === false) {
+                const isValid = validateDiscount(CURRENT_DISCOUNT);
+                if (isValid) {
+                    switch (CURRENT_DISCOUNT.type) {
+                        case 'percentage':
+                            const percentageAmount = (newSubtotal * CURRENT_DISCOUNT.value) / 100;
+                            discountAmount = Math.min(percentageAmount, CURRENT_DISCOUNT.maxDiscount || percentageAmount);
+                            discountDescription = `${CURRENT_DISCOUNT.value}% descuento`;
+                            break;
+                        case 'fixed':
+                            if (newSubtotal >= CURRENT_DISCOUNT.minPurchase) {
+                                discountAmount = CURRENT_DISCOUNT.value;
+                                discountDescription = `${CURRENT_DISCOUNT.value}€ descuento`;
+                            }
+                            break;
+                        case 'free_shipping':
+                            if (newSubtotal >= CURRENT_DISCOUNT.value) {
+                                newShipping = 0;
+                                discountDescription = 'Envío gratis';
+                            }
+                            break;
+                        case 'free_item':
+                            // Para artículos gratis, se aplicará al final del proceso de pago
+                            discountDescription = `${CURRENT_DISCOUNT.value} artículo(s) gratis`;
+                            break;
+                    }
+                }
+            }
 
+            const discountedSubtotal = Math.max(0, newSubtotal - discountAmount);
+            const total = (CART.length>0) ? (discountedSubtotal + newShipping) : 0;
+
+            // Actualizar UI con descuento
             byId('cartSubtotal').textContent = newSubtotal.toFixed(2) + '€';
             byId('cartShipping').textContent = newShipping.toFixed(2) + '€';
             byId('cartTotal').textContent = total.toFixed(2) + '€';
+            
+            // Mostrar descuento aplicado
+            const discountRow = document.getElementById('cartDiscount');
+            if (discountRow) {
+                if (discountAmount > 0) {
+                    discountRow.innerHTML = `<span>${discountDescription}</span><span>-€${discountAmount.toFixed(2)}</span>`;
+                    discountRow.style.display = 'flex';
+                } else if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.type === 'free_shipping' && newShipping === 0) {
+                    discountRow.innerHTML = `<span>${discountDescription}</span><span>-€${SHIPPING.toFixed(2)}</span>`;
+                    discountRow.style.display = 'flex';
+                } else {
+                    discountRow.style.display = 'none';
+                }
+            }
+            
+            // Actualizar descuento aplicado
+            updateAppliedDiscount();
 
             // Si hay una oferta aplicada, mostrar summary del ahorro justo encima de totales
             const totalsContainer = document.querySelector('.cart-totals');
@@ -3978,13 +4316,393 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             try { updateCartPromoBanner(); } catch(e) {}
             // actualizar recomendaciones junto al carrito
             try { if (typeof updateRecommendations === 'function') updateRecommendations(); } catch(e) {}
+            // actualizar desplegable de descuentos
+            try { updateDiscountDropdown(); } catch(e) {}
         }
 
         function clearCart(){ CART = []; renderCart(); }
 
+        // Sistema de descuentos
+        let CURRENT_DISCOUNT = null;
+        let USER_DISCOUNTS = [];
+
+        // Simular descuentos del usuario (en producción vendrían de Firebase)
+        async function loadUserDiscounts() {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    USER_DISCOUNTS = [];
+                    updateDiscountDropdown();
+                    return;
+                }
+
+                // Cargar descuentos comprados desde Firebase
+                const redemptionsRef = ref(db, `loyaltyByUser/${user.uid}/redemptions`);
+                const snapshot = await get(redemptionsRef);
+                
+                if (!snapshot.exists()) {
+                    USER_DISCOUNTS = [];
+                    updateDiscountDropdown();
+                    return;
+                }
+
+                const redemptions = snapshot.val();
+                const availableDiscounts = [];
+
+                // Convertir redenciones a formato de descuento
+                Object.entries(redemptions).forEach(([id, redemption]) => {
+                    if (!redemption.used && redemption.kind) {
+                        let discount = {
+                            id: id,
+                            code: redemption.kind,
+                            title: redemption.label || 'Descuento comprado',
+                            description: 'Descuento adquirido en la tienda de puntos',
+                            type: 'percentage',
+                            value: 0,
+                            minPurchase: 0,
+                            maxDiscount: 0,
+                            expires: '2099-12-31',
+                            used: false,
+                            redemptionId: id
+                        };
+
+                        // Configurar valores según el tipo de descuento comprado
+                        switch (redemption.kind) {
+                            case 'discount10':
+                                discount.type = 'percentage';
+                                discount.value = 10;
+                                discount.title = '10% de descuento';
+                                discount.maxDiscount = 50;
+                                break;
+                            case 'discount15':
+                                discount.type = 'percentage';
+                                discount.value = 15;
+                                discount.title = '15% de descuento';
+                                discount.maxDiscount = 75;
+                                break;
+                            case 'discount20':
+                                discount.type = 'percentage';
+                                discount.value = 20;
+                                discount.title = '20% de descuento';
+                                discount.maxDiscount = 100;
+                                break;
+                            case 'freeShirt':
+                                discount.type = 'free_item';
+                                discount.value = 1;
+                                discount.title = 'Camiseta gratis';
+                                discount.description = 'Una camiseta gratis en tu pedido';
+                                discount.minPurchase = 0;
+                                discount.maxDiscount = 25;
+                                discount.itemType = 'shirt';
+                                break;
+                        }
+
+                        availableDiscounts.push(discount);
+                    }
+                });
+
+                USER_DISCOUNTS = availableDiscounts;
+                updateDiscountDropdown();
+                
+            } catch (error) {
+                console.error('Error cargando descuentos del usuario:', error);
+                USER_DISCOUNTS = [];
+                updateDiscountDropdown();
+            }
+        }
+
+        function updateDiscountDropdown() {
+            const discountList = document.getElementById('discountList');
+            if (!discountList) return;
+            
+            discountList.innerHTML = '';
+            
+            const availableDiscounts = USER_DISCOUNTS.filter(d => !d.used);
+            
+            if (availableDiscounts.length === 0) {
+                discountList.innerHTML = '<div class="discount-empty">No tienes descuentos disponibles</div>';
+                return;
+            }
+            
+            availableDiscounts.forEach(discount => {
+                const item = document.createElement('div');
+                item.className = 'discount-item';
+                item.style.cursor = 'pointer';
+                item.style.transition = 'background-color 0.2s ease';
+                
+                // Crear HTML según el tipo de descuento
+                let discountHTML = '';
+                switch (discount.type) {
+                    case 'percentage':
+                        discountHTML = `
+                            <div class="discount-item-title">${discount.title}</div>
+                            <div class="discount-item-description">Descuento del ${discount.value}% en tu pedido</div>
+                            <div class="discount-item-code">Descuento comprado • Disponible</div>
+                        `;
+                        break;
+                    case 'free_item':
+                        discountHTML = `
+                            <div class="discount-item-title">${discount.title}</div>
+                            <div class="discount-item-description">Una camiseta gratis en tu pedido</div>
+                            <div class="discount-item-code">Descuento comprado • Disponible</div>
+                        `;
+                        break;
+                    case 'free_shipping':
+                        discountHTML = `
+                            <div class="discount-item-title">${discount.title}</div>
+                            <div class="discount-item-description">Envío gratis en tu pedido</div>
+                            <div class="discount-item-code">Descuento comprado • Disponible</div>
+                        `;
+                        break;
+                    default:
+                        discountHTML = `
+                            <div class="discount-item-title">${discount.title}</div>
+                            <div class="discount-item-description">${discount.description}</div>
+                            <div class="discount-item-code">Descuento comprado • Disponible</div>
+                        `;
+                }
+                
+                item.innerHTML = discountHTML;
+                
+                // Agregar efecto hover
+                item.addEventListener('mouseenter', () => {
+                    item.style.backgroundColor = 'rgba(102, 126, 234, 0.1)';
+                });
+                item.addEventListener('mouseleave', () => {
+                    item.style.backgroundColor = '';
+                });
+                
+                item.addEventListener('click', () => applyDiscount(discount));
+                discountList.appendChild(item);
+            });
+        }
+
+        async function applyDiscount(discount) {
+            if (discount.used) return;
+            
+            const isValid = validateDiscount(discount);
+            if (!isValid) {
+                alert('Este descuento no es válido para tu compra actual.');
+                return;
+            }
+            
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('Debes iniciar sesión para usar descuentos.');
+                    return;
+                }
+
+                // Marcar el descuento como usado en Firebase
+                if (discount.redemptionId) {
+                    const redemptionRef = ref(db, `loyaltyByUser/${user.uid}/redemptions/${discount.redemptionId}`);
+                    await set(redemptionRef, { 
+                        ...discount, 
+                        used: true, 
+                        usedAt: new Date().toISOString() 
+                    });
+                }
+                
+                // Quitar descuento anterior si existe
+                if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.redemptionId) {
+                    // Restaurar el descuento anterior como no usado en Firebase
+                    const prevRedemptionRef = ref(db, `loyaltyByUser/${user.uid}/redemptions/${CURRENT_DISCOUNT.redemptionId}`);
+                    await set(prevRedemptionRef, { 
+                        ...CURRENT_DISCOUNT, 
+                        used: false 
+                    });
+                }
+                
+                CURRENT_DISCOUNT = discount;
+                CURRENT_DISCOUNT.used = true;
+                
+                // Actualizar UI
+                updateAppliedDiscount();
+                updateDiscountDropdown();
+                renderCart();
+                
+                // Cerrar dropdown
+                const dropdown = document.getElementById('discountDropdown');
+                const button = document.getElementById('discountDropdownBtn');
+                if (dropdown) dropdown.classList.add('hidden');
+                if (button) button.classList.remove('active');
+                
+            } catch (error) {
+                console.error('Error al aplicar descuento:', error);
+                alert('Error al aplicar el descuento. Inténtalo de nuevo.');
+            }
+        }
+
+        async function removeDiscount() {
+            try {
+                const user = auth.currentUser;
+                if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.redemptionId && user) {
+                    // Marcar el descuento como no usado en Firebase
+                    const redemptionRef = ref(db, `loyaltyByUser/${user.uid}/redemptions/${CURRENT_DISCOUNT.redemptionId}`);
+                    await set(redemptionRef, { 
+                        ...CURRENT_DISCOUNT, 
+                        used: false 
+                    });
+                }
+                
+                if (CURRENT_DISCOUNT) {
+                    CURRENT_DISCOUNT.used = false;
+                    CURRENT_DISCOUNT = null;
+                }
+                
+                updateAppliedDiscount();
+                updateDiscountDropdown();
+                renderCart();
+                
+            } catch (error) {
+                console.error('Error al quitar descuento:', error);
+                alert('Error al quitar el descuento. Inténtalo de nuevo.');
+            }
+        }
+
+        function updateAppliedDiscount() {
+            const appliedContainer = document.getElementById('appliedDiscount');
+            if (!appliedContainer) return;
+            
+            if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.used) {
+                appliedContainer.innerHTML = `
+                    <div class="applied-discount-info">
+                        <div>
+                            <div class="applied-discount-title">${CURRENT_DISCOUNT.title}</div>
+                            <div class="applied-discount-code">${CURRENT_DISCOUNT.code}</div>
+                        </div>
+                        <button class="remove-discount-btn" onclick="removeDiscount()">×</button>
+                    </div>
+                `;
+                appliedContainer.style.display = 'block';
+            } else {
+                appliedContainer.style.display = 'none';
+            }
+        }
+
+        function validateDiscount(discount) {
+            if (!discount || discount.used) return false;
+            
+            // Verificar fecha de expiración
+            const today = new Date();
+            const expires = new Date(discount.expires);
+            if (today > expires) return false;
+            
+            // Calcular subtotal actual
+            let currentSubtotal = 0;
+            CART.forEach(item => {
+                currentSubtotal += item.total;
+            });
+            
+            // Verificar compra mínima
+            if (discount.minPurchase > 0 && currentSubtotal < discount.minPurchase) {
+                return false;
+            }
+            
+            // Verificar requisitos específicos por tipo
+            switch (discount.type) {
+                case 'free_item':
+                    if (discount.itemType === 'shirt') {
+                        return hasShirtInCart();
+                    }
+                    break;
+                case 'free_shipping':
+                    return currentSubtotal >= discount.value;
+            }
+            
+            return true;
+        }
+
+        function hasShirtInCart() {
+            return CART.some(item => {
+                if (!item || !item.name) return false;
+                const name = item.name.toLowerCase();
+                return item.productId === 'barca1' || name.includes('camiseta') || name.includes('camisetas');
+            });
+        }
+
+        function toggleDiscountDropdown() {
+            const dropdown = document.getElementById('discountDropdown');
+            const button = document.getElementById('discountDropdownBtn');
+            if (dropdown && button) {
+                dropdown.classList.toggle('hidden');
+                button.classList.toggle('active');
+                
+                // Si se abre el desplegable, agregar listener para cerrar al hacer clic fuera
+                if (!dropdown.classList.contains('hidden')) {
+                    setTimeout(() => {
+                        document.addEventListener('click', closeDiscountDropdownOutside);
+                    }, 100);
+                }
+            }
+        }
+        
+        function closeDiscountDropdownOutside(event) {
+            const dropdown = document.getElementById('discountDropdown');
+            const button = document.getElementById('discountDropdownBtn');
+            
+            if (dropdown && button && !dropdown.classList.contains('hidden')) {
+                if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+                    dropdown.classList.add('hidden');
+                    button.classList.remove('active');
+                    document.removeEventListener('click', closeDiscountDropdownOutside);
+                }
+            }
+        }
+
+        // Inicializar descuentos al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserDiscounts();
+        });
+
+        function calculateDiscountAmount(subtotal, shipping) {
+            if (!CURRENT_DISCOUNT) return { discount: 0, newShipping: shipping };
+
+            let discount = 0;
+            let newShipping = shipping;
+
+            switch (CURRENT_DISCOUNT.type) {
+                case 'percentage':
+                    discount = subtotal * (CURRENT_DISCOUNT.value / 100);
+                    if (CURRENT_DISCOUNT.maxDiscount > 0) {
+                        discount = Math.min(discount, CURRENT_DISCOUNT.maxDiscount);
+                    }
+                    break;
+                    
+                case 'fixed':
+                    discount = CURRENT_DISCOUNT.value;
+                    break;
+                    
+                case 'free_shipping':
+                    newShipping = 0;
+                    break;
+                    
+                case 'free_item':
+                    // Para items gratis, calculamos el valor de la camiseta más barata
+                    const shirtItems = CART.filter(item => {
+                        const name = (item.name || '').toLowerCase();
+                        return item.productId === 'barca1' || name.includes('camiseta') || name.includes('camisetas');
+                    });
+                    
+                    if (shirtItems.length > 0) {
+                        // Aplicar descuento igual al precio de la camiseta más barata
+                        const cheapestShirt = Math.min(...shirtItems.map(item => item.price || 0));
+                        discount = cheapestShirt * CURRENT_DISCOUNT.value;
+                        if (CURRENT_DISCOUNT.maxDiscount > 0) {
+                            discount = Math.min(discount, CURRENT_DISCOUNT.maxDiscount);
+                        }
+                    }
+                    break;
+            }
+
+            return { discount, newShipping };
+        }
+
         // Improve UX: after clearing the cart, reposition the fixed cart to avoid visual jump
         const _origClearCart = clearCart;
-        function clearCart(){ CART = []; renderCart();
+        function clearCart(){ 
+            CART = []; 
+            renderCart();
             // small debounce reposition
             try { setTimeout(() => { const evt = new Event('resize'); window.dispatchEvent(evt); }, 80); } catch(e){}
         }
@@ -4013,6 +4731,9 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                         <input id="checkoutPhone" class="checkout-input" placeholder="Phone Number:" />
                         <input id="checkoutPaypalEmail" class="checkout-input" placeholder="PayPal Email:" />
                         <input id="checkoutInstagram" class="checkout-input" placeholder="@Instagram" />
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <button id="useSavedAddressBtn" style="background:#667eea;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;width:100%;">📍 Usar dirección predefinida</button>
                     </div>
                     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
                                 <button id="checkoutCancel" class="btn-secondary">Cancelar</button>
@@ -4108,6 +4829,12 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
             modal.querySelector('#checkoutCancel').addEventListener('click', ()=> { modal.remove(); document.body.style.overflow = ''; });
 
+            // Event listener para el botón de usar dirección predefinida
+            const useSavedAddressBtn = modal.querySelector('#useSavedAddressBtn');
+            if (useSavedAddressBtn) {
+                useSavedAddressBtn.addEventListener('click', openAddressSelector);
+            }
+
             modal.querySelector('#checkoutConfirm').addEventListener('click', ()=>{
                 const name = modal.querySelector('#checkoutContactName').value.trim();
                 const address = modal.querySelector('#checkoutAddressLine').value.trim();
@@ -4170,7 +4897,8 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
     // solo adjuntar listeners si los botones existen (por seguridad)
     if (byId('gotoCheckoutBtn')) byId('gotoCheckoutBtn').addEventListener('click', openCheckout);
-        if (byId('clearCartGallery')) byId('clearCartGallery').addEventListener('click', clearCart);
+            if (byId('clearCartGallery')) byId('clearCartGallery').addEventListener('click', clearCart);
+            if (byId('discountDropdownBtn')) byId('discountDropdownBtn').addEventListener('click', toggleDiscountDropdown);
 
         // Renderizar UI solo si existe el contenedor (sección pedidos)
         if (byId('productGallery') && byId('cartItems')) {
@@ -5066,11 +5794,37 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style="margin:0 auto 16px;opacity:0.9;">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/>
           </svg>
-          <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Mi Cuenta</h3>
-          <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0 0 24px 0;">Gestión completa de tu perfil y preferencias</p>
-          <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;">
-            <p style="color:rgba(255,255,255,0.9);font-size:14px;margin:0;">🚀 Esta sección estará disponible próximamente</p>
-            <p style="color:rgba(255,255,255,0.7);font-size:12px;margin:8px 0 0 0;">Podrás gestionar tu información personal, métodos de pago y preferencias de envío.</p>
+          <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Mis Direcciones</h3>
+          <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0 0 24px 0;">Gestiona tus direcciones de envío guardadas</p>
+          
+          <!-- Formulario para agregar nueva dirección -->
+          <div id="add-address-form" style="background:rgba(255,255,255,0.95);border-radius:12px;padding:24px;margin-bottom:24px;text-align:left;display:none;">
+            <h4 style="color:#333;margin:0 0 16px 0;font-size:18px;">Agregar Nueva Dirección</h4>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <input type="text" id="address-alias" placeholder="Alias (ej: Casa, Trabajo)" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+              <input type="text" id="address-name" placeholder="Nombre completo" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+              <input type="text" id="address-line" placeholder="Dirección" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;grid-column:1/-1;">
+              <input type="text" id="address-city" placeholder="Ciudad" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+              <input type="text" id="address-state" placeholder="Provincia/Estado" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+              <input type="text" id="address-country" placeholder="País" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+              <input type="text" id="address-postal" placeholder="Código postal" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+              <input type="tel" id="address-phone" placeholder="Teléfono" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+            </div>
+            <div style="display:flex;gap:12px;margin-top:16px;">
+              <button id="save-address-btn" style="background:#667eea;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:600;flex:1;">Guardar Dirección</button>
+              <button id="cancel-address-btn" style="background:#f5f5f5;color:#666;border:1px solid #ddd;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:600;flex:1;">Cancelar</button>
+            </div>
+          </div>
+
+          <!-- Lista de direcciones guardadas -->
+          <div id="saved-addresses-list" style="background:rgba(255,255,255,0.95);border-radius:12px;padding:24px;text-align:left;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h4 style="color:#333;margin:0;font-size:18px;">Direcciones Guardadas</h4>
+              <button id="add-address-btn" style="background:#667eea;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;">+ Agregar</button>
+            </div>
+            <div id="addresses-container">
+              <p style="color:#666;text-align:center;padding:20px;">Cargando direcciones...</p>
+            </div>
           </div>
         </div>
       </section>
@@ -5929,6 +6683,154 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       }
     };
     window.refreshProfileOrders = async ()=>{ try{ const u = auth.currentUser; if (u) await loadUserOrders(u.uid); }catch(e){ console.error('refreshProfileOrders error:', e); } };
+
+    // Funciones para gestionar direcciones guardadas
+    async function loadUserAddresses(uid) {
+      try {
+        if (!uid) {
+          renderAddressesList([]);
+          return;
+        }
+        const snap = await get(ref(db, `addressesByUser/${uid}`));
+        if (!snap.exists()) {
+          renderAddressesList([]);
+          return;
+        }
+        const obj = snap.val() || {};
+        const arr = Object.entries(obj).map(([id, data]) => ({ id, ...(data || {}) }));
+        renderAddressesList(arr);
+      } catch (err) {
+        console.error('Error cargando direcciones:', err);
+        renderAddressesList([]);
+      }
+    }
+
+    function renderAddressesList(addresses) {
+      const container = document.getElementById('addresses-container');
+      if (!container) return;
+      
+      // Guardar direcciones en variable global
+      window.USER_ADDRESSES = addresses || [];
+      
+      if (!addresses || addresses.length === 0) {
+        container.innerHTML = '<p style="color:#666;text-align:center;padding:20px;">No tienes direcciones guardadas</p>';
+        return;
+      }
+      
+      container.innerHTML = addresses.map(addr => `
+        <div class="address-item" style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:8px;padding:16px;margin-bottom:12px;position:relative;">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div style="flex:1;">
+              <div style="font-weight:600;color:#333;margin-bottom:4px;">${addr.alias || 'Dirección'}</div>
+              <div style="color:#666;font-size:14px;margin-bottom:2px;">${addr.name || ''}</div>
+              <div style="color:#666;font-size:14px;margin-bottom:2px;">${addr.line || ''}</div>
+              <div style="color:#666;font-size:14px;margin-bottom:2px;">${addr.city || ''}${addr.city && addr.state ? ', ' : ''}${addr.state || ''}</div>
+              <div style="color:#666;font-size:14px;margin-bottom:2px;">${addr.country || ''} ${addr.postal || ''}</div>
+              ${addr.phone ? `<div style="color:#666;font-size:14px;">📞 ${addr.phone}</div>` : ''}
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button onclick="useSavedAddress('${addr.id}')" style="background:#667eea;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px;">Usar</button>
+              <button onclick="deleteAddress('${addr.id}')" style="background:#dc3545;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px;">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.useSavedAddress = function(addressId) {
+      const addresses = window.USER_ADDRESSES || [];
+      const address = addresses.find(addr => addr.id === addressId);
+      if (address) {
+        // Llenar el formulario de checkout con la dirección seleccionada
+        const addressLine = document.getElementById('checkoutAddressLine');
+        const city = document.getElementById('checkoutCity');
+        const state = document.getElementById('checkoutState');
+        const country = document.getElementById('checkoutCountry');
+        const postal = document.getElementById('checkoutPostal');
+        const phone = document.getElementById('checkoutPhone');
+        const name = document.getElementById('checkoutName');
+        
+        if (addressLine) addressLine.value = address.line || '';
+        if (city) city.value = address.city || '';
+        if (state) state.value = address.state || '';
+        if (country) country.value = address.country || '';
+        if (postal) postal.value = address.postal || '';
+        if (phone) phone.value = address.phone || '';
+        if (name) name.value = address.name || '';
+        
+        // Cerrar el modal de direcciones si existe
+        const modal = document.getElementById('saved-addresses-modal');
+        if (modal) modal.style.display = 'none';
+        
+        // Mostrar mensaje de confirmación
+        showToast(`Dirección "${address.alias || 'Dirección'}" aplicada al formulario`);
+      }
+    };
+
+    window.deleteAddress = async function(addressId) {
+      if (!confirm('¿Estás seguro de que quieres eliminar esta dirección?')) return;
+      
+      try {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        await set(ref(db, `addressesByUser/${user.uid}/${addressId}`), null);
+        showToast('Dirección eliminada correctamente');
+        await loadUserAddresses(user.uid);
+      } catch (err) {
+        console.error('Error eliminando dirección:', err);
+        showToast('Error al eliminar la dirección');
+      }
+    };
+
+    async function saveUserAddress(addressData) {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          showToast('Debes iniciar sesión para guardar direcciones');
+          return false;
+        }
+        
+        const id = addressData.id || Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+        const payload = {
+          id,
+          uid: user.uid,
+          createdAt: new Date().toISOString(),
+          alias: addressData.alias || '',
+          name: addressData.name || '',
+          line: addressData.line || '',
+          city: addressData.city || '',
+          state: addressData.state || '',
+          country: addressData.country || '',
+          postal: addressData.postal || '',
+          phone: addressData.phone || ''
+        };
+        
+        await set(ref(db, `addressesByUser/${user.uid}/${id}`), payload);
+        showToast('Dirección guardada correctamente');
+        return true;
+      } catch (err) {
+        console.error('Error guardando dirección:', err);
+        showToast('Error al guardar la dirección');
+        return false;
+      }
+    }
+
+    function showToast(message) {
+      // Crear toast notification si no existe
+      let toast = document.getElementById('toast-notification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast-notification';
+        toast.style.cssText = 'position:fixed;top:20px;right:20px;background:#333;color:white;padding:12px 20px;border-radius:6px;z-index:10000;transform:translateX(100%);transition:transform 0.3s ease;';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.style.transform = 'translateX(0)';
+      setTimeout(() => {
+        toast.style.transform = 'translateX(100%)';
+      }, 3000);
+    }
     window.redeemReward = async (kind, cost, label)=>{
       try{
         const u = auth.currentUser; 
@@ -5971,6 +6873,9 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
         updatePointsPanel({ available: availableNew, lifetime, spent: newSpent });
         if (msgEl){ msgEl.textContent = `Canjeado: ${label} (-${cost} pts)`; msgEl.style.color = '#bbf7d0'; }
+        
+        // Actualizar el desplegable del carrito con el nuevo descuento
+        loadUserDiscounts();
       }catch(e){
         console.error('redeemReward error', e);
         const msgEl = document.getElementById('redeem-msg'); if (msgEl){ msgEl.textContent = 'Error al canjear. Inténtalo de nuevo.'; msgEl.style.color = '#fecaca'; }
@@ -6000,6 +6905,9 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             <span style="color:#22c55e;font-size:12px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);padding:4px 8px;border-radius:999px;">Se aplicará automáticamente</span>
           </div>
         `).join('');
+        
+        // Sincronizar con el desplegable del carrito
+        loadUserDiscounts();
       }catch(e){ console.error('renderOwnedDiscounts error', e); }
     }
 
@@ -6015,6 +6923,65 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
       }
       const btnLogout = document.getElementById('btn-logout');
       if (btnLogout){ btnLogout.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){ console.error(e); } }); }
+      
+      // Funcionalidad de direcciones guardadas
+      const addAddressBtn = document.getElementById('add-address-btn');
+      const addAddressForm = document.getElementById('add-address-form');
+      const cancelAddressBtn = document.getElementById('cancel-address-btn');
+      const saveAddressBtn = document.getElementById('save-address-btn');
+      
+      if (addAddressBtn && addAddressForm) {
+        addAddressBtn.addEventListener('click', () => {
+          addAddressForm.style.display = 'block';
+          addAddressBtn.style.display = 'none';
+        });
+      }
+      
+      if (cancelAddressBtn && addAddressForm && addAddressBtn) {
+        cancelAddressBtn.addEventListener('click', () => {
+          addAddressForm.style.display = 'none';
+          addAddressBtn.style.display = 'block';
+          // Limpiar formulario
+          document.getElementById('address-alias').value = '';
+          document.getElementById('address-name').value = '';
+          document.getElementById('address-line').value = '';
+          document.getElementById('address-city').value = '';
+          document.getElementById('address-state').value = '';
+          document.getElementById('address-country').value = '';
+          document.getElementById('address-postal').value = '';
+          document.getElementById('address-phone').value = '';
+        });
+      }
+      
+      if (saveAddressBtn) {
+        saveAddressBtn.addEventListener('click', async () => {
+          const addressData = {
+            alias: document.getElementById('address-alias').value.trim(),
+            name: document.getElementById('address-name').value.trim(),
+            line: document.getElementById('address-line').value.trim(),
+            city: document.getElementById('address-city').value.trim(),
+            state: document.getElementById('address-state').value.trim(),
+            country: document.getElementById('address-country').value.trim(),
+            postal: document.getElementById('address-postal').value.trim(),
+            phone: document.getElementById('address-phone').value.trim()
+          };
+          
+          // Validación básica
+          if (!addressData.alias || !addressData.name || !addressData.line || !addressData.city || !addressData.country) {
+            showToast('Por favor completa los campos obligatorios (alias, nombre, dirección, ciudad, país)');
+            return;
+          }
+          
+          const success = await saveUserAddress(addressData);
+          if (success) {
+            addAddressForm.style.display = 'none';
+            addAddressBtn.style.display = 'block';
+            // Recargar direcciones
+            const user = auth.currentUser;
+            if (user) await loadUserAddresses(user.uid);
+          }
+        });
+      }
       
       // Toggle lista de descuentos comprados
       try{
@@ -6101,6 +7068,8 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
           } catch(e){}
 
           await loadUserOrders(user.uid);
+          await loadUserDiscounts(); // Cargar descuentos comprados disponibles
+          await loadUserAddresses(user.uid); // Cargar direcciones guardadas
         }
       } else {
         if (verifyCta) verifyCta.classList.add('hidden');
