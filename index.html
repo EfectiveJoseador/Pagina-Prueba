@@ -2934,108 +2934,6 @@
                 renderGallery(document.getElementById('productSearch')?.value || '');
             });
         }
-
-        // Función para abrir el selector de direcciones guardadas
-        function openAddressSelector() {
-            if (!window.USER_ADDRESSES || !window.USER_ADDRESSES.length) {
-                alert('No tienes direcciones guardadas. Ve a tu perfil para agregar una.');
-                return;
-            }
-
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(0,0,0,0.8); z-index: 9999; display: flex;
-                align-items: center; justify-content: center; padding: 20px;
-            `;
-            
-            modal.innerHTML = `
-                <div style="background: #0f172a; border-radius: 16px; padding: 24px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto; border: 1px solid rgba(99, 102, 241, 0.2);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 style="color: #fff; margin: 0; font-size: 1.5rem;">Seleccionar Dirección</h3>
-                        <button id="closeAddressSelector" style="background: none; border: none; color: #94a3b8; font-size: 24px; cursor: pointer;">&times;</button>
-                    </div>
-                    <div id="addressSelectorList" style="margin-bottom: 20px;"></div>
-                    <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                        <button id="cancelAddressSelection" class="btn-secondary">Cancelar</button>
-                    </div>
-                </div>
-            `;
-
-            document.body.appendChild(modal);
-            document.body.style.overflow = 'hidden';
-
-            // Renderizar direcciones
-            const listContainer = modal.querySelector('#addressSelectorList');
-            window.USER_ADDRESSES.forEach((address, index) => {
-                const addressItem = document.createElement('div');
-                addressItem.style.cssText = `
-                    background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(99, 102, 241, 0.15);
-                    border-radius: 12px; padding: 16px; margin-bottom: 12px; cursor: pointer;
-                    transition: all 0.3s ease;
-                `;
-                
-                addressItem.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <div style="color: #fff; font-weight: 600; margin-bottom: 4px;">${address.name}</div>
-                            <div style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.4;">
-                                ${address.address}<br>
-                                ${address.city}, ${address.state}<br>
-                                ${address.country} ${address.postal}<br>
-                                ${address.phone}
-                            </div>
-                        </div>
-                        <button class="select-address-btn" data-index="${index}" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Usar</button>
-                    </div>
-                `;
-                
-                listContainer.appendChild(addressItem);
-            });
-
-            // Event listeners
-            modal.querySelector('#closeAddressSelector').addEventListener('click', () => {
-                modal.remove();
-                document.body.style.overflow = '';
-            });
-
-            modal.querySelector('#cancelAddressSelection').addEventListener('click', () => {
-                modal.remove();
-                document.body.style.overflow = '';
-            });
-
-            // Seleccionar dirección
-            modal.querySelectorAll('.select-address-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const index = parseInt(e.target.dataset.index);
-                    const selectedAddress = window.USER_ADDRESSES[index];
-                    
-                    // Llenar el formulario de checkout con la dirección seleccionada
-                    const checkoutModal = document.getElementById('checkoutModal');
-                    if (checkoutModal) {
-                        checkoutModal.querySelector('#checkoutContactName').value = selectedAddress.name;
-                        checkoutModal.querySelector('#checkoutAddressLine').value = selectedAddress.address;
-                        checkoutModal.querySelector('#checkoutCity').value = selectedAddress.city;
-                        checkoutModal.querySelector('#checkoutState').value = selectedAddress.state;
-                        checkoutModal.querySelector('#checkoutCountry').value = selectedAddress.country;
-                        checkoutModal.querySelector('#checkoutPostal').value = selectedAddress.postal;
-                        checkoutModal.querySelector('#checkoutPhone').value = selectedAddress.phone;
-                    }
-                    
-                    modal.remove();
-                    document.body.style.overflow = '';
-                    showToast('Dirección seleccionada correctamente');
-                });
-            });
-
-            // Cerrar al hacer clic fuera
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.remove();
-                    document.body.style.overflow = '';
-                }
-            });
-        }
         
         function renderGallery(filterText){
             const container = byId('productGallery');
@@ -4732,9 +4630,6 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                         <input id="checkoutPaypalEmail" class="checkout-input" placeholder="PayPal Email:" />
                         <input id="checkoutInstagram" class="checkout-input" placeholder="@Instagram" />
                     </div>
-                    <div style="margin-bottom:12px;">
-                        <button id="useSavedAddressBtn" style="background:#667eea;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;width:100%;">📍 Usar dirección predefinida</button>
-                    </div>
                     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
                                 <button id="checkoutCancel" class="btn-secondary">Cancelar</button>
                                 <button id="checkoutConfirm" class="btn-primary">Pagar con PayPal</button>
@@ -4828,12 +4723,6 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             renderSummary();
 
             modal.querySelector('#checkoutCancel').addEventListener('click', ()=> { modal.remove(); document.body.style.overflow = ''; });
-
-            // Event listener para el botón de usar dirección predefinida
-            const useSavedAddressBtn = modal.querySelector('#useSavedAddressBtn');
-            if (useSavedAddressBtn) {
-                useSavedAddressBtn.addEventListener('click', openAddressSelector);
-            }
 
             modal.querySelector('#checkoutConfirm').addEventListener('click', ()=>{
                 const name = modal.querySelector('#checkoutContactName').value.trim();
@@ -5794,37 +5683,11 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style="margin:0 auto 16px;opacity:0.9;">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/>
           </svg>
-          <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Mis Direcciones</h3>
-          <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0 0 24px 0;">Gestiona tus direcciones de envío guardadas</p>
-          
-          <!-- Formulario para agregar nueva dirección -->
-          <div id="add-address-form" style="background:rgba(255,255,255,0.95);border-radius:12px;padding:24px;margin-bottom:24px;text-align:left;display:none;">
-            <h4 style="color:#333;margin:0 0 16px 0;font-size:18px;">Agregar Nueva Dirección</h4>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-              <input type="text" id="address-alias" placeholder="Alias (ej: Casa, Trabajo)" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-              <input type="text" id="address-name" placeholder="Nombre completo" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-              <input type="text" id="address-line" placeholder="Dirección" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;grid-column:1/-1;">
-              <input type="text" id="address-city" placeholder="Ciudad" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-              <input type="text" id="address-state" placeholder="Provincia/Estado" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-              <input type="text" id="address-country" placeholder="País" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-              <input type="text" id="address-postal" placeholder="Código postal" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-              <input type="tel" id="address-phone" placeholder="Teléfono" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-            </div>
-            <div style="display:flex;gap:12px;margin-top:16px;">
-              <button id="save-address-btn" style="background:#667eea;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:600;flex:1;">Guardar Dirección</button>
-              <button id="cancel-address-btn" style="background:#f5f5f5;color:#666;border:1px solid #ddd;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:600;flex:1;">Cancelar</button>
-            </div>
-          </div>
-
-          <!-- Lista de direcciones guardadas -->
-          <div id="saved-addresses-list" style="background:rgba(255,255,255,0.95);border-radius:12px;padding:24px;text-align:left;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-              <h4 style="color:#333;margin:0;font-size:18px;">Direcciones Guardadas</h4>
-              <button id="add-address-btn" style="background:#667eea;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;">+ Agregar</button>
-            </div>
-            <div id="addresses-container">
-              <p style="color:#666;text-align:center;padding:20px;">Cargando direcciones...</p>
-            </div>
+          <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Mi Cuenta</h3>
+          <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0 0 24px 0;">Gestión completa de tu perfil y preferencias</p>
+          <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;">
+            <p style="color:rgba(255,255,255,0.9);font-size:14px;margin:0;">🚀 Esta sección estará disponible próximamente</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:12px;margin:8px 0 0 0;">Podrás gestionar tu información personal, métodos de pago y preferencias de envío.</p>
           </div>
         </div>
       </section>
@@ -6683,154 +6546,6 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       }
     };
     window.refreshProfileOrders = async ()=>{ try{ const u = auth.currentUser; if (u) await loadUserOrders(u.uid); }catch(e){ console.error('refreshProfileOrders error:', e); } };
-
-    // Funciones para gestionar direcciones guardadas
-    async function loadUserAddresses(uid) {
-      try {
-        if (!uid) {
-          renderAddressesList([]);
-          return;
-        }
-        const snap = await get(ref(db, `addressesByUser/${uid}`));
-        if (!snap.exists()) {
-          renderAddressesList([]);
-          return;
-        }
-        const obj = snap.val() || {};
-        const arr = Object.entries(obj).map(([id, data]) => ({ id, ...(data || {}) }));
-        renderAddressesList(arr);
-      } catch (err) {
-        console.error('Error cargando direcciones:', err);
-        renderAddressesList([]);
-      }
-    }
-
-    function renderAddressesList(addresses) {
-      const container = document.getElementById('addresses-container');
-      if (!container) return;
-      
-      // Guardar direcciones en variable global
-      window.USER_ADDRESSES = addresses || [];
-      
-      if (!addresses || addresses.length === 0) {
-        container.innerHTML = '<p style="color:#666;text-align:center;padding:20px;">No tienes direcciones guardadas</p>';
-        return;
-      }
-      
-      container.innerHTML = addresses.map(addr => `
-        <div class="address-item" style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:8px;padding:16px;margin-bottom:12px;position:relative;">
-          <div style="display:flex;justify-content:space-between;align-items:start;">
-            <div style="flex:1;">
-              <div style="font-weight:600;color:#333;margin-bottom:4px;">${addr.alias || 'Dirección'}</div>
-              <div style="color:#666;font-size:14px;margin-bottom:2px;">${addr.name || ''}</div>
-              <div style="color:#666;font-size:14px;margin-bottom:2px;">${addr.line || ''}</div>
-              <div style="color:#666;font-size:14px;margin-bottom:2px;">${addr.city || ''}${addr.city && addr.state ? ', ' : ''}${addr.state || ''}</div>
-              <div style="color:#666;font-size:14px;margin-bottom:2px;">${addr.country || ''} ${addr.postal || ''}</div>
-              ${addr.phone ? `<div style="color:#666;font-size:14px;">📞 ${addr.phone}</div>` : ''}
-            </div>
-            <div style="display:flex;gap:8px;">
-              <button onclick="useSavedAddress('${addr.id}')" style="background:#667eea;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px;">Usar</button>
-              <button onclick="deleteAddress('${addr.id}')" style="background:#dc3545;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px;">Eliminar</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    window.useSavedAddress = function(addressId) {
-      const addresses = window.USER_ADDRESSES || [];
-      const address = addresses.find(addr => addr.id === addressId);
-      if (address) {
-        // Llenar el formulario de checkout con la dirección seleccionada
-        const addressLine = document.getElementById('checkoutAddressLine');
-        const city = document.getElementById('checkoutCity');
-        const state = document.getElementById('checkoutState');
-        const country = document.getElementById('checkoutCountry');
-        const postal = document.getElementById('checkoutPostal');
-        const phone = document.getElementById('checkoutPhone');
-        const name = document.getElementById('checkoutName');
-        
-        if (addressLine) addressLine.value = address.line || '';
-        if (city) city.value = address.city || '';
-        if (state) state.value = address.state || '';
-        if (country) country.value = address.country || '';
-        if (postal) postal.value = address.postal || '';
-        if (phone) phone.value = address.phone || '';
-        if (name) name.value = address.name || '';
-        
-        // Cerrar el modal de direcciones si existe
-        const modal = document.getElementById('saved-addresses-modal');
-        if (modal) modal.style.display = 'none';
-        
-        // Mostrar mensaje de confirmación
-        showToast(`Dirección "${address.alias || 'Dirección'}" aplicada al formulario`);
-      }
-    };
-
-    window.deleteAddress = async function(addressId) {
-      if (!confirm('¿Estás seguro de que quieres eliminar esta dirección?')) return;
-      
-      try {
-        const user = auth.currentUser;
-        if (!user) return;
-        
-        await set(ref(db, `addressesByUser/${user.uid}/${addressId}`), null);
-        showToast('Dirección eliminada correctamente');
-        await loadUserAddresses(user.uid);
-      } catch (err) {
-        console.error('Error eliminando dirección:', err);
-        showToast('Error al eliminar la dirección');
-      }
-    };
-
-    async function saveUserAddress(addressData) {
-      try {
-        const user = auth.currentUser;
-        if (!user) {
-          showToast('Debes iniciar sesión para guardar direcciones');
-          return false;
-        }
-        
-        const id = addressData.id || Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-        const payload = {
-          id,
-          uid: user.uid,
-          createdAt: new Date().toISOString(),
-          alias: addressData.alias || '',
-          name: addressData.name || '',
-          line: addressData.line || '',
-          city: addressData.city || '',
-          state: addressData.state || '',
-          country: addressData.country || '',
-          postal: addressData.postal || '',
-          phone: addressData.phone || ''
-        };
-        
-        await set(ref(db, `addressesByUser/${user.uid}/${id}`), payload);
-        showToast('Dirección guardada correctamente');
-        return true;
-      } catch (err) {
-        console.error('Error guardando dirección:', err);
-        showToast('Error al guardar la dirección');
-        return false;
-      }
-    }
-
-    function showToast(message) {
-      // Crear toast notification si no existe
-      let toast = document.getElementById('toast-notification');
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'toast-notification';
-        toast.style.cssText = 'position:fixed;top:20px;right:20px;background:#333;color:white;padding:12px 20px;border-radius:6px;z-index:10000;transform:translateX(100%);transition:transform 0.3s ease;';
-        document.body.appendChild(toast);
-      }
-      toast.textContent = message;
-      toast.style.transform = 'translateX(0)';
-      setTimeout(() => {
-        toast.style.transform = 'translateX(100%)';
-      }, 3000);
-    }
     window.redeemReward = async (kind, cost, label)=>{
       try{
         const u = auth.currentUser; 
@@ -6924,65 +6639,6 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
       const btnLogout = document.getElementById('btn-logout');
       if (btnLogout){ btnLogout.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){ console.error(e); } }); }
       
-      // Funcionalidad de direcciones guardadas
-      const addAddressBtn = document.getElementById('add-address-btn');
-      const addAddressForm = document.getElementById('add-address-form');
-      const cancelAddressBtn = document.getElementById('cancel-address-btn');
-      const saveAddressBtn = document.getElementById('save-address-btn');
-      
-      if (addAddressBtn && addAddressForm) {
-        addAddressBtn.addEventListener('click', () => {
-          addAddressForm.style.display = 'block';
-          addAddressBtn.style.display = 'none';
-        });
-      }
-      
-      if (cancelAddressBtn && addAddressForm && addAddressBtn) {
-        cancelAddressBtn.addEventListener('click', () => {
-          addAddressForm.style.display = 'none';
-          addAddressBtn.style.display = 'block';
-          // Limpiar formulario
-          document.getElementById('address-alias').value = '';
-          document.getElementById('address-name').value = '';
-          document.getElementById('address-line').value = '';
-          document.getElementById('address-city').value = '';
-          document.getElementById('address-state').value = '';
-          document.getElementById('address-country').value = '';
-          document.getElementById('address-postal').value = '';
-          document.getElementById('address-phone').value = '';
-        });
-      }
-      
-      if (saveAddressBtn) {
-        saveAddressBtn.addEventListener('click', async () => {
-          const addressData = {
-            alias: document.getElementById('address-alias').value.trim(),
-            name: document.getElementById('address-name').value.trim(),
-            line: document.getElementById('address-line').value.trim(),
-            city: document.getElementById('address-city').value.trim(),
-            state: document.getElementById('address-state').value.trim(),
-            country: document.getElementById('address-country').value.trim(),
-            postal: document.getElementById('address-postal').value.trim(),
-            phone: document.getElementById('address-phone').value.trim()
-          };
-          
-          // Validación básica
-          if (!addressData.alias || !addressData.name || !addressData.line || !addressData.city || !addressData.country) {
-            showToast('Por favor completa los campos obligatorios (alias, nombre, dirección, ciudad, país)');
-            return;
-          }
-          
-          const success = await saveUserAddress(addressData);
-          if (success) {
-            addAddressForm.style.display = 'none';
-            addAddressBtn.style.display = 'block';
-            // Recargar direcciones
-            const user = auth.currentUser;
-            if (user) await loadUserAddresses(user.uid);
-          }
-        });
-      }
-      
       // Toggle lista de descuentos comprados
       try{
         const toggleBtn = document.getElementById('toggle-owned-discounts');
@@ -7069,7 +6725,6 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
 
           await loadUserOrders(user.uid);
           await loadUserDiscounts(); // Cargar descuentos comprados disponibles
-          await loadUserAddresses(user.uid); // Cargar direcciones guardadas
         }
       } else {
         if (verifyCta) verifyCta.classList.add('hidden');
