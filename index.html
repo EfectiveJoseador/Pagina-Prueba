@@ -4619,6 +4619,21 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                     <h3 style="margin-top:0;color:var(--azul-acento);">Resumen de pedido y datos de envío</h3>
                     <div style="margin-bottom:10px;color:#cfe7ff">Total a pagar: <strong>€${total.toFixed(2)}</strong></div>
                     <div id="checkoutSummary" style="background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;margin-bottom:12px;max-height:200px;overflow:auto;"></div>
+                    
+                    <!-- Opción de usar dirección predefinida -->
+                    <div style="margin-bottom:16px;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                            <input type="checkbox" id="use-saved-address" style="transform:scale(1.2);" />
+                            <label for="use-saved-address" style="color:#cfe7ff;font-size:14px;cursor:pointer;">Usar dirección predefinida</label>
+                        </div>
+                        <div id="saved-addresses-container" class="hidden" style="margin-bottom:12px;">
+                            <select id="saved-addresses" class="checkout-input" style="width:100%;margin-bottom:8px;">
+                                <option value="">Selecciona una dirección guardada</option>
+                            </select>
+                            <button id="load-saved-address" class="btn-secondary" style="width:100%;padding:8px;font-size:14px;">Cargar Dirección</button>
+                        </div>
+                    </div>
+                    
                     <div id="checkoutGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
                         <input id="checkoutContactName" class="checkout-input" placeholder="Contact Name:" />
                         <input id="checkoutAddressLine" class="checkout-input" placeholder="Address Line:" />
@@ -4721,6 +4736,68 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                 summary.appendChild(totals);
             }
             renderSummary();
+
+            // Funcionalidad de direcciones predefinidas en checkout
+            const useSavedAddressCheckbox = modal.querySelector('#use-saved-address');
+            const savedAddressesContainer = modal.querySelector('#saved-addresses-container');
+            const savedAddressesSelect = modal.querySelector('#saved-addresses');
+            const loadSavedAddressBtn = modal.querySelector('#load-saved-address');
+            
+            // Función para cargar direcciones guardadas en el select
+            function loadSavedAddresses() {
+                const addresses = JSON.parse(localStorage.getItem('savedAddresses') || '[]');
+                savedAddressesSelect.innerHTML = '<option value="">Selecciona una dirección guardada</option>';
+                
+                addresses.forEach((address, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${address.name} - ${address.contactName}, ${address.city}`;
+                    savedAddressesSelect.appendChild(option);
+                });
+            }
+            
+            // Función para cargar los datos de la dirección seleccionada
+            function loadSelectedAddress() {
+                const selectedIndex = savedAddressesSelect.value;
+                if (selectedIndex === '') return;
+                
+                const addresses = JSON.parse(localStorage.getItem('savedAddresses') || '[]');
+                const selectedAddress = addresses[parseInt(selectedIndex)];
+                
+                if (selectedAddress) {
+                    modal.querySelector('#checkoutContactName').value = selectedAddress.contactName || '';
+                    modal.querySelector('#checkoutAddressLine').value = selectedAddress.addressLine || '';
+                    modal.querySelector('#checkoutCity').value = selectedAddress.city || '';
+                    modal.querySelector('#checkoutState').value = selectedAddress.state || '';
+                    modal.querySelector('#checkoutCountry').value = selectedAddress.country || '';
+                    modal.querySelector('#checkoutPostal').value = selectedAddress.postal || '';
+                    modal.querySelector('#checkoutPhone').value = selectedAddress.phone || '';
+                }
+            }
+            
+            // Event listener para el checkbox de usar dirección predefinida
+            useSavedAddressCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    savedAddressesContainer.classList.remove('hidden');
+                    loadSavedAddresses();
+                } else {
+                    savedAddressesContainer.classList.add('hidden');
+                    // Limpiar campos si se desmarca
+                    modal.querySelector('#checkoutContactName').value = '';
+                    modal.querySelector('#checkoutAddressLine').value = '';
+                    modal.querySelector('#checkoutCity').value = '';
+                    modal.querySelector('#checkoutState').value = '';
+                    modal.querySelector('#checkoutCountry').value = '';
+                    modal.querySelector('#checkoutPostal').value = '';
+                    modal.querySelector('#checkoutPhone').value = '';
+                }
+            });
+            
+            // Event listener para el botón de cargar dirección
+            loadSavedAddressBtn.addEventListener('click', loadSelectedAddress);
+            
+            // Event listener para cambio en el select
+            savedAddressesSelect.addEventListener('change', loadSelectedAddress);
 
             modal.querySelector('#checkoutCancel').addEventListener('click', ()=> { modal.remove(); document.body.style.overflow = ''; });
 
@@ -5580,6 +5657,183 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       #profile-section .profile-actions { width: 100%; justify-content: center; margin-left: 0; margin-bottom: 0; }
       #profile-section .profile-actions .btn-ident { width: 100%; justify-content: center; }
     }
+
+    /* Estilos para la gestión de direcciones */
+    #profile-section #addresses-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #profile-section .address-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 16px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    #profile-section .address-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-1px);
+    }
+
+    #profile-section .address-card h5 {
+      color: #fff;
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    #profile-section .address-card .address-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    #profile-section .address-card .edit-address,
+    #profile-section .address-card .delete-address {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s ease;
+    }
+
+    #profile-section .address-card .edit-address:hover {
+      background: rgba(99, 102, 241, 0.3);
+      border-color: rgba(99, 102, 241, 0.5);
+    }
+
+    #profile-section .address-card .delete-address {
+      background: rgba(255, 0, 0, 0.2);
+      color: #ff6b6b;
+      border-color: rgba(255, 0, 0, 0.3);
+    }
+
+    #profile-section .address-card .delete-address:hover {
+      background: rgba(255, 0, 0, 0.3);
+      border-color: rgba(255, 0, 0, 0.5);
+    }
+
+    #profile-section #address-form {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    #profile-section #address-form h4 {
+      color: #fff;
+      margin: 0 0 16px 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    #profile-section #address-form .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    #profile-section #address-form .form-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    #profile-section #address-form .form-actions button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    #profile-section #address-form .btn-cancel {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    #profile-section #address-form .btn-cancel:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    #profile-section #address-form .btn-save {
+      background: linear-gradient(135deg,#667eea,#764ba2);
+      color: #fff;
+      border: none;
+    }
+
+    #profile-section #address-form .btn-save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Estilos para el modal de checkout con direcciones */
+    #checkoutModal #saved-addresses-container {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    #checkoutModal #saved-addresses {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    #checkoutModal #saved-addresses option {
+      background: #071735;
+      color: #fff;
+    }
+
+    #checkoutModal #load-saved-address {
+      background: rgba(99, 102, 241, 0.2);
+      color: #cfe7ff;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 6px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    #checkoutModal #load-saved-address:hover {
+      background: rgba(99, 102, 241, 0.3);
+      border-color: rgba(99, 102, 241, 0.5);
+    }
+
+    /* Responsive para direcciones */
+    @media (max-width: 768px) {
+      #profile-section #address-form .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      #profile-section .address-card .address-actions {
+        flex-direction: column;
+      }
+      
+      #profile-section .address-card .edit-address,
+      #profile-section .address-card .delete-address {
+        width: 100%;
+        text-align: center;
+      }
+    }
   </style>
 
   <div id="profile-section" class="ident-ui hidden" aria-live="polite">
@@ -5679,15 +5933,53 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       </section>
       
       <section id="profile-account" class="ident-card hidden" style="padding:0;background:transparent;border:none;">
-        <div style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:16px;padding:32px;box-shadow:0 10px 40px rgba(102,126,234,0.3);text-align:center;">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style="margin:0 auto 16px;opacity:0.9;">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/>
-          </svg>
-          <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Mi Cuenta</h3>
-          <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0 0 24px 0;">Gestión completa de tu perfil y preferencias</p>
-          <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;">
-            <p style="color:rgba(255,255,255,0.9);font-size:14px;margin:0;">🚀 Esta sección estará disponible próximamente</p>
-            <p style="color:rgba(255,255,255,0.7);font-size:12px;margin:8px 0 0 0;">Podrás gestionar tu información personal, métodos de pago y preferencias de envío.</p>
+        <div style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:16px;padding:32px;box-shadow:0 10px 40px rgba(102,126,234,0.3);">
+          <div style="text-align:center;margin-bottom:24px;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style="margin:0 auto 16px;opacity:0.9;">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/>
+            </svg>
+            <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Mi Cuenta</h3>
+            <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0;">Gestión completa de tu perfil y preferencias</p>
+          </div>
+          
+          <!-- Gestión de Direcciones -->
+          <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:20px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h4 style="color:#fff;margin:0;font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                <span>📍</span> Mis Direcciones
+              </h4>
+              <button id="btn-add-address" style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:14px;font-weight:500;">
+                + Nueva Dirección
+              </button>
+            </div>
+            
+            <div id="addresses-list" style="display:flex;flex-direction:column;gap:12px;">
+              <!-- Las direcciones se cargarán aquí dinámicamente -->
+            </div>
+            
+            <div id="no-addresses" class="hidden" style="text-align:center;padding:20px;color:rgba(255,255,255,0.7);">
+              <p style="margin:0 0 8px 0;">No tienes direcciones guardadas</p>
+              <p style="margin:0;font-size:12px;">Guarda direcciones para agilizar tus compras</p>
+            </div>
+          </div>
+          
+          <!-- Formulario de Nueva Dirección (oculto por defecto) -->
+          <div id="address-form" class="hidden" style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;">
+            <h4 style="color:#fff;margin:0 0 16px 0;font-size:18px;font-weight:700;">Nueva Dirección</h4>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+              <input id="address-name" class="checkout-input" placeholder="Nombre de la dirección (ej: Casa, Trabajo)" />
+              <input id="address-contact-name" class="checkout-input" placeholder="Nombre completo" />
+              <input id="address-line" class="checkout-input" placeholder="Dirección" style="grid-column:1/-1;" />
+              <input id="address-city" class="checkout-input" placeholder="Ciudad" />
+              <input id="address-state" class="checkout-input" placeholder="Provincia/Estado" />
+              <input id="address-country" class="checkout-input" placeholder="País" />
+              <input id="address-postal" class="checkout-input" placeholder="Código postal" />
+              <input id="address-phone" class="checkout-input" placeholder="Teléfono" />
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+              <button id="btn-cancel-address" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:8px 16px;cursor:pointer;">Cancelar</button>
+              <button id="btn-save-address" style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;">Guardar Dirección</button>
+            </div>
           </div>
         </div>
       </section>
@@ -6766,6 +7058,237 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
           try{ await reload(u); }catch(_){ }
         });
       }
+    })();
+
+    // Funcionalidad de gestión de direcciones
+    (function(){
+      let addresses = JSON.parse(localStorage.getItem('savedAddresses') || '[]');
+      
+      // Elementos del DOM
+      const addressesList = document.getElementById('addresses-list');
+      const noAddresses = document.getElementById('no-addresses');
+      const addressForm = document.getElementById('address-form');
+      const btnAddAddress = document.getElementById('btn-add-address');
+      const btnCancelAddress = document.getElementById('btn-cancel-address');
+      const btnSaveAddress = document.getElementById('btn-save-address');
+      
+      // Campos del formulario
+      const addressFields = {
+        name: document.getElementById('address-name'),
+        contactName: document.getElementById('address-contact-name'),
+        addressLine: document.getElementById('address-line'),
+        city: document.getElementById('address-city'),
+        state: document.getElementById('address-state'),
+        country: document.getElementById('address-country'),
+        postal: document.getElementById('address-postal'),
+        phone: document.getElementById('address-phone')
+      };
+      
+      // Función para renderizar la lista de direcciones
+      function renderAddressesList() {
+        if (addresses.length === 0) {
+          addressesList.innerHTML = '';
+          noAddresses.classList.remove('hidden');
+          return;
+        }
+        
+        noAddresses.classList.add('hidden');
+        addressesList.innerHTML = '';
+        
+        addresses.forEach((address, index) => {
+          const addressCard = document.createElement('div');
+          addressCard.style.cssText = `
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 16px;
+            position: relative;
+          `;
+          
+          addressCard.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+              <h5 style="color:#fff;margin:0;font-size:16px;font-weight:600;">${address.name}</h5>
+              <div style="display:flex;gap:8px;">
+                <button class="edit-address" data-index="${index}" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;">Editar</button>
+                <button class="delete-address" data-index="${index}" style="background:rgba(255,0,0,0.2);color:#ff6b6b;border:1px solid rgba(255,0,0,0.3);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;">Eliminar</button>
+              </div>
+            </div>
+            <div style="color:rgba(255,255,255,0.8);font-size:14px;line-height:1.4;">
+              <div><strong>${address.contactName}</strong></div>
+              <div>${address.addressLine}</div>
+              <div>${address.city}, ${address.state} ${address.postal}</div>
+              <div>${address.country}</div>
+              <div style="margin-top:4px;color:rgba(255,255,255,0.6);">📞 ${address.phone}</div>
+            </div>
+          `;
+          
+          addressesList.appendChild(addressCard);
+        });
+        
+        // Event listeners para botones de editar y eliminar
+        addressesList.querySelectorAll('.edit-address').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const index = parseInt(e.target.dataset.index);
+            editAddress(index);
+          });
+        });
+        
+        addressesList.querySelectorAll('.delete-address').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const index = parseInt(e.target.dataset.index);
+            deleteAddress(index);
+          });
+        });
+      }
+      
+      // Función para mostrar/ocultar formulario
+      function toggleAddressForm(show = true) {
+        if (show) {
+          addressForm.classList.remove('hidden');
+          btnAddAddress.style.display = 'none';
+        } else {
+          addressForm.classList.add('hidden');
+          btnAddAddress.style.display = 'block';
+          clearAddressForm();
+        }
+      }
+      
+      // Función para limpiar el formulario
+      function clearAddressForm() {
+        Object.values(addressFields).forEach(field => {
+          if (field) field.value = '';
+        });
+      }
+      
+      // Función para validar el formulario
+      function validateAddressForm() {
+        const required = ['name', 'contactName', 'addressLine', 'city', 'country', 'postal', 'phone'];
+        for (const field of required) {
+          if (!addressFields[field].value.trim()) {
+            alert(`Por favor, completa el campo: ${addressFields[field].placeholder}`);
+            addressFields[field].focus();
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      // Función para guardar dirección
+      function saveAddress() {
+        if (!validateAddressForm()) return;
+        
+        const addressData = {
+          name: addressFields.name.value.trim(),
+          contactName: addressFields.contactName.value.trim(),
+          addressLine: addressFields.addressLine.value.trim(),
+          city: addressFields.city.value.trim(),
+          state: addressFields.state.value.trim(),
+          country: addressFields.country.value.trim(),
+          postal: addressFields.postal.value.trim(),
+          phone: addressFields.phone.value.trim()
+        };
+        
+        addresses.push(addressData);
+        localStorage.setItem('savedAddresses', JSON.stringify(addresses));
+        renderAddressesList();
+        toggleAddressForm(false);
+        
+        // Mostrar mensaje de éxito
+        const successMsg = document.createElement('div');
+        successMsg.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: linear-gradient(135deg, #4CAF50, #45a049);
+          color: white;
+          padding: 12px 20px;
+          border-radius: 8px;
+          z-index: 10000;
+          font-size: 14px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        `;
+        successMsg.textContent = 'Dirección guardada correctamente';
+        document.body.appendChild(successMsg);
+        setTimeout(() => successMsg.remove(), 3000);
+      }
+      
+      // Función para editar dirección
+      function editAddress(index) {
+        const address = addresses[index];
+        Object.keys(addressFields).forEach(key => {
+          if (addressFields[key]) {
+            addressFields[key].value = address[key] || '';
+          }
+        });
+        toggleAddressForm(true);
+        
+        // Cambiar el botón de guardar para actualizar
+        btnSaveAddress.textContent = 'Actualizar Dirección';
+        btnSaveAddress.onclick = () => updateAddress(index);
+      }
+      
+      // Función para actualizar dirección
+      function updateAddress(index) {
+        if (!validateAddressForm()) return;
+        
+        const addressData = {
+          name: addressFields.name.value.trim(),
+          contactName: addressFields.contactName.value.trim(),
+          addressLine: addressFields.addressLine.value.trim(),
+          city: addressFields.city.value.trim(),
+          state: addressFields.state.value.trim(),
+          country: addressFields.country.value.trim(),
+          postal: addressFields.postal.value.trim(),
+          phone: addressFields.phone.value.trim()
+        };
+        
+        addresses[index] = addressData;
+        localStorage.setItem('savedAddresses', JSON.stringify(addresses));
+        renderAddressesList();
+        toggleAddressForm(false);
+        
+        // Restaurar botón de guardar
+        btnSaveAddress.textContent = 'Guardar Dirección';
+        btnSaveAddress.onclick = saveAddress;
+      }
+      
+      // Función para eliminar dirección
+      function deleteAddress(index) {
+        if (confirm('¿Estás seguro de que quieres eliminar esta dirección?')) {
+          addresses.splice(index, 1);
+          localStorage.setItem('savedAddresses', JSON.stringify(addresses));
+          renderAddressesList();
+        }
+      }
+      
+      // Event listeners
+      if (btnAddAddress) {
+        btnAddAddress.addEventListener('click', () => {
+          clearAddressForm();
+          toggleAddressForm(true);
+          btnSaveAddress.textContent = 'Guardar Dirección';
+          btnSaveAddress.onclick = saveAddress;
+        });
+      }
+      
+      if (btnCancelAddress) {
+        btnCancelAddress.addEventListener('click', () => {
+          toggleAddressForm(false);
+          btnSaveAddress.textContent = 'Guardar Dirección';
+          btnSaveAddress.onclick = saveAddress;
+        });
+      }
+      
+      if (btnSaveAddress) {
+        btnSaveAddress.addEventListener('click', saveAddress);
+      }
+      
+      // Inicializar
+      renderAddressesList();
+      
+      // Hacer las funciones disponibles globalmente para el checkout
+      window.addresses = addresses;
+      window.renderAddressesList = renderAddressesList;
     })();
   </script>
 </section>
