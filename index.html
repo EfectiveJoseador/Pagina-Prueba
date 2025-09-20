@@ -1475,7 +1475,36 @@
             .cart-panel { position: relative; width: 100%; right: 0; top: 0; z-index: auto; }
         }
     /* Small helper for the checkout modal inputs */
-    .checkout-input { width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;margin-bottom:8px }
+    .checkout-input { 
+        width:100%;
+        padding:12px 16px;
+        border-radius:10px;
+        border:2px solid rgba(255,255,255,0.15);
+        background:rgba(255,255,255,0.08);
+        color:#fff;
+        margin-bottom:12px;
+        font-size:14px;
+        transition:all 0.3s ease;
+        backdrop-filter:blur(10px);
+    }
+    
+    .checkout-input:focus {
+        outline:none;
+        border-color:rgba(99, 102, 241, 0.6);
+        background:rgba(255,255,255,0.12);
+        box-shadow:0 0 0 3px rgba(99, 102, 241, 0.2);
+        transform:translateY(-1px);
+    }
+    
+    .checkout-input::placeholder {
+        color:rgba(255,255,255,0.6);
+        font-weight:400;
+    }
+    
+    .checkout-input:hover {
+        border-color:rgba(255,255,255,0.25);
+        background:rgba(255,255,255,0.1);
+    }
     /* Ajustes para que la tarjeta se adapte a la imagen 800x800 */
     .product-item, .pedido-mini-card { display:flex; flex-direction:column; align-items:center; }
     .product-item > img, .pedido-mini-card img.pedido-carrusel-img { max-width:800px; width:100%; height:140px; object-fit:cover; border-radius:8px; }
@@ -4812,12 +4841,31 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                 const paypalEmail = modal.querySelector('#checkoutPaypalEmail').value.trim();
                 const instagram = modal.querySelector('#checkoutInstagram').value.trim();
 
-                if (!name || !address || !city || !country || !postal || !phone) {
-                    alert('Por favor, completa todos los campos de dirección.');
+                // Validación mejorada de campos de dirección
+                const addressFields = [
+                    { value: name, name: 'Nombre de contacto' },
+                    { value: address, name: 'Dirección' },
+                    { value: city, name: 'Ciudad' },
+                    { value: country, name: 'País' },
+                    { value: postal, name: 'Código postal' },
+                    { value: phone, name: 'Teléfono' }
+                ];
+
+                const missingFields = addressFields.filter(field => !field.value);
+                if (missingFields.length > 0) {
+                    const fieldNames = missingFields.map(field => field.name).join(', ');
+                    alert(`Por favor, completa los siguientes campos: ${fieldNames}`);
                     return;
                 }
-                if (!paypalEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paypalEmail)) { alert('Introduce un correo PayPal válido.'); return; }
-                if (!instagram || !/^@/.test(instagram)) { alert('Introduce tu usuario de Instagram, debe empezar por @'); return; }
+
+                if (!paypalEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paypalEmail)) { 
+                    alert('Introduce un correo PayPal válido.'); 
+                    return; 
+                }
+                if (!instagram || !/^@/.test(instagram)) { 
+                    alert('Introduce tu usuario de Instagram, debe empezar por @'); 
+                    return; 
+                }
 
                 const checkoutData = { name, address, city, state, country, postal, phone, paypalEmail, instagram };
 
@@ -5666,18 +5714,21 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     }
 
     #profile-section .address-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      padding: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 20px;
       position: relative;
       transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
 
     #profile-section .address-card:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.15);
-      transform: translateY(-1px);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     }
 
     #profile-section .address-card h5 {
@@ -5695,127 +5746,222 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
     #profile-section .address-card .edit-address,
     #profile-section .address-card .delete-address {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.12);
       color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
-      padding: 4px 8px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 8px 12px;
       cursor: pointer;
       font-size: 12px;
-      transition: all 0.2s ease;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      min-width: 80px;
     }
 
     #profile-section .address-card .edit-address:hover {
-      background: rgba(99, 102, 241, 0.3);
-      border-color: rgba(99, 102, 241, 0.5);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(139, 92, 246, 0.4));
+      border-color: rgba(99, 102, 241, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
     #profile-section .address-card .delete-address {
-      background: rgba(255, 0, 0, 0.2);
+      background: rgba(255, 0, 0, 0.15);
       color: #ff6b6b;
       border-color: rgba(255, 0, 0, 0.3);
     }
 
     #profile-section .address-card .delete-address:hover {
-      background: rgba(255, 0, 0, 0.3);
+      background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(220, 38, 38, 0.3));
       border-color: rgba(255, 0, 0, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
     }
 
     #profile-section #address-form {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 16px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(15px);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
 
     #profile-section #address-form h4 {
       color: #fff;
-      margin: 0 0 16px 0;
-      font-size: 18px;
+      margin: 0 0 20px 0;
+      font-size: 20px;
       font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #profile-section #address-form h4::before {
+      content: "📍";
+      font-size: 18px;
     }
 
     #profile-section #address-form .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    #profile-section #address-form input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    #profile-section #address-form input:focus {
+      outline: none;
+      border-color: rgba(99, 102, 241, 0.7);
+      background: rgba(255,255,255,0.15);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      transform: translateY(-2px);
+    }
+
+    #profile-section #address-form input::placeholder {
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+    }
+
+    #profile-section #address-form input:hover {
+      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.12);
     }
 
     #profile-section #address-form .form-actions {
       display: flex;
-      gap: 8px;
+      gap: 12px;
       justify-content: flex-end;
+      margin-top: 8px;
     }
 
     #profile-section #address-form .form-actions button {
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s ease;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      min-width: 120px;
     }
 
     #profile-section #address-form .btn-cancel {
       background: rgba(255,255,255,0.1);
       color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.2);
     }
 
     #profile-section #address-form .btn-cancel:hover {
       background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     #profile-section #address-form .btn-save {
       background: linear-gradient(135deg,#667eea,#764ba2);
       color: #fff;
-      border: none;
+      border: 2px solid rgba(99, 102, 241, 0.3);
     }
 
     #profile-section #address-form .btn-save:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      background: linear-gradient(135deg,#5a67d8,#6b46c1);
     }
 
     /* Estilos para el modal de checkout con direcciones */
     #checkoutModal #saved-addresses-container {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     }
 
     #checkoutModal #saved-addresses {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
       color: #fff;
-      padding: 8px 12px;
+      padding: 12px 16px;
       font-size: 14px;
+      width: 100%;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+
+    #checkoutModal #saved-addresses:focus {
+      outline: none;
+      border-color: rgba(99, 102, 241, 0.6);
+      background: rgba(255,255,255,0.15);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
     #checkoutModal #saved-addresses option {
       background: #071735;
       color: #fff;
+      padding: 8px;
     }
 
     #checkoutModal #load-saved-address {
-      background: rgba(99, 102, 241, 0.2);
-      color: #cfe7ff;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      border-radius: 6px;
-      padding: 8px 16px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
+      color: #fff;
+      border: 2px solid rgba(99, 102, 241, 0.4);
+      border-radius: 10px;
+      padding: 12px 20px;
       cursor: pointer;
       font-size: 14px;
-      transition: all 0.2s ease;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      width: 100%;
     }
 
     #checkoutModal #load-saved-address:hover {
-      background: rgba(99, 102, 241, 0.3);
-      border-color: rgba(99, 102, 241, 0.5);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(139, 92, 246, 0.5));
+      border-color: rgba(99, 102, 241, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    #checkoutModal #use-saved-address {
+      transform: scale(1.3);
+      margin-right: 8px;
+    }
+
+    #checkoutModal label[for="use-saved-address"] {
+      color: #cfe7ff;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Estilos para el botón Nueva Dirección */
+    #profile-section #btn-add-address:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      background: linear-gradient(135deg,#5a67d8,#6b46c1);
+    }
+
+    #profile-section #btn-add-address:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
     }
 
     /* Responsive para direcciones */
@@ -5864,6 +6010,22 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             <h3 style="color:#fff;font-size:24px;margin:0 0 8px 0;font-weight:700;">Programa de Fidelidad</h3>
             <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0;">Acumula puntos con cada compra y obtén descuentos exclusivos</p>
           </div>
+          
+          <!-- Saldo de Puntos -->
+          <div class="points-balance" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;">
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px;">
+              <span style="font-size:32px;">🏆</span>
+              <div>
+                <div id="user-points-balance" style="color:#fff;font-size:28px;font-weight:700;margin:0;">0</div>
+                <div style="color:rgba(255,255,255,0.8);font-size:14px;margin:0;">Puntos disponibles</div>
+              </div>
+            </div>
+            <div style="color:rgba(255,255,255,0.7);font-size:12px;">
+              Gana 10 puntos por cada camiseta comprada
+            </div>
+          </div>
+          
+          <!-- Tienda de Canje -->
           
           <div class="points-stats" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:24px;">
             <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:16px;">
@@ -5942,14 +6104,69 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0;">Gestión completa de tu perfil y preferencias</p>
           </div>
           
+          <!-- Panel Administrativo (solo para administradores) -->
+          <div id="admin-panel" class="hidden" style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:20px;">
+            <h4 style="color:#fff;font-size:18px;margin:0 0 16px 0;font-weight:600;">🔧 Panel Administrativo - Gestión de Puntos</h4>
+            
+            <!-- Buscar usuario -->
+            <div style="margin-bottom:20px;">
+              <label style="color:rgba(255,255,255,0.9);font-size:14px;margin-bottom:8px;display:block;">Buscar usuario por email:</label>
+              <div style="display:flex;gap:8px;">
+                <input type="email" id="admin-search-email" placeholder="email@ejemplo.com" style="
+                  flex:1;padding:10px;border:none;border-radius:6px;background:rgba(255,255,255,0.2);
+                  color:#fff;font-size:14px;outline:none;
+                ">
+                <button id="admin-search-btn" style="
+                  background:rgba(255,255,255,0.2);border:none;color:#fff;padding:10px 16px;
+                  border-radius:6px;cursor:pointer;font-size:14px;
+                ">Buscar</button>
+              </div>
+            </div>
+            
+            <!-- Información del usuario -->
+            <div id="admin-user-info" class="hidden" style="background:rgba(255,255,255,0.1);border-radius:8px;padding:16px;margin-bottom:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div>
+                  <div style="color:#fff;font-weight:600;" id="admin-user-email"></div>
+                  <div style="color:rgba(255,255,255,0.7);font-size:12px;" id="admin-user-uid"></div>
+                </div>
+                <div style="color:#ffd700;font-size:20px;font-weight:700;" id="admin-user-points">0</div>
+              </div>
+              
+              <!-- Ajustar puntos -->
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="number" id="admin-new-points" placeholder="Nuevos puntos" style="
+                  flex:1;padding:8px;border:none;border-radius:4px;background:rgba(255,255,255,0.2);
+                  color:#fff;font-size:14px;outline:none;
+                ">
+                <input type="text" id="admin-reason" placeholder="Motivo" style="
+                  flex:1;padding:8px;border:none;border-radius:4px;background:rgba(255,255,255,0.2);
+                  color:#fff;font-size:14px;outline:none;
+                ">
+                <button id="admin-update-points" style="
+                  background:rgba(76,175,80,0.8);border:none;color:#fff;padding:8px 12px;
+                  border-radius:4px;cursor:pointer;font-size:12px;
+                ">Actualizar</button>
+              </div>
+            </div>
+            
+            <!-- Lista de usuarios recientes -->
+            <div>
+              <h5 style="color:rgba(255,255,255,0.9);font-size:14px;margin:0 0 12px 0;">Usuarios recientes:</h5>
+              <div id="admin-users-list" style="max-height:200px;overflow-y:auto;">
+                <!-- Se cargará dinámicamente -->
+              </div>
+            </div>
+          </div>
+          
           <!-- Gestión de Direcciones -->
           <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:20px;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
               <h4 style="color:#fff;margin:0;font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px;">
                 <span>📍</span> Mis Direcciones
               </h4>
-              <button id="btn-add-address" style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:14px;font-weight:500;">
-                + Nueva Dirección
+              <button id="btn-add-address" style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:2px solid rgba(99, 102, 241, 0.3);border-radius:10px;padding:10px 20px;cursor:pointer;font-size:14px;font-weight:600;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(102, 126, 234, 0.3);">
+                <span style="margin-right:6px;">➕</span> Nueva Dirección
               </button>
             </div>
             
@@ -6143,6 +6360,204 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       finally { btn.disabled=false; btn.textContent=prev; }
     });
 
+    // Sistema de Puntos - Funciones principales
+    window.PointsSystem = {
+      // Obtener puntos del usuario
+      async getUserPoints(uid) {
+        try {
+          const pointsRef = ref(db, `users/${uid}/points`);
+          const snapshot = await get(pointsRef);
+          return snapshot.exists() ? snapshot.val() : 0;
+        } catch (error) {
+          console.error('Error obteniendo puntos:', error);
+          return 0;
+        }
+      },
+
+      // Actualizar puntos del usuario
+      async updateUserPoints(uid, newPoints, reason = 'Ajuste manual') {
+        try {
+          const pointsRef = ref(db, `users/${uid}/points`);
+          const pointsHistoryRef = ref(db, `users/${uid}/pointsHistory/${Date.now()}`);
+          
+          // Obtener puntos actuales
+          const currentPoints = await this.getUserPoints(uid);
+          
+          // Guardar nuevo saldo
+          await set(pointsRef, newPoints);
+          
+          // Registrar en historial
+          await set(pointsHistoryRef, {
+            previousPoints: currentPoints,
+            newPoints: newPoints,
+            difference: newPoints - currentPoints,
+            reason: reason,
+            timestamp: new Date().toISOString(),
+            adminAction: true
+          });
+          
+          return true;
+        } catch (error) {
+          console.error('Error actualizando puntos:', error);
+          return false;
+        }
+      },
+
+      // Agregar puntos (por compra)
+      async addPoints(uid, points, reason = 'Compra realizada', orderId = null) {
+        try {
+          // Validaciones de seguridad
+          if (!uid || !points || points <= 0) {
+            throw new Error('Datos inválidos para agregar puntos');
+          }
+          
+          // Prevenir duplicación por orderId
+          if (orderId) {
+            const existingPointsRef = ref(db, `users/${uid}/pointsByOrder/${orderId}`);
+            const existingSnapshot = await get(existingPointsRef);
+            if (existingSnapshot.exists()) {
+              console.log(`Puntos ya agregados para la orden ${orderId}`);
+              return true; // Ya se agregaron puntos para esta orden
+            }
+          }
+          
+          const currentPoints = await this.getUserPoints(uid);
+          const newPoints = currentPoints + points;
+          
+          const pointsRef = ref(db, `users/${uid}/points`);
+          const pointsHistoryRef = ref(db, `users/${uid}/pointsHistory/${Date.now()}`);
+          
+          // Guardar nuevo saldo
+          await set(pointsRef, newPoints);
+          
+          // Registrar en historial
+          await set(pointsHistoryRef, {
+            previousPoints: currentPoints,
+            newPoints: newPoints,
+            difference: points,
+            reason: reason,
+            timestamp: new Date().toISOString(),
+            adminAction: false,
+            orderId: orderId
+          });
+          
+          // Marcar como procesado si hay orderId
+          if (orderId) {
+            await set(ref(db, `users/${uid}/pointsByOrder/${orderId}`), {
+              points: points,
+              timestamp: new Date().toISOString()
+            });
+          }
+          
+          return true;
+        } catch (error) {
+          console.error('Error agregando puntos:', error);
+          return false;
+        }
+      },
+
+      // Canjear puntos por descuento
+      async redeemPoints(uid, pointsToRedeem, rewardType, rewardValue) {
+        try {
+          // Validaciones de seguridad
+          if (!uid || !pointsToRedeem || pointsToRedeem <= 0) {
+            throw new Error('Datos inválidos para canjear puntos');
+          }
+          
+          if (!rewardType || rewardValue === undefined) {
+            throw new Error('Tipo de recompensa inválido');
+          }
+          
+          const currentPoints = await this.getUserPoints(uid);
+          
+          if (currentPoints < pointsToRedeem) {
+            throw new Error('Puntos insuficientes');
+          }
+          
+          // Verificar que no se canjee más de lo permitido
+          if (pointsToRedeem > 1000) {
+            throw new Error('No se pueden canjear más de 1000 puntos a la vez');
+          }
+          
+          const newPoints = currentPoints - pointsToRedeem;
+          const pointsRef = ref(db, `users/${uid}/points`);
+          const pointsHistoryRef = ref(db, `users/${uid}/pointsHistory/${Date.now()}`);
+          const redemptionRef = ref(db, `users/${uid}/redemptions/${Date.now()}`);
+          
+          // Guardar nuevo saldo
+          await set(pointsRef, newPoints);
+          
+          // Registrar en historial
+          await set(pointsHistoryRef, {
+            previousPoints: currentPoints,
+            newPoints: newPoints,
+            difference: -pointsToRedeem,
+            reason: `Canje: ${rewardType} - ${rewardValue}`,
+            timestamp: new Date().toISOString(),
+            adminAction: false
+          });
+          
+          // Registrar canje
+          await set(redemptionRef, {
+            pointsUsed: pointsToRedeem,
+            rewardType: rewardType,
+            rewardValue: rewardValue,
+            timestamp: new Date().toISOString(),
+            used: false
+          });
+          
+          return true;
+        } catch (error) {
+          console.error('Error canjeando puntos:', error);
+          throw error;
+        }
+      },
+
+      // Obtener historial de puntos
+      async getPointsHistory(uid) {
+        try {
+          const historyRef = ref(db, `users/${uid}/pointsHistory`);
+          const snapshot = await get(historyRef);
+          if (!snapshot.exists()) return [];
+          
+          const history = [];
+          snapshot.forEach((childSnapshot) => {
+            history.push({
+              id: childSnapshot.key,
+              ...childSnapshot.val()
+            });
+          });
+          
+          return history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        } catch (error) {
+          console.error('Error obteniendo historial:', error);
+          return [];
+        }
+      },
+
+      // Obtener canjes del usuario
+      async getUserRedemptions(uid) {
+        try {
+          const redemptionsRef = ref(db, `users/${uid}/redemptions`);
+          const snapshot = await get(redemptionsRef);
+          if (!snapshot.exists()) return [];
+          
+          const redemptions = [];
+          snapshot.forEach((childSnapshot) => {
+            redemptions.push({
+              id: childSnapshot.key,
+              ...childSnapshot.val()
+            });
+          });
+          
+          return redemptions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        } catch (error) {
+          console.error('Error obteniendo canjes:', error);
+          return [];
+        }
+      }
+    };
+
     // Estado de autenticación y UI de perfil
     function updateIdentityLabels(user){
       try{
@@ -6165,6 +6580,346 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     const profileOrdersPanel = document.getElementById('profile-orders');
     const profileAccountPanel = document.getElementById('profile-account');
     const profilePointsPanel = document.getElementById('profile-points');
+
+    // Configuración de recompensas disponibles
+    const AVAILABLE_REWARDS = [
+      { id: 'discount_5', name: '5% Descuento', points: 50, type: 'percentage', value: 5, description: '5% de descuento en tu próxima compra' },
+      { id: 'discount_10', name: '10% Descuento', points: 100, type: 'percentage', value: 10, description: '10% de descuento en tu próxima compra' },
+      { id: 'discount_15', name: '15% Descuento', points: 150, type: 'percentage', value: 15, description: '15% de descuento en tu próxima compra' },
+      { id: 'discount_20', name: '20% Descuento', points: 200, type: 'percentage', value: 20, description: '20% de descuento en tu próxima compra' },
+      { id: 'free_shipping', name: 'Envío Gratis', points: 80, type: 'shipping', value: 0, description: 'Envío gratuito en tu próxima compra' },
+      { id: 'euro_5', name: '5€ Descuento', points: 100, type: 'fixed', value: 5, description: '5€ de descuento fijo en tu próxima compra' },
+      { id: 'euro_10', name: '10€ Descuento', points: 200, type: 'fixed', value: 10, description: '10€ de descuento fijo en tu próxima compra' }
+    ];
+
+    // Cargar puntos del usuario
+    async function loadUserPoints(uid) {
+      try {
+        const points = await window.PointsSystem.getUserPoints(uid);
+        const pointsBalanceEl = document.getElementById('user-points-balance');
+        const pointsTotalEl = document.getElementById('points-total');
+        
+        if (pointsBalanceEl) pointsBalanceEl.textContent = points;
+        if (pointsTotalEl) pointsTotalEl.textContent = points;
+        
+        // Cargar recompensas disponibles
+        await loadAvailableRewards(uid, points);
+        
+        // Cargar historial de puntos
+        await loadPointsHistory(uid);
+        
+      } catch (error) {
+        console.error('Error cargando puntos:', error);
+      }
+    }
+
+    // Cargar recompensas disponibles
+    async function loadAvailableRewards(uid, userPoints) {
+      const rewardsGrid = document.getElementById('points-rewards-grid');
+      if (!rewardsGrid) return;
+      
+      rewardsGrid.innerHTML = '';
+      
+      AVAILABLE_REWARDS.forEach(reward => {
+        const canAfford = userPoints >= reward.points;
+        const rewardCard = document.createElement('div');
+        rewardCard.className = 'reward-card';
+        rewardCard.style.cssText = `
+          background: ${canAfford ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)'};
+          border: 1px solid ${canAfford ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'};
+          border-radius: 8px;
+          padding: 16px;
+          text-align: center;
+          cursor: ${canAfford ? 'pointer' : 'not-allowed'};
+          opacity: ${canAfford ? '1' : '0.6'};
+          transition: all 0.3s ease;
+        `;
+        
+        rewardCard.innerHTML = `
+          <div style="font-size:24px;margin-bottom:8px;">${getRewardIcon(reward.type)}</div>
+          <div style="color:#fff;font-weight:600;margin-bottom:4px;">${reward.name}</div>
+          <div style="color:rgba(255,255,255,0.8);font-size:12px;margin-bottom:8px;">${reward.description}</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:12px;">
+            <span style="color:#ffd700;font-weight:700;">${reward.points}</span>
+            <span style="color:rgba(255,255,255,0.7);font-size:12px;">puntos</span>
+          </div>
+          <button class="redeem-btn" ${!canAfford ? 'disabled' : ''} style="
+            background: ${canAfford ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)'};
+            border: 1px solid ${canAfford ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'};
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: ${canAfford ? 'pointer' : 'not-allowed'};
+            width: 100%;
+            transition: all 0.3s ease;
+          ">
+            ${canAfford ? 'Canjear' : 'Puntos insuficientes'}
+          </button>
+        `;
+        
+        if (canAfford) {
+          rewardCard.addEventListener('click', () => redeemReward(uid, reward));
+          rewardCard.addEventListener('mouseenter', () => {
+            rewardCard.style.background = 'rgba(255,255,255,0.3)';
+            rewardCard.style.transform = 'translateY(-2px)';
+          });
+          rewardCard.addEventListener('mouseleave', () => {
+            rewardCard.style.background = 'rgba(255,255,255,0.2)';
+            rewardCard.style.transform = 'translateY(0)';
+          });
+        }
+        
+        rewardsGrid.appendChild(rewardCard);
+      });
+    }
+
+    // Obtener icono para tipo de recompensa
+    function getRewardIcon(type) {
+      const icons = {
+        percentage: '📊',
+        fixed: '💰',
+        shipping: '🚚'
+      };
+      return icons[type] || '🎁';
+    }
+
+    // Canjear recompensa
+    async function redeemReward(uid, reward) {
+      try {
+        const confirmed = confirm(`¿Estás seguro de que quieres canjear ${reward.points} puntos por ${reward.name}?`);
+        if (!confirmed) return;
+        
+        await window.PointsSystem.redeemPoints(uid, reward.points, reward.type, reward.value);
+        
+        // Mostrar mensaje de éxito
+        showMessage(`¡Recompensa canjeada! ${reward.name} está disponible en tu próxima compra.`, 'success');
+        
+        // Recargar puntos y recompensas
+        await loadUserPoints(uid);
+        
+      } catch (error) {
+        console.error('Error canjeando recompensa:', error);
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    // Cargar historial de puntos
+    async function loadPointsHistory(uid) {
+      try {
+        const history = await window.PointsSystem.getPointsHistory(uid);
+        const historyList = document.getElementById('points-history-list');
+        if (!historyList) return;
+        
+        if (history.length === 0) {
+          historyList.innerHTML = '<div style="color:rgba(255,255,255,0.7);text-align:center;padding:20px;">No hay historial de puntos</div>';
+          return;
+        }
+        
+        historyList.innerHTML = history.slice(0, 10).map(entry => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+            <div>
+              <div style="color:#fff;font-size:14px;">${entry.reason}</div>
+              <div style="color:rgba(255,255,255,0.6);font-size:12px;">${new Date(entry.timestamp).toLocaleDateString()}</div>
+            </div>
+            <div style="color:${entry.difference > 0 ? '#4CAF50' : '#f44336'};font-weight:600;">
+              ${entry.difference > 0 ? '+' : ''}${entry.difference}
+            </div>
+          </div>
+        `).join('');
+        
+      } catch (error) {
+        console.error('Error cargando historial:', error);
+      }
+    }
+
+    // Función para mostrar mensajes
+    function showMessage(message, type = 'info') {
+      const messageEl = document.createElement('div');
+      messageEl.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 10000;
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        max-width: 300px;
+      `;
+      messageEl.textContent = message;
+      document.body.appendChild(messageEl);
+      
+      setTimeout(() => {
+        messageEl.remove();
+      }, 5000);
+    }
+
+    // Panel Administrativo - Funciones
+    const ADMIN_EMAILS = ['admin@camisetazo.com', 'igort@camisetazo.com']; // Lista de emails de administradores
+
+    // Verificar si el usuario es administrador
+    function isAdmin(user) {
+      return user && ADMIN_EMAILS.includes(user.email);
+    }
+
+    // Mostrar/ocultar panel administrativo
+    function toggleAdminPanel(user) {
+      const adminPanel = document.getElementById('admin-panel');
+      if (adminPanel) {
+        if (isAdmin(user)) {
+          adminPanel.classList.remove('hidden');
+          loadAdminUsersList();
+        } else {
+          adminPanel.classList.add('hidden');
+        }
+      }
+    }
+
+    // Cargar lista de usuarios para administradores
+    async function loadAdminUsersList() {
+      try {
+        const usersRef = ref(db, 'users');
+        const snapshot = await get(usersRef);
+        const usersList = document.getElementById('admin-users-list');
+        
+        if (!snapshot.exists() || !usersList) return;
+        
+        const users = [];
+        snapshot.forEach((childSnapshot) => {
+          const userData = childSnapshot.val();
+          users.push({
+            uid: childSnapshot.key,
+            email: userData.email,
+            createdAt: userData.createdAt
+          });
+        });
+        
+        // Ordenar por fecha de creación (más recientes primero)
+        users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        usersList.innerHTML = users.slice(0, 10).map(user => `
+          <div style="
+            display:flex;justify-content:space-between;align-items:center;
+            padding:8px 12px;margin-bottom:4px;background:rgba(255,255,255,0.1);
+            border-radius:6px;cursor:pointer;transition:background 0.2s;
+          " onclick="selectUserForAdmin('${user.uid}', '${user.email}')">
+            <div>
+              <div style="color:#fff;font-size:14px;">${user.email}</div>
+              <div style="color:rgba(255,255,255,0.6);font-size:12px;">${new Date(user.createdAt).toLocaleDateString()}</div>
+            </div>
+            <div style="color:rgba(255,255,255,0.5);font-size:12px;">👆</div>
+          </div>
+        `).join('');
+        
+      } catch (error) {
+        console.error('Error cargando lista de usuarios:', error);
+      }
+    }
+
+    // Seleccionar usuario para administración
+    window.selectUserForAdmin = async function(uid, email) {
+      try {
+        const points = await window.PointsSystem.getUserPoints(uid);
+        
+        document.getElementById('admin-user-email').textContent = email;
+        document.getElementById('admin-user-uid').textContent = uid;
+        document.getElementById('admin-user-points').textContent = points;
+        document.getElementById('admin-new-points').value = points;
+        
+        const userInfo = document.getElementById('admin-user-info');
+        userInfo.classList.remove('hidden');
+        
+      } catch (error) {
+        console.error('Error seleccionando usuario:', error);
+        showMessage('Error al cargar información del usuario', 'error');
+      }
+    };
+
+    // Buscar usuario por email
+    async function searchUserByEmail(email) {
+      try {
+        const usersRef = ref(db, 'users');
+        const snapshot = await get(usersRef);
+        
+        if (!snapshot.exists()) {
+          showMessage('No se encontraron usuarios', 'error');
+          return;
+        }
+        
+        let foundUser = null;
+        snapshot.forEach((childSnapshot) => {
+          const userData = childSnapshot.val();
+          if (userData.email && userData.email.toLowerCase() === email.toLowerCase()) {
+            foundUser = {
+              uid: childSnapshot.key,
+              email: userData.email
+            };
+          }
+        });
+        
+        if (foundUser) {
+          await selectUserForAdmin(foundUser.uid, foundUser.email);
+          showMessage('Usuario encontrado', 'success');
+        } else {
+          showMessage('Usuario no encontrado', 'error');
+        }
+        
+      } catch (error) {
+        console.error('Error buscando usuario:', error);
+        showMessage('Error al buscar usuario', 'error');
+      }
+    }
+
+    // Actualizar puntos de usuario
+    async function updateUserPoints() {
+      try {
+        const uid = document.getElementById('admin-user-uid').textContent;
+        const newPoints = parseInt(document.getElementById('admin-new-points').value);
+        const reason = document.getElementById('admin-reason').value || 'Ajuste administrativo';
+        
+        // Validaciones de seguridad
+        if (!uid || isNaN(newPoints)) {
+          showMessage('Datos inválidos', 'error');
+          return;
+        }
+        
+        if (newPoints < 0) {
+          showMessage('Los puntos no pueden ser negativos', 'error');
+          return;
+        }
+        
+        if (newPoints > 10000) {
+          showMessage('No se pueden asignar más de 10,000 puntos', 'error');
+          return;
+        }
+        
+        if (reason.length < 3) {
+          showMessage('El motivo debe tener al menos 3 caracteres', 'error');
+          return;
+        }
+        
+        // Confirmar acción
+        const confirmed = confirm(`¿Estás seguro de actualizar los puntos a ${newPoints}?`);
+        if (!confirmed) return;
+        
+        const success = await window.PointsSystem.updateUserPoints(uid, newPoints, reason);
+        
+        if (success) {
+          showMessage('Puntos actualizados correctamente', 'success');
+          document.getElementById('admin-user-points').textContent = newPoints;
+          document.getElementById('admin-reason').value = '';
+        } else {
+          showMessage('Error al actualizar puntos', 'error');
+        }
+        
+      } catch (error) {
+        console.error('Error actualizando puntos:', error);
+        showMessage('Error al actualizar puntos', 'error');
+      }
+    }
 
     function renderOrdersList(orders){
       ordersListEl.innerHTML = '';
@@ -6822,6 +7577,16 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         console.log('saveOrderToRTDB: Guardando pedido con payload:', payload);
         await set(ref(db, `ordersByUser/${uid}/${id}`), payload);
         console.log('saveOrderToRTDB: Pedido guardado exitosamente con ID:', id);
+        
+        // Agregar puntos por la compra
+        if (pointsEarned > 0) {
+          try {
+            await window.PointsSystem.addPoints(uid, pointsEarned, `Compra #${id}`, id);
+            console.log(`Puntos agregados: ${pointsEarned} para usuario ${uid}`);
+          } catch (pointsError) {
+            console.error('Error agregando puntos:', pointsError);
+          }
+        }
         // Si hay un descuento aplicado, marcarlo como usado
         try{
           const ar = window.__APPLIED_REWARD;
@@ -6925,11 +7690,67 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       const btnVerPuntos = document.getElementById('btn-ver-puntos');
       if (btnVerPedidos && btnVerCuenta && btnVerPuntos){
         btnVerPedidos.addEventListener('click', ()=>{ profileAccountPanel.classList.add('hidden'); profilePointsPanel.classList.add('hidden'); profileOrdersPanel.classList.remove('hidden'); btnVerPedidos.classList.add('active'); btnVerPuntos.classList.remove('active'); btnVerCuenta.classList.remove('active'); });
-        btnVerPuntos.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profileAccountPanel.classList.add('hidden'); profilePointsPanel.classList.remove('hidden'); btnVerPuntos.classList.add('active'); btnVerPedidos.classList.remove('active'); btnVerCuenta.classList.remove('active'); });
+        btnVerPuntos.addEventListener('click', async ()=>{ 
+          profileOrdersPanel.classList.add('hidden'); 
+          profileAccountPanel.classList.add('hidden'); 
+          profilePointsPanel.classList.remove('hidden'); 
+          btnVerPuntos.classList.add('active'); 
+          btnVerPedidos.classList.remove('active'); 
+          btnVerCuenta.classList.remove('active');
+          
+          // Cargar puntos si hay usuario autenticado
+          if (auth.currentUser) {
+            await loadUserPoints(auth.currentUser.uid);
+          }
+        });
 btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profilePointsPanel.classList.add('hidden'); profileAccountPanel.classList.remove('hidden'); btnVerCuenta.classList.add('active'); btnVerPedidos.classList.remove('active'); btnVerPuntos.classList.remove('active'); });
       }
       const btnLogout = document.getElementById('btn-logout');
       if (btnLogout){ btnLogout.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){ console.error(e); } }); }
+      
+      // Toggle historial de puntos
+      const toggleHistory = document.getElementById('toggle-history');
+      if (toggleHistory) {
+        toggleHistory.addEventListener('click', () => {
+          const historyList = document.getElementById('points-history-list');
+          if (historyList.classList.contains('hidden')) {
+            historyList.classList.remove('hidden');
+            toggleHistory.textContent = 'Ocultar historial';
+          } else {
+            historyList.classList.add('hidden');
+            toggleHistory.textContent = 'Ver historial';
+          }
+        });
+      }
+      
+      // Event listeners del panel administrativo
+      const adminSearchBtn = document.getElementById('admin-search-btn');
+      const adminSearchEmail = document.getElementById('admin-search-email');
+      const adminUpdatePoints = document.getElementById('admin-update-points');
+      
+      if (adminSearchBtn) {
+        adminSearchBtn.addEventListener('click', () => {
+          const email = adminSearchEmail.value.trim();
+          if (email) {
+            searchUserByEmail(email);
+          }
+        });
+      }
+      
+      if (adminSearchEmail) {
+        adminSearchEmail.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            const email = adminSearchEmail.value.trim();
+            if (email) {
+              searchUserByEmail(email);
+            }
+          }
+        });
+      }
+      
+      if (adminUpdatePoints) {
+        adminUpdatePoints.addEventListener('click', updateUserPoints);
+      }
       
       // Toggle lista de descuentos comprados
       try{
@@ -7016,7 +7837,13 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
           } catch(e){}
 
           await loadUserOrders(user.uid);
+          
+          // Cargar puntos del usuario
+          await loadUserPoints(user.uid);
           await loadUserDiscounts(); // Cargar descuentos comprados disponibles
+          
+          // Mostrar panel administrativo si es administrador
+          toggleAdminPanel(user);
         }
       } else {
         if (verifyCta) verifyCta.classList.add('hidden');
@@ -7072,17 +7899,30 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
       const btnCancelAddress = document.getElementById('btn-cancel-address');
       const btnSaveAddress = document.getElementById('btn-save-address');
       
-      // Campos del formulario
-      const addressFields = {
-        name: document.getElementById('address-name'),
-        contactName: document.getElementById('address-contact-name'),
-        addressLine: document.getElementById('address-line'),
-        city: document.getElementById('address-city'),
-        state: document.getElementById('address-state'),
-        country: document.getElementById('address-country'),
-        postal: document.getElementById('address-postal'),
-        phone: document.getElementById('address-phone')
-      };
+      // Campos del formulario - inicialización diferida
+      let addressFields = {};
+      
+      function initializeAddressFields() {
+        addressFields = {
+          name: document.getElementById('address-name'),
+          contactName: document.getElementById('address-contact-name'),
+          addressLine: document.getElementById('address-line'),
+          city: document.getElementById('address-city'),
+          state: document.getElementById('address-state'),
+          country: document.getElementById('address-country'),
+          postal: document.getElementById('address-postal'),
+          phone: document.getElementById('address-phone')
+        };
+      }
+      
+      // Inicializar campos al cargar
+      initializeAddressFields();
+      
+      // Configurar listeners de validación para campos
+      setupFieldValidationListeners();
+      
+      // Renderizar lista inicial de direcciones
+      renderAddressesList();
       
       // Función para renderizar la lista de direcciones
       function renderAddressesList() {
@@ -7155,38 +7995,217 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
       
       // Función para limpiar el formulario
       function clearAddressForm() {
+        initializeAddressFields();
         Object.values(addressFields).forEach(field => {
           if (field) field.value = '';
         });
       }
       
-      // Función para validar el formulario
-      function validateAddressForm() {
-        const required = ['name', 'contactName', 'addressLine', 'city', 'country', 'postal', 'phone'];
-        for (const field of required) {
-          if (!addressFields[field].value.trim()) {
-            alert(`Por favor, completa el campo: ${addressFields[field].placeholder}`);
-            addressFields[field].focus();
-            return false;
-          }
+      // Función para mostrar mensajes de error específicos del campo
+      function showFieldError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        if (!field) return;
+        
+        field.style.borderColor = '#ff4444';
+        field.style.boxShadow = '0 0 0 2px rgba(255, 68, 68, 0.2)';
+        
+        // Crear o actualizar mensaje de error
+        let errorDiv = field.parentNode.querySelector('.field-error-message');
+        if (!errorDiv) {
+          errorDiv = document.createElement('div');
+          errorDiv.className = 'field-error-message';
+          errorDiv.style.color = '#ff4444';
+          errorDiv.style.fontSize = '0.8rem';
+          errorDiv.style.marginTop = '4px';
+          field.parentNode.appendChild(errorDiv);
         }
-        return true;
+        errorDiv.textContent = message;
       }
       
-      // Función para guardar dirección
+      // Función para limpiar errores cuando el usuario empieza a escribir
+      function setupFieldValidationListeners() {
+        const addressFields = addressForm.querySelectorAll('input');
+        addressFields.forEach(field => {
+          field.addEventListener('input', function() {
+            // Limpiar el error de este campo específico
+            this.style.borderColor = '';
+            this.style.boxShadow = '';
+            const errorDiv = this.parentNode.querySelector('.field-error-message');
+            if (errorDiv) {
+              errorDiv.remove();
+            }
+          });
+          
+          field.addEventListener('blur', function() {
+            // Validar este campo específico cuando pierde el foco
+            if (this.value.trim()) {
+              this.style.borderColor = '#28a745';
+              this.style.boxShadow = '0 0 0 2px rgba(40, 167, 69, 0.2)';
+            }
+          });
+        });
+      }
+      
+      // Función para limpiar mensajes de error
+      function clearFieldErrors() {
+        const fields = addressForm.querySelectorAll('input');
+        fields.forEach(field => {
+          field.style.borderColor = '';
+          field.style.boxShadow = '';
+          const errorDiv = field.parentNode.querySelector('.field-error-message');
+          if (errorDiv) {
+            errorDiv.remove();
+          }
+        });
+      }
+      
+      // Función para validar el formulario con mensajes de error específicos
+      function validateAddressForm() {
+        clearFieldErrors();
+        
+        const requiredFields = [
+          { id: 'address-name', message: 'El nombre de la dirección es requerido' },
+          { id: 'address-contact-name', message: 'El nombre del contacto es requerido' },
+          { id: 'address-line', message: 'La dirección es requerida' },
+          { id: 'address-city', message: 'La ciudad es requerida' },
+          { id: 'address-country', message: 'El país es requerido' },
+          { id: 'address-postal', message: 'El código postal es requerido' }
+        ];
+        
+        let isValid = true;
+        let firstInvalidField = null;
+        
+        requiredFields.forEach(fieldInfo => {
+          const field = document.getElementById(fieldInfo.id);
+          if (!field || !field.value.trim()) {
+            isValid = false;
+            showFieldError(fieldInfo.id, fieldInfo.message);
+            if (!firstInvalidField) firstInvalidField = field;
+          }
+        });
+        
+        // Validación específica para el teléfono
+        const phoneField = document.getElementById('address-phone');
+        if (phoneField && phoneField.value.trim()) {
+          const phoneRegex = /^[+]?[0-9\s\-\(\)]{7,15}$/;
+          if (!phoneRegex.test(phoneField.value.trim())) {
+            isValid = false;
+            showFieldError('address-phone', 'El teléfono debe tener entre 7 y 15 dígitos');
+            if (!firstInvalidField) firstInvalidField = phoneField;
+          }
+        }
+        
+        // Validación de longitud mínima para dirección
+        const addressLineField = document.getElementById('address-line');
+        if (addressLineField && addressLineField.value.trim() && addressLineField.value.trim().length < 5) {
+          isValid = false;
+          showFieldError('address-line', 'La dirección debe tener al menos 5 caracteres');
+          if (!firstInvalidField) firstInvalidField = addressLineField;
+        }
+        
+        // Hacer focus en el primer campo inválido
+        if (firstInvalidField) {
+          firstInvalidField.focus();
+        }
+        
+        return isValid;
+      }
+      
+      
+      // Función para mostrar éxito usando el sistema de notificaciones
+      function mostrarExitoLocal(mensaje) {
+        const notificacion = document.getElementById('formStatus');
+        if (!notificacion) return;
+        notificacion.className = 'success';
+        notificacion.style.position = 'fixed';
+        notificacion.style.top = '20px';
+        notificacion.style.left = '50%';
+        notificacion.style.transform = 'translateX(-50%)';
+        notificacion.style.zIndex = '200000';
+        notificacion.style.background = '#1e7e34';
+        notificacion.style.color = '#fff';
+        notificacion.style.padding = '12px 16px';
+        notificacion.style.borderRadius = '8px';
+        notificacion.style.display = 'block';
+        notificacion.style.width = 'auto';
+        notificacion.style.maxWidth = '94%';
+        notificacion.style.boxShadow = '0 8px 30px rgba(30,126,52,0.22)';
+        notificacion.innerHTML = `<strong style="margin-right:8px;">✔</strong> ${mensaje} <button id="closeFormStatus" style="margin-left:12px;background:transparent;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:6px 10px;border-radius:6px;cursor:pointer;">Cerrar</button>`;
+        const closeBtn = document.getElementById('closeFormStatus');
+        if (closeBtn) closeBtn.addEventListener('click', ()=> { notificacion.style.display = 'none'; });
+      }
+      
+      // Función para verificar si una dirección ya existe con mensajes claros
+      function isDuplicateAddress(newAddress, excludeIndex = -1) {
+        // Verificar si es una dirección completamente vacía
+        const isEmptyAddress = !newAddress.name.trim() || 
+                              !newAddress.contactName.trim() || 
+                              !newAddress.addressLine.trim() || 
+                              !newAddress.city.trim() || 
+                              !newAddress.country.trim() || 
+                              !newAddress.postal.trim();
+        
+        if (isEmptyAddress) {
+          return { isDuplicate: true, message: 'La dirección no puede estar vacía. Por favor completa todos los campos requeridos.' };
+        }
+        
+        // Verificar duplicados basados en campos clave
+        const duplicate = addresses.find((addr, index) => {
+          if (index === excludeIndex) return false;
+          
+          return addr.name.toLowerCase().trim() === newAddress.name.toLowerCase().trim() ||
+                 (addr.contactName.toLowerCase().trim() === newAddress.contactName.toLowerCase().trim() &&
+                  addr.addressLine.toLowerCase().trim() === newAddress.addressLine.toLowerCase().trim() &&
+                  addr.city.toLowerCase().trim() === newAddress.city.toLowerCase().trim());
+        });
+        
+        if (duplicate) {
+          return { 
+            isDuplicate: true, 
+            message: `Ya existe una dirección con este nombre o en esta ubicación. Por favor usa un nombre diferente o verifica la dirección.` 
+          };
+        }
+        
+        return { isDuplicate: false, message: '' };
+      }
+      
+      // Función para guardar dirección con validaciones y prevención de duplicados
       function saveAddress() {
-        if (!validateAddressForm()) return;
+        // Prevenir doble envío
+        if (isSubmitting) return;
+        isSubmitting = true;
+        
+        // Validar el formulario primero
+        if (!validateAddressForm()) {
+          mostrarExitoLocal('Por favor, completa todos los campos requeridos');
+          isSubmitting = false;
+          return;
+        }
+        
+        // Obtener valores del DOM
+        const getValue = (elementId) => {
+          const element = document.getElementById(elementId);
+          return element ? element.value.trim() : '';
+        };
         
         const addressData = {
-          name: addressFields.name.value.trim(),
-          contactName: addressFields.contactName.value.trim(),
-          addressLine: addressFields.addressLine.value.trim(),
-          city: addressFields.city.value.trim(),
-          state: addressFields.state.value.trim(),
-          country: addressFields.country.value.trim(),
-          postal: addressFields.postal.value.trim(),
-          phone: addressFields.phone.value.trim()
+          name: getValue('address-name'),
+          contactName: getValue('address-contact-name'),
+          addressLine: getValue('address-line'),
+          city: getValue('address-city'),
+          state: getValue('address-state'),
+          country: getValue('address-country'),
+          postal: getValue('address-postal'),
+          phone: getValue('address-phone')
         };
+        
+        // Verificar si ya existe una dirección idéntica
+        const duplicateCheck = isDuplicateAddress(addressData);
+        if (duplicateCheck.isDuplicate) {
+          mostrarExitoLocal(duplicateCheck.message);
+          isSubmitting = false;
+          return;
+        }
         
         addresses.push(addressData);
         localStorage.setItem('savedAddresses', JSON.stringify(addresses));
@@ -7194,27 +8213,18 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
         toggleAddressForm(false);
         
         // Mostrar mensaje de éxito
-        const successMsg = document.createElement('div');
-        successMsg.style.cssText = `
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          background: linear-gradient(135deg, #4CAF50, #45a049);
-          color: white;
-          padding: 12px 20px;
-          border-radius: 8px;
-          z-index: 10000;
-          font-size: 14px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        `;
-        successMsg.textContent = 'Dirección guardada correctamente';
-        document.body.appendChild(successMsg);
-        setTimeout(() => successMsg.remove(), 3000);
+        mostrarExitoLocal('Dirección agregada correctamente');
+        
+        // Restablecer el estado de envío
+        isSubmitting = false;
       }
       
       // Función para editar dirección
       function editAddress(index) {
         const address = addresses[index];
+        // Re-inicializar campos antes de editarlos
+        initializeAddressFields();
+        
         Object.keys(addressFields).forEach(key => {
           if (addressFields[key]) {
             addressFields[key].value = address[key] || '';
@@ -7227,29 +8237,60 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
         btnSaveAddress.onclick = () => updateAddress(index);
       }
       
-      // Función para actualizar dirección
+      // Función para actualizar dirección con validaciones y prevención de duplicados
       function updateAddress(index) {
-        if (!validateAddressForm()) return;
+        // Prevenir doble envío
+        if (isSubmitting) return;
+        isSubmitting = true;
+        
+        // Validar el formulario primero
+        if (!validateAddressForm()) {
+          mostrarExitoLocal('Por favor, completa todos los campos requeridos');
+          isSubmitting = false;
+          return;
+        }
+        
+        // Obtener valores del DOM
+        const getValue = (elementId) => {
+          const element = document.getElementById(elementId);
+          return element ? element.value.trim() : '';
+        };
         
         const addressData = {
-          name: addressFields.name.value.trim(),
-          contactName: addressFields.contactName.value.trim(),
-          addressLine: addressFields.addressLine.value.trim(),
-          city: addressFields.city.value.trim(),
-          state: addressFields.state.value.trim(),
-          country: addressFields.country.value.trim(),
-          postal: addressFields.postal.value.trim(),
-          phone: addressFields.phone.value.trim()
+          name: getValue('address-name'),
+          contactName: getValue('address-contact-name'),
+          addressLine: getValue('address-line'),
+          city: getValue('address-city'),
+          state: getValue('address-state'),
+          country: getValue('address-country'),
+          postal: getValue('address-postal'),
+          phone: getValue('address-phone')
         };
+        
+        // Verificar si ya existe una dirección idéntica (excluyendo la dirección actual)
+        const duplicateCheck = isDuplicateAddress(addressData, index);
+        if (duplicateCheck.isDuplicate) {
+          mostrarExitoLocal(duplicateCheck.message);
+          isSubmitting = false;
+          return;
+        }
         
         addresses[index] = addressData;
         localStorage.setItem('savedAddresses', JSON.stringify(addresses));
         renderAddressesList();
         toggleAddressForm(false);
         
+        // Mostrar mensaje de éxito
+        mostrarExitoLocal('Dirección actualizada correctamente');
+        
         // Restaurar botón de guardar
         btnSaveAddress.textContent = 'Guardar Dirección';
-        btnSaveAddress.onclick = saveAddress;
+        btnSaveAddress.onclick = null;
+        btnSaveAddress.removeEventListener('click', () => {});
+        btnSaveAddress.addEventListener('click', saveAddress);
+        
+        // Restablecer el estado de envío
+        isSubmitting = false;
       }
       
       // Función para eliminar dirección
@@ -7258,16 +8299,24 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
           addresses.splice(index, 1);
           localStorage.setItem('savedAddresses', JSON.stringify(addresses));
           renderAddressesList();
+          mostrarExitoLocal('Dirección eliminada correctamente');
         }
       }
       
-      // Event listeners
+      // Variable para prevenir doble envío
+      let isSubmitting = false;
+      
+      // Event listeners - usar solo addEventListener para evitar conflictos
       if (btnAddAddress) {
         btnAddAddress.addEventListener('click', () => {
           clearAddressForm();
           toggleAddressForm(true);
           btnSaveAddress.textContent = 'Guardar Dirección';
-          btnSaveAddress.onclick = saveAddress;
+          // Remover listeners anteriores antes de agregar el nuevo
+          btnSaveAddress.onclick = null;
+          btnSaveAddress.removeEventListener('click', saveAddress);
+          btnSaveAddress.removeEventListener('click', () => {}); // Remover cualquier listener anónimo
+          btnSaveAddress.addEventListener('click', saveAddress);
         });
       }
       
@@ -7275,13 +8324,13 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
         btnCancelAddress.addEventListener('click', () => {
           toggleAddressForm(false);
           btnSaveAddress.textContent = 'Guardar Dirección';
-          btnSaveAddress.onclick = saveAddress;
+          btnSaveAddress.onclick = null;
+          btnSaveAddress.removeEventListener('click', saveAddress);
+          btnSaveAddress.removeEventListener('click', () => {});
         });
       }
       
-      if (btnSaveAddress) {
-        btnSaveAddress.addEventListener('click', saveAddress);
-      }
+      // El listener para btnSaveAddress se maneja dinámicamente en las funciones de toggle
       
       // Inicializar
       renderAddressesList();
