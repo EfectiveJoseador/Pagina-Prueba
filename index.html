@@ -6922,6 +6922,8 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     }
 
     function renderOrdersList(orders){
+      console.log('renderOrdersList: Renderizando lista de pedidos, cantidad:', orders ? orders.length : 0);
+      console.log('renderOrdersList: Datos de pedidos:', orders);
       ordersListEl.innerHTML = '';
       if (!orders || orders.length === 0){
         ordersEmptyEl.classList.remove('hidden');
@@ -7447,14 +7449,18 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
     async function loadUserOrders(uid){
       try{
+        console.log('loadUserOrders: Cargando pedidos para usuario:', uid);
         if (!uid) { 
+          console.log('loadUserOrders: UID no proporcionado');
           renderOrdersList([]); 
           window.USER_POINTS = 0; window.USER_POINTS_LIFETIME = 0; window.USER_POINTS_SPENT = 0; window.USER_POINTS_AVAILABLE = 0;
           updatePointsPanel({ available:0, lifetime:0, spent:0 }); 
           return; 
         }
         const snap = await get(ref(db, `ordersByUser/${uid}`));
+        console.log('loadUserOrders: Snapshot de pedidos:', snap.exists() ? 'existe' : 'no existe', snap.val());
         if (!snap.exists()){ 
+          console.log('loadUserOrders: No hay pedidos para este usuario');
           renderOrdersList([]); 
           window.USER_POINTS = 0; window.USER_POINTS_LIFETIME = 0; window.USER_POINTS_SPENT = 0; window.USER_POINTS_AVAILABLE = 0;
           updatePointsPanel({ available:0, lifetime:0, spent:0 }); 
@@ -7522,7 +7528,12 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     // Helpers globales: guardar pedido y refrescar listado en Perfil
     window.saveOrderToRTDB = async (orderData)=>{
       try{
+        console.log('saveOrderToRTDB: Iniciando guardado de pedido...');
+        console.log('saveOrderToRTDB: orderData recibido:', orderData);
+        
         const u = auth.currentUser; 
+        console.log('saveOrderToRTDB: Usuario actual:', u ? u.uid : 'null');
+        
         if (!u) {
           console.log('saveOrderToRTDB: No hay usuario autenticado');
           return null;
@@ -9163,10 +9174,15 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
                         pointsEarned: shirtCount * 10,
                         cartItems: window.CART ? JSON.stringify(window.CART) : '[]'
                       };
+                      console.log('Checkout: orderPayload creado:', orderPayload);
+                      console.log('Checkout: saveOrderToRTDB disponible:', typeof window.saveOrderToRTDB);
                       if (window.saveOrderToRTDB) {
                         window.saveOrderToRTDB(orderPayload).then(()=>{
+                          console.log('Checkout: Pedido guardado exitosamente');
                           if (window.refreshProfileOrders) window.refreshProfileOrders();
                         }).catch(err=>console.error('saveOrderToRTDB promise error:', err));
+                      } else {
+                        console.warn('Checkout: saveOrderToRTDB no está disponible');
                       }
                     } catch(e) { console.warn('No se pudo guardar el pedido en RTDB:', e); }
                     // Redirigir si hay _next
@@ -9206,6 +9222,7 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
                                 
                                 // Guardar pedido en RTDB si el usuario está autenticado y refrescar panel Perfil
                                 try {
+                                  console.log('Checkout fallback: Intentando guardar pedido en RTDB...');
                                   const getVal = (id)=>{ const el = document.getElementById(id); return el ? (el.value||'').trim() : ''; };
                                   const totalNum = (precioTotalEl && precioTotalEl.value) ? parseFloat(String(precioTotalEl.value).replace(',', '.')) : 0;
                                   const shirtCount = (function(){ try { const c = computeCartTotals(); return (c && c.appliedOffer && c.appliedOffer.count) ? c.appliedOffer.count : 0; } catch(_) { return 0; } })();
@@ -9225,10 +9242,15 @@ btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('h
                                     pointsEarned: shirtCount * 10,
                                     cartItems: window.CART ? JSON.stringify(window.CART) : '[]'
                                   };
+                                  console.log('Checkout fallback: orderPayload creado:', orderPayload);
+                                  console.log('Checkout fallback: saveOrderToRTDB disponible:', typeof window.saveOrderToRTDB);
                                   if (window.saveOrderToRTDB) {
                                     window.saveOrderToRTDB(orderPayload).then(()=>{
+                                      console.log('Checkout fallback: Pedido guardado exitosamente');
                                       if (window.refreshProfileOrders) window.refreshProfileOrders();
                                     }).catch(err=>console.error('saveOrderToRTDB promise error:', err));
+                                  } else {
+                                    console.warn('Checkout fallback: saveOrderToRTDB no está disponible');
                                   }
                                 } catch(e) { console.warn('No se pudo guardar el pedido en RTDB:', e); }
                             }, 600);

@@ -139,3 +139,4 @@ El sistema incluye logs detallados en la consola del navegador para facilitar el
 - Notificaciones push para nuevos puntos
 - Programa de fidelidad por niveles
 - Estadísticas avanzadas para administradores
+
