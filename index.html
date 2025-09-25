@@ -908,6 +908,25 @@
                 background: linear-gradient(180deg, #ff9500 0%, #cc7700 100%);
             }
 
+            .discount-dropdown-btn.has-discounts {
+                background: linear-gradient(180deg, #4299e1 0%, #3182ce 100%);
+                border-color: #3182ce;
+                color: #fff;
+                animation: pulse-discount 2s infinite;
+            }
+
+            @keyframes pulse-discount {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.4);
+                }
+                70% {
+                    box-shadow: 0 0 0 10px rgba(66, 153, 225, 0);
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(66, 153, 225, 0);
+                }
+            }
+
             .dropdown-arrow {
                 font-size: 12px;
                 transition: transform 0.2s ease;
@@ -2198,40 +2217,74 @@
             // Si hay más de 1 camiseta, envío gratis global; si no, sumar shipping para nonShirtItems si existen
             const newShipping = (shirtCount > 1) ? 0 : (shirtsOfferShipping + (nonShirtItems.length>0 ? SHIPPING : 0));
 
-            // Aplicar descuentos comprados (no niveles)
+            // Aplicar descuentos seleccionados manualmente (no automáticamente)
             let adjustedSubtotal = newSubtotal;
             let loyaltyApplied = null;
-            try{
-              const rewards = Array.isArray(window.USER_ACTIVE_REWARDS) ? window.USER_ACTIVE_REWARDS : [];
-              // Elegir el mejor descuento disponible: prioridad Camiseta gratis; si no, mayor porcentaje
-              let chosen = null;
-              const free = rewards.find(r => String(r.kind) === 'freeShirt' && !r.used);
-              if (free && shirtCount > 0) {
-                chosen = free;
-              } else {
-                const order = { discount20: 0.20, discount15: 0.15, discount10: 0.10 };
-                chosen = rewards
-                  .filter(r => r.kind && String(r.kind).startsWith('discount') && !r.used)
-                  .sort((a,b)=> (order[String(b.kind)]||0) - (order[String(a.kind)]||0))[0] || null;
-              }
-              if (chosen) {
-                window.__APPLIED_REWARD = chosen; // global para marcarlo al confirmar compra
-                if (String(chosen.kind) === 'freeShirt' && shirtCount > 0) {
+            
+            // Verificar si hay un descuento aplicado manualmente (CURRENT_DISCOUNT)
+            try {
+              if (CURRENT_DISCOUNT && !CURRENT_DISCOUNT.used) {
+                console.log('Aplicando descuento seleccionado manualmente:', CURRENT_DISCOUNT);
+                
+                // Guardar el descuento aplicado para marcarlo al confirmar la compra
+                window.__APPLIED_REWARD = CURRENT_DISCOUNT;
+                
+                // Aplicar el descuento según su tipo
+                if (CURRENT_DISCOUNT.type === 'free_item' && shirtCount > 0) {
+                  // Descuento de camiseta gratis
                   const baseOffer = (OFFERS && OFFERS.find(o=>o.size===1) && OFFERS.find(o=>o.size===1).price) ? OFFERS.find(o=>o.size===1).price : 19.90;
                   const value = baseOffer;
                   adjustedSubtotal = Math.max(0, adjustedSubtotal - value);
-                  loyaltyApplied = { type:'reward', rewardId: chosen.id, rewardKind: chosen.kind, label: chosen.label, value };
-                } else {
-                  const kind = String(chosen.kind);
-                  const percent = (kind === 'discount20') ? 0.20 : (kind === 'discount15') ? 0.15 : 0.10;
+                  loyaltyApplied = { 
+                    type: 'reward', 
+                    rewardId: CURRENT_DISCOUNT.redemptionId || CURRENT_DISCOUNT.id, 
+                    rewardKind: CURRENT_DISCOUNT.kind || CURRENT_DISCOUNT.type, 
+                    label: CURRENT_DISCOUNT.title || CURRENT_DISCOUNT.name || 'Camiseta gratis', 
+                    value 
+                  };
+                } else if (CURRENT_DISCOUNT.type === 'percentage') {
+                  // Descuento porcentual
+                  const percent = CURRENT_DISCOUNT.value / 100;
                   const value = adjustedSubtotal * percent;
                   adjustedSubtotal = Math.max(0, adjustedSubtotal - value);
-                  loyaltyApplied = { type:'reward', rewardId: chosen.id, rewardKind: chosen.kind, label: chosen.label, value, percent };
+                  loyaltyApplied = { 
+                    type: 'reward', 
+                    rewardId: CURRENT_DISCOUNT.redemptionId || CURRENT_DISCOUNT.id, 
+                    rewardKind: CURRENT_DISCOUNT.kind || CURRENT_DISCOUNT.type, 
+                    label: CURRENT_DISCOUNT.title || CURRENT_DISCOUNT.name || `${CURRENT_DISCOUNT.value}% de descuento`, 
+                    value, 
+                    percent 
+                  };
+                } else if (CURRENT_DISCOUNT.type === 'fixed') {
+                  // Descuento de cantidad fija
+                  const value = Math.min(adjustedSubtotal, CURRENT_DISCOUNT.value);
+                  adjustedSubtotal = Math.max(0, adjustedSubtotal - value);
+                  loyaltyApplied = { 
+                    type: 'reward', 
+                    rewardId: CURRENT_DISCOUNT.redemptionId || CURRENT_DISCOUNT.id, 
+                    rewardKind: CURRENT_DISCOUNT.kind || CURRENT_DISCOUNT.type, 
+                    label: CURRENT_DISCOUNT.title || CURRENT_DISCOUNT.name || `${CURRENT_DISCOUNT.value}€ de descuento`, 
+                    value 
+                  };
+                } else if (CURRENT_DISCOUNT.type === 'free_shipping') {
+                  // Descuento de envío gratis
+                  loyaltyApplied = { 
+                    type: 'reward', 
+                    rewardId: CURRENT_DISCOUNT.redemptionId || CURRENT_DISCOUNT.id, 
+                    rewardKind: CURRENT_DISCOUNT.kind || CURRENT_DISCOUNT.type, 
+                    label: CURRENT_DISCOUNT.title || CURRENT_DISCOUNT.name || 'Envío gratis', 
+                    value: newShipping 
+                  };
+                  // El envío gratis se aplica más adelante
                 }
               } else {
+                // No hay descuento aplicado manualmente
                 window.__APPLIED_REWARD = null;
               }
-            }catch(_){ window.__APPLIED_REWARD = null; }
+            } catch(e) { 
+              console.error('Error al aplicar descuento:', e);
+              window.__APPLIED_REWARD = null; 
+            }
 
             const newTotal = adjustedSubtotal + newShipping;
 
@@ -4340,52 +4393,161 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
         function updateDiscountDropdown() {
             const discountList = document.getElementById('discountList');
-            if (!discountList) return;
+            const discountBtn = document.getElementById('discountDropdownBtn');
+            const discountBtnText = document.getElementById('discountBtnText');
             
+            if (!discountList) {
+                console.warn('No se encontró el elemento discountList');
+                return;
+            }
+            
+            // Limpiar la lista de descuentos
             discountList.innerHTML = '';
             
-            const availableDiscounts = USER_DISCOUNTS.filter(d => !d.used);
+            // Filtrar descuentos disponibles (no usados)
+            let availableDiscounts = Array.isArray(USER_DISCOUNTS) ? USER_DISCOUNTS.filter(d => !d.used) : [];
+            console.log('Descuentos disponibles (USER_DISCOUNTS):', availableDiscounts);
+
+            // Respaldo: si no hay descuentos en USER_DISCOUNTS, intentar con USER_ACTIVE_REWARDS
+            if ((!availableDiscounts || availableDiscounts.length === 0) && Array.isArray(window.USER_ACTIVE_REWARDS) && window.USER_ACTIVE_REWARDS.length > 0) {
+                try {
+                    availableDiscounts = window.USER_ACTIVE_REWARDS
+                        .filter(r => !r.used)
+                        .map(r => {
+                            const type = r.type === 'shipping' ? 'free_shipping' : (r.type || (r.kind === 'freeShirt' ? 'free_item' : 'percentage'));
+                            const value = typeof r.value === 'number' ? r.value : (r.kind === 'discount10' ? 10 : (r.kind === 'discount15' ? 15 : (r.kind === 'discount20' ? 20 : 0)));
+                            return {
+                                id: r.id || r.redemptionId,
+                                redemptionId: r.redemptionId || r.id,
+                                title: r.title || r.name || getDiscountTitle(type, value),
+                                description: r.description || getDiscountDescription(type, value),
+                                type,
+                                value,
+                                used: !!r.used
+                            };
+                        });
+                    console.log('Descuentos disponibles (USER_ACTIVE_REWARDS fallback):', availableDiscounts);
+                } catch (e) {
+                    console.warn('Error al transformar USER_ACTIVE_REWARDS:', e);
+                }
+            }
             
+            // Actualizar el texto del botón según la cantidad de descuentos disponibles
+            if (discountBtnText) {
+                if (availableDiscounts.length > 0) {
+                    discountBtnText.textContent = `Descuentos (${availableDiscounts.length})`;
+                    // Añadir una clase para destacar que hay descuentos disponibles
+                    if (discountBtn) {
+                        discountBtn.classList.add('has-discounts');
+                    }
+                } else {
+                    discountBtnText.textContent = 'Aplicar descuento';
+                    // Quitar la clase si no hay descuentos
+                    if (discountBtn) {
+                        discountBtn.classList.remove('has-discounts');
+                    }
+                }
+            }
+            
+            // Si no hay descuentos disponibles, mostrar mensaje
             if (availableDiscounts.length === 0) {
                 discountList.innerHTML = '<div class="discount-empty">No tienes descuentos disponibles</div>';
                 return;
             }
             
+            // Crear elementos para cada descuento disponible
             availableDiscounts.forEach(discount => {
                 const item = document.createElement('div');
                 item.className = 'discount-item';
                 item.style.cursor = 'pointer';
-                item.style.transition = 'background-color 0.2s ease';
+                item.style.transition = 'all 0.2s ease';
+                item.style.padding = '12px';
+                item.style.borderRadius = '8px';
+                item.style.marginBottom = '8px';
+                item.style.border = '1px solid rgba(102, 126, 234, 0.2)';
                 
                 // Crear HTML según el tipo de descuento
                 let discountHTML = '';
+                let discountIcon = '';
+                
+                // Determinar el icono según el tipo de descuento
+                switch (discount.type) {
+                    case 'percentage':
+                        discountIcon = '💯';
+                        break;
+                    case 'free_item':
+                        discountIcon = '🎁';
+                        break;
+                    case 'free_shipping':
+                        discountIcon = '🚚';
+                        break;
+                    case 'fixed':
+                        discountIcon = '💰';
+                        break;
+                    default:
+                        discountIcon = '🏷️';
+                }
+                
+                // Crear el HTML del descuento
                 switch (discount.type) {
                     case 'percentage':
                         discountHTML = `
-                            <div class="discount-item-title">${discount.title}</div>
-                            <div class="discount-item-description">Descuento del ${discount.value}% en tu pedido</div>
-                            <div class="discount-item-code">Descuento comprado • Disponible</div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div style="font-size:24px;">${discountIcon}</div>
+                                <div style="flex:1;">
+                                    <div class="discount-item-title" style="font-weight:600;margin-bottom:4px;">${discount.title || `${discount.value}% de descuento`}</div>
+                                    <div class="discount-item-description" style="font-size:12px;color:#718096;">Descuento del ${discount.value}% en tu pedido</div>
+                                    <div class="discount-item-code" style="font-size:11px;color:#4299e1;margin-top:4px;">Descuento canjeado • Clic para aplicar</div>
+                                </div>
+                            </div>
                         `;
                         break;
                     case 'free_item':
                         discountHTML = `
-                            <div class="discount-item-title">${discount.title}</div>
-                            <div class="discount-item-description">Una camiseta gratis en tu pedido</div>
-                            <div class="discount-item-code">Descuento comprado • Disponible</div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div style="font-size:24px;">${discountIcon}</div>
+                                <div style="flex:1;">
+                                    <div class="discount-item-title" style="font-weight:600;margin-bottom:4px;">${discount.title || 'Camiseta gratis'}</div>
+                                    <div class="discount-item-description" style="font-size:12px;color:#718096;">Una camiseta gratis en tu pedido</div>
+                                    <div class="discount-item-code" style="font-size:11px;color:#4299e1;margin-top:4px;">Descuento canjeado • Clic para aplicar</div>
+                                </div>
+                            </div>
                         `;
                         break;
                     case 'free_shipping':
                         discountHTML = `
-                            <div class="discount-item-title">${discount.title}</div>
-                            <div class="discount-item-description">Envío gratis en tu pedido</div>
-                            <div class="discount-item-code">Descuento comprado • Disponible</div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div style="font-size:24px;">${discountIcon}</div>
+                                <div style="flex:1;">
+                                    <div class="discount-item-title" style="font-weight:600;margin-bottom:4px;">${discount.title || 'Envío gratis'}</div>
+                                    <div class="discount-item-description" style="font-size:12px;color:#718096;">Envío gratis en tu pedido</div>
+                                    <div class="discount-item-code" style="font-size:11px;color:#4299e1;margin-top:4px;">Descuento canjeado • Clic para aplicar</div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'fixed':
+                        discountHTML = `
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div style="font-size:24px;">${discountIcon}</div>
+                                <div style="flex:1;">
+                                    <div class="discount-item-title" style="font-weight:600;margin-bottom:4px;">${discount.title || `${discount.value}€ de descuento`}</div>
+                                    <div class="discount-item-description" style="font-size:12px;color:#718096;">${discount.value}€ de descuento en tu pedido</div>
+                                    <div class="discount-item-code" style="font-size:11px;color:#4299e1;margin-top:4px;">Descuento canjeado • Clic para aplicar</div>
+                                </div>
+                            </div>
                         `;
                         break;
                     default:
                         discountHTML = `
-                            <div class="discount-item-title">${discount.title}</div>
-                            <div class="discount-item-description">${discount.description}</div>
-                            <div class="discount-item-code">Descuento comprado • Disponible</div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div style="font-size:24px;">${discountIcon}</div>
+                                <div style="flex:1;">
+                                    <div class="discount-item-title" style="font-weight:600;margin-bottom:4px;">${discount.title || 'Descuento'}</div>
+                                    <div class="discount-item-description" style="font-size:12px;color:#718096;">${discount.description || 'Descuento para tu próxima compra'}</div>
+                                    <div class="discount-item-code" style="font-size:11px;color:#4299e1;margin-top:4px;">Descuento canjeado • Clic para aplicar</div>
+                                </div>
+                            </div>
                         `;
                 }
                 
@@ -4394,14 +4556,115 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                 // Agregar efecto hover
                 item.addEventListener('mouseenter', () => {
                     item.style.backgroundColor = 'rgba(102, 126, 234, 0.1)';
+                    item.style.transform = 'translateY(-2px)';
+                    item.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.15)';
                 });
                 item.addEventListener('mouseleave', () => {
                     item.style.backgroundColor = '';
+                    item.style.transform = '';
+                    item.style.boxShadow = '';
                 });
                 
-                item.addEventListener('click', () => applyDiscount(discount));
+                // Agregar evento para aplicar el descuento al hacer clic
+                item.addEventListener('click', () => {
+                    console.log('Aplicando descuento:', discount);
+                    applyDiscount(discount);
+                });
+                
+                // Agregar el elemento a la lista
                 discountList.appendChild(item);
             });
+        }
+
+        // Cargar descuentos disponibles del usuario
+        async function loadUserDiscounts() {
+            try {
+                // Verificar si auth está definido
+                if (typeof auth === 'undefined' || !auth) {
+                    console.warn('Auth no está definido al cargar descuentos');
+                    USER_DISCOUNTS = [];
+                    updateDiscountDropdown();
+                    return;
+                }
+                
+                const user = auth.currentUser;
+                if (!user) {
+                    USER_DISCOUNTS = [];
+                    updateDiscountDropdown();
+                    return;
+                }
+                
+                // Obtener descuentos del usuario desde Firebase
+                // Usamos la misma ruta que la función redeemPoints del sistema de puntos
+                const redemptionsRef = ref(db, `users/${user.uid}/redemptions`);
+                const snapshot = await get(redemptionsRef);
+                
+                if (!snapshot.exists()) {
+                    USER_DISCOUNTS = [];
+                    updateDiscountDropdown();
+                    return;
+                }
+                
+                const redemptions = [];
+                snapshot.forEach((childSnapshot) => {
+                    const redemption = childSnapshot.val();
+                    if (!redemption.used) {
+                        redemptions.push({
+                            id: childSnapshot.key,
+                            redemptionId: childSnapshot.key,
+                            title: redemption.name || getDiscountTitle(redemption.type, redemption.value),
+                            description: redemption.description || getDiscountDescription(redemption.type, redemption.value),
+                            type: redemption.type,
+                            value: redemption.value,
+                            used: false,
+                            createdAt: redemption.createdAt
+                        });
+                    }
+                });
+                
+                USER_DISCOUNTS = redemptions;
+                updateDiscountDropdown();
+                
+                // Actualizar también la lista de descuentos en el perfil
+                renderOwnedDiscounts(redemptions);
+                
+            } catch (error) {
+                console.error('Error cargando descuentos del usuario:', error);
+                USER_DISCOUNTS = [];
+                updateDiscountDropdown();
+            }
+        }
+        
+        // Obtener título del descuento según su tipo y valor
+        function getDiscountTitle(type, value) {
+            switch (type) {
+                case 'percentage':
+                    return `${value}% de descuento`;
+                case 'fixed':
+                    return `${value}€ de descuento`;
+                case 'free_shipping':
+                    return 'Envío gratis';
+                case 'free_item':
+                    return 'Camiseta gratis';
+                default:
+                    return 'Descuento';
+            }
+        }
+        
+        // Obtener descripción del descuento según su tipo y valor
+        function getDiscountDescription(type, value) {
+            switch (type) {
+                case 'percentage':
+                    return `Descuento del ${value}% en tu pedido`;
+                case 'fixed':
+                    return `${value}€ de descuento en tu pedido`;
+                case 'free_shipping':
+                    return 'Envío gratis en tu pedido';
+                case 'free_item':
+                    return 'Una camiseta gratis en tu pedido';
+                default:
+                    return 'Descuento para tu próxima compra';
+            }
         }
 
         async function applyDiscount(discount) {
@@ -4420,28 +4683,34 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                     return;
                 }
 
-                // Marcar el descuento como usado en Firebase
-                if (discount.redemptionId) {
-                    const redemptionRef = ref(db, `loyaltyByUser/${user.uid}/redemptions/${discount.redemptionId}`);
-                    await set(redemptionRef, { 
-                        ...discount, 
-                        used: true, 
-                        usedAt: new Date().toISOString() 
-                    });
-                }
+                // No marcamos el descuento como usado en Firebase todavía
+                // Solo lo marcamos como seleccionado en la aplicación
+                // Se marcará como usado cuando se complete la compra
+                
+                console.log(`Descuento ${discount.redemptionId || discount.id} seleccionado para aplicar`);
+                
+                // Guardar una copia del descuento seleccionado
+                const discountCopy = { ...discount };
                 
                 // Quitar descuento anterior si existe
                 if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.redemptionId) {
                     // Restaurar el descuento anterior como no usado en Firebase
-                    const prevRedemptionRef = ref(db, `loyaltyByUser/${user.uid}/redemptions/${CURRENT_DISCOUNT.redemptionId}`);
-                    await set(prevRedemptionRef, { 
-                        ...CURRENT_DISCOUNT, 
-                        used: false 
-                    });
+                    // Usamos la misma ruta que la función loadUserDiscounts
+                    const prevRedemptionRef = ref(db, `users/${user.uid}/redemptions/${CURRENT_DISCOUNT.redemptionId}`);
+                    try {
+                        await set(prevRedemptionRef, { 
+                            ...CURRENT_DISCOUNT, 
+                            used: false 
+                        });
+                        console.log(`Descuento anterior ${CURRENT_DISCOUNT.redemptionId} restaurado como no usado`);
+                    } catch (error) {
+                        console.error(`Error al restaurar descuento anterior ${CURRENT_DISCOUNT.redemptionId}:`, error);
+                        // No lanzamos el error para que el nuevo descuento se aplique de todos modos
+                    }
                 }
                 
                 CURRENT_DISCOUNT = discount;
-                CURRENT_DISCOUNT.used = true;
+                CURRENT_DISCOUNT.used = false;
                 
                 // Actualizar UI
                 updateAppliedDiscount();
@@ -4465,11 +4734,18 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                 const user = auth.currentUser;
                 if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.redemptionId && user) {
                     // Marcar el descuento como no usado en Firebase
-                    const redemptionRef = ref(db, `loyaltyByUser/${user.uid}/redemptions/${CURRENT_DISCOUNT.redemptionId}`);
-                    await set(redemptionRef, { 
-                        ...CURRENT_DISCOUNT, 
-                        used: false 
-                    });
+                    // Usamos la misma ruta que la función loadUserDiscounts
+                    const redemptionRef = ref(db, `users/${user.uid}/redemptions/${CURRENT_DISCOUNT.redemptionId}`);
+                    try {
+                        await set(redemptionRef, { 
+                            ...CURRENT_DISCOUNT, 
+                            used: false 
+                        });
+                        console.log(`Descuento ${CURRENT_DISCOUNT.redemptionId} restaurado como no usado`);
+                    } catch (error) {
+                        console.error(`Error al restaurar descuento ${CURRENT_DISCOUNT.redemptionId}:`, error);
+                        throw error;
+                    }
                 }
                 
                 if (CURRENT_DISCOUNT) {
@@ -4491,12 +4767,42 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             const appliedContainer = document.getElementById('appliedDiscount');
             if (!appliedContainer) return;
             
-            if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.used) {
+            if (CURRENT_DISCOUNT) {
+                // Determinar el texto a mostrar según el tipo de descuento
+                let discountTitle = CURRENT_DISCOUNT.title || 'Descuento aplicado';
+                let discountCode = CURRENT_DISCOUNT.code || '';
+                
+                // Si es un descuento obtenido a través del sistema de puntos, mostrar información adicional
+                if (CURRENT_DISCOUNT.redemptionId) {
+                    // Mostrar información según el tipo de descuento
+                    switch (CURRENT_DISCOUNT.type) {
+                        case 'percentage':
+                            discountTitle = `${CURRENT_DISCOUNT.value}% de descuento`;
+                            discountCode = 'Canjeado con puntos';
+                            break;
+                        case 'fixed':
+                            discountTitle = `${CURRENT_DISCOUNT.value}€ de descuento`;
+                            discountCode = 'Canjeado con puntos';
+                            break;
+                        case 'free_shipping':
+                            discountTitle = 'Envío gratis';
+                            discountCode = 'Canjeado con puntos';
+                            break;
+                        case 'free_item':
+                            discountTitle = 'Camiseta gratis';
+                            discountCode = 'Canjeado con puntos';
+                            break;
+                        default:
+                            discountTitle = CURRENT_DISCOUNT.title || 'Descuento aplicado';
+                            discountCode = 'Canjeado con puntos';
+                    }
+                }
+                
                 appliedContainer.innerHTML = `
                     <div class="applied-discount-info">
                         <div>
-                            <div class="applied-discount-title">${CURRENT_DISCOUNT.title}</div>
-                            <div class="applied-discount-code">${CURRENT_DISCOUNT.code}</div>
+                            <div class="applied-discount-title">${discountTitle}</div>
+                            <div class="applied-discount-code">${discountCode}</div>
                         </div>
                         <button class="remove-discount-btn" onclick="removeDiscount()">×</button>
                     </div>
@@ -4508,12 +4814,20 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         }
 
         function validateDiscount(discount) {
-            if (!discount || discount.used) return false;
+            if (!discount) return false;
+            
+            // Si es un descuento obtenido a través del sistema de puntos, siempre es válido
+            if (discount.redemptionId) return true;
+            
+            // Para descuentos tradicionales, verificar si ya está usado
+            if (discount.used) return false;
             
             // Verificar fecha de expiración
-            const today = new Date();
-            const expires = new Date(discount.expires);
-            if (today > expires) return false;
+            if (discount.expires) {
+                const today = new Date();
+                const expires = new Date(discount.expires);
+                if (today > expires) return false;
+            }
             
             // Calcular subtotal actual
             let currentSubtotal = 0;
@@ -4534,7 +4848,13 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                     }
                     break;
                 case 'free_shipping':
-                    return currentSubtotal >= discount.value;
+                    return currentSubtotal >= (discount.value || 0);
+                case 'percentage':
+                    // Los descuentos porcentuales son válidos para cualquier compra
+                    return true;
+                case 'fixed':
+                    // Los descuentos fijos son válidos si el subtotal es mayor que el descuento
+                    return currentSubtotal >= (discount.value || 0);
             }
             
             return true;
@@ -4548,10 +4868,18 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             });
         }
 
-        function toggleDiscountDropdown() {
+        async function toggleDiscountDropdown() {
             const dropdown = document.getElementById('discountDropdown');
             const button = document.getElementById('discountDropdownBtn');
             if (dropdown && button) {
+                const willOpen = dropdown.classList.contains('hidden');
+                if (willOpen) {
+                    try {
+                        await loadUserDiscounts();
+                    } catch (e) {
+                        console.warn('No se pudo recargar descuentos antes de abrir el desplegable:', e);
+                    }
+                }
                 dropdown.classList.toggle('hidden');
                 button.classList.toggle('active');
                 
@@ -6062,22 +6390,22 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
               <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;">
                 <div style="color:#fff;font-weight:600;margin-bottom:6px;">10% de descuento</div>
                 <div style="color:#ffd700;font-size:12px;margin-bottom:10px;">20 pts</div>
-                <button onclick="redeemReward('discount10', 20, '10% de descuento')" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
+                <button id="redeem-discount10" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
               </div>
               <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;">
                 <div style="color:#fff;font-weight:600;margin-bottom:6px;">15% de descuento</div>
                 <div style="color:#ffd700;font-size:12px;margin-bottom:10px;">40 pts</div>
-                <button onclick="redeemReward('discount15', 40, '15% de descuento')" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
+                <button id="redeem-discount15" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
               </div>
               <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;">
                 <div style="color:#fff;font-weight:600;margin-bottom:6px;">20% de descuento</div>
                 <div style="color:#ffd700;font-size:12px;margin-bottom:10px;">60 pts</div>
-                <button onclick="redeemReward('discount20', 60, '20% de descuento')" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
+                <button id="redeem-discount20" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
               </div>
               <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;">
                 <div style="color:#fff;font-weight:600;margin-bottom:6px;">Camiseta gratis 🔥</div>
                 <div style="color:#ffd700;font-size:12px;margin-bottom:10px;">100 pts</div>
-                <button onclick="redeemReward('freeShirt', 100, 'Camiseta gratis')" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
+                <button id="redeem-freeShirt" style="width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">Canjear</button>
               </div>
             </div>
             <div id="redeem-msg" style="margin-top:12px;color:#fff;font-size:13px;"></div>
@@ -6402,51 +6730,165 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           return false;
         }
       },
+      
+      // Actualizar estado de pedido y asignar puntos si es necesario
+      async updateOrderStatus(orderId, uid, newStatus, adminUid = null) {
+        try {
+          if (!orderId || !uid || !newStatus) {
+            throw new Error('Datos insuficientes para actualizar estado del pedido');
+          }
+          
+          // Obtener datos actuales del pedido
+          const orderRef = ref(db, `ordersByUser/${uid}/${orderId}`);
+          const snapshot = await get(orderRef);
+          
+          if (!snapshot.exists()) {
+            throw new Error(`Pedido ${orderId} no encontrado`);
+          }
+          
+          const orderData = snapshot.val();
+          const oldStatus = orderData.status || 'pendiente-de-confirmacion';
+          
+          // Si el estado no ha cambiado, no hacer nada
+          if (oldStatus === newStatus) {
+            return { success: true, message: 'El estado ya era ' + newStatus, pointsAdded: 0 };
+          }
+          
+          // Actualizar estado del pedido
+          await set(ref(db, `ordersByUser/${uid}/${orderId}/status`), newStatus);
+          await set(ref(db, `ordersByUser/${uid}/${orderId}/statusUpdatedAt`), new Date().toISOString());
+          
+          if (adminUid) {
+            await set(ref(db, `ordersByUser/${uid}/${orderId}/statusUpdatedBy`), adminUid);
+          }
+          
+          // Si el nuevo estado es 'entregado', asignar puntos al usuario
+          let pointsAdded = 0;
+          if (newStatus === 'entregado') {
+            try {
+              // Calcular puntos (10 por cada camiseta)
+              const shirtsCount = orderData.shirtsCount || 0;
+              pointsAdded = shirtsCount * 10;
+              
+              if (pointsAdded > 0) {
+                // Verificar si ya se asignaron puntos por este pedido
+                const pointsByOrderRef = ref(db, `users/${uid}/pointsByOrder/${orderId}`);
+                const pointsSnapshot = await get(pointsByOrderRef);
+                
+                if (!pointsSnapshot.exists()) {
+                  // Asignar puntos al usuario
+                  const success = await this.addPoints(uid, pointsAdded, `Pedido entregado #${orderId}`, orderId);
+                  if (success) {
+                    console.log(`Puntos asignados automáticamente: ${pointsAdded} para usuario ${uid} por pedido ${orderId}`);
+                  } else {
+                    console.error(`Error al asignar puntos para el pedido ${orderId}`);
+                    throw new Error(`Error al asignar puntos para el pedido ${orderId}`);
+                  }
+                } else {
+                  console.log(`Ya se asignaron puntos para el pedido ${orderId}`);
+                  pointsAdded = 0; // No se agregaron nuevos puntos
+                }
+              }
+            } catch (pointsError) {
+              console.error('Error al asignar puntos:', pointsError);
+              // No lanzamos el error para que el cambio de estado se complete de todos modos
+              // pero registramos el error para depuración
+            }
+          }
+          
+          return { 
+            success: true, 
+            message: `Estado actualizado de ${oldStatus} a ${newStatus}`, 
+            pointsAdded: pointsAdded 
+          };
+        } catch (error) {
+          console.error('Error actualizando estado del pedido:', error);
+          return { 
+            success: false, 
+            message: error.message || 'Error desconocido', 
+            pointsAdded: 0 
+          };
+        }
+      },
 
       // Agregar puntos (por compra)
       async addPoints(uid, points, reason = 'Compra realizada', orderId = null) {
         try {
           // Validaciones de seguridad
           if (!uid || !points || points <= 0) {
+            console.error('Datos inválidos para agregar puntos:', { uid, points });
             throw new Error('Datos inválidos para agregar puntos');
           }
           
           // Prevenir duplicación por orderId
           if (orderId) {
             const existingPointsRef = ref(db, `users/${uid}/pointsByOrder/${orderId}`);
-            const existingSnapshot = await get(existingPointsRef);
-            if (existingSnapshot.exists()) {
-              console.log(`Puntos ya agregados para la orden ${orderId}`);
-              return true; // Ya se agregaron puntos para esta orden
+            try {
+              const existingSnapshot = await get(existingPointsRef);
+              if (existingSnapshot.exists()) {
+                console.log(`Puntos ya agregados para la orden ${orderId}`);
+                return true; // Ya se agregaron puntos para esta orden
+              }
+            } catch (checkError) {
+              console.error(`Error al verificar puntos existentes para la orden ${orderId}:`, checkError);
+              // Continuamos de todos modos para intentar agregar los puntos
             }
           }
           
-          const currentPoints = await this.getUserPoints(uid);
+          // Obtener puntos actuales del usuario
+          let currentPoints = 0;
+          try {
+            currentPoints = await this.getUserPoints(uid);
+            console.log(`Puntos actuales del usuario ${uid}: ${currentPoints}`);
+          } catch (pointsError) {
+            console.error(`Error al obtener puntos actuales del usuario ${uid}:`, pointsError);
+            // Si no podemos obtener los puntos actuales, asumimos 0
+          }
+          
           const newPoints = currentPoints + points;
+          console.log(`Nuevos puntos para el usuario ${uid}: ${newPoints} (${currentPoints} + ${points})`);
           
           const pointsRef = ref(db, `users/${uid}/points`);
           const pointsHistoryRef = ref(db, `users/${uid}/pointsHistory/${Date.now()}`);
           
           // Guardar nuevo saldo
-          await set(pointsRef, newPoints);
+          try {
+            await set(pointsRef, newPoints);
+            console.log(`Saldo actualizado para el usuario ${uid}: ${newPoints}`);
+          } catch (setError) {
+            console.error(`Error al guardar nuevo saldo para el usuario ${uid}:`, setError);
+            throw setError; // Propagamos el error
+          }
           
           // Registrar en historial
-          await set(pointsHistoryRef, {
-            previousPoints: currentPoints,
-            newPoints: newPoints,
-            difference: points,
-            reason: reason,
-            timestamp: new Date().toISOString(),
-            adminAction: false,
-            orderId: orderId
-          });
+          try {
+            await set(pointsHistoryRef, {
+              previousPoints: currentPoints,
+              newPoints: newPoints,
+              difference: points,
+              reason: reason,
+              timestamp: new Date().toISOString(),
+              adminAction: false,
+              orderId: orderId
+            });
+            console.log(`Historial actualizado para el usuario ${uid}`);
+          } catch (historyError) {
+            console.error(`Error al registrar historial para el usuario ${uid}:`, historyError);
+            // No propagamos el error para que el saldo se actualice de todos modos
+          }
           
           // Marcar como procesado si hay orderId
           if (orderId) {
-            await set(ref(db, `users/${uid}/pointsByOrder/${orderId}`), {
-              points: points,
-              timestamp: new Date().toISOString()
-            });
+            try {
+              await set(ref(db, `users/${uid}/pointsByOrder/${orderId}`), {
+                points: points,
+                timestamp: new Date().toISOString()
+              });
+              console.log(`Orden ${orderId} marcada como procesada para el usuario ${uid}`);
+            } catch (orderError) {
+              console.error(`Error al marcar orden ${orderId} como procesada para el usuario ${uid}:`, orderError);
+              // No propagamos el error para que el saldo se actualice de todos modos
+            }
           }
           
           return true;
@@ -6690,13 +7132,55 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         const confirmed = confirm(`¿Estás seguro de que quieres canjear ${reward.points} puntos por ${reward.name}?`);
         if (!confirmed) return;
         
-        await window.PointsSystem.redeemPoints(uid, reward.points, reward.type, reward.value);
+        // Obtener puntos disponibles del usuario
+        const userPoints = await window.PointsSystem.getUserPoints(uid);
+        
+        // Verificar que el usuario tenga suficientes puntos
+        if (userPoints < reward.points) {
+          showMessage(`No tienes suficientes puntos para canjear esta recompensa. Necesitas ${reward.points} puntos.`, 'error');
+          return;
+        }
+        
+        // Generar ID único para la recompensa
+        const rewardId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+        
+        // Crear objeto de recompensa para guardar en la base de datos
+        const rewardData = {
+          id: rewardId,
+          type: reward.type,
+          value: reward.value,
+          name: reward.name,
+          description: reward.description || `${reward.name} - ${reward.value}${reward.type === 'percentage' ? '%' : '€'} de descuento`,
+          points: reward.points,
+          createdAt: new Date().toISOString(),
+          used: false
+        };
+        
+        // Guardar recompensa en el inventario del usuario
+        // Usamos la misma ruta que la función redeemPoints del sistema de puntos
+        const rewardRef = ref(db, `users/${uid}/redemptions/${rewardId}`);
+        await set(rewardRef, rewardData);
+        
+        // Actualizar puntos del usuario utilizando la función redeemPoints del sistema de puntos
+        try {
+          await window.PointsSystem.redeemPoints(uid, reward.points, reward.type, reward.value);
+          console.log(`Puntos canjeados correctamente: ${reward.points} puntos por ${reward.name}`);
+        } catch (e) {
+          console.error('Error al canjear puntos con PointsSystem:', e);
+          throw e;
+        }
+        
+        // No necesitamos registrar en el historial de puntos aquí
+        // La función redeemPoints ya lo hace por nosotros
         
         // Mostrar mensaje de éxito
         showMessage(`¡Recompensa canjeada! ${reward.name} está disponible en tu próxima compra.`, 'success');
         
         // Recargar puntos y recompensas
         await loadUserPoints(uid);
+        
+        // Recargar descuentos disponibles en el carrito
+        await loadUserDiscounts();
         
       } catch (error) {
         console.error('Error canjeando recompensa:', error);
@@ -7154,10 +7638,31 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                 </div>
               </div>
             </div>
-            <span class="order-status-badge ${statusClass}">
-              <span style="display:inline-block;width:6px;height:6px;background:currentColor;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>
-              ${statusText}
-            </span>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+              <span class="order-status-badge ${statusClass}">
+                <span style="display:inline-block;width:6px;height:6px;background:currentColor;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>
+                ${statusText}
+              </span>
+              ${isAdmin(auth.currentUser) ? `
+                <div class="admin-order-controls" style="display:flex;gap:6px;">
+                  <select class="status-selector" data-order-id="${o.id}" data-user-id="${o.uid || ''}" style="
+                    background: rgba(255,255,255,0.1);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    color: #fff;
+                    padding: 4px 8px;
+                    border-radius: 6px;
+                    font-size: 12px;
+                    cursor: pointer;
+                  ">
+                    <option value="" disabled selected>Cambiar estado</option>
+                    <option value="pendiente-de-confirmacion" ${status === 'pendiente-de-confirmacion' ? 'disabled' : ''}>Pendiente</option>
+                    <option value="confirmado" ${status === 'confirmado' ? 'disabled' : ''}>Confirmado</option>
+                    <option value="entregado" ${status === 'entregado' ? 'disabled' : ''}>Entregado</option>
+                    <option value="recibido" ${status === 'recibido' ? 'disabled' : ''}>Recibido</option>
+                  </select>
+                </div>
+              ` : ''}
+            </div>
           </div>
           
           <div class="order-card-body">
@@ -7370,6 +7875,107 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           }
         };
       }
+      
+      // Añadir event listeners para los selectores de estado de pedido
+      setTimeout(() => {
+        document.querySelectorAll('.status-selector').forEach(selector => {
+          selector.addEventListener('change', async function() {
+            const orderId = this.getAttribute('data-order-id');
+            const userId = this.getAttribute('data-user-id');
+            const newStatus = this.value;
+            
+            if (!orderId || !userId || !newStatus) {
+              showMessage('Datos insuficientes para actualizar el estado', 'error');
+              return;
+            }
+            
+            try {
+              // Mostrar indicador de carga
+              this.disabled = true;
+              const originalText = this.options[0].textContent;
+              this.options[0].textContent = 'Actualizando...';
+              
+              // Actualizar estado del pedido
+              const result = await window.PointsSystem.updateOrderStatus(
+                orderId, 
+                userId, 
+                newStatus, 
+                auth.currentUser ? auth.currentUser.uid : null
+              );
+              
+              if (result.success) {
+                // Actualizar UI
+                const card = this.closest('.order-card');
+                if (card) {
+                  // Actualizar badge de estado
+                  const statusBadge = card.querySelector('.order-status-badge');
+                  if (statusBadge) {
+                    statusBadge.className = 'order-status-badge order-status-' + newStatus.toLowerCase().replace(/\s+/g, '-');
+                    const statusText = {
+                      'pendiente-de-confirmacion': 'Pendiente de Confirmación',
+                      'confirmado': 'Confirmado',
+                      'entregado': 'Entregado',
+                      'recibido': 'Recibido'
+                    }[newStatus.toLowerCase()] || newStatus;
+                    
+                    statusBadge.innerHTML = `
+                      <span style="display:inline-block;width:6px;height:6px;background:currentColor;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>
+                      ${statusText}
+                    `;
+                  }
+                  
+                  // Actualizar icono de estado
+                  const statusIconContainer = card.querySelector('.order-card-header > div > div > div:first-child');
+                  if (statusIconContainer) {
+                    const statusIcon = {
+                      'pendiente-de-confirmacion': '⏳',
+                      'confirmado': '✅',
+                      'entregado': '🎉',
+                      'recibido': '📦'
+                    }[newStatus.toLowerCase()] || '📦';
+                    
+                    statusIconContainer.innerHTML = statusIcon;
+                  }
+                  
+                  // Si se asignaron puntos, mostrar mensaje y actualizar panel de puntos
+                  if (result.pointsAdded > 0) {
+                    // Mostrar mensaje de puntos asignados
+                    showMessage(`¡Se han asignado ${result.pointsAdded} puntos al usuario por el pedido entregado!`, 'success');
+                    
+                    // Actualizar panel de puntos si es el usuario actual
+                    if (auth.currentUser && auth.currentUser.uid === userId) {
+                      await loadUserPoints(userId);
+                    }
+                    
+                    // Añadir o actualizar el indicador de puntos en la tarjeta
+                    const pointsContainer = card.querySelector('.order-card-body > div:first-child > div:last-child');
+                    if (pointsContainer) {
+                      pointsContainer.innerHTML = `
+                        <div style="background:linear-gradient(135deg, #f6d365 0%, #fda085 100%);border-radius:12px;padding:12px 20px;box-shadow:0 4px 12px rgba(253,160,133,0.3);">
+                          <div style="color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;font-weight:600;">Puntos ganados</div>
+                          <div style="color:#fff;font-size:24px;font-weight:700;">+${result.pointsAdded}</div>
+                        </div>
+                      `;
+                    }
+                  } else {
+                    showMessage(`Estado actualizado a ${newStatus}`, 'success');
+                  }
+                }
+              } else {
+                showMessage(`Error: ${result.message}`, 'error');
+              }
+            } catch (error) {
+              console.error('Error actualizando estado:', error);
+              showMessage('Error al actualizar el estado del pedido', 'error');
+            } finally {
+              // Restaurar selector
+              this.disabled = false;
+              this.options[0].textContent = originalText;
+              this.value = '';
+            }
+          });
+        });
+      }, 500);
     }
 
     function computeLoyaltyTier(points){
@@ -7470,10 +8076,42 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         const arr = Object.entries(obj).map(([id, data])=>({ id, ...(data||{}) }));
         arr.sort((a,b)=> new Date(b.date||b.createdAt||0) - new Date(a.date||a.createdAt||0));
         
-        // Contar puntos solo de pedidos confirmados
-        const lifetimePoints = arr.reduce((sum, o)=>{
+        // Leer puntos del usuario directamente
+        let availablePoints = 0;
+        try {
+          availablePoints = await window.PointsSystem.getUserPoints(uid);
+          console.log(`Puntos disponibles para el usuario ${uid}: ${availablePoints}`);
+        } catch(e) { 
+          console.error('Error obteniendo puntos del usuario:', e);
+          availablePoints = 0;
+        }
+
+        // Calcular puntos gastados
+        let spentPoints = 0;
+        try {
+          // Obtener historial de puntos para calcular los puntos gastados
+          const history = await window.PointsSystem.getPointsHistory(uid);
+          // Sumar todos los valores negativos (canjes)
+          spentPoints = history.reduce((sum, entry) => {
+            if (entry.difference < 0) {
+              return sum + Math.abs(entry.difference);
+            }
+            return sum;
+          }, 0);
+          console.log(`Puntos gastados por el usuario ${uid}: ${spentPoints}`);
+        } catch(e) { 
+          console.error('Error calculando puntos gastados:', e);
+          spentPoints = 0;
+        }
+
+        // Calcular puntos totales (disponibles + gastados)
+        let lifetimePoints = availablePoints + spentPoints;
+        
+        // Verificar si hay puntos en los pedidos confirmados (método anterior)
+        // y usar el valor más alto entre los dos métodos
+        const pointsFromOrders = arr.reduce((sum, o)=>{
           const st = String(o.status || '').toLowerCase();
-          if (st === 'confirmado') {
+          if (st === 'confirmado' || st === 'entregado') {
             if (typeof o.pointsEarned === 'number') return sum + o.pointsEarned;
             if (o.itemsText){
               const add = o.itemsText.split('\n').reduce((s,line)=>{ const m=line.match(/(\d+)x\s/i); return s + (m? parseInt(m[1],10)*10 : 0); }, 0);
@@ -7482,20 +8120,20 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           }
           return sum;
         }, 0);
-
-        // Leer puntos canjeados del usuario
-        let spentPoints = 0;
-        try {
-          const spentSnap = await get(ref(db, `loyaltyByUser/${uid}/spentPoints`));
-          spentPoints = Number(spentSnap.exists() ? spentSnap.val() : 0) || 0;
-        } catch(_){ spentPoints = 0; }
-
-        const availablePoints = Math.max(0, lifetimePoints - spentPoints);
+        
+        // Usar el valor más alto entre los dos métodos
+        if (pointsFromOrders > lifetimePoints) {
+          console.log(`Usando puntos calculados desde pedidos: ${pointsFromOrders} > ${lifetimePoints}`);
+          lifetimePoints = pointsFromOrders;
+          // Recalcular puntos disponibles
+          availablePoints = Math.max(0, lifetimePoints - spentPoints);
+        }
 
         // Leer redenciones del usuario y construir rewards activos (no usados)
         let activeRewards = [];
         try {
-          const redSnap = await get(ref(db, `loyaltyByUser/${uid}/redemptions`));
+          // Usar la misma ruta que la función redeemPoints
+          const redSnap = await get(ref(db, `users/${uid}/redemptions`));
           if (redSnap.exists()){
             const objR = redSnap.val() || {};
             const all = Object.entries(objR).map(([id, r])=>({ id, ...(r||{}) }));
@@ -7602,8 +8240,10 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         try{
           const ar = window.__APPLIED_REWARD;
           if (ar && ar.id) {
-            await set(ref(db, `loyaltyByUser/${uid}/redemptions/${ar.id}/used`), true);
-            await set(ref(db, `loyaltyByUser/${uid}/redemptions/${ar.id}/usedAt`), new Date().toISOString());
+            // Usamos la misma ruta que la función loadUserDiscounts
+            await set(ref(db, `users/${uid}/redemptions/${ar.id}/used`), true);
+            await set(ref(db, `users/${uid}/redemptions/${ar.id}/usedAt`), new Date().toISOString());
+            console.log(`Descuento ${ar.id} marcado como usado en la compra ${id}`);
             window.__APPLIED_REWARD = null;
           }
         }catch(eMark){ console.warn('No se pudo marcar el descuento como usado:', eMark); }
@@ -7622,43 +8262,111 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         const available = Number(window.USER_POINTS_AVAILABLE || 0);
         if (available < Number(cost||0)) { if (msgEl){ msgEl.textContent = 'No tienes puntos suficientes.'; msgEl.style.color = '#fecaca'; } return; }
 
-        // Leer puntos canjeados actuales
-        const spentRef = ref(db, `loyaltyByUser/${u.uid}/spentPoints`);
-        let currentSpent = 0;
-        try{ const s = await get(spentRef); if (s.exists()) currentSpent = Number(s.val()) || 0; }catch(_){ currentSpent = 0; }
-
-        const newSpent = currentSpent + Number(cost||0);
-        const rid = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-        const redemptionRef = ref(db, `loyaltyByUser/${u.uid}/redemptions/${rid}`);
-
-        await Promise.all([
-          set(spentRef, newSpent),
-          set(redemptionRef, { id: rid, kind: String(kind||''), label: String(label||''), points: Number(cost||0), createdAt: new Date().toISOString(), uid: u.uid, used: false })
-        ]);
-
-        const lifetime = Number(window.USER_POINTS_LIFETIME || 0);
-        const availableNew = Math.max(0, lifetime - newSpent);
-        window.USER_POINTS_SPENT = newSpent;
-        window.USER_POINTS_AVAILABLE = availableNew;
-
-        // Refrescar lista de redenciones
+        // Usar la función redeemReward del sistema de puntos
         try {
-          const redSnap = await get(ref(db, `loyaltyByUser/${u.uid}/redemptions`));
-          let activeRewards = [];
-          if (redSnap.exists()){
-            const objR = redSnap.val() || {};
-            const all = Object.entries(objR).map(([id, r])=>({ id, ...(r||{}) }));
-            activeRewards = all.filter(r => !r.used);
+          // Crear objeto de recompensa
+          const reward = {
+            type: 'percentage', // Por defecto, asumimos que es un descuento porcentual
+            value: 0,
+            points: Number(cost||0),
+            name: String(label||''),
+            description: `${label} - Canjeado por ${cost} puntos`
+          };
+          
+          // Determinar el tipo y valor según el kind
+          if (kind === 'discount10') {
+            reward.type = 'percentage';
+            reward.value = 10;
+          } else if (kind === 'discount15') {
+            reward.type = 'percentage';
+            reward.value = 15;
+          } else if (kind === 'discount20') {
+            reward.type = 'percentage';
+            reward.value = 20;
+          } else if (kind === 'freeShirt') {
+            reward.type = 'free_item';
+            reward.value = 1;
           }
-          window.USER_ACTIVE_REWARDS = activeRewards;
-          renderOwnedDiscounts(activeRewards);
-        } catch(e){ console.warn('refresh redemptions after redeem error', e); }
-
-        updatePointsPanel({ available: availableNew, lifetime, spent: newSpent });
-        if (msgEl){ msgEl.textContent = `Canjeado: ${label} (-${cost} pts)`; msgEl.style.color = '#bbf7d0'; }
+          
+          // Usar la función redeemReward que ya hemos corregido
+          await redeemReward(u.uid, reward);
+          
+          // Actualizar variables globales
+          const lifetime = Number(window.USER_POINTS_LIFETIME || 0);
+          const newSpent = Number(window.USER_POINTS_SPENT || 0) + Number(cost||0);
+          const availableNew = Math.max(0, lifetime - newSpent);
+          window.USER_POINTS_SPENT = newSpent;
+          window.USER_POINTS_AVAILABLE = availableNew;
+          
+          // Actualizar panel de puntos
+          updatePointsPanel({ available: availableNew, lifetime, spent: newSpent });
+          
+          // Mostrar mensaje de éxito
+          if (msgEl){ msgEl.textContent = `Canjeado: ${label} (-${cost} pts)`; msgEl.style.color = '#bbf7d0'; }
+          
+          // Actualizar el desplegable del carrito con el nuevo descuento
+          loadUserDiscounts();
+          
+          return;
+        } catch (redeemError) {
+          console.error('Error usando redeemReward:', redeemError);
+          // Continuar con el método antiguo como fallback
+        }
         
-        // Actualizar el desplegable del carrito con el nuevo descuento
-        loadUserDiscounts();
+        // Método antiguo (fallback)
+        try {
+          // Leer puntos canjeados actuales
+          const spentRef = ref(db, `users/${u.uid}/spentPoints`);
+          let currentSpent = 0;
+          try{ const s = await get(spentRef); if (s.exists()) currentSpent = Number(s.val()) || 0; }catch(_){ currentSpent = 0; }
+  
+          const newSpent = currentSpent + Number(cost||0);
+          const rid = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+          // Usamos la misma ruta que la función loadUserDiscounts
+          const redemptionRef = ref(db, `users/${u.uid}/redemptions/${rid}`);
+  
+          await Promise.all([
+            set(spentRef, newSpent),
+            set(redemptionRef, { 
+              id: rid, 
+              kind: String(kind||''), 
+              label: String(label||''), 
+              points: Number(cost||0), 
+              createdAt: new Date().toISOString(), 
+              uid: u.uid, 
+              used: false,
+              // Añadir campos compatibles con la nueva estructura
+              type: kind === 'freeShirt' ? 'free_item' : 'percentage',
+              value: kind === 'discount10' ? 10 : (kind === 'discount15' ? 15 : (kind === 'discount20' ? 20 : 0)),
+              name: String(label||''),
+              description: `${label} - Canjeado por ${cost} puntos`
+            })
+          ]);
+  
+          const lifetime = Number(window.USER_POINTS_LIFETIME || 0);
+          const availableNew = Math.max(0, lifetime - newSpent);
+          window.USER_POINTS_SPENT = newSpent;
+          window.USER_POINTS_AVAILABLE = availableNew;
+  
+          // Refrescar lista de redenciones
+          try {
+            // Usamos la misma ruta que la función loadUserDiscounts
+            const redSnap = await get(ref(db, `users/${u.uid}/redemptions`));
+            let activeRewards = [];
+            if (redSnap.exists()){
+              const objR = redSnap.val() || {};
+              const all = Object.entries(objR).map(([id, r])=>({ id, ...(r||{}) }));
+              activeRewards = all.filter(r => !r.used);
+            }
+            window.USER_ACTIVE_REWARDS = activeRewards;
+            renderOwnedDiscounts(activeRewards);
+          } catch(e){ console.warn('refresh redemptions after redeem error', e); }
+        } catch (fallbackError) {
+          console.error('Error en método fallback:', fallbackError);
+          throw fallbackError;
+        }
+
+        // No necesitamos actualizar el panel de puntos aquí, ya se hace en el método principal
       }catch(e){
         console.error('redeemReward error', e);
         const msgEl = document.getElementById('redeem-msg'); if (msgEl){ msgEl.textContent = 'Error al canjear. Inténtalo de nuevo.'; msgEl.style.color = '#fecaca'; }
@@ -7675,19 +8383,62 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           list.innerHTML = '<div style="color:#94a3b8;">No tienes descuentos comprados aún.</div>';
           return;
         }
-        const badge = (k)=> k==='freeShirt' ? '🔥 Gratis' : (k==='discount20'?'20% dto': k==='discount15'?'15% dto':'10% dto');
-        list.innerHTML = items.map(r=>`
-          <div class="owned-discount-item" style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;margin-bottom:8px;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <span>🎟️</span>
-              <div>
-                <div style="color:#fff;font-weight:600;">${r.label || badge(String(r.kind))}</div>
-                <div style="color:#94a3b8;font-size:12px;">${r.points||0} pts • Disponible</div>
+        
+        // Función para obtener el emoji y título según el tipo de descuento
+        function getDiscountInfo(reward) {
+          const type = reward.type || '';
+          const value = reward.value || 0;
+          
+          switch (type) {
+            case 'percentage':
+              return { emoji: '💯', title: `${value}% de descuento` };
+            case 'fixed':
+              return { emoji: '💰', title: `${value}€ de descuento` };
+            case 'free_shipping':
+              return { emoji: '🚚', title: 'Envío gratis' };
+            case 'free_item':
+              return { emoji: '🔥', title: 'Camiseta gratis' };
+            default:
+              if (reward.kind === 'freeShirt') return { emoji: '🔥', title: 'Camiseta gratis' };
+              if (reward.kind === 'discount20') return { emoji: '💯', title: '20% de descuento' };
+              if (reward.kind === 'discount15') return { emoji: '💯', title: '15% de descuento' };
+              if (reward.kind === 'discount10') return { emoji: '💯', title: '10% de descuento' };
+              return { emoji: '🎟️', title: reward.label || 'Descuento' };
+          }
+        }
+        
+        list.innerHTML = items.map(r=>{
+          const info = getDiscountInfo(r);
+          return `
+            <div class="owned-discount-item" style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;margin-bottom:8px;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span>${info.emoji}</span>
+                <div>
+                  <div style="color:#fff;font-weight:600;">${info.title}</div>
+                  <div style="color:#94a3b8;font-size:12px;">${r.points||0} pts • Disponible</div>
+                </div>
               </div>
+              <span style="color:#22c55e;font-size:12px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);padding:4px 8px;border-radius:999px;">Se aplicará automáticamente</span>
             </div>
-            <span style="color:#22c55e;font-size:12px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);padding:4px 8px;border-radius:999px;">Se aplicará automáticamente</span>
-          </div>
-        `).join('');
+          `;
+        }).join('');
+        
+        // Mostrar el contenedor de descuentos si hay descuentos disponibles
+        const toggleBtn = document.getElementById('toggle-owned-discounts');
+        if (toggleBtn) {
+          const span = toggleBtn.querySelector('span');
+          if (span) {
+            span.textContent = `🧾 Descuentos disponibles (${items.length})`;
+          }
+          
+          // Mostrar automáticamente la lista si hay descuentos
+          const listEl = document.getElementById('owned-discounts-list');
+          if (listEl) {
+            listEl.style.display = 'block';
+            const arrow = toggleBtn.querySelector('svg');
+            if (arrow) arrow.style.transform = 'rotate(180deg)';
+          }
+        }
         
         // Sincronizar con el desplegable del carrito
         loadUserDiscounts();
@@ -7714,7 +8465,113 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             await loadUserPoints(auth.currentUser.uid);
           }
         });
-btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profilePointsPanel.classList.add('hidden'); profileAccountPanel.classList.remove('hidden'); btnVerCuenta.classList.add('active'); btnVerPedidos.classList.remove('active'); btnVerPuntos.classList.remove('active'); });
+        btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profilePointsPanel.classList.add('hidden'); profileAccountPanel.classList.remove('hidden'); btnVerCuenta.classList.add('active'); btnVerPedidos.classList.remove('active'); btnVerPuntos.classList.remove('active'); });
+      }
+      
+      // Event listeners para los botones de canje de puntos
+      const redeemDiscount10Btn = document.getElementById('redeem-discount10');
+      const redeemDiscount15Btn = document.getElementById('redeem-discount15');
+      const redeemDiscount20Btn = document.getElementById('redeem-discount20');
+      const redeemFreeShirtBtn = document.getElementById('redeem-freeShirt');
+      
+      if (redeemDiscount10Btn) {
+        redeemDiscount10Btn.addEventListener('click', async () => {
+          // Verificar si auth está definido
+          if (typeof auth === 'undefined' || !auth) {
+            showMessage('Error al acceder al sistema de autenticación', 'error');
+            return;
+          }
+          
+          if (!auth.currentUser) {
+            showMessage('Debes iniciar sesión para canjear puntos', 'error');
+            return;
+          }
+          
+          const reward = {
+            type: 'percentage',
+            value: 10,
+            points: 20,
+            name: '10% de descuento',
+            description: 'Descuento del 10% en tu próxima compra'
+          };
+          
+          await redeemReward(auth.currentUser.uid, reward);
+        });
+      }
+      
+      if (redeemDiscount15Btn) {
+        redeemDiscount15Btn.addEventListener('click', async () => {
+          // Verificar si auth está definido
+          if (typeof auth === 'undefined' || !auth) {
+            showMessage('Error al acceder al sistema de autenticación', 'error');
+            return;
+          }
+          
+          if (!auth.currentUser) {
+            showMessage('Debes iniciar sesión para canjear puntos', 'error');
+            return;
+          }
+          
+          const reward = {
+            type: 'percentage',
+            value: 15,
+            points: 40,
+            name: '15% de descuento',
+            description: 'Descuento del 15% en tu próxima compra'
+          };
+          
+          await redeemReward(auth.currentUser.uid, reward);
+        });
+      }
+      
+      if (redeemDiscount20Btn) {
+        redeemDiscount20Btn.addEventListener('click', async () => {
+          // Verificar si auth está definido
+          if (typeof auth === 'undefined' || !auth) {
+            showMessage('Error al acceder al sistema de autenticación', 'error');
+            return;
+          }
+          
+          if (!auth.currentUser) {
+            showMessage('Debes iniciar sesión para canjear puntos', 'error');
+            return;
+          }
+          
+          const reward = {
+            type: 'percentage',
+            value: 20,
+            points: 60,
+            name: '20% de descuento',
+            description: 'Descuento del 20% en tu próxima compra'
+          };
+          
+          await redeemReward(auth.currentUser.uid, reward);
+        });
+      }
+      
+      if (redeemFreeShirtBtn) {
+        redeemFreeShirtBtn.addEventListener('click', async () => {
+          // Verificar si auth está definido
+          if (typeof auth === 'undefined' || !auth) {
+            showMessage('Error al acceder al sistema de autenticación', 'error');
+            return;
+          }
+          
+          if (!auth.currentUser) {
+            showMessage('Debes iniciar sesión para canjear puntos', 'error');
+            return;
+          }
+          
+          const reward = {
+            type: 'free_item',
+            value: 1,
+            points: 100,
+            name: 'Camiseta gratis',
+            description: 'Una camiseta gratis en tu próxima compra'
+          };
+          
+          await redeemReward(auth.currentUser.uid, reward);
+        });
       }
       const btnLogout = document.getElementById('btn-logout');
       if (btnLogout){ btnLogout.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){ console.error(e); } }); }
