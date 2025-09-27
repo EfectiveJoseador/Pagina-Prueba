@@ -273,7 +273,8 @@
         const uid = cred.user.uid;
         await set(ref(db, `users/${uid}`), {
           email,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          puntosCliente: 0
         });
         // Enviar correo de verificación (con fallback si el dominio no está autorizado)
         let verifOk = false;

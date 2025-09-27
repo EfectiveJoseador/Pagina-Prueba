@@ -2223,7 +2223,7 @@
             
             // Verificar si hay un descuento aplicado manualmente (CURRENT_DISCOUNT)
             try {
-              if (CURRENT_DISCOUNT && !CURRENT_DISCOUNT.used) {
+              if (CURRENT_DISCOUNT) {
                 console.log('Aplicando descuento seleccionado manualmente:', CURRENT_DISCOUNT);
                 
                 // Guardar el descuento aplicado para marcarlo al confirmar la compra
@@ -4168,7 +4168,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             let discountAmount = 0;
             let discountDescription = '';
             
-            if (CURRENT_DISCOUNT && CURRENT_DISCOUNT.used === false) {
+            if (CURRENT_DISCOUNT) {
                 const isValid = validateDiscount(CURRENT_DISCOUNT);
                 if (isValid) {
                     switch (CURRENT_DISCOUNT.type) {
@@ -4710,7 +4710,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                 }
                 
                 CURRENT_DISCOUNT = discount;
-                CURRENT_DISCOUNT.used = false;
+                CURRENT_DISCOUNT.used = true;
                 
                 // Actualizar UI
                 updateAppliedDiscount();
@@ -6366,9 +6366,9 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
               </div>
             </div>
             <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:16px;">
-              <div style="color:rgba(255,255,255,0.7);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Puntos Acumulados</div>
+              <div style="color:rgba(255,255,255,0.7);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Puntos Pendientes</div>
               <div style="color:#fff;font-size:28px;font-weight:700;display:flex;align-items:center;gap:8px;">
-                <span id="points-lifetime">0</span>
+                <span id="points-pending">0</span>
               </div>
             </div>
             <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:16px;">
@@ -6690,29 +6690,132 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
     // Sistema de Puntos - Funciones principales
     window.PointsSystem = {
-      // Obtener puntos del usuario
+      // Obtener puntos del usuario desde puntosCliente con migración automática
       async getUserPoints(uid) {
         try {
-          const pointsRef = ref(db, `users/${uid}/points`);
-          const snapshot = await get(pointsRef);
-          return snapshot.exists() ? snapshot.val() : 0;
+          const userRef = ref(db, `users/${uid}/puntosCliente`);
+          const snapshot = await get(userRef);
+          
+          // Si el campo puntosCliente no existe, migrar desde el sistema anterior
+          if (!snapshot.exists()) {
+            console.log('Campo puntosCliente no existe, iniciando migración automática...');
+            const migratedPoints = await this.migrateUserPoints(uid);
+            return migratedPoints;
+          }
+          
+          return snapshot.val() || 0;
         } catch (error) {
           console.error('Error obteniendo puntos:', error);
           return 0;
         }
       },
 
-      // Actualizar puntos del usuario
+      // Migrar puntos del sistema anterior al nuevo campo puntosCliente
+      async migrateUserPoints(uid) {
+        try {
+          console.log(`Iniciando migración de puntos para usuario: ${uid}`);
+          
+          // Obtener pedidos del usuario
+          const ordersSnap = await get(ref(db, `ordersByUser/${uid}`));
+          let calculatedPoints = 0;
+          let pendingPoints = 0;
+          
+          if (ordersSnap.exists()) {
+            const orders = ordersSnap.val() || {};
+            const ordersList = Object.entries(orders).map(([id, data]) => ({ id, ...(data || {}) }));
+            
+            // Calcular puntos basados en pedidos entregados y pendientes
+            const numVal = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
+            
+            ordersList.forEach(o => {
+              const st = String(o.status || '').toLowerCase();
+              let pointsForOrder = 0;
+              
+              // Calcular puntos para este pedido
+              const pe = numVal(o.pointsEarned);
+              if (pe > 0) {
+                pointsForOrder = pe;
+              } else {
+                const sc = numVal(o.shirtsCount);
+                if (sc > 0) {
+                  pointsForOrder = sc * 10;
+                } else if (o.itemsText) {
+                  pointsForOrder = o.itemsText.split('\n').reduce((s, line) => {
+                    const m = line.match(/(\d+)x\s/i);
+                    return s + (m ? parseInt(m[1], 10) * 10 : 0);
+                  }, 0);
+                }
+              }
+              
+              // Asignar a confirmados/entregados o pendientes
+              if (st === 'confirmado' || st === 'entregado') {
+                calculatedPoints += pointsForOrder;
+              } else {
+                // Puntos pendientes (pedidos no entregados)
+                pendingPoints += pointsForOrder;
+              }
+            });
+          }
+          
+          // Obtener puntos gastados en canjes anteriores
+          let spentPoints = 0;
+          try {
+            const redemptionsSnap = await get(ref(db, `users/${uid}/redemptions`));
+            if (redemptionsSnap.exists()) {
+              const redemptions = redemptionsSnap.val() || {};
+              spentPoints = Object.values(redemptions).reduce((sum, redemption) => {
+                return sum + (redemption.points || 0);
+              }, 0);
+            }
+          } catch (e) {
+            console.warn('Error calculando puntos gastados durante migración:', e);
+          }
+          
+          // Calcular puntos disponibles (ganados + pendientes - gastados)
+          // Incluimos los pendientes como solicitado
+          const totalPoints = calculatedPoints + pendingPoints;
+          const availablePoints = Math.max(0, totalPoints - spentPoints);
+          
+          console.log(`Migración: Puntos calculados: ${calculatedPoints}, Pendientes: ${pendingPoints}, Gastados: ${spentPoints}, Disponibles: ${availablePoints}`);
+          
+          // Guardar en el nuevo campo puntosCliente
+          const userRef = ref(db, `users/${uid}/puntosCliente`);
+          await set(userRef, availablePoints);
+          
+          // Registrar la migración en el historial
+          const migrationHistoryRef = ref(db, `users/${uid}/pointsHistory/${Date.now()}`);
+          await set(migrationHistoryRef, {
+            previousPoints: 0,
+            newPoints: availablePoints,
+            difference: availablePoints,
+            reason: 'Migración automática del sistema anterior (incluye puntos pendientes)',
+            timestamp: new Date().toISOString(),
+            migration: true,
+            calculatedFromOrders: calculatedPoints,
+            pendingPoints: pendingPoints,
+            spentPoints: spentPoints
+          });
+          
+          console.log(`Migración completada para usuario ${uid}: ${availablePoints} puntos (incluye ${pendingPoints} pendientes)`);
+          return availablePoints;
+          
+        } catch (error) {
+          console.error('Error durante la migración de puntos:', error);
+          return 0;
+        }
+      },
+
+      // Actualizar puntos del usuario directamente en puntosCliente
       async updateUserPoints(uid, newPoints, reason = 'Ajuste manual') {
         try {
-          const pointsRef = ref(db, `users/${uid}/points`);
+          const userRef = ref(db, `users/${uid}/puntosCliente`);
           const pointsHistoryRef = ref(db, `users/${uid}/pointsHistory/${Date.now()}`);
           
           // Obtener puntos actuales
           const currentPoints = await this.getUserPoints(uid);
           
-          // Guardar nuevo saldo
-          await set(pointsRef, newPoints);
+          // Guardar nuevo saldo en puntosCliente
+          await set(userRef, newPoints);
           
           // Registrar en historial
           await set(pointsHistoryRef, {
@@ -6728,6 +6831,82 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         } catch (error) {
           console.error('Error actualizando puntos:', error);
           return false;
+        }
+      },
+
+      // Añadir puntos al usuario (para cuando se confirmen pedidos)
+      async addPoints(uid, pointsToAdd, reason = 'Puntos por pedido') {
+        try {
+          const currentPoints = await this.getUserPoints(uid);
+          const newPoints = currentPoints + pointsToAdd;
+          return await this.updateUserPoints(uid, newPoints, reason);
+        } catch (error) {
+          console.error('Error añadiendo puntos:', error);
+          return false;
+        }
+      },
+
+      // Restar puntos al usuario (para canjes)
+      async subtractPoints(uid, pointsToSubtract, reason = 'Canje de recompensa') {
+        try {
+          const currentPoints = await this.getUserPoints(uid);
+          if (currentPoints < pointsToSubtract) {
+            throw new Error('Puntos insuficientes');
+          }
+          const newPoints = currentPoints - pointsToSubtract;
+          return await this.updateUserPoints(uid, newPoints, reason);
+        } catch (error) {
+          console.error('Error restando puntos:', error);
+          return false;
+        }
+      },
+      
+      // Verificar si el usuario tiene suficientes puntos para canjear
+      // Incluye sistema de respaldo para usar window.USER_POINTS_AVAILABLE si falla la base de datos
+      async verifyUserHasEnoughPoints(uid, pointsNeeded) {
+        try {
+          // Intentar obtener puntos de la base de datos primero
+          const dbPoints = await this.getUserPoints(uid);
+          
+          if (dbPoints >= pointsNeeded) {
+            console.log(`Verificación de puntos exitosa desde DB: ${dbPoints} >= ${pointsNeeded}`);
+            return true;
+          }
+          
+          // Si no hay suficientes puntos en la base de datos, verificar el respaldo
+          console.log(`Puntos insuficientes en DB (${dbPoints}), verificando respaldo...`);
+          
+          // Usar window.USER_POINTS_AVAILABLE como respaldo
+          const backupPoints = window.USER_POINTS_AVAILABLE || 0;
+          
+          if (backupPoints >= pointsNeeded) {
+            console.log(`Verificación de puntos exitosa desde respaldo: ${backupPoints} >= ${pointsNeeded}`);
+            
+            // Intentar sincronizar los puntos del respaldo con la base de datos
+            try {
+              console.log(`Sincronizando puntos de respaldo (${backupPoints}) con la base de datos`);
+              await this.updateUserPoints(uid, backupPoints, 'Sincronización desde respaldo');
+            } catch (syncError) {
+              console.warn('No se pudieron sincronizar los puntos con la base de datos:', syncError);
+              // Continuamos aunque falle la sincronización
+            }
+            
+            return true;
+          }
+          
+          // No hay suficientes puntos en ninguna fuente
+          console.log(`Puntos insuficientes en ambas fuentes. DB: ${dbPoints}, Respaldo: ${backupPoints}, Necesarios: ${pointsNeeded}`);
+          return false;
+          
+        } catch (error) {
+          console.error('Error al verificar puntos del usuario:', error);
+          
+          // En caso de error, intentar usar el respaldo
+          const backupPoints = window.USER_POINTS_AVAILABLE || 0;
+          const hasEnough = backupPoints >= pointsNeeded;
+          
+          console.log(`Usando puntos de respaldo debido a error: ${backupPoints} ${hasEnough ? '>=' : '<'} ${pointsNeeded}`);
+          return hasEnough;
         }
       },
       
@@ -6776,8 +6955,8 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                 const pointsSnapshot = await get(pointsByOrderRef);
                 
                 if (!pointsSnapshot.exists()) {
-                  // Asignar puntos al usuario
-                  const success = await this.addPoints(uid, pointsAdded, `Pedido entregado #${orderId}`, orderId);
+                  // Asignar puntos al usuario usando la nueva función
+                  const success = await this.addPoints(uid, pointsAdded, `Pedido entregado #${orderId}`);
                   if (success) {
                     console.log(`Puntos asignados automáticamente: ${pointsAdded} para usuario ${uid} por pedido ${orderId}`);
                   } else {
@@ -6811,74 +6990,14 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         }
       },
 
-      // Agregar puntos (por compra)
+      // Agregar puntos (por compra) - FUNCIÓN LEGACY - Usar PointsSystem.addPoints en su lugar
       async addPoints(uid, points, reason = 'Compra realizada', orderId = null) {
         try {
-          // Validaciones de seguridad
-          if (!uid || !points || points <= 0) {
-            console.error('Datos inválidos para agregar puntos:', { uid, points });
-            throw new Error('Datos inválidos para agregar puntos');
-          }
-          
-          // Prevenir duplicación por orderId
-          if (orderId) {
-            const existingPointsRef = ref(db, `users/${uid}/pointsByOrder/${orderId}`);
-            try {
-              const existingSnapshot = await get(existingPointsRef);
-              if (existingSnapshot.exists()) {
-                console.log(`Puntos ya agregados para la orden ${orderId}`);
-                return true; // Ya se agregaron puntos para esta orden
-              }
-            } catch (checkError) {
-              console.error(`Error al verificar puntos existentes para la orden ${orderId}:`, checkError);
-              // Continuamos de todos modos para intentar agregar los puntos
-            }
-          }
-          
-          // Obtener puntos actuales del usuario
-          let currentPoints = 0;
-          try {
-            currentPoints = await this.getUserPoints(uid);
-            console.log(`Puntos actuales del usuario ${uid}: ${currentPoints}`);
-          } catch (pointsError) {
-            console.error(`Error al obtener puntos actuales del usuario ${uid}:`, pointsError);
-            // Si no podemos obtener los puntos actuales, asumimos 0
-          }
-          
-          const newPoints = currentPoints + points;
-          console.log(`Nuevos puntos para el usuario ${uid}: ${newPoints} (${currentPoints} + ${points})`);
-          
-          const pointsRef = ref(db, `users/${uid}/points`);
-          const pointsHistoryRef = ref(db, `users/${uid}/pointsHistory/${Date.now()}`);
-          
-          // Guardar nuevo saldo
-          try {
-            await set(pointsRef, newPoints);
-            console.log(`Saldo actualizado para el usuario ${uid}: ${newPoints}`);
-          } catch (setError) {
-            console.error(`Error al guardar nuevo saldo para el usuario ${uid}:`, setError);
-            throw setError; // Propagamos el error
-          }
-          
-          // Registrar en historial
-          try {
-            await set(pointsHistoryRef, {
-              previousPoints: currentPoints,
-              newPoints: newPoints,
-              difference: points,
-              reason: reason,
-              timestamp: new Date().toISOString(),
-              adminAction: false,
-              orderId: orderId
-            });
-            console.log(`Historial actualizado para el usuario ${uid}`);
-          } catch (historyError) {
-            console.error(`Error al registrar historial para el usuario ${uid}:`, historyError);
-            // No propagamos el error para que el saldo se actualice de todos modos
-          }
+          // Usar la nueva función del PointsSystem
+          const success = await window.PointsSystem.addPoints(uid, points, reason);
           
           // Marcar como procesado si hay orderId
-          if (orderId) {
+          if (success && orderId) {
             try {
               await set(ref(db, `users/${uid}/pointsByOrder/${orderId}`), {
                 points: points,
@@ -6887,13 +7006,12 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
               console.log(`Orden ${orderId} marcada como procesada para el usuario ${uid}`);
             } catch (orderError) {
               console.error(`Error al marcar orden ${orderId} como procesada para el usuario ${uid}:`, orderError);
-              // No propagamos el error para que el saldo se actualice de todos modos
             }
           }
           
-          return true;
+          return success;
         } catch (error) {
-          console.error('Error agregando puntos:', error);
+          console.error('Error en addPoints legacy:', error);
           return false;
         }
       },
@@ -7037,7 +7155,13 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     // Cargar puntos del usuario
     async function loadUserPoints(uid) {
       try {
+        // Obtener puntos disponibles del usuario
         const points = await window.PointsSystem.getUserPoints(uid);
+        
+        // Actualizar la variable global para asegurar consistencia
+        window.USER_POINTS_AVAILABLE = points;
+        console.log('loadUserPoints: Puntos disponibles actualizados:', points);
+        
         const pointsBalanceEl = document.getElementById('user-points-balance');
         const pointsTotalEl = document.getElementById('points-total');
         
@@ -7062,8 +7186,12 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       
       rewardsGrid.innerHTML = '';
       
+      // Usar window.USER_POINTS_AVAILABLE directamente para asegurar consistencia
+      const availablePoints = Number(window.USER_POINTS_AVAILABLE || userPoints || 0);
+      console.log('Puntos disponibles para mostrar recompensas:', availablePoints);
+      
       AVAILABLE_REWARDS.forEach(reward => {
-        const canAfford = userPoints >= reward.points;
+        const canAfford = availablePoints >= reward.points;
         const rewardCard = document.createElement('div');
         rewardCard.className = 'reward-card';
         rewardCard.style.cssText = `
@@ -7132,12 +7260,21 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         const confirmed = confirm(`¿Estás seguro de que quieres canjear ${reward.points} puntos por ${reward.name}?`);
         if (!confirmed) return;
         
-        // Obtener puntos disponibles del usuario
-        const userPoints = await window.PointsSystem.getUserPoints(uid);
+        // Verificar puntos disponibles con sistema de respaldo
+        // Implementamos la nueva función que verifica tanto en BD como en USER_POINTS_AVAILABLE
+        const hasEnoughPoints = await window.PointsSystem.verifyUserHasEnoughPoints(uid, reward.points);
+        console.log(`Verificación de puntos para canje: ${hasEnoughPoints ? 'Suficientes' : 'Insuficientes'}`);
         
-        // Verificar que el usuario tenga suficientes puntos
-        if (userPoints < reward.points) {
-          showMessage(`No tienes suficientes puntos para canjear esta recompensa. Necesitas ${reward.points} puntos.`, 'error');
+        if (!hasEnoughPoints) {
+          const displayPoints = window.USER_POINTS_AVAILABLE || await window.PointsSystem.getUserPoints(uid) || 0;
+          showMessage(`No tienes suficientes puntos. Necesitas ${reward.points} puntos pero solo tienes ${displayPoints}.`, 'error');
+          return;
+        }
+        
+        // Restar puntos usando la función del PointsSystem
+        const success = await window.PointsSystem.subtractPoints(uid, reward.points, `Canje: ${reward.name}`);
+        if (!success) {
+          showMessage('Error al procesar el canje. Inténtalo de nuevo.', 'error');
           return;
         }
         
@@ -7157,21 +7294,10 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         };
         
         // Guardar recompensa en el inventario del usuario
-        // Usamos la misma ruta que la función redeemPoints del sistema de puntos
         const rewardRef = ref(db, `users/${uid}/redemptions/${rewardId}`);
         await set(rewardRef, rewardData);
         
-        // Actualizar puntos del usuario utilizando la función redeemPoints del sistema de puntos
-        try {
-          await window.PointsSystem.redeemPoints(uid, reward.points, reward.type, reward.value);
-          console.log(`Puntos canjeados correctamente: ${reward.points} puntos por ${reward.name}`);
-        } catch (e) {
-          console.error('Error al canjear puntos con PointsSystem:', e);
-          throw e;
-        }
-        
-        // No necesitamos registrar en el historial de puntos aquí
-        // La función redeemPoints ya lo hace por nosotros
+        console.log(`Puntos canjeados correctamente: ${reward.points} puntos por ${reward.name}`);
         
         // Mostrar mensaje de éxito
         showMessage(`¡Recompensa canjeada! ${reward.name} está disponible en tu próxima compra.`, 'success');
@@ -7945,6 +8071,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                     // Actualizar panel de puntos si es el usuario actual
                     if (auth.currentUser && auth.currentUser.uid === userId) {
                       await loadUserPoints(userId);
+                      await loadUserOrders(userId);
                     }
                     
                     // Añadir o actualizar el indicador de puntos en la tarjeta
@@ -7991,36 +8118,47 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       try{
         const totalEl = document.getElementById('points-total');
         const lifeEl = document.getElementById('points-lifetime');
+        const pendingEl = document.getElementById('points-pending');
         const spentEl = document.getElementById('points-spent');
         const tierLine = document.getElementById('points-tier-line');
         const nextMsg = document.getElementById('points-next-msg');
         const progress = document.getElementById('points-progress');
-        if (!totalEl) return;
+        // Continuar incluso si totalEl no existe; actualizaremos pendientes/gastados y solo animaremos disponibles si totalEl está presente.
         
         const isObj = points && typeof points === 'object';
         const available = isObj ? Number(points.available || 0) : Number(points || 0);
         const lifetime = isObj ? Number(points.lifetime || 0) : Number(window.USER_POINTS || available || 0);
+        const pending = isObj ? Number(points.pending || 0) : 0;
         const spent = isObj ? Number(points.spent || Math.max(0, lifetime - available)) : Math.max(0, lifetime - available);
 
         if (lifeEl) lifeEl.textContent = String(lifetime);
+        if (pendingEl) pendingEl.textContent = String(pending);
         if (spentEl) spentEl.textContent = String(spent);
 
-        // Animación del contador de puntos (disponibles)
-        const currentPoints = parseInt(totalEl.textContent) || 0;
-        const targetPoints = available;
-        const increment = (targetPoints - currentPoints) / 20;
-        let step = 0;
-        
-        if (currentPoints !== targetPoints) {
-          const counter = setInterval(() => {
-            step++;
-            const newValue = Math.round(currentPoints + increment * step);
-            totalEl.textContent = String(newValue);
-            if (step >= 20) {
-              clearInterval(counter);
-              totalEl.textContent = String(targetPoints);
-            }
-          }, 30);
+        // Actualizar puntos disponibles en ambas vistas si existen
+        const balanceEl = document.getElementById('user-points-balance');
+        if (balanceEl) balanceEl.textContent = String(available);
+
+        // Animación del contador de puntos (disponibles) solo si existe el elemento
+        if (totalEl) {
+          const currentPoints = parseInt(totalEl.textContent) || 0;
+          const targetPoints = available;
+          const increment = (targetPoints - currentPoints) / 20;
+          let step = 0;
+          
+          if (currentPoints !== targetPoints) {
+            const counter = setInterval(() => {
+              step++;
+              const newValue = Math.round(currentPoints + increment * step);
+              totalEl.textContent = String(newValue);
+              if (step >= 20) {
+                clearInterval(counter);
+                totalEl.textContent = String(targetPoints);
+              }
+            }, 30);
+          } else {
+            totalEl.textContent = String(targetPoints);
+          }
         }
         
         // Opcional: Tier y progreso (solo si existen elementos en el DOM)
@@ -8109,10 +8247,14 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         
         // Verificar si hay puntos en los pedidos confirmados (método anterior)
         // y usar el valor más alto entre los dos métodos
+        const numVal = (v)=>{ const n = Number(v); return Number.isFinite(n) ? n : 0; };
         const pointsFromOrders = arr.reduce((sum, o)=>{
           const st = String(o.status || '').toLowerCase();
           if (st === 'confirmado' || st === 'entregado') {
-            if (typeof o.pointsEarned === 'number') return sum + o.pointsEarned;
+            const pe = numVal(o.pointsEarned);
+            if (pe > 0) return sum + pe;
+            const sc = numVal(o.shirtsCount);
+            if (sc > 0) return sum + (sc * 10);
             if (o.itemsText){
               const add = o.itemsText.split('\n').reduce((s,line)=>{ const m=line.match(/(\d+)x\s/i); return s + (m? parseInt(m[1],10)*10 : 0); }, 0);
               return sum + add;
@@ -8152,7 +8294,24 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         window.USER_POINTS_AVAILABLE = availablePoints;
         window.USER_ACTIVE_REWARDS = activeRewards;
 
-        updatePointsPanel({ available: availablePoints, lifetime: lifetimePoints, spent: spentPoints });
+        // Guardar pedidos en global para cálculos de puntos pendientes
+        window.USER_ORDERS = arr;
+        // Calcular puntos pendientes (pedidos no entregados)
+        const pendingPoints = arr.reduce((sum, o) => {
+          const st = String(o.status || '').toLowerCase();
+          if (st !== 'entregado') {
+            const pe = numVal(o.pointsEarned);
+            if (pe > 0) return sum + pe;
+            const sc = numVal(o.shirtsCount);
+            if (sc > 0) return sum + (sc * 10);
+            if (o.itemsText) {
+              const add = o.itemsText.split('\n').reduce((s, line) => { const m = line.match(/(\d+)x\s/i); return s + (m ? parseInt(m[1], 10) * 10 : 0); }, 0);
+              return sum + add;
+            }
+          }
+          return sum;
+        }, 0);
+        updatePointsPanel({ available: availablePoints, pending: pendingPoints, lifetime: lifetimePoints, spent: spentPoints });
         renderOrdersList(arr);
       }catch(err){ 
         console.error('Error cargando pedidos:', err); 
@@ -8227,15 +8386,8 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         await set(ref(db, `ordersByUser/${uid}/${id}`), payload);
         console.log('saveOrderToRTDB: Pedido guardado exitosamente con ID:', id);
         
-        // Agregar puntos por la compra
-        if (pointsEarned > 0) {
-          try {
-            await window.PointsSystem.addPoints(uid, pointsEarned, `Compra #${id}`, id);
-            console.log(`Puntos agregados: ${pointsEarned} para usuario ${uid}`);
-          } catch (pointsError) {
-            console.error('Error agregando puntos:', pointsError);
-          }
-        }
+        // Nota: ya no se agregan puntos al crear el pedido.
+        // Los puntos se acreditan automáticamente cuando el pedido pasa a estado 'entregado' (ver PointsSystem.updateOrderStatus).
         // Si hay un descuento aplicado, marcarlo como usado
         try{
           const ar = window.__APPLIED_REWARD;
@@ -8259,7 +8411,11 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
         const u = auth.currentUser; 
         const msgEl = document.getElementById('redeem-msg');
         if (!u){ if (msgEl){ msgEl.textContent = 'Inicia sesión para canjear.'; msgEl.style.color = '#fecaca'; } return; }
+        
+        // Usar window.USER_POINTS_AVAILABLE directamente en lugar de obtener los puntos de nuevo
+        // Esto asegura que usamos el mismo valor que se muestra en la UI
         const available = Number(window.USER_POINTS_AVAILABLE || 0);
+        console.log('Puntos disponibles para canje:', available, 'Costo:', Number(cost||0));
         if (available < Number(cost||0)) { if (msgEl){ msgEl.textContent = 'No tienes puntos suficientes.'; msgEl.style.color = '#fecaca'; } return; }
 
         // Usar la función redeemReward del sistema de puntos
@@ -8463,6 +8619,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           // Cargar puntos si hay usuario autenticado
           if (auth.currentUser) {
             await loadUserPoints(auth.currentUser.uid);
+            await loadUserOrders(auth.currentUser.uid);
           }
         });
         btnVerCuenta.addEventListener('click', ()=>{ profileOrdersPanel.classList.add('hidden'); profilePointsPanel.classList.add('hidden'); profileAccountPanel.classList.remove('hidden'); btnVerCuenta.classList.add('active'); btnVerPedidos.classList.remove('active'); btnVerPuntos.classList.remove('active'); });
