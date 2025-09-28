@@ -48,6 +48,170 @@
             border-radius: 15px;
             border: 1px solid rgba(42, 91, 168, 0.2);
             transition: transform 0.3s ease;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .item-detalle img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .item-info {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .item-nombre {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .item-descripcion {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        .item-precio {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--azul-acento);
+        }
+
+        .resumen-pedido {
+            background: rgba(42, 91, 168, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .resumen-fila {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .resumen-fila:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .resumen-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--azul-acento);
+        }
+
+        .seccion-puntos {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(42, 91, 168, 0.1) 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            animation: brilloPuntos 2s ease-in-out infinite;
+        }
+
+        .puntos-ganados {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4CAF50;
+            margin: 1rem 0;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .puntos-descripcion {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .puntos-beneficios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .beneficio-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .beneficio-item i {
+            font-size: 2rem;
+            color: var(--azul-acento);
+            margin-bottom: 1rem;
+        }
+
+        @keyframes brilloPuntos {
+            0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.4); }
+        }
+
+        .datos-envio {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .datos-envio h3 {
+            color: var(--azul-acento);
+            margin-bottom: 1.5rem;
+        }
+
+        .datos-envio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .dato-campo {
+            margin-bottom: 1rem;
+        }
+
+        .dato-etiqueta {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .dato-valor {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .item-detalle {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .item-detalle img {
+                margin: 0 auto;
+            }
+
+            .puntos-beneficios {
+                grid-template-columns: 1fr;
+            }
+
+            .datos-envio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .item-detalle {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(42, 91, 168, 0.2);
+            transition: transform 0.3s ease;
         }
 
         .item-detalle:hover {
@@ -1021,7 +1185,7 @@ h1 small {
         </header>
 
         <div class="confirmacion-container">
-            <div class="tarjeta-confirmacion animate__animated animate__fadeInUp">
+            <div class="tarjeta-confirmacion animate__animated animate__fadeIn">
                 <div class="icono-exito">
                     <i class="fas fa-check-circle"></i>
                 </div>
@@ -1119,134 +1283,82 @@ h1 small {
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Calcular fecha estimada de entrega (15 días a partir de hoy)
-        const fechaEntrega = new Date();
-        fechaEntrega.setDate(fechaEntrega.getDate() + 15);
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('fechaEntrega').textContent = fechaEntrega.toLocaleDateString('es-ES', options);
-        
-        // Actualizar puntos pendientes en el timeline
-        const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-        const totalShirts = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-        const totalPoints = totalShirts * 10;
-        
-        // Actualizar el elemento de puntos si existe
-        const puntosElement = document.querySelector('.paso-tiempo .fa-clock').closest('div');
-        if (puntosElement) {
-            const puntosNumero = puntosElement.querySelector('div[style*="font-size: 20px"]');
-            const puntosTexto = puntosElement.querySelector('div[style*="font-size: 12px"]');
-            if (puntosNumero) puntosNumero.textContent = totalPoints;
-            if (puntosTexto) puntosTexto.textContent = 'Puntos pendientes (recibirás al enviar fotos)';
-        }
-    });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos del pedido desde localStorage
+            const orderData = JSON.parse(localStorage.getItem('lastOrder') || '{}');
+            const shippingData = JSON.parse(localStorage.getItem('shippingData') || '{}');
+            
+            // Mostrar datos de envío
+            document.getElementById('nombre-envio').textContent = shippingData.nombre || '';
+            document.getElementById('direccion-envio').textContent = shippingData.direccion || '';
+            document.getElementById('ciudad-envio').textContent = shippingData.ciudad || '';
+            document.getElementById('cp-envio').textContent = shippingData.codigoPostal || '';
+            document.getElementById('email-envio').textContent = shippingData.email || '';
+            document.getElementById('telefono-envio').textContent = shippingData.telefono || '';
 
-    // Función para mostrar detalles del pedido
-    function mostrarDetallesPedido() {
-        // Obtener el número de pedido del almacenamiento local o generar uno temporal
-        const orderNumber = localStorage.getItem('lastOrderNumber') || 'TEMP-' + Date.now();
-        
-        // Obtener información del pedido del almacenamiento local
-        const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-        const orderData = JSON.parse(localStorage.getItem('lastOrderData') || '{}');
-        const shippingData = JSON.parse(localStorage.getItem('shippingData') || '{}');
-        
-        // Calcular total y puntos
-        const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const totalShirts = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-        const pointsEarned = totalShirts * 10;
-        
-        // Formatear fecha
-        const orderDate = new Date().toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-        
-        // Crear el contenido del modal con el mismo estilo que el perfil
-        const modalContent = `
-            <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 16px; padding: 0; margin: 0; position: relative; overflow: hidden; font-family: Inter, Segoe UI, system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 20px rgba(96, 165, 250, 0.15);">
-                <div style="padding: 20px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h3 style="color: white; margin: 0; font-size: 18px; font-weight: 700;">Pedido #${orderNumber}</h3>
-                        <p style="color: rgba(255,255,255,0.8); margin: 4px 0 0 0; font-size: 14px;">${orderDate}</p>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="color: white; font-size: 20px; font-weight: 700;">€${total.toFixed(2)}</div>
-                        <span style="background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; backdrop-filter: blur(10px);">Confirmado</span>
-                    </div>
-                </div>
-                
-                <div style="padding: 20px 24px; background: rgba(15, 23, 42, 0.6);">
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="color: #667eea; margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">📦 Productos</h4>
-                        <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: 12px; padding: 16px; font-family: 'Fira Code', Consolas, monospace; font-size: 13px; line-height: 1.6; color: #cbd5e1; white-space: pre-wrap; word-break: break-word;">
-                            ${cartItems.map(item => `${item.quantity}x ${item.name} - €${(item.price * item.quantity).toFixed(2)}`).join('\n')}
+            // Mostrar items del pedido
+            const itemsContainer = document.getElementById('items-pedido');
+            if (orderData.items && Array.isArray(orderData.items)) {
+                orderData.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'item-detalle';
+                    itemElement.innerHTML = `
+                        <img src="${item.imagen || 'placeholder.jpg'}" alt="${item.nombre}">
+                        <div class="item-info">
+                            <div class="item-nombre">${item.nombre}</div>
+                            <div class="item-descripcion">
+                                Talla: ${item.talla || 'N/A'}<br>
+                                Cantidad: ${item.cantidad}
+                            </div>
                         </div>
-                    </div>
-                    
-                    ${shippingData.name ? `
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="color: #667eea; margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">📍 Dirección de Envío</h4>
-                        <div style="background: rgba(30, 41, 59, 0.3); border-radius: 8px; padding: 16px; font-size: 14px; color: #e2e8f0;">
-                            <div style="margin-bottom: 8px;"><strong>${shippingData.name}</strong></div>
-                            <div>${shippingData.address || ''}</div>
-                            <div>${shippingData.city || ''}, ${shippingData.postal || ''}</div>
-                            <div>${shippingData.country || ''}</div>
-                            ${shippingData.phone ? `<div style="margin-top: 8px;">📞 ${shippingData.phone}</div>` : ''}
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="color: #667eea; margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">💳 Método de Pago</h4>
-                        <div style="background: rgba(30, 41, 59, 0.3); border-radius: 8px; padding: 16px; font-size: 14px; color: #e2e8f0;">
-                            Pago procesado correctamente
-                        </div>
-                    </div>
-                    
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 16px; text-align: center;">
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
-                            <span style="font-size: 24px;">⏰</span>
-                            <div>
-                            <div style="color: white; font-size: 20px; font-weight: 700;">${totalShirts * 10}</div>
-                            <div style="color: rgba(255,255,255,0.8); font-size: 12px;">Puntos pendientes (recibirás al enviar fotos)</div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // Crear modal temporal
-        const modal = document.createElement('div');
-        modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px;';
-        
-        const modalInner = document.createElement('div');
-        modalInner.style.cssText = 'max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative;';
-        modalInner.innerHTML = modalContent;
-        
-        // Agregar botón de cerrar
-        const closeBtn = document.createElement('button');
-        closeBtn.innerHTML = '✕';
-        closeBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;';
-        closeBtn.onclick = () => document.body.removeChild(modal);
-        
-        modalInner.appendChild(closeBtn);
-        modal.appendChild(modalInner);
-        document.body.appendChild(modal);
-        
-        // Cerrar al hacer clic fuera del contenido
-        modal.onclick = (e) => {
-            if (e.target === modal) {
-                document.body.removeChild(modal);
+                        <div class="item-precio">€${(item.precio * item.cantidad).toFixed(2)}</div>
+                    `;
+                    itemsContainer.appendChild(itemElement);
+                });
             }
-        };
-        
-        return false;
-    }
+
+            // Mostrar resumen del pedido
+            document.getElementById('subtotal-pedido').textContent = `€${orderData.subtotal?.toFixed(2) || '0.00'}`;
+            document.getElementById('envio-pedido').textContent = `€${orderData.envio?.toFixed(2) || '0.00'}`;
+            document.getElementById('descuento-pedido').textContent = `-€${orderData.descuento?.toFixed(2) || '0.00'}`;
+            document.getElementById('total-pedido').textContent = `€${orderData.total?.toFixed(2) || '0.00'}`;
+
+            // Mostrar puntos ganados con animación
+            const puntosGanados = orderData.puntosGanados || Math.floor(orderData.total * 10);
+            const puntosElement = document.getElementById('puntos-ganados');
+            let currentPoints = 0;
+            const duration = 2000; // 2 segundos para la animación
+            const interval = 50; // Actualizar cada 50ms
+            const steps = duration / interval;
+            const increment = puntosGanados / steps;
+
+            const animatePuntos = setInterval(() => {
+                currentPoints += increment;
+                if (currentPoints >= puntosGanados) {
+                    currentPoints = puntosGanados;
+                    clearInterval(animatePuntos);
+                }
+                puntosElement.textContent = Math.floor(currentPoints);
+            }, interval);
+
+            // Manejar la descarga del comprobante
+            document.getElementById('descargar-comprobante').addEventListener('click', function(e) {
+                e.preventDefault();
+                generarComprobantePDF(orderData, shippingData);
+            });
+
+            function generarComprobantePDF(orderData, shippingData) {
+                // Aquí se implementará la generación del PDF
+                console.log('Generando PDF...', {orderData, shippingData});
+                alert('La función de descarga de comprobante estará disponible próximamente.');
+            }
+
+            // Limpiar datos del pedido después de mostrarlos
+            setTimeout(() => {
+                localStorage.removeItem('lastOrder');
+                localStorage.removeItem('shippingData');
+            }, 1000);
+        });
     </script>
 </body>
 </html>

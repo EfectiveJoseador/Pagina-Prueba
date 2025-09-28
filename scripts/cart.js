@@ -194,9 +194,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Enviar checkout
     document.getElementById('pedido-checkout-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        // Simulación de pago
-        pedidoCarrito = [];
-        mostrarPedidoStep('pedido-confirmacion');
+        
+        // Recopilar datos del pedido
+        const formData = new FormData(e.target);
+        const shippingData = {
+            name: formData.get('nombre'),
+            email: formData.get('email'),
+            phone: formData.get('telefono'),
+            address: formData.get('direccion'),
+            city: formData.get('ciudad'),
+            postal: formData.get('codigo_postal'),
+            country: formData.get('pais'),
+            instagram: formData.get('instagram')
+        };
+        
+        // Guardar datos de envío
+        localStorage.setItem('shippingData', JSON.stringify(shippingData));
+        
+        // Preparar datos del pedido
+        const orderData = {
+            items: pedidoCarrito.map(item => ({
+                ...item,
+                price: item.cantidad * 29.90
+            })),
+            shipping: shippingData,
+            total: pedidoCarrito.reduce((sum, item) => sum + (item.cantidad * 29.90), 0)
+        };
+        
+        // Iniciar proceso de pago con PayPal
+        window.PaymentHandler.initializePayPalPayment(orderData);
     });
     // Volver a inicio desde confirmación
     document.getElementById('pedido-volver-inicio').addEventListener('click', function() {

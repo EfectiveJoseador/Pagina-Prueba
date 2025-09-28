@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">        
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/modal-adjustments.css">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -3247,7 +3248,7 @@
 
                                 <label style="font-weight:600;color:#dbeeff;font-size:1.6rem;"> Versión (elige una):
                                     <select id="_opt_version" class="custom-select" style="margin-top:8px;width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;font-size:1.1rem;">
-                                        <option value="" disabled selected>Selecciona versión</option>
+<option value="fan" selected>FAN</option>
                                         <option value="fan">FAN</option>
                                         <option value="jugador">JUGADOR (+5€)</option>
                                     </select>
@@ -3443,11 +3444,19 @@
                 } catch(e) {}
             // Si el producto define versiones y sólo hay una opción, preseleccionarla y ocultar el selector
             try {
-                if (product && Array.isArray(product.versions) && product.versions.length === 1) {
+                if (product && Array.isArray(product.versions)) {
                     const verSelect = modal.querySelector('#_opt_version');
                     const verLabel = verSelect ? verSelect.parentElement : null;
-                    if (verSelect) { verSelect.value = product.versions[0]; }
-                    if (verLabel) { verLabel.style.display = 'none'; }
+                    if (verSelect) {
+                        if (product.versions.length === 1) {
+                            verSelect.value = product.versions[0];
+                            if (verLabel) { verLabel.style.display = 'none'; }
+                        } else {
+                            // Múltiples versiones: seleccionar 'fan' por defecto si existe
+                            const optFan = Array.from(verSelect.options).find(o => o.value.toLowerCase() === 'fan');
+                            if (optFan) verSelect.value = 'fan';
+                        }
+                    }
                 }
             } catch(e) { /* ignore if modal not present */ }
             // show/hide 'otros' field for parche
@@ -3531,7 +3540,7 @@
             // Build carousel HTML dynamically from product.images (fallback to [product.img])
             const imgs = Array.isArray(product.images) && product.images.length ? product.images : [product.img];
             const slidesHtml = imgs.map((src, i) => `<div style="flex:0 0 100%;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:4px;min-width:100%;"><img src="${src}" alt="Imagen ${i+1} de ${imgs.length}" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('');
-            const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" alt="Miniatura ${i+1} de ${imgs.length}" loading="lazy" style="width:40px;height:40px;object-fit:cover;border-radius:4px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
+            const thumbsHtml = imgs.map((src, i) => `<img data-index="${i}" src="${src}" alt="Miniatura ${i+1} de ${imgs.length}" loading="lazy" class="${i === 0 ? 'active-thumb' : ''}" style="width:56px;height:56px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid rgba(255,255,255,0.06);">`).join('');
 
             modal.innerHTML = `
                 <div class="tienda-panel" style="width:100%;max-width:720px;background:#071735;padding:8px;border-radius:8px;color:#dbeeff;display:grid;grid-template-columns:1fr 240px;gap:8px;overflow:visible;">
@@ -3596,7 +3605,14 @@
             const thumbs = modal.querySelector('#modalTiendaThumbs');
             // Visor ampliado: click en el carrusel para abrir a pantalla completa en el índice actual
             try { track.style.cursor = 'zoom-in'; track.addEventListener('click', (e)=>{ e.stopPropagation(); openImageViewer(imgs, idx); }); } catch(e) {}
-            function update(){ track.style.transform = `translateX(-${idx * 100}%)`; Array.from(thumbs.children).forEach((t,i)=> t.style.outline = i===idx? '3px solid var(--azul-acento)' : 'none'); }
+            function update(){ 
+                track.style.transform = `translateX(-${idx * 100}%)`; 
+                Array.from(thumbs.children).forEach((t,i)=> {
+                    // Eliminar outline antiguo y usar clase active-thumb en su lugar
+                    t.style.outline = 'none';
+                    t.classList.toggle('active-thumb', i === idx);
+                }); 
+            }
             prev && prev.addEventListener('click', (e)=>{ e.stopPropagation(); idx = (idx-1+slides.length)%slides.length; update(); });
             next && next.addEventListener('click', (e)=>{ e.stopPropagation(); idx = (idx+1)%slides.length; update(); });
             if (thumbs) thumbs.addEventListener('click', (e)=>{ const t = e.target.closest('img[data-index]'); if (!t) return; idx = parseInt(t.dataset.index,10); update(); });
@@ -3675,8 +3691,7 @@
                             const versionHTML = `
                         <label style="font-size:1.3rem;">Versión:
                             <select id="_opt_version_modal" class="custom-select" style="margin-top:3px;padding:4px;border-radius:4px;font-size:1.0rem;">
-                                <option value="" disabled selected>Selecciona versión</option>
-                                <option value="fan">FAN</option>
+                                <option value="fan" selected>FAN</option>
                                 <option value="jugador">JUGADOR (+5€)</option>
                             </select>
                         </label>`;
@@ -3688,6 +3703,12 @@
                                 const buttonsRow = form.querySelector('div[style*="justify-content:flex-end"]');
                                 if (buttonsRow) buttonsRow.insertAdjacentHTML('beforebegin', versionHTML);
                                 else form.insertAdjacentHTML('beforeend', versionHTML);
+                            }
+                            // Asegurar que 'fan' queda seleccionado si el producto define múltiples versiones
+                            const verSelModalInit = rightCol.querySelector('#_opt_version_modal');
+                            if (verSelModalInit) {
+                                const optFan2 = Array.from(verSelModalInit.options).find(o => o.value.toLowerCase() === 'fan');
+                                if (optFan2) verSelModalInit.value = 'fan';
                             }
                         }
                         // Reemplazar tallas por numéricas si es Kids (16-28)
