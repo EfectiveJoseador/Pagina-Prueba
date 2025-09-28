@@ -1,0 +1,187 @@
+/**
+ * Ajustes para el modal de personalización
+ * 
+ * Este archivo contiene estilos específicos para mejorar la relación de tamaños
+ * entre la imagen principal, las imágenes en miniatura y los elementos del formulario
+ * en el modal de personalización de productos.
+ */
+
+/* Ajustes para el modal de tienda/carrusel */
+#modal-tienda-carrusel {
+    --modal-scale: 1.65;
+    padding: calc(20px * var(--modal-scale)) !important;
+}
+
+/* Panel principal del modal */
+#modal-tienda-carrusel .tienda-panel {
+    max-width: calc(800px * var(--modal-scale)) !important;
+    grid-template-columns: 1fr calc(280px * var(--modal-scale)) !important;
+    gap: calc(16px * var(--modal-scale)) !important;
+    padding: calc(12px * var(--modal-scale)) !important;
+    border-radius: calc(12px * var(--modal-scale)) !important;
+}
+
+/* Contenedor de la imagen principal - reducir tamaño */
+#modal-tienda-carrusel .tienda-panel > div:first-child {
+    padding: calc(8px * var(--modal-scale)) !important;
+}
+
+/* Ajustar el tamaño del carrusel para que la imagen principal sea más pequeña */
+#modalTiendaCarousel {
+    max-width: 100% !important;
+    max-height: calc(450px * var(--modal-scale)) !important;
+}
+
+/* Imágenes dentro del carrusel */
+#modalTiendaCarousel img {
+    max-height: calc(450px * var(--modal-scale)) !important;
+    object-fit: contain !important; /* Asegura que la imagen se muestre completa */
+}
+
+/* Aumentar el tamaño de las imágenes en miniatura */
+#modalTiendaThumbs img {
+    width: calc(34px * var(--modal-scale)) !important;
+    height: calc(34px * var(--modal-scale)) !important;
+    margin: calc(4px * var(--modal-scale)) !important;
+    border-radius: calc(6px * var(--modal-scale)) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Efecto hover para las miniaturas */
+#modalTiendaThumbs img:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Miniatura activa */
+#modalTiendaThumbs img.active-thumb {
+    outline: calc(3px * var(--modal-scale)) solid var(--azul-acento) !important;
+    transform: scale(1.05) !important;
+}
+
+/* Contenedor de miniaturas */
+#modalTiendaThumbs {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: calc(8px * var(--modal-scale)) !important;
+    margin-top: calc(12px * var(--modal-scale)) !important;
+    padding: calc(6px * var(--modal-scale)) !important;
+}
+
+/* Panel derecho con información y formulario */
+#modal-tienda-carrusel .tienda-panel > div:last-child {
+    padding: calc(16px * var(--modal-scale)) !important;
+    border-radius: calc(8px * var(--modal-scale)) !important;
+}
+
+/* Título del producto */
+#modal-tienda-carrusel .tienda-panel > div:last-child h3 {
+    font-size: calc(1.3rem * var(--modal-scale)) !important;
+    margin-bottom: calc(12px * var(--modal-scale)) !important;
+    color: var(--azul-acento) !important;
+}
+
+/* Descripción del producto */
+#modal-tienda-carrusel .tienda-panel > div:last-child p {
+    font-size: calc(0.9rem * var(--modal-scale)) !important;
+    line-height: 1.4 !important;
+    margin-bottom: calc(12px * var(--modal-scale)) !important;
+}
+
+/* Precio del producto */
+#modal-tienda-carrusel .tienda-panel > div:last-child div[style*="font-weight:800"] {
+    font-size: calc(1.4rem * var(--modal-scale)) !important;
+    margin: calc(12px * var(--modal-scale)) 0 !important;
+}
+
+/* Botón de personalizar */
+#modalTiendaPersonalizar {
+    padding: calc(10px * var(--modal-scale)) calc(16px * var(--modal-scale)) !important;
+    font-size: calc(0.95rem * var(--modal-scale)) !important;
+    border-radius: calc(8px * var(--modal-scale)) !important;
+    margin-top: calc(8px * var(--modal-scale)) !important;
+}
+
+/* Botón de cerrar */
+#modalTiendaClose {
+    top: calc(20px * var(--modal-scale)) !important;
+    right: calc(20px * var(--modal-scale)) !important;
+    padding: calc(8px * var(--modal-scale)) calc(14px * var(--modal-scale)) !important;
+    font-size: calc(0.9rem * var(--modal-scale)) !important;
+    border-radius: calc(8px * var(--modal-scale)) !important;
+    background: rgba(10, 20, 40, 0.7) !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 900px) {
+    #modal-tienda-carrusel .tienda-panel {
+        grid-template-columns: 1fr !important;
+        max-width: calc(600px * var(--modal-scale)) !important;
+    }
+    
+    #modalTiendaThumbs img {
+        width: calc(28px * var(--modal-scale)) !important;
+        height: calc(28px * var(--modal-scale)) !important;
+    }
+}
+
+/* Ajustes para pantallas más grandes */
+@media (min-width: 1440px) {
+    #modal-tienda-carrusel .tienda-panel {
+        max-width: calc(900px * var(--modal-scale)) !important;
+        grid-template-columns: 1fr calc(320px * var(--modal-scale)) !important;
+    }
+    
+    #modalTiendaThumbs img {
+        width: calc(38px * var(--modal-scale)) !important;
+        height: calc(38px * var(--modal-scale)) !important;
+    }
+}
+
+/* Escalado equitativo para la modal de personalización simple */
+.modal-personalizacion {
+    --modal-scale: 1.65;
+    padding: calc(24px * var(--modal-scale)) !important;
+}
+.modal-personalizacion img {
+    width: calc(350px * var(--modal-scale)) !important;
+    height: calc(350px * var(--modal-scale)) !important;
+}
+.modal-personalizacion > div > div {
+    gap: calc(20px * var(--modal-scale)) !important;
+}
+/* Escalado adicional equitativo para controles del formulario en la modal de personalización */
+.modal-personalizacion .input-group {
+    padding: calc(1.1rem * var(--modal-scale)) calc(1rem * var(--modal-scale)) calc(0.7rem * var(--modal-scale)) calc(1rem * var(--modal-scale)) !important;
+    border-radius: calc(10px * var(--modal-scale)) !important;
+}
+.modal-personalizacion .input-group label {
+    margin-bottom: calc(12px * var(--modal-scale)) !important;
+}
+.modal-personalizacion .custom-dropdown-button {
+    padding: calc(0.78em * var(--modal-scale)) calc(1.05em * var(--modal-scale)) !important;
+    border-radius: calc(12px * var(--modal-scale)) !important;
+    font-size: calc(1rem * var(--modal-scale)) !important;
+}
+.modal-personalizacion .input-talla {
+    padding: calc(0.72em * var(--modal-scale)) calc(2.2em * var(--modal-scale)) calc(0.72em * var(--modal-scale)) calc(1.05em * var(--modal-scale)) !important;
+    border-radius: calc(10px * var(--modal-scale)) !important;
+    font-size: calc(1.03em * var(--modal-scale)) !important;
+}
+/* Asegurar que el grid del formulario también escale el gap */
+.modal-personalizacion #_personalizeForm {
+    grid-template-columns: 1fr 1fr !important; /* respetar 2 columnas en desktop */
+    gap: calc(15px * var(--modal-scale)) !important;
+}
+.modal-personalizacion label {
+    font-size: calc(1rem * var(--modal-scale)) !important;
+}
+.modal-personalizacion .custom-select,
+.modal-personalizacion input,
+.modal-personalizacion textarea {
+    font-size: calc(1.05rem * var(--modal-scale)) !important;
+    padding: calc(13px * var(--modal-scale)) !important;
+}
