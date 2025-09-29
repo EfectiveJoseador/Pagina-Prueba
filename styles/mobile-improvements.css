@@ -1,0 +1,384 @@
+/**
+ * Mejoras para visualización móvil de la sección tienda y modal de personalización
+ * Este archivo contiene estilos específicos para mejorar la experiencia en dispositivos móviles
+ */
+
+/* ===== MEJORAS PARA LA SECCIÓN TIENDA EN MÓVIL ===== */
+
+/* Ajustes generales para la sección tienda en móvil */
+@media (max-width: 768px) {
+  /* Mejora del grid de productos para móvil */
+  #pedidos .product-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 5px;
+  }
+
+  /* Tarjetas de producto más compactas y optimizadas */
+  #pedidos .product-item {
+    padding: 8px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* Imágenes de producto más grandes y proporcionadas */
+  #pedidos .product-item img,
+  #pedidos .pedido-mini-card img.pedido-carrusel-img {
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  /* Títulos y precios más legibles */
+  #pedidos .product-item h4 {
+    font-size: 0.9rem;
+    margin: 8px 0 4px;
+    line-height: 1.2;
+    height: 2.4em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  #pedidos .product-item .price {
+    font-size: 0.95rem;
+    padding: 4px 8px;
+    margin: 4px 0;
+  }
+
+  /* Controles de filtrado más accesibles */
+  #pedidos .gallery-controls {
+    padding: 10px;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  #pedidos .gallery-controls select {
+    padding: 10px;
+    width: 100%;
+    min-height: 44px; /* Área de toque mínima recomendada */
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  #pedidos .product-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  #pedidos .product-item {
+    padding: 6px;
+  }
+
+  #pedidos .product-item h4 {
+    font-size: 0.85rem;
+    margin: 6px 0 3px;
+  }
+
+  #pedidos .product-item .price {
+    font-size: 0.9rem;
+    padding: 3px 6px;
+  }
+}
+
+/* ===== MEJORAS PARA LA MODAL DE PERSONALIZACIÓN EN MÓVIL ===== */
+
+/* Ajustes generales para la modal de personalización */
+@media (max-width: 768px) {
+  /* Estructura general de la modal */
+  #modal-tienda-carrusel {
+    padding: 0 !important;
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+  }
+
+  /* Panel principal de la modal */
+  #modal-tienda-carrusel .tienda-panel {
+    grid-template-columns: 1fr !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* Contenedor de la imagen principal */
+  #modal-tienda-carrusel .tienda-panel > div:first-child {
+    padding: 10px !important;
+    background: rgba(10,31,61,0.8) !important;
+  }
+
+  /* Carrusel de imágenes */
+  #modalTiendaCarousel {
+    width: 100% !important;
+    max-height: 40vh !important;
+    aspect-ratio: auto !important;
+  }
+
+  /* Imágenes dentro del carrusel */
+  #modalTiendaCarousel .carousel-track > div {
+    aspect-ratio: 1/1 !important;
+    height: auto !important;
+  }
+
+  #modalTiendaCarousel img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+
+  /* Miniaturas de imágenes */
+  #modalTiendaThumbs {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    padding: 8px 4px !important;
+    margin-top: 8px !important;
+  }
+
+  #modalTiendaThumbs img {
+    width: 48px !important;
+    height: 48px !important;
+    flex-shrink: 0 !important;
+    border-radius: 6px !important;
+  }
+
+  /* Contenedor de información y formulario */
+  #modal-tienda-carrusel .tienda-panel > div:last-child {
+    padding: 12px !important;
+    border-radius: 0 !important;
+    border-top: 1px solid rgba(42,91,168,0.2) !important;
+  }
+
+  /* Título y descripción del producto */
+  #modal-tienda-carrusel .tienda-panel > div:last-child h3 {
+    font-size: 1.2rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  #modal-tienda-carrusel .tienda-panel > div:last-child p {
+    font-size: 0.9rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Precio del producto */
+  #modal-tienda-carrusel .tienda-panel > div:last-child div[style*="font-weight:800"] {
+    font-size: 1.3rem !important;
+    margin: 10px 0 !important;
+  }
+
+  /* Formulario de personalización */
+  #modalTiendaForm {
+    display: grid !important;
+    gap: 12px !important;
+    margin-top: 10px !important;
+  }
+
+  #modalTiendaForm label {
+    font-size: 1rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Inputs y selects del formulario */
+  #modalTiendaForm input,
+  #modalTiendaForm select {
+    width: 100% !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    min-height: 44px !important; /* Área de toque mínima recomendada */
+  }
+
+  /* Botones de acción */
+  #modalTiendaForm button {
+    padding: 12px !important;
+    font-size: 1rem !important;
+    border-radius: 8px !important;
+    min-height: 44px !important; /* Área de toque mínima recomendada */
+  }
+
+  /* Botón de cerrar */
+  #modalTiendaClose {
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    background: rgba(0,0,0,0.5) !important;
+    color: white !important;
+    border: none !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 18px !important;
+    z-index: 9999 !important;
+    padding: 0 !important;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  /* Reducir tamaño de miniaturas */
+  #modalTiendaThumbs img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  /* Ajustar tamaños de texto */
+  #modal-tienda-carrusel .tienda-panel > div:last-child h3 {
+    font-size: 1.1rem !important;
+  }
+
+  #modal-tienda-carrusel .tienda-panel > div:last-child p {
+    font-size: 0.85rem !important;
+  }
+
+  #modal-tienda-carrusel .tienda-panel > div:last-child div[style*="font-weight:800"] {
+    font-size: 1.2rem !important;
+  }
+
+  #modalTiendaForm label {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* ===== MEJORAS PARA LA MODAL DE PERSONALIZACIÓN SIMPLE ===== */
+
+@media (max-width: 768px) {
+  /* Estructura general de la modal simple */
+  .modal-personalizacion {
+    padding: 0 !important;
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+  }
+
+  /* Panel principal de la modal simple */
+  .modal-personalizacion > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Contenedor de la imagen */
+  .modal-personalizacion > div > div:first-child {
+    padding: 10px !important;
+    background: rgba(10,31,61,0.8) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  /* Imagen del producto */
+  .modal-personalizacion img {
+    width: 100% !important;
+    max-width: 300px !important;
+    height: auto !important;
+    aspect-ratio: 1/1 !important;
+    object-fit: contain !important;
+  }
+
+  /* Formulario de personalización */
+  .modal-personalizacion #_personalizeForm {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 12px !important;
+    margin-top: 0 !important;
+  }
+
+  /* Labels del formulario */
+  .modal-personalizacion #_personalizeForm label {
+    font-size: 1rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Inputs y selects del formulario */
+  .modal-personalizacion #_personalizeForm input,
+  .modal-personalizacion #_personalizeForm select {
+    width: 100% !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    min-height: 44px !important; /* Área de toque mínima recomendada */
+  }
+
+  /* Botones de acción */
+  .modal-personalizacion button {
+    padding: 12px !important;
+    font-size: 1rem !important;
+    border-radius: 8px !important;
+    min-height: 44px !important; /* Área de toque mínima recomendada */
+    margin-top: 8px !important;
+  }
+
+  /* Botón de cerrar */
+  .modal-personalizacion #_closeModal {
+    margin-top: 8px !important;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  /* Ajustar tamaños de imagen */
+  .modal-personalizacion img {
+    max-width: 250px !important;
+  }
+
+  /* Ajustar tamaños de texto */
+  .modal-personalizacion #_personalizeForm label {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* Perfil > Pedidos: correcciones de overflow en móvil */
+@media (max-width: 768px){
+  /* Evitar cualquier desbordamiento horizontal en el contenedor del perfil */
+  #profile-section{ overflow-x:hidden; }
+  #profile-section .profile-card, #profile-section .ident-card{ overflow-x:hidden; }
+  #profile-section .orders-list{ padding: 0 8px; box-sizing: border-box; }
+
+  /* Las tarjetas ocupan el 100% y permiten que el contenido se reduzca sin romper el layout */
+  #profile-section .order-card{ width:100% !important; max-width:100% !important; box-sizing:border-box; margin-left:0; margin-right:0; }
+  #profile-section .order-card-header, #profile-section .order-card-body{ padding:14px 12px !important; }
+
+  /* Encabezado: permitir wrap y evitar que el bloque derecho empuje fuera de pantalla */
+  #profile-section .order-card-header{ flex-wrap:wrap; gap:12px; }
+  #profile-section .order-card-header > div{ min-width:0; }
+  #profile-section .order-card-header > div:last-child{ flex:1 1 100%; align-items:flex-start !important; }
+  #profile-section .order-status-badge{ display:inline-block; width:100%; text-align:left; }
+  #profile-section .admin-order-controls{ width:100%; justify-content:flex-start; }
+  #profile-section select.status-selector{ max-width:100%; }
+
+  /* Bloque superior del body: permitir wrap y evitar empujes fuera de pantalla */
+  #profile-section .order-card-body > div:first-child{ flex-wrap:wrap; gap:8px; }
+  #profile-section .order-card-body > div:first-child > div{ min-width:0; }
+
+  /* Filas de detalle: apilar etiqueta y valor, romper palabras largas */
+  #profile-section .order-detail-row{ display:grid; grid-template-columns:1fr; row-gap:4px; }
+  #profile-section .order-detail-value{ text-align:left; max-width:100% !important; word-wrap:break-word; word-break:break-word; }
+
+  /* Caja de productos: compacta y sin desbordes */
+  #profile-section .order-products-box{ padding:12px; font-size:12px; white-space:pre-wrap; word-break:break-word; }
+}
+
+/* Extra para pantallas muy pequeñas */
+@media (max-width: 420px){
+  #profile-section .order-card-header, #profile-section .order-card-body{ padding:12px 10px !important; }
+  #profile-section .order-status-badge{ font-size:10px; padding:5px 10px; }
+}
