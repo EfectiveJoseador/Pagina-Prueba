@@ -1,0 +1,334 @@
+/**
+ * Mobile Filters CSS
+ * Estilos exclusivos para el panel de filtros móviles
+ * Solo visible en resoluciones móviles (< 769px)
+ */
+
+/* ============================================
+   BOTÓN FLOTANTE DE FILTROS (MOBILE ONLY)
+   ============================================ */
+
+.mobile-filter-btn {
+    display: none;
+    /* Oculto por defecto en desktop */
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999;
+
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #6b46c1 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+
+    box-shadow:
+        0 4px 16px rgba(107, 70, 193, 0.4),
+        0 2px 8px rgba(0, 0, 0, 0.3);
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-filter-btn i {
+    font-size: 1.1rem;
+}
+
+.mobile-filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 20px rgba(107, 70, 193, 0.5),
+        0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-filter-btn:active {
+    transform: translateY(0);
+}
+
+/* Solo visible en móvil */
+@media (max-width: 768px) {
+    .mobile-filter-btn {
+        display: flex;
+    }
+}
+
+/* ============================================
+   PANEL MÓVIL DE FILTROS
+   ============================================ */
+
+.mobile-filter-panel {
+    display: none;
+    /* Oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.mobile-filter-panel.active {
+    display: block;
+    pointer-events: all;
+}
+
+/* Overlay oscuro */
+.mobile-filter-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.mobile-filter-panel.active .mobile-filter-overlay {
+    opacity: 1;
+}
+
+/* Contenido del panel */
+.mobile-filter-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 80vh;
+
+    background: var(--bg-card);
+    border-radius: 24px 24px 0 0;
+
+    display: flex;
+    flex-direction: column;
+
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    box-shadow:
+        0 -4px 24px rgba(0, 0, 0, 0.15),
+        0 -2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-filter-panel.active .mobile-filter-content {
+    transform: translateY(0);
+}
+
+/* ============================================
+   HEADER DEL PANEL
+   ============================================ */
+
+.mobile-filter-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    flex-shrink: 0;
+}
+
+.mobile-filter-header h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.mobile-filter-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    transition: all 0.2s ease;
+}
+
+.mobile-filter-close:hover {
+    background: var(--bg-body);
+    color: var(--text-main);
+}
+
+/* ============================================
+   BODY DEL PANEL (SCROLLABLE)
+   ============================================ */
+
+.mobile-filter-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+
+    /* Smooth scrolling */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================
+   FILTRO STEPS
+   ============================================ */
+
+.mobile-filter-step {
+    margin-bottom: 24px;
+}
+
+.mobile-filter-step.hidden {
+    display: none;
+}
+
+.mobile-filter-step label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.mobile-filter-step select {
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 16px;
+
+    background: var(--bg-body);
+    color: var(--text-main);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    font-family: var(--font-body);
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 44px;
+
+    transition: all 0.2s ease;
+}
+
+.mobile-filter-step select:focus {
+    outline: none;
+    border-color: #6b46c1;
+    box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+}
+
+/* ============================================
+   FOOTER DEL PANEL
+   ============================================ */
+
+.mobile-filter-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+
+    display: flex;
+    gap: 12px;
+
+    flex-shrink: 0;
+}
+
+.mobile-filter-footer button {
+    flex: 1;
+    min-height: 52px;
+    padding: 14px 20px;
+
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+/* Botón secundario (Limpiar) */
+.mobile-filter-footer .btn-secondary {
+    background: var(--bg-body);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+}
+
+.mobile-filter-footer .btn-secondary:hover {
+    background: var(--border);
+}
+
+.mobile-filter-footer .btn-secondary:active {
+    transform: scale(0.98);
+}
+
+/* Botón primario (Aplicar) */
+.mobile-filter-footer .btn-primary {
+    background: linear-gradient(135deg, #1a1a2e 0%, #6b46c1 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(107, 70, 193, 0.3);
+}
+
+.mobile-filter-footer .btn-primary:hover {
+    box-shadow: 0 4px 12px rgba(107, 70, 193, 0.4);
+    transform: translateY(-1px);
+}
+
+.mobile-filter-footer .btn-primary:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+   OCULTAR EN DESKTOP
+   ============================================ */
+
+@media (min-width: 769px) {
+
+    .mobile-filter-btn,
+    .mobile-filter-panel {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   ANIMACIÓN DE ENTRADA
+   ============================================ */
+
+@keyframes slideUpIn {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
