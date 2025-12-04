@@ -173,14 +173,15 @@
                 <div class="options-block">
                     <!-- Talla -->
                     <div class="option-group">
-                        <label class="option-label">Talla *</label>
-                        <div class="size-selector">
-                            <button class="size-btn" data-size="XS">XS</button>
-                            <button class="size-btn" data-size="S">S</button>
-                            <button class="size-btn" data-size="M">M</button>
-                            <button class="size-btn active" data-size="L">L</button>
-                            <button class="size-btn" data-size="XL">XL</button>
-                            <button class="size-btn" data-size="XXL">XXL</button>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label class="option-label" style="margin-bottom: 0;">Talla *</label>
+                            <button type="button" id="size-guide-btn" class="size-guide-link">
+                                <i class="fas fa-ruler"></i> Guía de Tallas
+                            </button>
+                        </div>
+                        <div class="size-selector" id="size-selector">
+                            <!-- Populated by JavaScript based on product type -->
                         </div>
                     </div>
 
@@ -277,6 +278,18 @@
             </div>
         </section>
     </main>
+
+    <!-- Size Guide Modal -->
+    <div class="size-guide-modal" id="size-guide-modal">
+        <div class="size-guide-overlay"></div>
+        <div class="size-guide-content">
+            <button class="size-guide-close" id="size-guide-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3>Guía de Tallas</h3>
+            <img id="size-guide-image" src="" alt="Guía de Tallas" />
+        </div>
+    </div>
 
     <!-- Footer injected by JS -->
     <div id="footer-placeholder"></div>

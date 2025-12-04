@@ -24,6 +24,14 @@ const patchPrices = {
     conmemorativo: 1
 };
 
+// Size configurations
+const SIZE_CONFIGS = {
+    kids: ['16', '18', '20', '22', '24', '26', '28'],
+    retro: ['S', 'M', 'L', 'XL', '2XL'],
+    normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
+};
+
 const extraPrices = {
     embolso: 2,
     envio: 5,
@@ -321,12 +329,45 @@ function openCustomizationModal(productId) {
     document.getElementById('customization-form').reset();
     document.getElementById('modal-product-id').value = productId;
 
+    // Populate size options based on product type
+    populateSizeOptions();
+
     // Update modal and preview
     updatePreview();
 
     // Open modal
     document.getElementById('customization-modal').classList.add('active');
     document.body.style.overflow = 'hidden';
+}
+
+// Detect product type for sizing
+function getProductType(product) {
+    const nameLower = product.name.toLowerCase();
+    if (nameLower.includes('kids') || nameLower.includes('niño')) return 'kids';
+    if (product.category === 'nba' || product.league === 'nba') return 'nba';
+    if (product.name.trim().endsWith('R') || product.league === 'retro') return 'retro';
+    return 'normal';
+}
+
+// Populate size options based on product type
+function populateSizeOptions() {
+    if (!currentProduct) return;
+
+    const productType = getProductType(currentProduct);
+    const sizes = SIZE_CONFIGS[productType];
+    const sizeSelect = document.getElementById('modal-size');
+
+    // Clear existing options except first one ("Seleccionar Talla")
+    sizeSelect.innerHTML = '<option value="">Seleccionar Talla</option>';
+
+    // Add new size options
+    sizes.forEach(size => {
+        const option = document.createElement('option');
+        option.value = size;
+        const sizeLabel = (size === '3XL' || size === '4XL') ? `${size} (+€2)` : size;
+        option.textContent = sizeLabel;
+        sizeSelect.appendChild(option);
+    });
 }
 
 // Close modal
@@ -338,50 +379,6 @@ function closeModal() {
 
 // Update price preview
 function updatePreview() {
-    if (!currentProduct) return;
-
-    const basePrice = currentProduct.price;
-    let totalPrice = basePrice;
-    const details = [];
-
-    // Version
-    const version = document.getElementById('modal-version').value;
-    if (version === 'jugador') {
-        totalPrice += 5;
-        details.push('Versión Jugador: +€15');
-    }
-
-    // Patch
-    const patch = document.getElementById('modal-patch').value;
-    if (patch && patch !== 'none') {
-        const patchCost = patchPrices[patch] || 0;
-        totalPrice += patchCost;
-        const patchName = document.getElementById('modal-patch').selectedOptions[0].text;
-        details.push(`${patchName}`);
-    }
-
-    // Name and number
-    const name = document.getElementById('modal-name').value.trim();
-    const number = document.getElementById('modal-number').value;
-    if (name) {
-        details.push(`Nombre: ${name.toUpperCase()}`);
-    }
-    if (number) {
-        details.push(`Dorsal: ${number}`);
-    }
-
-    // Update preview
-    document.getElementById('preview-base-price').textContent = `€${basePrice.toFixed(2)}`;
-    document.getElementById('preview-details').innerHTML = details.length > 0
-        ? details.map(d => `<span style="display:block;">• ${d}</span>`).join('')
-        : '<span style="color: var(--text-muted); font-style: italic;">No se han seleccionado extras</span>';
-    document.getElementById('preview-total-price').textContent = `€${totalPrice.toFixed(2)}`;
-}
-
-// Handle form submission
-function handleFormSubmit(e) {
-    e.preventDefault();
-
     // Validation
     const size = document.getElementById('modal-size').value;
     if (!size) {
