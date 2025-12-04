@@ -9,6 +9,43 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, set, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
+// Helper: Map Firebase Error Codes to Spanish
+function mapAuthError(code) {
+    switch (code) {
+        case 'auth/email-already-in-use': return 'Este email ya está registrado.';
+        case 'auth/invalid-email': return 'El email no es válido.';
+        case 'auth/operation-not-allowed': return 'Operación no permitida. Contacta soporte.';
+        case 'auth/weak-password': return 'La contraseña es muy débil (mínimo 6 caracteres).';
+        case 'auth/user-disabled': return 'Esta cuenta ha sido deshabilitada.';
+        case 'auth/user-not-found': return 'No existe una cuenta con este email.';
+        case 'auth/wrong-password': return 'Contraseña incorrecta.';
+        case 'auth/too-many-requests': return 'Demasiados intentos. Inténtalo más tarde.';
+        case 'auth/network-request-failed': return 'Error de conexión. Verifica tu internet.';
+        case 'auth/invalid-credential': return 'Credenciales inválidas.';
+        default: return 'Ocurrió un error inesperado. Inténtalo de nuevo.';
+    }
+}
+
+// Helper: Show Error
+function showError(elementId, message) {
+    const el = document.getElementById(elementId);
+    if (el) {
+        el.textContent = message;
+        el.style.display = 'block';
+    } else {
+        alert(message); // Fallback
+    }
+}
+
+// Helper: Clear Error
+function clearError(elementId) {
+    const el = document.getElementById(elementId);
+    if (el) {
+        el.textContent = '';
+        el.style.display = 'none';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Tab Switching
     const tabs = document.querySelectorAll('.auth-tab');
@@ -22,6 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tab.classList.add('active');
             const target = document.getElementById(tab.dataset.target);
             if (target) target.classList.add('active');
+
+            // Clear errors when switching tabs
+            clearError('login-error');
+            clearError('register-error');
+            clearError('reset-error');
         });
     });
 
@@ -30,6 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            clearError('login-error');
+
             const email = loginForm.querySelector('input[type="email"]').value;
             const password = loginForm.querySelector('input[type="password"]').value;
             const btn = loginForm.querySelector('button');
@@ -41,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = '/pages/perfil.html';
             } catch (error) {
                 console.error(error);
-                alert('Error al iniciar sesión: ' + error.message);
+                showError('login-error', mapAuthError(error.code));
                 btn.textContent = 'Entrar';
                 btn.disabled = false;
             }
@@ -53,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            clearError('register-error');
+
             const name = registerForm.querySelector('input[type="text"]').value;
             const email = registerForm.querySelector('input[type="email"]').value;
             const password = registerForm.querySelector('input[type="password"]').value;
@@ -74,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = '/pages/perfil.html';
             } catch (error) {
                 console.error(error);
-                alert('Error al registrarse: ' + error.message);
+                showError('register-error', mapAuthError(error.code));
                 btn.textContent = 'Crear Cuenta';
                 btn.disabled = false;
             }
@@ -86,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resetForm) {
         resetForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            clearError('reset-error');
+
             const email = resetForm.querySelector('input[type="email"]').value;
             const btn = resetForm.querySelector('button');
 
@@ -99,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetForm.reset();
             } catch (error) {
                 console.error(error);
-                alert('Error: ' + error.message);
+                showError('reset-error', mapAuthError(error.code));
                 btn.textContent = 'Enviar Enlace';
                 btn.disabled = false;
             }
@@ -114,17 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const resetTab = document.querySelector('.auth-tab[data-target="reset-form"]');
             if (resetTab) {
                 resetTab.click();
-            }
-        });
-    }
-
-    // Profile Logic
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', async () => {
-            if (confirm('¿Seguro que quieres cerrar sesión?')) {
-                await signOut(auth);
-                window.location.href = '/index.html';
             }
         });
     }
@@ -152,3 +189,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Logout Logic - Wait for components to be ready (Header injection)
+function initLogout() {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        // Remove existing listeners to avoid duplicates if called multiple times
+        const newBtn = logoutBtn.cloneNode(true);
+        logoutBtn.parentNode.replaceChild(newBtn, logoutBtn);
+
+        newBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (confirm('¿Seguro que quieres cerrar sesión?')) {
+                try {
+                    await signOut(auth);
+                    window.location.href = '/index.html';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    alert('Error al cerrar sesión');
+                }
+            }
+        });
+        console.log('Logout listener attached');
+    }
+}
+
+// Listen for components injection
+window.addEventListener('components:ready', initLogout);
+
+// Also try on load in case components are already there (e.g. static header)
+window.addEventListener('load', initLogout);
