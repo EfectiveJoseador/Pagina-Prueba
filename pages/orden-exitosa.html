@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Pedido Realizado! - Camisetazo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="auth-container">
+        <div class="auth-card" style="max-width: 600px; text-align: center;">
+            <div style="font-size: 5rem; color: #28a745; margin-bottom: 1rem;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1 style="color: var(--text-main); margin-bottom: 1rem; font-size: 2rem;">¡Pedido Realizado con Éxito!</h1>
+            <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 1.1rem;">
+                Gracias por tu compra. Hemos recibido tu pedido y comenzaremos a procesarlo de inmediato.
+            </p>
+
+            <div
+                style="background: var(--bg-body); padding: 1.5rem; border-radius: var(--radius-md); margin: 2rem 0; border: 1px solid var(--border);">
+                <p style="color: var(--text-muted); margin-bottom: 0.5rem;">ID de Pedido:</p>
+                <p id="order-id"
+                    style="font-family: 'Courier New', monospace; font-size: 1.2rem; color: var(--primary); font-weight: bold;">
+                </p>
+            </div>
+
+            <div
+                style="background: rgba(var(--primary-rgb), 0.1); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+                <h3 style="color: var(--text-main); margin-bottom: 1rem;">
+                    <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                    Próximos Pasos
+                </h3>
+                <ul style="text-align: left; color: var(--text-muted); list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.7rem;">
+                        <i class="fas fa-envelope" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                        Recibirás un correo de confirmación
+                    </li>
+                    <li style="margin-bottom: 0.7rem;">
+                        <i class="fas fa-box" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                        Procesaremos tu pedido en 24-48 horas
+                    </li>
+                    <li style="margin-bottom: 0.7rem;">
+                        <i class="fas fa-shipping-fast" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                        Tiempo de entrega estimado: 1-2 semanas
+                    </li>
+                    <li>
+                        <i class="fas fa-headset" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                        Contacta con soporte si tienes dudas
+                    </li>
+                </ul>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="/index.html" class="btn btn-primary" style="text-decoration: none;">
+                    <i class="fas fa-home" style="margin-right: 0.5rem;"></i>
+                    Volver al Inicio
+                </a>
+                <a href="/pages/contacto.html" class="btn"
+                    style="background: var(--bg-body); color: var(--text-main); border: 1px solid var(--border); text-decoration: none;">
+                    <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>
+                    Contactar Soporte
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/theme.js"></script>
+    <script src="/js/components.js"></script>
+    <script>
+        // Extraer Order ID de la URL
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get('order') || 'N/A';
+        document.getElementById('order-id').textContent = orderId;
+
+        // Limpiar carrito después de compra exitosa
+        localStorage.removeItem('cart');
+        localStorage.removeItem('appliedPacks');
+    </script>
+</body>
+
+</html>

@@ -81,6 +81,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Password Reset
+    const resetForm = document.getElementById('reset-form');
+    if (resetForm) {
+        resetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = resetForm.querySelector('input[type="email"]').value;
+            const btn = resetForm.querySelector('button');
+
+            try {
+                btn.textContent = 'Enviando...';
+                btn.disabled = true;
+                await sendPasswordResetEmail(auth, email);
+                alert('¡Correo de recuperación enviado! Revisa tu bandeja de entrada.');
+                btn.textContent = 'Enviar Enlace';
+                btn.disabled = false;
+                resetForm.reset();
+            } catch (error) {
+                console.error(error);
+                alert('Error: ' + error.message);
+                btn.textContent = 'Enviar Enlace';
+                btn.disabled = false;
+            }
+        });
+    }
+
+    // Forgot Password Link
+    const forgotPasswordLink = document.querySelector('.forgot-password');
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const resetTab = document.querySelector('.auth-tab[data-target="reset-form"]');
+            if (resetTab) {
+                resetTab.click();
+            }
+        });
+    }
+
     // Profile Logic
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
@@ -101,9 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const snapshot = await get(userRef);
                 if (snapshot.exists()) {
                     const data = snapshot.val();
-                    document.querySelector('.user-info h3').textContent = data.username || 'Usuario';
-                    document.querySelector('.user-info p').textContent = user.email;
-                    document.querySelector('.avatar').textContent = (data.username || 'U')[0].toUpperCase();
+                    const usernameEl = document.querySelector('.user-info h3');
+                    const emailEl = document.querySelector('.user-info p');
+                    const avatarEl = document.querySelector('.avatar');
+
+                    if (usernameEl) usernameEl.textContent = data.username || 'Usuario';
+                    if (emailEl) emailEl.textContent = user.email;
+                    if (avatarEl) avatarEl.textContent = (data.username || 'U')[0].toUpperCase();
                 }
             } else {
                 window.location.href = '/pages/login.html';

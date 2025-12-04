@@ -374,6 +374,70 @@ const Cart = {
     }
 };
 
+
+// ============================================
+// PAYPAL INTEGRATION
+// ============================================
+function initPayPal() {
+    const paypalContainer = document.getElementById('paypal-button-container');
+    if (!paypalContainer || typeof paypal === 'undefined') return;
+
+    // Clear container
+    paypalContainer.innerHTML = '';
+
+    // Hide if cart is empty
+    if (Cart.items.length === 0) {
+        paypalContainer.style.display = 'none';
+        return;
+    }
+
+    paypalContainer.style.display = 'block';
+
+    paypal.Buttons({
+        style: {
+            layout: 'vertical',
+            color: 'blue',
+            shape: 'rect',
+            label: 'paypal'
+        },
+        createOrder: function(data, actions) {
+            const calculations = Cart.calculateTotal();
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: calculations.total.toFixed(2),
+                        currency_code: 'EUR',
+                        breakdown: {
+                            item_total: {
+                                value: calculations.subtotal.toFixed(2),
+                                currency_code: 'EUR'
+                            },
+                            shipping: {
+                                value: calculations.shipping.toFixed(2),
+                                currency_code: 'EUR'
+                            }
+                        }
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                // Clear cart
+                localStorage.removeItem('cart');
+                localStorage.removeItem('appliedPacks');
+                
+                // Redirect to success page
+                window.location.href = `/pages/orden-exitosa.html?order=${data.orderID}`;
+            });
+        },
+        onError: function(err) {
+            console.error('PayPal Error:', err);
+            alert('Hubo un error al procesar el pago. Por favor, inténtalo de nuevo.');
+        }
+    }).render('#paypal-button-container');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     Cart.init();
 
@@ -381,6 +445,18 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('components:ready', () => {
         Cart.updateHeaderCount();
     });
+
+    // Initialize PayPal if on cart page
+    if (document.getElementById('paypal-button-container')) {
+        // Wait a bit for PayPal SDK to load
+        if (typeof paypal !== 'undefined') {
+            initPayPal();
+        } else {
+            window.addEventListener('load', () => {
+                setTimeout(initPayPal, 500);
+            });
+        }
+    }
 
     // Checkout Form Handler
     const checkoutForm = document.getElementById('checkout-form');
@@ -403,3 +479,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 export default Cart;
+

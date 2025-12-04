@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/carrito.css">
+
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
 </head>
 
 <body>
@@ -62,6 +65,9 @@
                 <a href="/pages/checkout.html" id="checkout-btn" class="btn btn-block btn-primary">
                     Tramitar Pedido
                 </a>
+
+                <!-- PayPal Button Container -->
+                <div id="paypal-button-container" style="margin-top: 1rem;"></div>
 
                 <div class="secure-badge">
                     <i class="fas fa-lock"></i> Pago 100% Seguro
