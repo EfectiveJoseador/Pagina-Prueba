@@ -31,7 +31,6 @@
             <div class="auth-tabs">
                 <button class="auth-tab active" data-target="login-form">Iniciar Sesión</button>
                 <button class="auth-tab" data-target="register-form">Registrarse</button>
-                <button class="auth-tab" data-target="reset-form">Recuperar</button>
             </div>
 
             <!-- Login Form -->
@@ -56,7 +55,8 @@
                     </label>
                     <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
                 </div>
-                                <div id="login-error" class="error-message" style="color: #ef4444; margin-bottom: 1rem; font-size: 0.9rem; display: none;"></div>
+                <div id="login-error" class="error-message"
+                    style="color: #ef4444; margin-bottom: 1rem; font-size: 0.9rem; display: none;"></div>
                 <button type="submit" class="btn btn-block btn-primary">Entrar</button>
             </form>
 
@@ -83,12 +83,25 @@
                         <input type="password" required placeholder="••••••••">
                     </div>
                 </div>
-                                <div id="register-error" class="error-message" style="color: #ef4444; margin-bottom: 1rem; font-size: 0.9rem; display: none;"></div>
+
+                <!-- reCAPTCHA Container -->
+                <div id="recaptcha-container" style="margin-bottom: 1rem;"></div>
+
+                <div id="register-error" class="error-message"
+                    style="color: #ef4444; margin-bottom: 1rem; font-size: 0.9rem; display: none;"></div>
                 <button type="submit" class="btn btn-block btn-primary">Crear Cuenta</button>
             </form>
 
             <!-- Reset Password Form -->
             <form id="reset-form" class="auth-form">
+                <div style="margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">
+                        Recuperar Contraseña</h2>
+                    <button type="button" id="back-to-login"
+                        style="background: none; border: none; color: var(--primary); font-size: 0.9rem; cursor: pointer; padding: 0; text-decoration: underline;">
+                        ← Volver a Iniciar Sesión
+                    </button>
+                </div>
                 <div class="form-group">
                     <label>Email</label>
                     <div class="input-icon">
@@ -97,9 +110,11 @@
                     </div>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-                    Recibirás un correo con instrucciones para recuperar tu contraseña.
+                    Recibirás un correo con instrucciones para recuperar tu contraseña. <strong>Revisa tu carpeta de
+                        spam</strong> si no lo encuentras en tu bandeja de entrada.
                 </p>
-                                <div id="reset-error" class="error-message" style="color: #ef4444; margin-bottom: 1rem; font-size: 0.9rem; display: none;"></div>
+                <div id="reset-error" class="error-message"
+                    style="color: #ef4444; margin-bottom: 1rem; font-size: 0.9rem; display: none;"></div>
                 <button type="submit" class="btn btn-block btn-primary">Enviar Enlace</button>
             </form>
         </div>

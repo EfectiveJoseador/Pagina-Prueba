@@ -1,104 +1,92 @@
-/* Auth Styles */
+/* Auth Styles - Premium Redesign */
 
+/* Container & Layout */
 .auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 70vh;
+    min-height: 80vh;
+    /* More breathing room */
+    padding: 2rem;
+    background-color: var(--bg-body);
+    /* Ensure contrast if needed */
 }
 
 .auth-card {
     background: var(--bg-card);
-    padding: 2.5rem;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    padding: 3rem 2.5rem;
+    /* More vertical padding */
+    border-radius: 16px;
+    /* Smooth large radius */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    /* Soft, premium shadow */
     width: 100%;
-    max-width: 450px;
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    /* Premium Entry Animation with glow */
-    animation: scaleIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    max-width: 420px;
+    /* Consistent width */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Very subtle border */
     position: relative;
     overflow: hidden;
+    animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
-/* Pulsating glow effect */
-.auth-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
-    animation: rotateGlow 8s linear infinite;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.auth-card>* {
-    position: relative;
-    z-index: 1;
-}
-
+/* Tabs */
 .auth-tabs {
     display: flex;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+    border-bottom: 2px solid var(--border);
+    gap: 1rem;
 }
 
 .auth-tab {
     flex: 1;
-    padding: 1rem;
+    padding: 0.75rem 0;
     font-weight: 600;
+    font-size: 0.95rem;
     color: var(--text-muted);
+    background: none;
+    border: none;
     border-bottom: 2px solid transparent;
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    margin-bottom: -2px;
+    /* Overlap border */
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Shimmer effect on hover */
-.auth-tab::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--primary), transparent);
-    transform: translateX(-50%);
-    transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.3s ease;
+    text-align: center;
 }
 
 .auth-tab:hover {
     color: var(--primary);
-    background: rgba(99, 102, 241, 0.05);
-    transform: translateY(-2px);
-}
-
-.auth-tab:hover::before {
-    width: 80%;
 }
 
 .auth-tab.active {
     color: var(--primary);
     border-bottom-color: var(--primary);
-    background: transparent;
-    /* Pulsating glow for active tab */
-    animation: glowBorder 2s ease-in-out infinite;
 }
 
+/* Forms */
 .auth-form {
     display: none;
+    animation: fadeIn 0.4s ease-out;
 }
 
 .auth-form.active {
     display: block;
-    /* Smooth entrance with blur */
-    animation: blurIn 0.5s ease-out;
 }
 
+/* Form Groups */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+/* Input Styling */
 .input-icon {
     position: relative;
 }
@@ -109,53 +97,124 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-muted);
+    font-size: 1rem;
     transition: color 0.2s;
-}
-
-.input-icon input:focus+i,
-.input-icon:focus-within i {
-    color: var(--primary);
+    pointer-events: none;
 }
 
 .input-icon input {
     width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    height: 48px;
+    /* Taller, premium feel */
+    padding: 0 1rem 0 2.75rem;
+    /* Space for icon */
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--bg-body);
+    border-radius: 10px;
+    background: var(--bg-input, #f9fafb);
+    /* Light background */
     color: var(--text-main);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    font-size: 0.95rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .input-icon input:focus {
     border-color: var(--primary);
-    /* Premium ripple effect */
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2),
-        0 4px 20px rgba(99, 102, 241, 0.2);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    /* Soft focus ring */
     outline: none;
-    animation: rippleEffect 0.6s ease;
-    transform: translateY(-1px);
 }
 
+.input-icon input:focus+i {
+    color: var(--primary);
+}
+
+/* Options (Remember Me / Forgot Password) */
 .form-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    accent-color: var(--primary);
+    width: 16px;
+    height: 16px;
 }
 
 .forgot-password {
-    color: var(--accent);
-    transition: color 0.2s;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
 }
 
 .forgot-password:hover {
-    color: var(--primary);
+    opacity: 0.8;
     text-decoration: underline;
 }
 
-/* Profile Styles */
+/* Buttons */
+.auth-form button[type="submit"] {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--primary);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    /* Colored shadow */
+}
+
+.auth-form button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+    filter: brightness(1.05);
+}
+
+.auth-form button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+.auth-form button[type="submit"]:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Error Messages */
+.error-message {
+    background-color: #fef2f2;
+    color: #ef4444;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #fecaca;
+    display: none;
+    /* Hidden by default */
+    text-align: center;
+}
+
+/* Profile Styles (Preserved) */
 .profile-container {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -199,12 +258,8 @@
 }
 
 .avatar:hover {
-    /* Epic 3D rotation with glow */
     transform: scale(1.15) rotate(10deg);
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4),
-        0 0 40px rgba(99, 102, 241, 0.3),
-        inset 0 0 20px rgba(255, 255, 255, 0.2);
-    animation: levitate 1.5s ease-in-out infinite;
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
 }
 
 .profile-nav {
@@ -231,7 +286,6 @@
     background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
     color: var(--primary);
     transform: translateX(8px);
-    box-shadow: -3px 0 0 0 var(--primary);
 }
 
 .nav-item.logout {
@@ -262,7 +316,8 @@
     margin-bottom: 1.5rem;
 }
 
-.order-card {
+.order-card,
+.address-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
@@ -271,10 +326,10 @@
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.order-card:hover {
-    transform: translateY(-5px) scale(1.01);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
-        0 0 30px rgba(99, 102, 241, 0.2);
+.order-card:hover,
+.address-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
     border-color: var(--primary);
 }
 
@@ -311,11 +366,6 @@
     margin-bottom: 1rem;
 }
 
-.order-items p {
-    font-size: 0.95rem;
-    margin-bottom: 0.25rem;
-}
-
 .order-total {
     margin-top: 1rem;
     padding-top: 1rem;
@@ -324,17 +374,39 @@
     text-align: right;
 }
 
-.address-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    transition: transform 0.2s;
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
-.address-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-sm);
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive */
@@ -342,4 +414,144 @@
     .profile-container {
         grid-template-columns: 1fr;
     }
+
+    .auth-card {
+        padding: 2rem;
+    }
+}
+
+/* Dark Mode Adjustments for Input Fields */
+[data-theme="dark"] .input-icon input {
+    background: #1e293b;
+    /* Dark input background */
+    color: #f8fafc;
+    /* Light text */
+    border-color: #334155;
+    /* Darker border */
+}
+
+[data-theme="dark"] .input-icon input::placeholder {
+    color: #64748b;
+    /* Muted placeholder in dark mode */
+}
+
+[data-theme="dark"] .input-icon input:focus {
+    background: #2a3548;
+    /* Slightly lighter on focus */
+    border-color: #60a5fa;
+    /* Accent color border */
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+    /* Blue glow for dark mode */
+}
+
+[data-theme="dark"] .input-icon i {
+    color: #64748b;
+    /* Icon color in dark mode */
+}
+
+[data-theme="dark"] .input-icon input:focus+i {
+    color: #60a5fa;
+    /* Icon color on focus */
+}
+
+/* Dark Mode Adjustments for Login Button */
+[data-theme="dark"] .auth-form button[type="submit"] {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    color: #f8fafc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .auth-form button[type="submit"]:hover {
+    background: linear-gradient(135deg, #3b4a61 0%, #2a3548 100%);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    filter: brightness(1.1);
+}
+
+[data-theme="dark"] .auth-form button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+[data-theme="dark"] .auth-form button[type="submit"]:disabled {
+    opacity: 0.6;
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+}
+
+/* Dark Mode Adjustments for Error/Success Messages */
+[data-theme="dark"] .error-message {
+    background-color: #1e293b;
+    /* Dark background for messages */
+    border-color: #334155;
+    /* Subtle border */
+}
+
+/* Override inline styles for success messages in dark mode */
+[data-theme="dark"] #login-error,
+[data-theme="dark"] #register-error,
+[data-theme="dark"] #reset-error {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.modal-content {
+    animation: scaleIn 0.3s ease-out;
+}
+
+/* Button Text Style */
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem;
+    transition: opacity 0.2s;
+}
+
+.btn-text:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
+/* Dark Mode Adjustments for Modal Inputs */
+[data-theme="dark"] .modal input[type="text"],
+[data-theme="dark"] .modal input[type="tel"] {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] .modal input[type="text"]:focus,
+[data-theme="dark"] .modal input[type="tel"]:focus {
+    background: #2a3548 !important;
+    border-color: #60a5fa !important;
+}
+
+[data-theme="dark"] .modal label {
+    color: var(--text-main);
+}
+
+/* Settings Card Adjustments */
+.settings-card h3 {
+    color: var(--text-main);
+}
+
+/* Address/Order List Styles */
+.address-list,
+.orders-list {
+    display: grid;
+    gap: 1rem;
 }
