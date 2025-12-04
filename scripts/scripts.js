@@ -706,7 +706,7 @@ document.addEventListener('DOMContentLoaded', function() {
 (function(){
   // Toast de total del carrito: visible pero discreto, eficiente y reutilizable
   let toastEl = null;
-  let hideTimer = null;
+  let hideTimer = null; // temporizador para ocultar automáticamente a los 3s
 
   function ensureToast(){
     if (toastEl && document.body.contains(toastEl)) return toastEl;
@@ -717,11 +717,11 @@ document.addEventListener('DOMContentLoaded', function() {
     toastEl.setAttribute('aria-live', 'polite');
     toastEl.innerHTML = '<span class="icon" aria-hidden="true">🛒</span><span class="text">Total: <strong>0.00</strong>€</span>';
     document.body.appendChild(toastEl);
+    // La visibilidad se controlará desde showCartTotalToast
     // Al hacer clic, llevar a la pestaña del carrito y ocultar la burbuja
     toastEl.addEventListener('click', function(){
       try {
-        // Oculta inmediatamente para una sensación de respuesta
-        hideNow();
+        // No ocultar permanentemente el botón; solo navegar al carrito
         const btn = document.querySelector('.boton-seccion[data-seccion="carrito"]');
         if (btn && typeof btn.click === 'function') {
           btn.click();
@@ -750,14 +750,13 @@ document.addEventListener('DOMContentLoaded', function() {
       // Actualizar cantidad
       const strong = el.querySelector('strong');
       if (strong) strong.textContent = (Number(amount) || 0).toFixed(2);
-      // Reiniciar animación
-      el.classList.remove('show');
-      // eslint-disable-next-line no-unused-expressions
-      el.offsetWidth;
+      // Quitar supresión persistente al añadir nuevo producto
+      el.classList.remove('suppressed');
+      // Asegurar que se mantenga visible
       el.classList.add('show');
-      // Ocultar automáticamente tras 4s (aumentado)
-      if (hideTimer) clearTimeout(hideTimer);
-      hideTimer = setTimeout(hideNow, 4000);
+      // Ocultar automáticamente tras 3s, independientemente de modales
+      if (hideTimer) { clearTimeout(hideTimer); }
+      hideTimer = setTimeout(hideNow, 3000);
     } catch(e) { /* silencioso para no afectar UX */ }
   };
 

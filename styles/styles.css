@@ -1758,6 +1758,20 @@ select.custom-select::-ms-expand { display: none; }
   cursor: pointer;
 }
 
+/* Ocultar con animación el toast del carrito cuando una modal de personalización esté activa */
+body.personalization-modal-open #cartTotalToast {
+  transform: translate(-50%, 140%) scale(1) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Estado suprimido: permanece oculto hasta próxima adición al carrito */
+#cartTotalToast.suppressed {
+  transform: translate(-50%, 140%) scale(1);
+  opacity: 0;
+  pointer-events: none;
+}
+
 @media (min-width: 1201px) {
   #cartTotalToast.cart-total-toast { bottom: 28px; }
 }

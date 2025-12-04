@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Camisetazo</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+
+    <!-- Header injected by JS -->
+    <div id="header-placeholder"></div>
+
+    <main class="profile-container">
+        <aside class="profile-sidebar">
+            <div class="user-info">
+                <div class="avatar">JP</div>
+                <h3>Juan Pérez</h3>
+                <p>juan@example.com</p>
+            </div>
+            <nav class="profile-nav">
+                <button class="nav-item active" data-target="orders">
+                    <i class="fas fa-box"></i> Mis Pedidos
+                </button>
+                <button class="nav-item" data-target="address">
+                    <i class="fas fa-map-marker-alt"></i> Direcciones
+                </button>
+                <button class="nav-item" data-target="settings">
+                    <i class="fas fa-cog"></i> Configuración
+                </button>
+                <button id="logout-btn" class="nav-item logout">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </nav>
+        </aside>
+
+        <section class="profile-content">
+            <!-- Orders Section -->
+            <div id="orders" class="content-section active">
+                <h2>Historial de Pedidos</h2>
+                <div class="orders-list">
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-id">#ORD-2025-001</span>
+                            <span class="order-status completed">Entregado</span>
+                        </div>
+                        <div class="order-date">12 May 2025</div>
+                        <div class="order-items">
+                            <p>1x Real Madrid Home 24/25 (L)</p>
+                            <p>1x Nike Air Jordan 1 (42)</p>
+                        </div>
+                        <div class="order-total">Total: €125.99</div>
+                    </div>
+
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-id">#ORD-2025-002</span>
+                            <span class="order-status processing">En Proceso</span>
+                        </div>
+                        <div class="order-date">01 Jun 2025</div>
+                        <div class="order-items">
+                            <p>1x Lakers LeBron James (M)</p>
+                        </div>
+                        <div class="order-total">Total: €24.99</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Section -->
+            <div id="address" class="content-section hidden">
+                <h2>Mis Direcciones</h2>
+                <div class="address-card">
+                    <h3>Casa</h3>
+                    <p>Calle Principal 123, 4ºA</p>
+                    <p>28001, Madrid</p>
+                    <p>España</p>
+                    <button class="btn-text">Editar</button>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="content-section hidden">
+                <h2>Configuración</h2>
+                <form class="settings-form">
+                    <div class="form-group">
+                        <label>Cambiar Contraseña</label>
+                        <input type="password" placeholder="Nueva contraseña">
+                    </div>
+                    <button class="btn btn-primary">Guardar Cambios</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer injected by JS -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/theme.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/auth.js"></script>
+    <script type="module" src="/js/carrito.js"></script>
+</body>
+
+</html>

@@ -83,6 +83,48 @@ function optimizePersonalizationModal() {
                 const modal = document.querySelector('#modal-tienda-carrusel, .modal-personalizacion');
                 
                 if (modal) {
+                    // Ocultar el toast del carrito mientras la modal de personalización esté activa
+                    try {
+                        document.body.classList.add('personalization-modal-open');
+                        // Suprimir de forma persistente el toast hasta nueva adición al carrito
+                        const toast = document.getElementById('cartTotalToast');
+                        if (toast) {
+                            toast.classList.add('suppressed');
+                            toast.classList.remove('show');
+                        }
+                        const isVisible = function(el){
+                            if (!el) return false;
+                            const cs = window.getComputedStyle(el);
+                            if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+                            const r = el.getBoundingClientRect();
+                            return !!(r.width || r.height);
+                        };
+                        const cleanup = function(){
+                            document.body.classList.remove('personalization-modal-open');
+                            if (observer) observer.disconnect();
+                            document.removeEventListener('click', onDocumentClick, true);
+                        };
+                        const onDocumentClick = function(ev){
+                            if (ev.target && (ev.target.matches('#modalTiendaClose, #_closeModal') || ev.target.closest('#modalTiendaClose, #_closeModal'))){
+                                // Esperar al cierre efectivo
+                                setTimeout(cleanup, 0);
+                            }
+                        };
+                        document.addEventListener('click', onDocumentClick, true);
+                        const observer = new MutationObserver(function(){
+                            // Sincronizar estado cada vez que cambie el DOM
+                            const exists = document.querySelector('#modal-tienda-carrusel, .modal-personalizacion');
+                            if (exists) {
+                                document.body.classList.add('personalization-modal-open');
+                            } else {
+                                cleanup();
+                            }
+                        });
+                        observer.observe(document.body, { childList: true, subtree: true });
+                        // Manejar cierre por tecla Escape
+                        const onKey = function(k){ if (k.key === 'Escape') setTimeout(cleanup, 0); };
+                        document.addEventListener('keydown', onKey, true);
+                    } catch(_e) { /* noop */ }
                     // Prevenir que el scroll de la página se mueva cuando se hace scroll en la modal
                     modal.addEventListener('touchmove', function(e) {
                         e.stopPropagation();
