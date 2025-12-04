@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto - Camisetazo</title>
+    <title>Soporte - Camisetazo</title>
     
-    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
@@ -24,17 +23,17 @@
     <main class="auth-container">
         <div class="auth-card" style="max-width: 600px;">
             <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--text-main);">
-                <i class="fas fa-envelope" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                Contáctanos
+                <i class="fas fa-life-ring" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                Soporte Técnico
             </h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">
-                ¿Tienes alguna pregunta? Envíanos un mensaje y te responderemos lo antes posible.
+                ¿Tienes problemas con tu pedido? Cuéntanos y te ayudaremos a resolverlo.
             </p>
 
             <form action="https://formsubmit.co/camisetazocontacto@gmail.com" method="POST">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_next" value="http://localhost/pages/mensaje-enviado.html">
-                <input type="hidden" name="_subject" value="Nuevo mensaje de contacto - Camisetazo">
+                <input type="hidden" name="_subject" value="Solicitud de Soporte - Camisetazo">
                 <input type="hidden" name="_template" value="table">
 
                 <div class="form-group">
@@ -54,29 +53,39 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Asunto</label>
+                    <label>Número de Pedido (opcional)</label>
                     <div class="input-icon">
-                        <i class="fas fa-tag"></i>
-                        <input type="text" name="asunto" required placeholder="¿En qué podemos ayudarte?">
+                        <i class="fas fa-hashtag"></i>
+                        <input type="text" name="pedido" placeholder="#12345">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Mensaje</label>
-                    <textarea name="mensaje" required placeholder="Escribe tu mensaje aquí..." 
+                    <label>Tipo de Problema</label>
+                    <div class="input-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <select name="tipo_problema" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-body); color: var(--text-main); font-size: 1rem;">
+                            <option value="">Selecciona una opción</option>
+                            <option value="Envío">Problema con el envío</option>
+                            <option value="Producto">Problema con el producto</option>
+                            <option value="Pago">Problema con el pago</option>
+                            <option value="Devolución">Devolución o cambio</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción del Problema</label>
+                    <textarea name="descripcion" required placeholder="Descripción detallada del problema..." 
                         style="width: 100%; min-height: 150px; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-body); color: var(--text-main); font-family: var(--font-body); font-size: 1rem; resize: vertical;"></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-block btn-primary">
                     <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i>
-                    Enviar Mensaje
+                    Enviar Solicitud
                 </button>
             </form>
-
-            <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                También puedes contactarnos en Instagram: 
-                <a href="https://www.instagram.com/camisetazo._/" target="_blank" style="color: var(--primary);">@camisetazo._</a>
-            </p>
         </div>
     </main>
 
