@@ -9,8 +9,10 @@
     --text-main-light: #1a1a1a;
     --text-muted-light: #6c757d;
     --border-light: #e9ecef;
-    --primary-light: #000000; /* Nike-style minimal black */
-    --accent-light: #3b82f6; /* Subtle blue accent */
+    --primary-light: #000000;
+    /* Nike-style minimal black */
+    --accent-light: #3b82f6;
+    /* Subtle blue accent */
 
     /* Dark Theme Colors */
     --bg-body-dark: #0f172a;
@@ -36,9 +38,9 @@
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] {
