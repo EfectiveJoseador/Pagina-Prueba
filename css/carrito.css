@@ -1,0 +1,561 @@
+/* Cart & Checkout Styles */
+
+.cart-container,
+.checkout-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.page-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    animation: slideDown 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.cart-layout,
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 3rem;
+}
+
+/* Cart Items */
+.cart-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.cart-item {
+    display: flex;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    align-items: center;
+    transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+}
+
+.cart-item:hover {
+    /* Premium floating effect */
+    transform: translateX(8px) translateY(-3px);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12),
+        0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    /* Cambiado de contain a cover para rellenar */
+    background: var(--bg-body);
+    border-radius: var(--radius-sm);
+    /* Sin padding para que rellene todo el espacio */
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.cart-item-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.cart-item-price {
+    font-weight: 700;
+}
+
+.cart-item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.btn-remove {
+    color: #ef4444;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.btn-remove:hover {
+    color: #dc2626;
+    /* Shake effect to indicate danger */
+    animation: shakeSubtle 0.4s ease;
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+/* Quantity Selector Styling for Cart */
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-body);
+}
+
+.quantity-selector button {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    font-size: 1.05rem;
+    transition: color 0.2s;
+}
+
+.quantity-selector button:hover {
+    color: var(--primary);
+    /* Sin animación - completamente quieto */
+}
+
+.quantity-selector input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    color: var(--text-main);
+    font-weight: 600;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    padding: 0;
+}
+
+.quantity-selector input::-webkit-outer-spin-button,
+.quantity-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Summary Box */
+.cart-summary {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    height: fit-content;
+    position: sticky;
+    top: calc(var(--header-height) + 2rem);
+    animation: fadeIn 0.8s ease 0.3s backwards;
+    /* Premium effects */
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.cart-summary:hover {
+    /* Glow intensifies on hover */
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12),
+        0 0 40px rgba(99, 102, 241, 0.15),
+        inset 0 0 30px rgba(99, 102, 241, 0.05);
+    transform: translateY(-2px);
+}
+
+.cart-summary h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+}
+
+.summary-row.total {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-main);
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.9rem 2rem;
+    /* Mejor padding para más presencia */
+    font-size: 1.05rem;
+    /* Texto más grande */
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    margin-top: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    /* Epic gradient background */
+    background: #6366f1;`r`n    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+/* Shimmer effect for checkout button */
+.btn-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.btn-block:hover::before {
+    left: 100%;
+}
+
+.btn-block:hover {
+    transform: translateY(-4px) scale(1.02);
+    /* Epic glow and gradient shift */
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5),
+        0 0 40px rgba(99, 102, 241, 0.3);
+    animation: gradientShift 2s ease infinite;
+}
+
+.secure-badge {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Empty Cart */
+.empty-cart-msg {
+    text-align: center;
+    padding: 4rem 0;
+    animation: fadeIn 0.8s ease;
+}
+
+.empty-cart-msg i {
+    font-size: 4rem;
+    color: var(--border);
+    margin-bottom: 1.5rem;
+    /* Swing animation */
+    animation: swing 2s ease-in-out infinite;
+    display: inline-block;
+    transform-origin: top center;
+}
+
+.empty-cart-msg p {
+    margin-bottom: 2rem;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+/* Checkout Specific */
+.checkout-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0;
+}
+
+.checkout-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkout-steps {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.checkout-steps .active {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.checkout-form-section h2 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-body);
+    color: var(--text-main);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.payment-option:hover {
+    border-color: var(--primary);
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0.03) 100%);
+    transform: translateX(5px);
+    box-shadow: -3px 0 0 0 var(--primary),
+        0 4px 15px rgba(99, 102, 241, 0.1);
+}
+
+.payment-option input:checked+span {
+    font-weight: 600;
+}
+
+.checkout-items-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.checkout-item-mini {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.checkout-item-mini img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+}
+
+.checkout-item-mini div {
+    flex: 1;
+}
+
+.checkout-item-mini h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.checkout-item-mini p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.mt-4 {
+    margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+
+    .cart-layout,
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-summary {
+        position: static;
+    }
+}
+
+/* ================================================
+   PACK INDICATORS - PREMIUM DESIGN
+   ================================================ */
+
+.pack-indicator-container {
+    /* Positioned ABOVE the summary card */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    /* Animation setup: Start hidden behind the card */
+    z-index: -1;
+    transform: translateY(20%);
+    opacity: 0;
+
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Bouncy pop effect */
+    pointer-events: none;
+}
+
+.pack-indicator-container.visible {
+    opacity: 1;
+    /* Move UP to reveal above the card */
+    transform: translateY(-110%);
+}
+
+.pack-badge {
+    /* Full width */
+    width: 100%;
+    padding: 1rem 1.25rem;
+
+    /* Visual styling */
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+
+    /* Typography */
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.05rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    /* Flex */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+
+    /* Inner depth */
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+
+    /* Text Shadow for readability */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Pack Popular - Orange Theme */
+.pack-badge.pack-popular {
+    background: linear-gradient(135deg, #ff8c00 0%, #ff4500 100%);
+    border-color: rgba(255, 140, 0, 0.5);
+    color: white;
+}
+
+/* Pack Mega - Emerald Theme */
+.pack-badge.pack-mega {
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    border-color: rgba(16, 185, 129, 0.5);
+    color: white;
+}
+
+/* Progressive Glow Effects - Popular */
+.pack-popular.glow-x1 {
+    box-shadow:
+        inset 0 0 15px rgba(255, 255, 255, 0.2),
+        /* Inner highlight */
+        0 0 20px rgba(255, 69, 0, 0.4);
+    /* Outer glow */
+}
+
+.pack-popular.glow-x2 {
+    box-shadow:
+        inset 0 0 20px rgba(255, 255, 255, 0.25),
+        0 0 30px rgba(255, 69, 0, 0.5),
+        0 0 10px rgba(255, 140, 0, 0.3);
+    /* Layered glow */
+}
+
+.pack-popular.glow-x3 {
+    box-shadow:
+        inset 0 0 25px rgba(255, 255, 255, 0.3),
+        0 0 40px rgba(255, 69, 0, 0.6),
+        0 0 15px rgba(255, 140, 0, 0.4);
+}
+
+.pack-popular.glow-x4 {
+    box-shadow:
+        inset 0 0 30px rgba(255, 255, 255, 0.35),
+        0 0 50px rgba(255, 69, 0, 0.7),
+        0 0 20px rgba(255, 140, 0, 0.5);
+}
+
+/* Progressive Glow Effects - Mega */
+.pack-mega.glow-x1 {
+    box-shadow:
+        inset 0 0 15px rgba(255, 255, 255, 0.2),
+        0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+.pack-mega.glow-x2 {
+    box-shadow:
+        inset 0 0 20px rgba(255, 255, 255, 0.25),
+        0 0 30px rgba(16, 185, 129, 0.5),
+        0 0 10px rgba(52, 211, 153, 0.3);
+}
+
+.pack-mega.glow-x3 {
+    box-shadow:
+        inset 0 0 25px rgba(255, 255, 255, 0.3),
+        0 0 40px rgba(16, 185, 129, 0.6),
+        0 0 15px rgba(52, 211, 153, 0.4);
+}
+
+.pack-mega.glow-x4 {
+    box-shadow:
+        inset 0 0 30px rgba(255, 255, 255, 0.35),
+        0 0 50px rgba(16, 185, 129, 0.7),
+        0 0 20px rgba(52, 211, 153, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pack-badge {
+        font-size: 1rem;
+        padding: 0.85rem;
+    }
+}

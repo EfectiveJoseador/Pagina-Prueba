@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - Camisetazo</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/catalogo.css">
+    <style>
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+            margin: 2rem auto;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: var(--text-main);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+
+        .preview-box {
+            background: var(--bg-body);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-top: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .preview-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .preview-total {
+            border-top: 1px solid var(--border);
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header injected by JS -->
+    <div id="header-placeholder"></div>
+
+    <main class="catalog-container">
+        <!-- Sidebar Filters -->
+        <aside class="filters-sidebar">
+            <div class="filters-header">
+                <h3>Filtrar por</h3>
+                <button id="close-filters" class="close-filters-btn" title="Cerrar filtros">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Cascading Filter: League -> Team -->
+            <div class="cascading-filter-container">
+
+                <!-- Step 1: League -->
+                <div class="filter-step">
+                    <label class="filter-label">1. Selecciona Liga</label>
+                    <div class="custom-select-wrapper">
+                        <select id="filter-league" class="custom-select">
+                            <option value="">Todas las Ligas</option>
+                            <!-- Populated by JS -->
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <!-- Step 2: Team (Hidden initially) -->
+                <div class="filter-step hidden" id="team-step">
+                    <label class="filter-label">2. Selecciona Equipo</label>
+                    <div class="custom-select-wrapper">
+                        <select id="filter-team" class="custom-select">
+                            <option value="">Todos los Equipos</option>
+                            <!-- Populated by JS -->
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <button id="clear-filters" class="btn-text">Limpiar Filtros</button>
+        </aside>
+
+        <!-- Product Grid Section -->
+        <section class="catalog-content">
+            <div class="catalog-toolbar">
+                <!-- Toggle Filters Button (visible when sidebar is closed) -->
+                <button id="show-filters" class="btn-show-filters" title="Mostrar filtros">
+                    <i class="fas fa-filter"></i>
+                    <span>Filtros</span>
+                </button>
+
+                <!-- Expanded Search Bar -->
+                <div class="search-bar expanded">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Buscar productos...">
+                </div>
+
+                <select id="sort-select">
+                    <option value="default">Relevancia</option>
+                    <option value="price-asc">Precio: Menor a Mayor</option>
+                    <option value="price-desc">Precio: Mayor a Menor</option>
+                </select>
+            </div>
+
+            <div id="product-grid" class="product-grid">
+                <!-- Products injected by JS -->
+            </div>
+
+            <div id="no-results" class="no-results hidden">
+                <i class="fas fa-search"></i>
+                <p>No encontramos productos con esos filtros.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Customization Modal -->
+    <div class="modal-overlay" id="customization-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Personalizar Producto</h3>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="customization-form">
+                <input type="hidden" id="modal-product-id">
+
+                <div class="form-group">
+                    <label>Talla *</label>
+                    <select id="modal-size" required>
+                        <option value="">Seleccionar Talla</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Versión</label>
+                    <select id="modal-version">
+                        <option value="aficionado">Aficionado (Standard)</option>
+                        <option value="jugador">Jugador (Premium +€5)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre (Opcional)</label>
+                    <input type="text" id="modal-name" placeholder="Ej: MESSI" maxlength="15">
+                </div>
+
+                <div class="form-group">
+                    <label>Dorsal (Opcional)</label>
+                    <input type="number" id="modal-number" placeholder="Ej: 10" min="0" max="99">
+                </div>
+
+                <div class="form-group">
+                    <label>Parches</label>
+                    <select id="modal-patch">
+                        <option value="none">Sin parches</option>
+                        <option value="liga">Parche Liga (+€1)</option>
+                        <option value="champions">Parche Champions League (+€2)</option>
+                        <option value="europa">Parche Europa League (+€1)</option>
+                        <option value="premier">Parche Premier League (+€1)</option>
+                        <option value="seriea">Parche Serie A (+€1)</option>
+                        <option value="mundial">Parche Mundial de Clubes (+€1)</option>
+                        <option value="copamundo">Parche Copa del Mundo (+€1)</option>
+                        <option value="conmemorativo">Parche Conmemorativo (+€1)</option>
+                    </select>
+                </div>
+
+                <div class="preview-box">
+                    <div class="preview-row">
+                        <span>Precio Base:</span>
+                        <span id="preview-base-price">€0.00</span>
+                    </div>
+                    <div id="preview-details"></div>
+                    <div class="preview-total">
+                        <span>Total:</span>
+                        <span id="preview-total-price">€0.00</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Añadir al Carrito</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer injected by JS -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/theme.js"></script>
+    <script src="/js/components.js"></script>
+    <script type="module" src="/js/tienda.js"></script>
+    <script type="module" src="/js/carrito.js"></script>
+</body>
+
+</html>

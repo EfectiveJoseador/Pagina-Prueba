@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto - Camisetazo</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family:Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/catalogo.css">
+    <link rel="stylesheet" href="/css/producto.css">
+
+    <style>
+        /* Customization styles  - scoped to product page */
+        .option-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .option-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .text-input,
+        .select-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .text-input:focus,
+        .select-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input-hint {
+            display: block;
+            margin-top: 0.35rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .customization-summary {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .summary-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+
+        .summary-content {
+            font-size: 0.95rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .summary-details {
+            margin: 0.75rem 0;
+            padding: 0.75rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            min-height: 2rem;
+        }
+
+        .summary-details span {
+            display: block;
+            padding: 0.25rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.75rem;
+            margin-top: 0.5rem;
+            border-top: 2px solid var(--border);
+        }
+
+        .total-label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .total-value {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header inject by JS -->
+    <div id="header-placeholder"></div>
+
+    <main class="product-container">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs">
+            <a href="/index.html">Inicio</a> /
+            <a href="/pages/catalogo.html">Catálogo</a> /
+            <span id="breadcrumb-name">Producto</span>
+        </nav>
+
+        <div class="product-layout">
+            <!-- Gallery -->
+            <section class="product-gallery">
+                <div class="main-image">
+                    <button class="gallery-arrow gallery-arrow-left" id="prev-image">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <img id="main-img" src="" alt="Producto">
+                    <button class="gallery-arrow gallery-arrow-right" id="next-image">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="thumbnails">
+                    <!-- Thumbnails injected by JS -->
+                </div>
+            </section>
+
+            <!-- Details -->
+            <section class="product-details">
+                <span id="product-category" class="category-tag">Categoría</span>
+                <h1 id="product-name" class="product-title">Nombre del Producto</h1>
+
+                <div class="price-block">
+                    <span id="product-price" class="current-price">€0.00</span>
+                    <span id="product-old-price" class="old-price hidden">€0.00</span>
+                </div>
+
+                <div class="options-block">
+                    <!-- Talla -->
+                    <div class="option-group">
+                        <label class="option-label">Talla *</label>
+                        <div class="size-selector">
+                            <button class="size-btn" data-size="XS">XS</button>
+                            <button class="size-btn" data-size="S">S</button>
+                            <button class="size-btn" data-size="M">M</button>
+                            <button class="size-btn active" data-size="L">L</button>
+                            <button class="size-btn" data-size="XL">XL</button>
+                            <button class="size-btn" data-size="XXL">XXL</button>
+                        </div>
+                    </div>
+
+                    <!-- Versión -->
+                    <div class="option-group">
+                        <label class="option-label" for="version-select">Versión</label>
+                        <select id="version-select" class="select-input">
+                            <option value="aficionado">Aficionado (Standard)</option>
+                            <option value="jugador">Jugador (Premium +€5)</option>
+                        </select>
+                    </div>
+
+                    <!-- Nombre -->
+                    <div class="option-group">
+                        <label class="option-label" for="name-input">Nombre <span
+                                style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">(Opcional)</span></label>
+                        <input type="text" id="name-input" class="text-input" placeholder="Ej: MESSI" maxlength="15"
+                            pattern="[A-Za-zÀ-ÿ\s]+">
+                        <small class="input-hint">Máximo 15 caracteres, solo letras</small>
+                    </div>
+
+                    <!-- Dorsal -->
+                    <div class="option-group">
+                        <label class="option-label" for="number-input">Dorsal <span
+                                style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">(Opcional)</span></label>
+                        <input type="text" id="number-input" class="text-input" placeholder="Ej: 10" maxlength="2"
+                            inputmode="numeric" pattern="[0-9]*">
+                        <small class="input-hint">Entre 0 y 99</small>
+                    </div>
+
+                    <!-- Parches -->
+                    <div class="option-group">
+                        <label class="option-label" for="patch-select">Parches</label>
+                        <select id="patch-select" class="select-input">
+                            <option value="none">Sin parches</option>
+                            <option value="liga">Parche Liga (+€1)</option>
+                            <option value="champions">Parche Champions League (+€2)</option>
+                            <option value="europa">Parche Europa League (+€1)</option>
+                            <option value="premier">Parche Premier League (+€1)</option>
+                            <option value="seriea">Parche Serie A (+€1)</option>
+                            <option value="mundial">Parche Mundial de Clubes (+€1)</option>
+                            <option value="copamundo">Parche Copa del Mundo (+€1)</option>
+                            <option value="conmemorativo">Parche Conmemorativo (+€1)</option>
+                        </select>
+                    </div>
+
+                    <!-- Resumen de Personalización -->
+                    <div class="customization-summary">
+                        <h4 class="summary-title">Resumen de Personalización</h4>
+                        <div class="summary-content">
+                            <div class="summary-row">
+                                <span class="summary-label">Precio base:</span>
+                                <span class="summary-value" id="preview-base">€0.00</span>
+                            </div>
+                            <div id="preview-list" class="summary-details"></div>
+                            <div class="summary-total">
+                                <span class="total-label">Total:</span>
+                                <span class="total-value" id="preview-total">€0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions-block">
+                    <div class="quantity-selector">
+                        <button id="qty-minus">-</button>
+                        <input type="number" id="qty-input" value="1" min="1" max="10">
+                        <button id="qty-plus">+</button>
+                    </div>
+                    <button id="add-to-cart-btn" class="btn-add-cart-lg">
+                        Añadir al Carrito
+                    </button>
+                </div>
+
+                <div class="description-block">
+                    <h3>Descripción</h3>
+                    <p id="product-description">
+                        Descripción detallada del producto. Calidad premium, tejido transpirable y detalles oficiales.
+                    </p>
+                    <ul class="features-list">
+                        <li><i class="fas fa-check"></i> 100% Poliéster reciclado</li>
+                        <li><i class="fas fa-check"></i> Tecnología de absorción de humedad</li>
+                        <li><i class="fas fa-check"></i> Escudo bordado de alta calidad</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Related Products -->
+        <section class="related-products">
+            <h2>También te podría gustar</h2>
+            <div id="related-grid" class="product-grid">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer injected by JS -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/theme.js"></script>
+    <script src="/js/components.js"></script>
+    <script type="module" src="/js/producto.js"></script>
+    <script type="module" src="/js/carrito.js"></script>
+</body>
+
+</html>
