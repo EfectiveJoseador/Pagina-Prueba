@@ -5,7 +5,8 @@ import {
     signOut,
     onAuthStateChanged,
     signInWithPopup,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, set, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
@@ -27,11 +28,12 @@ function mapAuthError(code) {
 }
 
 // Helper: Show Error
-function showError(elementId, message) {
+function showError(elementId, message, isSuccess = false) {
     const el = document.getElementById(elementId);
     if (el) {
         el.textContent = message;
         el.style.display = 'block';
+        el.style.color = isSuccess ? '#22c55e' : '#ef4444'; // Green for success, Red for error
     } else {
         alert(message); // Fallback
     }
@@ -81,7 +83,19 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 btn.textContent = 'Entrando...';
                 btn.disabled = true;
-                await signInWithEmailAndPassword(auth, email, password);
+
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Check if email is verified
+                if (!user.emailVerified) {
+                    await signOut(auth); // Log out immediately
+                    showError('login-error', 'Debes verificar tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada (y spam).');
+                    btn.textContent = 'Entrar';
+                    btn.disabled = false;
+                    return;
+                }
+
                 window.location.href = '/pages/perfil.html';
             } catch (error) {
                 console.error(error);
@@ -110,6 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
+                // Send Verification Email
+                await sendEmailVerification(user);
+
                 // Save user data to Realtime Database
                 await set(ref(db, 'users/' + user.uid), {
                     username: name,
@@ -117,7 +134,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdAt: new Date().toISOString()
                 });
 
-                window.location.href = '/pages/perfil.html';
+                // Sign out immediately so they can't access protected areas
+                await signOut(auth);
+
+                showError('register-error', '¡Cuenta creada! Hemos enviado un enlace de verificación a tu correo. Por favor verifícalo para iniciar sesión.', true);
+                registerForm.reset();
+
+                btn.textContent = 'Crear Cuenta';
+                btn.disabled = false;
+
             } catch (error) {
                 console.error(error);
                 showError('register-error', mapAuthError(error.code));
@@ -141,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.textContent = 'Enviando...';
                 btn.disabled = true;
                 await sendPasswordResetEmail(auth, email);
-                alert('¡Correo de recuperación enviado! Revisa tu bandeja de entrada.');
+                showError('reset-error', '¡Correo de recuperación enviado! Revisa tu bandeja de entrada.', true);
                 btn.textContent = 'Enviar Enlace';
                 btn.disabled = false;
                 resetForm.reset();
@@ -166,10 +191,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Profile Logic
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (confirm('¿Seguro que quieres cerrar sesión?')) {
+                try {
+                    await signOut(auth);
+                    window.location.href = '/index.html';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    alert('Error al cerrar sesión: ' + error.message);
+                }
+            }
+        });
+    }
+
     // Check Auth State on Profile Page
     if (window.location.pathname.includes('perfil.html')) {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                if (!user.emailVerified) {
+                    // Double check verification (in case they just verified in another tab)
+                    await user.reload();
+                    if (!user.emailVerified) {
+                        alert('Debes verificar tu correo para acceder a esta sección.');
+                        await signOut(auth);
+                        window.location.href = '/pages/login.html';
+                        return;
+                    }
+                }
+
                 // Load user data
                 const userRef = ref(db, 'users/' + user.uid);
                 const snapshot = await get(userRef);
@@ -189,33 +242,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-// Logout Logic - Wait for components to be ready (Header injection)
-function initLogout() {
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        // Remove existing listeners to avoid duplicates if called multiple times
-        const newBtn = logoutBtn.cloneNode(true);
-        logoutBtn.parentNode.replaceChild(newBtn, logoutBtn);
-
-        newBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            if (confirm('¿Seguro que quieres cerrar sesión?')) {
-                try {
-                    await signOut(auth);
-                    window.location.href = '/index.html';
-                } catch (error) {
-                    console.error('Logout error:', error);
-                    alert('Error al cerrar sesión');
-                }
-            }
-        });
-        console.log('Logout listener attached');
-    }
-}
-
-// Listen for components injection
-window.addEventListener('components:ready', initLogout);
-
-// Also try on load in case components are already there (e.g. static header)
-window.addEventListener('load', initLogout);
