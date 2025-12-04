@@ -14,7 +14,21 @@ const patchPrices = {
 };
 
 let product = null;
-let selectedSize = 'L';
+let selectedSize = '';
+
+// Size configurations
+const SIZE_CONFIGS = {
+    kids: ['16', '18', '20', '22', '24', '26', '28'],
+    retro: ['S', 'M', 'L', 'XL', '2XL'],
+    normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
+};
+
+const SIZE_GUIDE_IMAGES = {
+    kids: '/assets/images/guia tallas niños_resultado.webp',
+    nba: '/assets/images/guias tallas nba_resultado.webp',
+    normal: '/assets/images/guia tallas camisetas futbol_resultado.webp'
+};
 
 // Carousel state
 let carouselProducts = [];
@@ -153,6 +167,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('number-input').addEventListener('input', handleDorsalInput);
     document.getElementById('patch-select').addEventListener('change', updatePreview);
 
+    // Populate size buttons based on product type
+    populateSizeButtons();
+
+    // Size guide modal
+    document.getElementById('size-guide-btn').addEventListener('click', openSizeGuide);
+    document.getElementById('size-guide-close').addEventListener('click', closeSizeGuide);
+    document.querySelector('.size-guide-overlay').addEventListener('click', closeSizeGuide);
+
     // Add to cart button
     document.getElementById('add-to-cart-btn').addEventListener('click', addToCart);
 
@@ -189,6 +211,57 @@ function applySpecialPricing(p) {
     p.oldPrice = oldPrice;
     p.price = newPrice;
     p.sale = true;
+}
+
+// Detect product type for sizing
+function getProductType() {
+    const nameLower = product.name.toLowerCase();
+    if (nameLower.includes('kids') || nameLower.includes('niño')) return 'kids';
+    if (product.category === 'nba' || product.league === 'nba') return 'nba';
+    if (product.name.trim().endsWith('R') || product.league === 'retro') return 'retro';
+    return 'normal';
+}
+
+// Populate size buttons based on product type
+function populateSizeButtons() {
+    const productType = getProductType();
+    const sizes = SIZE_CONFIGS[productType];
+    const container = document.getElementById('size-selector');
+
+    container.innerHTML = '';
+    sizes.forEach((size, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'size-btn';
+        if (index === 2) btn.classList.add('active'); // Default to 3rd option
+        btn.dataset.size = size;
+        btn.textContent = size;
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSize = size;
+            updatePreview();
+        });
+        container.appendChild(btn);
+    });
+
+    // Set default
+    selectedSize = sizes[2] || sizes[0];
+}
+
+// Open size guide modal
+function openSizeGuide() {
+    const productType = getProductType();
+    const imageSrc = productType === 'retro' ? SIZE_GUIDE_IMAGES.normal : SIZE_GUIDE_IMAGES[productType];
+
+    document.getElementById('size-guide-image').src = imageSrc;
+    document.getElementById('size-guide-modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// Close size guide modal
+function closeSizeGuide() {
+    document.getElementById('size-guide-modal').classList.remove('active');
+    document.body.style.overflow = '';
 }
 
 // Handle name input with real-time validation (only letters and spaces)
@@ -238,7 +311,13 @@ function updatePreview() {
     const version = document.getElementById('version-select').value;
     if (version === 'jugador') {
         totalPrice += 5;
-        details.push('Versión Jugador: +€15');
+        details.push('Versión Jugador: +€5');
+    }
+
+    // Size surcharge for 3XL and 4XL
+    if (selectedSize === '3XL' || selectedSize === '4XL') {
+        totalPrice += 2;
+        details.push(`Talla ${selectedSize}: +€2`);
     }
 
     // Patch
@@ -258,9 +337,6 @@ function updatePreview() {
     }
     if (number) {
         details.push(`Dorsal: ${number}`);
-    }
-    if (selectedSize) {
-        details.push(`Talla: ${selectedSize}`);
     }
 
     // Update preview display
@@ -333,6 +409,11 @@ function addToCart() {
     if (customization.version === 'jugador') totalPrice += 5;
     if (customization.patch && customization.patch !== 'none') {
         totalPrice += patchPrices[customization.patch] || 0;
+    }
+
+    // Add size surcharge for 3XL and 4XL
+    if (selectedSize === '3XL' || selectedSize === '4XL') {
+        totalPrice += 2;
     }
 
     // Get quantity

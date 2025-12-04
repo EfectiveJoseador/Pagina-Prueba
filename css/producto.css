@@ -208,19 +208,22 @@
     color: var(--primary);
     /* Sutil text-shadow pulsante en lugar de box-shadow rectangular */
     text-shadow: 0 0 20px rgba(99, 102, 241, 0.3),
-                 0 0 40px rgba(99, 102, 241, 0.15);
+        0 0 40px rgba(99, 102, 241, 0.15);
     animation: priceGlow 2s ease-in-out infinite;
 }
 
 /* Animación sutil solo para el text-shadow */
 @keyframes priceGlow {
-    0%, 100% {
+
+    0%,
+    100% {
         text-shadow: 0 0 15px rgba(99, 102, 241, 0.25),
-                     0 0 30px rgba(99, 102, 241, 0.12);
+            0 0 30px rgba(99, 102, 241, 0.12);
     }
+
     50% {
         text-shadow: 0 0 25px rgba(99, 102, 241, 0.4),
-                     0 0 50px rgba(99, 102, 241, 0.2);
+            0 0 50px rgba(99, 102, 241, 0.2);
     }
 }
 
@@ -375,7 +378,7 @@
 }
 
 .btn-add-cart-lg:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: scale(1.02);
     /* Epic glow */
     box-shadow: 0 10px 35px rgba(99, 102, 241, 0.6),
         0 0 50px rgba(99, 102, 241, 0.4);
@@ -444,9 +447,6 @@
     display: flex;
     gap: 1.5rem;
     transition: transform 0.3s ease;
-    justify-content: flex-start;
-    width: max-content;
-    /* Ensure track takes full width of content */
 }
 
 .carousel-arrow {
@@ -454,7 +454,7 @@
     top: 50%;
     transform: translateY(-50%);
     background: var(--bg-card);
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -463,20 +463,17 @@
     justify-content: center;
     cursor: pointer;
     z-index: 10;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     color: var(--text-main);
     box-shadow: var(--shadow-sm);
 }
 
 .carousel-arrow:hover {
-    background: var(--primary);
-    color: white;
+    background: var(--bg-body);
+    color: var(--primary);
     border-color: var(--primary);
-    transform: translateY(-50%) scale(1.2);
-    /* Pulsating glow */
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4),
-        0 0 30px rgba(99, 102, 241, 0.3);
-    animation: pulse 1s ease-in-out infinite;
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(99, 102, 241, 0.15);
 }
 
 .carousel-arrow.disabled {
@@ -484,6 +481,8 @@
     cursor: not-allowed;
     pointer-events: none;
 }
+
+
 
 .carousel-arrow-left {
     left: 0;
@@ -650,4 +649,118 @@
     color: #10b981;
     /* Success Green */
     font-size: 1.2rem;
+}/* Size Guide Link Button */
+.size-guide-link {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
 }
+
+.size-guide-link:hover {
+    background: rgba(99, 102, 241, 0.1);
+    transform: translateX(2px);
+}
+
+.size-guide-link i {
+    font-size: 0.9rem;
+}
+
+/* Size Guide Modal */
+.size-guide-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.size-guide-modal.active {
+    display: flex;
+}
+
+.size-guide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+.size-guide-content {
+    position: relative;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUpFade 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    border: 1px solid var(--border);
+}
+
+.size-guide-content h3 {
+    margin-bottom: 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--text-main);
+}
+
+.size-guide-content img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+}
+
+.size-guide-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--bg-body);
+    border: 1px solid var(--border);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.size-guide-close:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: rotate(90deg);
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
