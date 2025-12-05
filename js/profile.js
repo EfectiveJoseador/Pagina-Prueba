@@ -129,13 +129,23 @@ function renderOrders(orders) {
             </div>
             <div class="order-date">${formatDate(order.date)}</div>
             <div class="order-items">
-                ${order.items ? order.items.map(item => `<p>${item.quantity}x ${item.name} ${item.size ? '(' + item.size + ')' : ''}</p>`).join('') : '<p>Sin items</p>'}
+                ${order.items ? order.items.map(item => `
+                    <div class="order-item-row">
+                        <span class="order-item-qty">${item.quantity || 1}x</span>
+                        <span class="order-item-name">${item.name}</span>
+                        ${item.size ? `<span class="order-item-size">${item.size}</span>` : ''}
+                    </div>
+                `).join('') : '<p>Sin items</p>'}
             </div>
             <div class="order-total">Total: €${order.total ? order.total.toFixed(2) : '0.00'}</div>
             ${order.status === 'enviado' && order.trackingNumber ? `
                 <div class="order-tracking">
-                    <i class="fas fa-truck"></i> 
-                    <span>Nº Seguimiento: <strong>${order.trackingNumber}</strong></span>
+                    <i class="fas fa-truck"></i>
+                    <span>Nº Seguimiento:</span>
+                    <strong class="tracking-number">${order.trackingNumber}</strong>
+                    <button class="copy-tracking-btn" onclick="navigator.clipboard.writeText('${order.trackingNumber}'); this.innerHTML='<i class=\\'fas fa-check\\'></i>'; setTimeout(() => this.innerHTML='<i class=\\'fas fa-copy\\'></i>', 2000);" title="Copiar">
+                        <i class="fas fa-copy"></i>
+                    </button>
                 </div>
             ` : ''}
         </div>

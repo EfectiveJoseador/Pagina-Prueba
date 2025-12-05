@@ -208,6 +208,13 @@ function initPaymentMethods() {
 // ============================================
 
 function confirmOrder() {
+    // Check if user is authenticated
+    if (!currentUser) {
+        alert('Debes iniciar sesión para realizar un pedido.');
+        window.location.href = '/pages/login.html';
+        return;
+    }
+
     if (!selectedAddressId) {
         showAddressWarning();
         return;
@@ -249,11 +256,13 @@ function confirmOrder() {
         orderId: orderId,
         userId: currentUser.uid,
         userEmail: currentUser.email,
+        customerName: currentUser.displayName || 'Usuario',
+        customerEmail: currentUser.email,
         date: new Date().toISOString(),
         dateFormatted: new Date().toLocaleString('es-ES'),
         createdAt: Date.now(),
-        status: 'pendiente_de_confirmacion', // Estados: pendiente_de_confirmacion, confirmado, enviado
-        trackingNumber: null, // Se añade cuando el estado es "enviado"
+        status: 'pendiente_de_confirmacion',
+        trackingNumber: null,
         items: Cart.items.map(item => {
             return {
                 id: item.id,
@@ -310,17 +319,24 @@ function confirmOrder() {
 
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
 
-                // Guardar pedido y enviar email via Web3Forms
+                // Guardar pedido PRIMERO y luego enviar email via Web3Forms
                 (async () => {
-                    await saveOrder(orderData);
-                    await sendOrderViaWeb3Forms(orderData);
+                    try {
+                        await saveOrder(orderData);
+                        await sendOrderViaWeb3Forms(orderData);
 
-                    // Limpiar carrito
-                    localStorage.removeItem('cart');
-                    localStorage.removeItem('appliedPacks');
+                        // Limpiar carrito
+                        localStorage.removeItem('cart');
+                        localStorage.removeItem('appliedPacks');
 
-                    // Redirigir a página de éxito
-                    window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+                        // Redirigir a página de éxito
+                        window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+                    } catch (error) {
+                        console.error('Error procesando pedido:', error);
+                        alert('Error al procesar el pedido. Por favor, inténtalo de nuevo.');
+                        confirmBtn.innerHTML = originalText;
+                        confirmBtn.disabled = false;
+                    }
                 })();
 
                 return;
@@ -341,17 +357,24 @@ function confirmOrder() {
         confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
         confirmBtn.disabled = true;
 
-        // Guardar pedido y enviar email via Web3Forms
+        // Guardar pedido PRIMERO y luego enviar email via Web3Forms
         (async () => {
-            await saveOrder(orderData);
-            await sendOrderViaWeb3Forms(orderData);
+            try {
+                await saveOrder(orderData);
+                await sendOrderViaWeb3Forms(orderData);
 
-            // Limpiar carrito
-            localStorage.removeItem('cart');
-            localStorage.removeItem('appliedPacks');
+                // Limpiar carrito
+                localStorage.removeItem('cart');
+                localStorage.removeItem('appliedPacks');
 
-            // Redirigir a página de éxito
-            window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+                // Redirigir a página de éxito
+                window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+            } catch (error) {
+                console.error('Error procesando pedido:', error);
+                alert('Error al procesar el pedido. Por favor, inténtalo de nuevo.');
+                confirmBtn.innerHTML = originalText;
+                confirmBtn.disabled = false;
+            }
         })();
     }
 }
