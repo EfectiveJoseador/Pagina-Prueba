@@ -528,20 +528,118 @@
 
 /* Dark Mode Adjustments for Modal Inputs */
 [data-theme="dark"] .modal input[type="text"],
-[data-theme="dark"] .modal input[type="tel"] {
+[data-theme="dark"] .modal input[type="tel"],
+[data-theme="dark"] .modal select {
     background: #1e293b !important;
     color: #f8fafc !important;
     border-color: #334155 !important;
 }
 
 [data-theme="dark"] .modal input[type="text"]:focus,
-[data-theme="dark"] .modal input[type="tel"]:focus {
+[data-theme="dark"] .modal input[type="tel"]:focus,
+[data-theme="dark"] .modal select:focus {
     background: #2a3548 !important;
     border-color: #60a5fa !important;
 }
 
+/* Dark Mode for Select (general) */
+[data-theme="dark"] select,
+[data-theme="dark"] .form-group select {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] select:focus,
+[data-theme="dark"] .form-group select:focus {
+    background: #2a3548 !important;
+    border-color: #60a5fa !important;
+}
+
+[data-theme="dark"] select option {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
 [data-theme="dark"] .modal label {
     color: var(--text-main);
+}
+
+/* ============================================ */
+/* MODAL BUTTONS - Premium Style               */
+/* ============================================ */
+
+.btn-modal-primary,
+.btn-modal-secondary {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Primary Button - Guardar */
+.btn-modal-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+}
+
+.btn-modal-primary:hover {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+    transform: translateY(-2px);
+}
+
+.btn-modal-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Secondary Button - Cancelar */
+.btn-modal-secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-modal-secondary:hover {
+    background: #e2e8f0;
+    color: #334155;
+    transform: translateY(-2px);
+}
+
+.btn-modal-secondary:active {
+    transform: translateY(0);
+}
+
+/* Dark Theme - Modal Buttons */
+[data-theme="dark"] .btn-modal-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .btn-modal-primary:hover {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+}
+
+[data-theme="dark"] .btn-modal-secondary {
+    background: #334155;
+    color: #e2e8f0;
+    border: 1px solid #475569;
+}
+
+[data-theme="dark"] .btn-modal-secondary:hover {
+    background: #475569;
+    color: #f8fafc;
 }
 
 /* Settings Card Adjustments */
@@ -549,9 +647,259 @@
     color: var(--text-main);
 }
 
+/* ============================================ */
+/* ADD ADDRESS BUTTON - Premium Style          */
+/* ============================================ */
+
+.btn-add-address {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.btn-add-address:hover {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    transform: translateY(-2px);
+}
+
+.btn-add-address:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Dark Theme */
+[data-theme="dark"] .btn-add-address {
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+[data-theme="dark"] .btn-add-address:hover {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
 /* Address/Order List Styles */
 .address-list,
 .orders-list {
     display: grid;
     gap: 1rem;
+}
+
+/* ============================================ */
+/* SHOP NOW BUTTON - For Empty States          */
+/* ============================================ */
+
+.btn-shop-now {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white !important;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+}
+
+.btn-shop-now:hover {
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.45);
+    transform: translateY(-2px);
+}
+
+.btn-shop-now:active {
+    transform: translateY(0);
+}
+
+/* Dark Theme */
+[data-theme="dark"] .btn-shop-now {
+    background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25);
+}
+
+[data-theme="dark"] .btn-shop-now:hover {
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
+}
+
+/* ============================================ */
+/* ORDER STATUS BADGES                         */
+/* ============================================ */
+
+.order-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Pendiente de Confirmación - Naranja */
+.order-status.pendiente_de_confirmacion {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #92400e;
+    border: 1px solid #fbbf24;
+}
+
+[data-theme="dark"] .order-status.pendiente_de_confirmacion {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    color: #fde68a;
+    border: 1px solid #d97706;
+}
+
+/* Confirmado - Azul */
+.order-status.confirmado {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    color: #1e40af;
+    border: 1px solid #3b82f6;
+}
+
+[data-theme="dark"] .order-status.confirmado {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    color: #bfdbfe;
+    border: 1px solid #3b82f6;
+}
+
+/* Enviado - Verde */
+.order-status.enviado {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+[data-theme="dark"] .order-status.enviado {
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+    color: #a7f3d0;
+    border: 1px solid #10b981;
+}
+
+/* Fallback estados antiguos */
+.order-status.processing {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #92400e;
+    border: 1px solid #fbbf24;
+}
+
+.order-status.completed {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+/* ============================================ */
+/* ORDER TRACKING NUMBER                       */
+/* ============================================ */
+
+.order-tracking {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border: 1px solid #10b981;
+    border-radius: 8px;
+    color: #065f46;
+    font-size: 0.9rem;
+}
+
+.order-tracking i {
+    color: #10b981;
+}
+
+.order-tracking strong {
+    font-family: monospace;
+    font-size: 1rem;
+}
+
+[data-theme="dark"] .order-tracking {
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+    border-color: #10b981;
+    color: #a7f3d0;
+}
+
+[data-theme="dark"] .order-tracking i {
+    color: #34d399;
+}
+
+/* ============================================ */
+/* ORDER CARD STYLES                           */
+/* ============================================ */
+
+.order-card {
+    background: var(--bg-card, #fff);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.order-id {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.order-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.order-items {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed var(--border);
+}
+
+.order-items p {
+    margin: 0.25rem 0;
+}
+
+.order-total {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+[data-theme="dark"] .order-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .order-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }

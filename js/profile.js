@@ -5,7 +5,7 @@ import {
     sendPasswordResetEmail,
     updateProfile
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { ref, set, get, update, remove, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { ref, set, get, update, remove, push, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 // ============================================
 // STATE MANAGEMENT
@@ -65,15 +65,14 @@ function initNavigation() {
 // ORDERS SECTION
 // ============================================
 
-async function loadOrders() {
+function loadOrders() {
     if (!currentUser) return;
 
     const ordersList = document.getElementById('orders-list');
+    const ordersRef = ref(db, `orders/${currentUser.uid}`);
 
-    try {
-        const ordersRef = ref(db, `orders/${currentUser.uid}`);
-        const snapshot = await get(ordersRef);
-
+    // Usar onValue para actualización en tiempo real
+    onValue(ordersRef, (snapshot) => {
         if (snapshot.exists()) {
             const orders = snapshot.val();
             renderOrders(orders);
@@ -83,17 +82,26 @@ async function loadOrders() {
                     <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
                     <p style="font-size: 1.1rem;">Aún no tienes pedidos realizados.</p>
                     <p style="font-size: 0.9rem; margin-top: 0.5rem;">¡Explora nuestra tienda y haz tu primer pedido!</p>
+                    <a href="/pages/catalogo.html" class="btn-shop-now" style="display: inline-flex; margin-top: 1rem;">
+                        <i class="fas fa-shopping-bag"></i> Ir a la Tienda
+                    </a>
                 </div>
             `;
         }
-    } catch (error) {
+    }, (error) => {
         console.error('Error loading orders:', error);
+        // Mostrar mensaje amigable
         ordersList.innerHTML = `
-            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                <p>Error al cargar los pedidos. Inténtalo de nuevo.</p>
+            <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <p style="font-size: 1.1rem;">No se encontraron pedidos.</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">Puede que aún no hayas realizado ningún pedido.</p>
+                <a href="/pages/catalogo.html" class="btn-shop-now" style="display: inline-flex; margin-top: 1rem;">
+                    <i class="fas fa-shopping-bag"></i> Ir a la Tienda
+                </a>
             </div>
         `;
-    }
+    });
 }
 
 function renderOrders(orders) {
@@ -116,26 +124,35 @@ function renderOrders(orders) {
     ordersList.innerHTML = ordersArray.map(order => `
         <div class="order-card">
             <div class="order-header">
-                <span class="order-id">#${order.id}</span>
-                <span class="order-status ${order.status || 'processing'}">${getStatusText(order.status)}</span>
+                <span class="order-id">#${order.orderId || order.id}</span>
+                <span class="order-status ${order.status || 'pendiente_de_confirmacion'}">${getStatusText(order.status)}</span>
             </div>
             <div class="order-date">${formatDate(order.date)}</div>
             <div class="order-items">
                 ${order.items ? order.items.map(item => `<p>${item.quantity}x ${item.name} ${item.size ? '(' + item.size + ')' : ''}</p>`).join('') : '<p>Sin items</p>'}
             </div>
             <div class="order-total">Total: €${order.total ? order.total.toFixed(2) : '0.00'}</div>
+            ${order.status === 'enviado' && order.trackingNumber ? `
+                <div class="order-tracking">
+                    <i class="fas fa-truck"></i> 
+                    <span>Nº Seguimiento: <strong>${order.trackingNumber}</strong></span>
+                </div>
+            ` : ''}
         </div>
     `).join('');
 }
 
 function getStatusText(status) {
     const statusMap = {
+        'pendiente_de_confirmacion': 'Pendiente de Confirmación',
+        'confirmado': 'Confirmado',
+        'enviado': 'Enviado',
         'completed': 'Entregado',
         'processing': 'En Proceso',
         'pending': 'Pendiente',
         'cancelled': 'Cancelado'
     };
-    return statusMap[status] || 'En Proceso';
+    return statusMap[status] || 'Pendiente de Confirmación';
 }
 
 function formatDate(dateString) {
@@ -197,7 +214,7 @@ function renderAddresses(addresses) {
         <div class="address-card" data-id="${addr.id}">
             <h3>${addr.name}</h3>
             <p>${addr.street}</p>
-            <p>${addr.zip}, ${addr.city}</p>
+            <p>${addr.zip}, ${addr.city}${addr.province ? ' (' + addr.province + ')' : ''}</p>
             <p><i class="fas fa-phone"></i> ${addr.phone}</p>
             <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
                 <button class="btn-text edit-address" data-id="${addr.id}">
@@ -259,6 +276,7 @@ async function loadAddressData(addressId) {
             document.getElementById('address-street').value = addr.street || '';
             document.getElementById('address-city').value = addr.city || '';
             document.getElementById('address-zip').value = addr.zip || '';
+            document.getElementById('address-province').value = addr.province || '';
             document.getElementById('address-phone').value = addr.phone || '';
         }
     } catch (error) {
@@ -276,6 +294,7 @@ async function saveAddress(e) {
         street: document.getElementById('address-street').value.trim(),
         city: document.getElementById('address-city').value.trim(),
         zip: document.getElementById('address-zip').value.trim(),
+        province: document.getElementById('address-province').value,
         phone: document.getElementById('address-phone').value.trim()
     };
 

@@ -76,7 +76,7 @@ function renderAddresses(addressArray) {
                     ${selectedAddressId === addr.id ? '<span class="selected-badge"><i class="fas fa-check-circle"></i> Seleccionada</span>' : ''}
                 </div>
                 <p>${addr.street}</p>
-                <p>${addr.zip}, ${addr.city}</p>
+                <p>${addr.zip}, ${addr.city}${addr.province ? ' (' + addr.province + ')' : ''}</p>
                 <p><i class="fas fa-phone" style="font-size: 0.85em;"></i> ${addr.phone}</p>
             </div>
         </label>
@@ -155,11 +155,13 @@ async function saveNewAddress(e) {
     if (!currentUser) return;
 
     const instagramInput = document.getElementById('new-address-instagram');
+    const provinceInput = document.getElementById('new-address-province');
     const addressData = {
         name: document.getElementById('new-address-name').value.trim(),
         street: document.getElementById('new-address-street').value.trim(),
         city: document.getElementById('new-address-city').value.trim(),
         zip: document.getElementById('new-address-zip').value.trim(),
+        province: provinceInput ? provinceInput.value : '',
         phone: document.getElementById('new-address-phone').value.trim(),
         instagram: instagramInput ? instagramInput.value.trim() : ''
     };
@@ -245,9 +247,13 @@ function confirmOrder() {
 
     const orderData = {
         orderId: orderId,
+        userId: currentUser.uid,
+        userEmail: currentUser.email,
         date: new Date().toISOString(),
         dateFormatted: new Date().toLocaleString('es-ES'),
-        status: 'processing',
+        createdAt: Date.now(),
+        status: 'pendiente_de_confirmacion', // Estados: pendiente_de_confirmacion, confirmado, enviado
+        trackingNumber: null, // Se añade cuando el estado es "enviado"
         items: Cart.items.map(item => {
             return {
                 id: item.id,
@@ -263,8 +269,7 @@ function confirmOrder() {
         subtotal: calculations.subtotal,
         shipping: calculations.shipping,
         shippingAddress: selectedAddress,
-        paymentMethod: paymentMethod,
-        userEmail: currentUser ? currentUser.email : 'No autenticado'
+        paymentMethod: paymentMethod
     };
 
     if (paymentMethod === 'bizum') {
@@ -357,7 +362,7 @@ async function sendOrderViaWeb3Forms(orderData) {
     const customerInfo = `Contact Name: ${sa.name || ''}
 Address Line: ${sa.street || ''}
 City: ${sa.city || ''}
-State: ${sa.city || ''}
+Province: ${sa.province || ''}
 Country: España
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
@@ -431,16 +436,38 @@ function showAddressWarning() {
 }
 
 function showLoginPrompt() {
-    const addressList = document.getElementById('saved-addresses-list');
-    addressList.innerHTML = `
-        <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
-            <i class="fas fa-user-lock" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
-            <p>Debes iniciar sesión para continuar.</p>
-            <a href="/pages/login.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">
-                Iniciar Sesión
-            </a>
-        </div>
-    `;
+    // Ocultar todo el contenido del checkout
+    const checkoutLayout = document.querySelector('.checkout-layout');
+    if (checkoutLayout) {
+        checkoutLayout.innerHTML = `
+            <div class="login-required-overlay" style="
+                grid-column: 1 / -1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 4rem 2rem;
+                text-align: center;
+                background: var(--bg-card);
+                border-radius: 16px;
+                border: 1px solid var(--border);
+            ">
+                <i class="fas fa-user-lock" style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; opacity: 0.8;"></i>
+                <h2 style="color: var(--text-main); margin-bottom: 0.5rem; font-size: 1.5rem;">Inicia sesión para continuar</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 400px;">
+                    Para realizar un pedido necesitas tener una cuenta. Así podrás guardar tus direcciones y ver el historial de tus pedidos.
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                    <a href="/pages/login.html" class="btn-modal-primary" style="text-decoration: none;">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                    <a href="/pages/login.html#register" class="btn-modal-secondary" style="text-decoration: none;">
+                        <i class="fas fa-user-plus"></i> Crear Cuenta
+                    </a>
+                </div>
+            </div>
+        `;
+    }
 }
 
 // ============================================
