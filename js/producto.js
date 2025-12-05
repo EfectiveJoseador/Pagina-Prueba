@@ -1,6 +1,6 @@
 import products from './products-data.js';
 
-// Price mappings
+// Price mappings - must match HTML text
 const patchPrices = {
     none: 0,
     liga: 1,
@@ -14,25 +14,7 @@ const patchPrices = {
 };
 
 let product = null;
-let selectedSize = '';
-
-// Size configurations
-const SIZE_CONFIGS = {
-    kids: ['16', '18', '20', '22', '24', '26', '28'],
-    retro: ['S', 'M', 'L', 'XL', '2XL'],
-    normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
-    nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
-};
-
-const SIZE_GUIDE_IMAGES = {
-    kids: '/assets/images/guia tallas niños_resultado.webp',
-    nba: '/assets/images/guias tallas nba_resultado.webp',
-    normal: '/assets/images/guia tallas camisetas futbol_resultado.webp'
-};
-
-// Carousel state
-let carouselProducts = [];
-let currentCarouselIndex = 0;
+let selectedSize = 'L';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Get Product ID from URL
@@ -163,22 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update preview on any change
     document.getElementById('version-select').addEventListener('change', updatePreview);
-    document.getElementById('name-input').addEventListener('input', handleNameInput);
+    document.getElementById('name-input').addEventListener('input', updatePreview);
     document.getElementById('number-input').addEventListener('input', handleDorsalInput);
     document.getElementById('patch-select').addEventListener('change', updatePreview);
-
-    // Populate size buttons based on product type
-    populateSizeButtons();
-
-    // Size guide modal
-    document.getElementById('size-guide-btn').addEventListener('click', openSizeGuide);
-    document.getElementById('size-guide-close').addEventListener('click', closeSizeGuide);
-    document.querySelector('.size-guide-overlay').addEventListener('click', closeSizeGuide);
 
     // Add to cart button
     document.getElementById('add-to-cart-btn').addEventListener('click', addToCart);
 
-    // Load related products carousel
+    // Load related products
     loadRelatedProducts();
 
     // Initial preview update
@@ -211,69 +185,6 @@ function applySpecialPricing(p) {
     p.oldPrice = oldPrice;
     p.price = newPrice;
     p.sale = true;
-}
-
-// Detect product type for sizing
-function getProductType() {
-    const nameLower = product.name.toLowerCase();
-    if (nameLower.includes('kids') || nameLower.includes('niño')) return 'kids';
-    if (product.category === 'nba' || product.league === 'nba') return 'nba';
-    if (product.name.trim().endsWith('R') || product.league === 'retro') return 'retro';
-    return 'normal';
-}
-
-// Populate size buttons based on product type
-function populateSizeButtons() {
-    const productType = getProductType();
-    const sizes = SIZE_CONFIGS[productType];
-    const container = document.getElementById('size-selector');
-
-    container.innerHTML = '';
-    sizes.forEach((size, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'size-btn';
-        if (index === 2) btn.classList.add('active'); // Default to 3rd option
-        btn.dataset.size = size;
-        btn.textContent = size;
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedSize = size;
-            updatePreview();
-        });
-        container.appendChild(btn);
-    });
-
-    // Set default
-    selectedSize = sizes[2] || sizes[0];
-}
-
-// Open size guide modal
-function openSizeGuide() {
-    const productType = getProductType();
-    const imageSrc = productType === 'retro' ? SIZE_GUIDE_IMAGES.normal : SIZE_GUIDE_IMAGES[productType];
-
-    document.getElementById('size-guide-image').src = imageSrc;
-    document.getElementById('size-guide-modal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-// Close size guide modal
-function closeSizeGuide() {
-    document.getElementById('size-guide-modal').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-// Handle name input with real-time validation (only letters and spaces)
-function handleNameInput(e) {
-    let value = e.target.value;
-
-    // Remove any character that is not a letter or space
-    // Allows A-Z, a-z, and accented characters (À-ÿ)
-    value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
-
-    e.target.value = value;
-    updatePreview();
 }
 
 // Handle dorsal input with real-time validation (max 2 digits)
@@ -314,12 +225,6 @@ function updatePreview() {
         details.push('Versión Jugador: +€5');
     }
 
-    // Size surcharge for 3XL and 4XL
-    if (selectedSize === '3XL' || selectedSize === '4XL') {
-        totalPrice += 2;
-        details.push(`Talla ${selectedSize}: +€2`);
-    }
-
     // Patch
     const patch = document.getElementById('patch-select').value;
     if (patch && patch !== 'none') {
@@ -338,6 +243,9 @@ function updatePreview() {
     if (number) {
         details.push(`Dorsal: ${number}`);
     }
+    if (selectedSize) {
+        details.push(`Talla: ${selectedSize}`);
+    }
 
     // Update preview display
     document.getElementById('preview-base').textContent = `€${basePrice.toFixed(2)}`;
@@ -345,30 +253,6 @@ function updatePreview() {
         ? details.map(d => `<span>• ${d}</span>`).join('')
         : '<span style="color: var(--text-muted); font-style: italic;">Sin personalizaciones</span>';
     document.getElementById('preview-total').textContent = `€${totalPrice.toFixed(2)}`;
-}
-
-function showToast(message) {
-    // Remove existing toast if any
-    const existing = document.querySelector('.toast-notification');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.className = 'toast-notification';
-    toast.innerHTML = `<i class="fas fa-check-circle"></i> <span>${message}</span>`;
-    document.body.appendChild(toast);
-
-    // Trigger animation
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 10);
-
-    // Hide after 3 seconds
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 500);
-    }, 3000);
 }
 
 function addToCart() {
@@ -389,12 +273,6 @@ function addToCart() {
         }
     }
 
-    // NUEVA VALIDACIÓN: Nombre y dorsal deben ir juntos
-    if ((name && !number) || (!name && number)) {
-        alert('⚠️ El nombre y el dorsal deben ir juntos.\n\nSi quieres personalizar la camiseta, debes escribir AMBOS campos:\n• Nombre (ej: MESSI)\n• Dorsal (ej: 10)');
-        return;
-    }
-
     // Gather customization data
     const customization = {
         size: selectedSize,
@@ -406,14 +284,9 @@ function addToCart() {
 
     // Calculate total price
     let totalPrice = product.price;
-    if (customization.version === 'jugador') totalPrice += 5;
+    if (customization.version === 'jugador') totalPrice += 15;
     if (customization.patch && customization.patch !== 'none') {
         totalPrice += patchPrices[customization.patch] || 0;
-    }
-
-    // Add size surcharge for 3XL and 4XL
-    if (selectedSize === '3XL' || selectedSize === '4XL') {
-        totalPrice += 2;
     }
 
     // Get quantity
@@ -447,8 +320,83 @@ function addToCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 
-    // Success feedback (Toast)
+    // Success feedback - Toast notification
     showToast(`${product.name} añadido al carrito`);
+}
+
+// Toast notification system
+function showToast(message) {
+    // Remove existing toast if any
+    const existingToast = document.querySelector('.cart-toast');
+    if (existingToast) existingToast.remove();
+
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = 'cart-toast';
+    toast.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${message}</span>
+    `;
+
+    // Add styles if not already present
+    if (!document.getElementById('toast-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'toast-styles';
+        styles.textContent = `
+            .cart-toast {
+                position: fixed;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%) translateY(100px);
+                background: var(--bg-card, #1a1a2e);
+                color: var(--text-main, #fff);
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                font-size: 0.95rem;
+                font-weight: 500;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                animation: toastSlideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                border: 1px solid var(--border, rgba(255,255,255,0.1));
+            }
+            .cart-toast i {
+                color: #22c55e;
+                font-size: 1.25rem;
+            }
+            @keyframes toastSlideUp {
+                from {
+                    transform: translateX(-50%) translateY(100px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes toastSlideDown {
+                from {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(-50%) translateY(100px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+
+    document.body.appendChild(toast);
+
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        toast.style.animation = 'toastSlideDown 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
 function updateCartCount() {
@@ -460,176 +408,402 @@ function updateCartCount() {
     }
 }
 
-// Extract team name from product name
-function extractTeamName(productName) {
-    // Remove year patterns, keywords like Local/Visitante/Tercera/Retro/Icon, and (Kids)
-    let team = productName.replace(/\d{2}\/\d{2}/, '');
-    team = team.replace(/(Local|Visitante|Tercera|Retro|Icon|Kids|\(Kids\))/gi, '');
-    return team.trim();
-}
-
-// Load related products carousel
 function loadRelatedProducts() {
-    if (!products || products.length === 0) return;
-
     // Logic to find related products:
-    // 1. Same Team (highest priority)
-    // 2. Same League
-    // 3. Same Category
-    // 4. Random (fallback to fill carousel)
+    // 1. Same League (most relevant)
+    // 2. Same Category (fallback)
+    // Exclude current product
 
-    const currentTeam = extractTeamName(product.name);
+    let related = products.filter(p => p.id !== product.id && p.league === product.league);
 
-    // 1. Same Team
-    let related = products.filter(p => {
-        if (p.id === product.id) return false;
-        const pTeam = extractTeamName(p.name);
-        return pTeam === currentTeam && p.league === product.league;
-    });
-
-    // Helper to get IDs of current related products
-    const getRelatedIds = () => new Set(related.map(r => r.id));
-
-    // 2. Same League
-    if (related.length < 12) {
-        let currentIds = getRelatedIds();
-        const leagueRelated = products.filter(p =>
-            p.id !== product.id &&
-            p.league === product.league &&
-            !currentIds.has(p.id)
-        );
-        related = [...related, ...leagueRelated];
-    }
-
-    // 3. Same Category
-    if (related.length < 12) {
-        let currentIds = getRelatedIds();
-        const categoryRelated = products.filter(p =>
+    // If not enough products from same league, add from same category
+    if (related.length < 4) {
+        const moreRelated = products.filter(p =>
             p.id !== product.id &&
             p.category === product.category &&
-            !currentIds.has(p.id)
+            !related.includes(p)
         );
-        related = [...related, ...categoryRelated];
+        related = [...related, ...moreRelated];
     }
 
-    // 4. Random fallback to ensure we have enough items for a nice carousel
-    if (related.length < 12) {
-        let currentIds = getRelatedIds();
-        const randomFill = products.filter(p =>
-            p.id !== product.id &&
-            !currentIds.has(p.id)
-        );
-        // Shuffle random fill
-        randomFill.sort(() => Math.random() - 0.5);
-        related = [...related, ...randomFill];
-    }
+    // Shuffle and pick 4
+    const finalRelated = related.sort(() => Math.random() - 0.5).slice(0, 4);
 
-    // Slice to max 12 items
-    carouselProducts = related.slice(0, 12);
-    currentCarouselIndex = 0;
+    const grid = document.getElementById('related-grid');
 
-    renderCarousel();
-    attachCarouselListeners();
-
-    // Recalculate on resize
-    window.addEventListener('resize', () => {
-        updateCarouselButtons();
-        updateCarouselPosition();
-    });
-}
-
-function renderCarousel() {
-    const container = document.getElementById('related-grid');
-
-    // Create carousel HTML
-    container.innerHTML = `
-        <button class="carousel-arrow carousel-arrow-left" id="carousel-prev">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <div class="carousel-container">
-            <div class="carousel-track" id="carousel-track">
-                ${carouselProducts.map(p => `
-                    <article class="product-card">
-                        <div class="product-image">
-                            <span class="badge-sale">OFERTA</span>
-                            <a href="/pages/producto.html?id=${p.id}">
-                                <img src="${p.image}" alt="${p.name}" loading="lazy">
-                            </a>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">${p.name}</h3>
-                            <div class="product-price">
-                                <span class="price-old">€${p.oldPrice.toFixed(2)}</span>
-                                <span class="price">€${p.price.toFixed(2)}</span>
-                            </div>
-                        </div>
-                    </article>
-                `).join('')}
+    // Use the exact same card structure as Tienda for consistency
+    grid.innerHTML = finalRelated.map(p => `
+        <article class="product-card">
+            <div class="product-image">
+                <span class="badge-sale">OFERTA</span>
+                <a href="/pages/producto.html?id=${p.id}">
+                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                </a>
+                <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
             </div>
-        </div>
-        <button class="carousel-arrow carousel-arrow-right" id="carousel-next">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-    `;
+            <div class="product-info">
+                <span class="product-category">${p.category}</span>
+                <h3 class="product-title">${p.name}</h3>
+                <div class="product-price">
+                    <span class="price-old">€${p.oldPrice.toFixed(2)}</span>
+                    <span class="price">€${p.price.toFixed(2)}</span>
+                </div>
+            </div>
+        </article>
+    `).join('');
 
-    updateCarouselButtons();
+    // Re-attach quick view listeners if needed (optional for related section but good for consistency)
+    // For now, we just ensure the links work, which they do via the <a> tag.
 }
 
-function getVisibleCards() {
-    const container = document.querySelector('.carousel-container');
-    if (!container) return 4; // Default
-    const cardWidth = 220;
-    const gap = 24;
-    return Math.floor(container.offsetWidth / (cardWidth + gap));
+// Update cart count on page load
+updateCartCount();
+
+// ============================================
+// SIZE GUIDE MODAL
+// ============================================
+const SIZE_GUIDE_IMAGES = {
+    kids: '/assets/images/guia tallas niños_resultado.webp',
+    nba: '/assets/images/guias tallas nba_resultado.webp',
+    normal: '/assets/images/guia tallas camisetas futbol_resultado.webp'
+};
+
+function getProductType() {
+    if (!product) return 'normal';
+    const nameLower = product.name.toLowerCase();
+    if (nameLower.includes('kids') || nameLower.includes('niño')) return 'kids';
+    if (product.category === 'nba' || product.league === 'nba') return 'nba';
+    return 'normal';
 }
 
-function attachCarouselListeners() {
-    const prevBtn = document.getElementById('carousel-prev');
-    const nextBtn = document.getElementById('carousel-next');
+function openSizeGuide() {
+    const productType = getProductType();
+    const imageSrc = SIZE_GUIDE_IMAGES[productType] || SIZE_GUIDE_IMAGES.normal;
 
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            if (currentCarouselIndex > 0) {
-                currentCarouselIndex--;
-                updateCarouselPosition();
-            }
+    const modal = document.getElementById('size-guide-modal');
+    const img = document.getElementById('size-guide-image');
+
+    if (img) img.src = imageSrc;
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeSizeGuide() {
+    const modal = document.getElementById('size-guide-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Initialize size guide listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const sizeGuideBtn = document.getElementById('size-guide-btn');
+    const sizeGuideClose = document.getElementById('size-guide-close');
+    const sizeGuideOverlay = document.querySelector('.size-guide-overlay');
+
+    if (sizeGuideBtn) sizeGuideBtn.addEventListener('click', openSizeGuide);
+    if (sizeGuideClose) sizeGuideClose.addEventListener('click', closeSizeGuide);
+    if (sizeGuideOverlay) sizeGuideOverlay.addEventListener('click', closeSizeGuide);
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeSizeGuide();
+    });
+});
+
+// ============================================
+// LIGHTBOX SYSTEM - Amazon Style with Zoom Slider
+// ============================================
+let lightboxImages = [];
+let currentLightboxIndex = 0;
+let zoomLevel = 1;
+let isDragging = false;
+let startX = 0, startY = 0;
+let translateX = 0, translateY = 0;
+let lastTouchDistance = 0;
+
+function initLightbox() {
+    const lightbox = document.getElementById('image-lightbox');
+    if (!lightbox) return;
+
+    const wrapper = document.getElementById('lightbox-wrapper');
+    const mainImageContainer = document.querySelector('.main-image');
+    const zoomSlider = document.getElementById('zoom-slider');
+
+    // Open lightbox on main image click
+    if (mainImageContainer) {
+        mainImageContainer.addEventListener('click', (e) => {
+            if (e.target.closest('.gallery-arrow')) return;
+            openLightbox();
         });
     }
 
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            const visibleCards = getVisibleCards();
-            const maxIndex = Math.max(0, carouselProducts.length - visibleCards);
-            if (currentCarouselIndex < maxIndex) {
-                currentCarouselIndex++;
-                updateCarouselPosition();
-            }
+    // Close handlers
+    document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-overlay')?.addEventListener('click', closeLightbox);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') navigateLightbox(-1);
+        if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+
+    // Arrow navigation
+    document.getElementById('lightbox-prev')?.addEventListener('click', () => navigateLightbox(-1));
+    document.getElementById('lightbox-next')?.addEventListener('click', () => navigateLightbox(1));
+
+    // Zoom slider control
+    if (zoomSlider) {
+        zoomSlider.addEventListener('input', (e) => {
+            zoomLevel = parseInt(e.target.value) / 100;
+            updateZoomDisplay();
+            clampTranslation();
+            applyTransform();
         });
     }
-}
 
-function updateCarouselPosition() {
-    const track = document.getElementById('carousel-track');
-    if (track) {
-        const cardWidth = 220; // Min width of card (matches CSS)
-        const gap = 24; // 1.5rem gap (matches CSS)
-        const offset = currentCarouselIndex * (cardWidth + gap);
-        track.style.transform = `translateX(-${offset}px)`;
-        updateCarouselButtons();
+    // Zoom buttons
+    document.getElementById('zoom-in-btn')?.addEventListener('click', () => {
+        setZoomLevel(Math.min(3, zoomLevel + 0.25));
+    });
+
+    document.getElementById('zoom-out-btn')?.addEventListener('click', () => {
+        setZoomLevel(Math.max(1, zoomLevel - 0.25));
+    });
+
+    // Mouse wheel zoom
+    if (wrapper) {
+        wrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.15 : 0.15;
+            setZoomLevel(Math.min(3, Math.max(1, zoomLevel + delta)));
+        }, { passive: false });
+
+        // Double click to toggle zoom
+        wrapper.addEventListener('dblclick', () => {
+            setZoomLevel(zoomLevel > 1 ? 1 : 2);
+        });
+
+        // Mouse drag for panning - CONTROLLED speed
+        wrapper.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            wrapper.classList.add('dragging');
+        });
+
+        wrapper.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            // Controlled speed - 0.4x for smoother movement
+            const deltaX = (e.clientX - startX);
+            const deltaY = (e.clientY - startY);
+
+            translateX += deltaX;
+            translateY += deltaY;
+
+            startX = e.clientX;
+            startY = e.clientY;
+
+            clampTranslation();
+            applyTransform();
+        });
+
+        wrapper.addEventListener('mouseleave', () => {
+            isDragging = false;
+            wrapper.classList.remove('dragging');
+        });
+    }
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        const w = document.getElementById('lightbox-wrapper');
+        if (w) w.classList.remove('dragging');
+    });
+
+    // Touch support
+    if (wrapper) {
+        wrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
+        wrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+        wrapper.addEventListener('touchend', handleTouchEnd);
     }
 }
 
-function updateCarouselButtons() {
-    const prevBtn = document.getElementById('carousel-prev');
-    const nextBtn = document.getElementById('carousel-next');
-    const visibleCards = getVisibleCards();
-    const maxIndex = Math.max(0, carouselProducts.length - visibleCards);
-
-    if (prevBtn) {
-        prevBtn.classList.toggle('disabled', currentCarouselIndex === 0);
-    }
-
-    if (nextBtn) {
-        nextBtn.classList.toggle('disabled', currentCarouselIndex >= maxIndex);
+function handleTouchStart(e) {
+    if (e.touches.length === 2) {
+        lastTouchDistance = getTouchDistance(e.touches);
+    } else if (e.touches.length === 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
     }
 }
+
+function handleTouchMove(e) {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+        const currentDistance = getTouchDistance(e.touches);
+        const delta = (currentDistance - lastTouchDistance) * 0.01;
+        lastTouchDistance = currentDistance;
+        setZoomLevel(Math.min(3, Math.max(1, zoomLevel + delta)));
+    } else if (e.touches.length === 1 && isDragging) {
+        const deltaX = (e.touches[0].clientX - startX);
+        const deltaY = (e.touches[0].clientY - startY);
+        translateX += deltaX;
+        translateY += deltaY;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        clampTranslation();
+        applyTransform();
+    }
+}
+
+function handleTouchEnd() {
+    isDragging = false;
+    lastTouchDistance = 0;
+}
+
+function getTouchDistance(touches) {
+    return Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+    );
+}
+
+function setZoomLevel(level) {
+    zoomLevel = level;
+    const slider = document.getElementById('zoom-slider');
+    if (slider) slider.value = Math.round(zoomLevel * 100);
+    updateZoomDisplay();
+
+    if (zoomLevel === 1) {
+        translateX = 0;
+        translateY = 0;
+    }
+
+    clampTranslation();
+    const wrapper = document.getElementById('lightbox-wrapper');
+    if (wrapper) wrapper.classList.toggle('zoomed', zoomLevel > 1);
+    applyTransform();
+}
+
+function updateZoomDisplay() {
+    const display = document.getElementById('zoom-level-display');
+    if (display) display.textContent = Math.round(zoomLevel * 100) + '%';
+}
+
+function clampTranslation() {
+    const image = document.getElementById('lightbox-image');
+    if (!image || zoomLevel <= 1) {
+        translateX = 0;
+        translateY = 0;
+        return;
+    }
+
+    // Calculate boundaries
+    const rect = image.getBoundingClientRect();
+    const maxX = (rect.width * (zoomLevel - 1)) / (2 * zoomLevel);
+    const maxY = (rect.height * (zoomLevel - 1)) / (2 * zoomLevel);
+
+    translateX = Math.max(-maxX, Math.min(maxX, translateX));
+    translateY = Math.max(-maxY, Math.min(maxY, translateY));
+}
+
+function resetZoom() {
+    zoomLevel = 1;
+    translateX = 0;
+    translateY = 0;
+    const slider = document.getElementById('zoom-slider');
+    if (slider) slider.value = 100;
+    updateZoomDisplay();
+    const wrapper = document.getElementById('lightbox-wrapper');
+    if (wrapper) wrapper.classList.remove('zoomed');
+    applyTransform();
+}
+
+function applyTransform() {
+    const image = document.getElementById('lightbox-image');
+    if (image) {
+        // Middle ground: divide by partial zoomLevel for balanced movement
+        const factor = 1 + (zoomLevel - 1) * 0.5; // At zoom 2x, factor = 1.5
+        const tx = translateX / factor;
+        const ty = translateY / factor;
+        image.style.transform = `scale(${zoomLevel}) translate(${tx}px, ${ty}px)`;
+    }
+}
+
+function openLightbox() {
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const thumbsContainer = document.getElementById('lightbox-thumbnails');
+    if (!lightbox || !lightboxImage) return;
+
+    const thumbs = document.querySelectorAll('.thumbnails .thumb img');
+    lightboxImages = Array.from(thumbs).map(img => img.src);
+
+    if (lightboxImages.length === 0) {
+        const mainImg = document.getElementById('main-img');
+        if (mainImg) lightboxImages = [mainImg.src];
+    }
+
+    const currentMainSrc = document.getElementById('main-img')?.src;
+    currentLightboxIndex = lightboxImages.findIndex(src => src === currentMainSrc);
+    if (currentLightboxIndex === -1) currentLightboxIndex = 0;
+
+    if (thumbsContainer) {
+        thumbsContainer.innerHTML = lightboxImages.map((src, i) => `
+            <div class="lightbox-thumb ${i === currentLightboxIndex ? 'active' : ''}" data-index="${i}">
+                <img src="${src}" alt="Miniatura ${i + 1}">
+            </div>
+        `).join('');
+
+        thumbsContainer.querySelectorAll('.lightbox-thumb').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                currentLightboxIndex = parseInt(thumb.dataset.index);
+                updateLightboxImage();
+            });
+        });
+    }
+
+    resetZoom();
+    lightboxImage.src = lightboxImages[currentLightboxIndex];
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('image-lightbox');
+    if (lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        resetZoom();
+    }
+}
+
+function navigateLightbox(direction) {
+    currentLightboxIndex = (currentLightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
+    updateLightboxImage();
+    resetZoom();
+}
+
+function updateLightboxImage() {
+    const lightboxImage = document.getElementById('lightbox-image');
+    if (lightboxImage) {
+        lightboxImage.src = lightboxImages[currentLightboxIndex];
+    }
+    document.querySelectorAll('.lightbox-thumb').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === currentLightboxIndex);
+    });
+    // Reset zoom when changing image
+    resetZoom();
+}
+
+// Initialize lightbox when DOM is ready
+document.addEventListener('DOMContentLoaded', initLightbox);
