@@ -92,6 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Check URL hash for #register to auto-switch to register tab
+    if (window.location.hash === '#register') {
+        const registerTab = document.querySelector('.auth-tab[data-target="register-form"]');
+        if (registerTab) {
+            registerTab.click();
+        }
+    }
+
     // Login
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
