@@ -1,6 +1,47 @@
 import products from './products-data.js';
 
+// Performance detection
+function detectLowPerformance() {
+    // Check for reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return true;
+    }
+
+    // Check device memory (if available)
+    if (navigator.deviceMemory && navigator.deviceMemory < 4) {
+        return true;
+    }
+
+    // Check hardware concurrency (CPU cores)
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
+        return true;
+    }
+
+    // Check if mobile device with touch
+    if ('ontouchstart' in window && window.innerWidth < 768) {
+        return true;
+    }
+
+    return false;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Detect low performance devices
+    if (detectLowPerformance()) {
+        document.body.classList.add('low-performance');
+    }
+
+    // Check if animation was already seen this session
+    if (sessionStorage.getItem('homeAnimationSeen')) {
+        // Skip animations - add class immediately
+        document.body.classList.add('animation-seen');
+    } else {
+        // First visit - mark as seen after animations complete
+        setTimeout(() => {
+            sessionStorage.setItem('homeAnimationSeen', 'true');
+        }, 1500); // Faster animations now complete in ~1.5s
+    }
+
     initHome();
 });
 
