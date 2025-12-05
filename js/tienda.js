@@ -1,15 +1,30 @@
 /**
- * Tienda.js - Store page with cascading filters
+ * Tienda.js - Store page with pagination & lazy-loading
+ * Optimized for 60fps performance
  */
 
 import products from './products-data.js';
 
-// Global variables
+// ============================================
+// CONFIGURATION
+// ============================================
+const CONFIG = {
+    PRODUCTS_PER_PAGE: 16,
+    LAZY_LOAD_THRESHOLD: '200px', // Load images before they enter viewport
+    PLACEHOLDER_COLOR: '#e0e0e0'
+};
+
+// ============================================
+// STATE MANAGEMENT
+// ============================================
 let allProducts = [];
 let filteredProducts = [];
 let currentProduct = null;
 let selectedLeague = '';
 let selectedTeam = '';
+let currentPage = 1;
+let totalPages = 1;
+let imageObserver = null;
 
 // Patch and extra prices mapping
 const patchPrices = {
@@ -40,14 +55,268 @@ const extraPrices = {
     oficial: 10
 };
 
-// Initialize store
+// ============================================
+// LAZY LOADING SYSTEM
+// ============================================
+function initLazyLoading() {
+    // Check for IntersectionObserver support
+    if (!('IntersectionObserver' in window)) {
+        // Fallback: load all images immediately
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+        });
+        return;
+    }
+
+    // Create observer for lazy loading
+    imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                loadImage(img);
+                observer.unobserve(img);
+            }
+        });
+    }, {
+        rootMargin: CONFIG.LAZY_LOAD_THRESHOLD,
+        threshold: 0.01
+    });
+
+    // Observe all lazy images
+    observeLazyImages();
+}
+
+function observeLazyImages() {
+    if (!imageObserver) return;
+
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+    });
+}
+
+function loadImage(img) {
+    const src = img.dataset.src;
+    if (!src) return;
+
+    // Create a new image to preload
+    const tempImg = new Image();
+
+    tempImg.onload = () => {
+        img.src = src;
+        img.classList.add('loaded');
+        img.removeAttribute('data-src');
+    };
+
+    tempImg.onerror = () => {
+        // Fallback to placeholder on error
+        img.classList.add('error');
+    };
+
+    tempImg.src = src;
+}
+
+// ============================================
+// PAGINATION SYSTEM
+// ============================================
+function calculatePagination() {
+    totalPages = Math.ceil(filteredProducts.length / CONFIG.PRODUCTS_PER_PAGE);
+    if (currentPage > totalPages) currentPage = totalPages || 1;
+}
+
+function getProductsForCurrentPage() {
+    const start = (currentPage - 1) * CONFIG.PRODUCTS_PER_PAGE;
+    const end = start + CONFIG.PRODUCTS_PER_PAGE;
+    return filteredProducts.slice(start, end);
+}
+
+function goToPage(page) {
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderProducts();
+
+    // Scroll to top of products smoothly
+    const grid = document.getElementById('product-grid');
+    if (grid) {
+        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function renderPagination() {
+    const container = document.getElementById('pagination-container');
+    if (!container) return;
+
+    // Don't show pagination if only 1 page
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+
+    let paginationHTML = '<div class="pagination">';
+
+    // Previous button
+    paginationHTML += `
+        <button class="pagination-btn pagination-prev" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    `;
+
+    // Page numbers with smart truncation
+    const maxVisible = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+    if (endPage - startPage < maxVisible - 1) {
+        startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+
+    // First page + ellipsis
+    if (startPage > 1) {
+        paginationHTML += `<button class="pagination-btn" data-page="1">1</button>`;
+        if (startPage > 2) {
+            paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+        }
+    }
+
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+        paginationHTML += `
+            <button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>
+        `;
+    }
+
+    // Last page + ellipsis
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+        }
+        paginationHTML += `<button class="pagination-btn" data-page="${totalPages}">${totalPages}</button>`;
+    }
+
+    // Next button
+    paginationHTML += `
+        <button class="pagination-btn pagination-next" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+
+    paginationHTML += '</div>';
+
+    // Product count info
+    const start = (currentPage - 1) * CONFIG.PRODUCTS_PER_PAGE + 1;
+    const end = Math.min(currentPage * CONFIG.PRODUCTS_PER_PAGE, filteredProducts.length);
+    paginationHTML += `
+        <div class="pagination-info">
+            Mostrando ${start}-${end} de ${filteredProducts.length} productos
+        </div>
+    `;
+
+    container.innerHTML = paginationHTML;
+
+    // Attach click handlers
+    container.querySelectorAll('.pagination-btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const page = parseInt(btn.dataset.page);
+            goToPage(page);
+        });
+    });
+}
+
+// ============================================
+// PRODUCT RENDERING
+// ============================================
+function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    const noResults = document.getElementById('no-results');
+
+    calculatePagination();
+
+    if (filteredProducts.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        renderPagination();
+        return;
+    }
+
+    noResults.classList.add('hidden');
+
+    const productsToShow = getProductsForCurrentPage();
+
+    // Use DocumentFragment for better performance
+    const fragment = document.createDocumentFragment();
+    const tempDiv = document.createElement('div');
+
+    tempDiv.innerHTML = productsToShow.map(product => `
+        <article class="product-card" data-id="${product.id}">
+            <div class="product-image">
+                <span class="badge-sale">OFERTA</span>
+                <a href="/pages/producto.html?id=${product.id}">
+                    <img 
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%23e5e7eb' width='1' height='1'/%3E%3C/svg%3E"
+                        data-src="${product.image}"
+                        alt="${product.name}"
+                        class="primary-image lazy-image"
+                        width="300"
+                        height="300"
+                        loading="lazy"
+                    >
+                    <img 
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%23e5e7eb' width='1' height='1'/%3E%3C/svg%3E"
+                        data-src="${product.image.replace('/1_resultado.webp', '/2_resultado.webp')}"
+                        alt="${product.name}"
+                        class="secondary-image lazy-image"
+                        width="300"
+                        height="300"
+                        loading="lazy"
+                    >
+                </a>
+                <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
+            </div>
+            <div class="product-info">
+                <span class="product-category">${product.category}</span>
+                <h3 class="product-title">${product.name}</h3>
+                <div class="product-price">
+                    <span class="price-old">€${product.oldPrice.toFixed(2)}</span>
+                    <span class="price">€${product.price.toFixed(2)}</span>
+                </div>
+            </div>
+        </article>
+    `).join('');
+
+    // Clear and append
+    grid.innerHTML = '';
+    while (tempDiv.firstChild) {
+        fragment.appendChild(tempDiv.firstChild);
+    }
+    grid.appendChild(fragment);
+
+    // Initialize lazy loading for new images
+    observeLazyImages();
+
+    // Render pagination
+    renderPagination();
+
+    // Attach click handlers for customize buttons
+    document.querySelectorAll('.btn-add').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const productId = parseInt(e.target.dataset.id);
+            openCustomizationModal(productId);
+        });
+    });
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
 function init() {
     allProducts = products;
 
-    // Apply special pricing rules requested
+    // Apply special pricing rules
     applySpecialPricing();
 
     filteredProducts = allProducts;
+
+    // Initialize lazy loading system
+    initLazyLoading();
 
     populateLeagueFilter();
     renderProducts();
@@ -82,7 +351,7 @@ function applySpecialPricing() {
         // Apply changes
         product.oldPrice = oldPrice;
         product.price = newPrice;
-        product.sale = true; // Always on sale
+        product.sale = true;
     });
 }
 
@@ -92,9 +361,7 @@ function populateLeagueFilter() {
     const leagueSelect = document.getElementById('filter-league');
 
     if (leagueSelect) {
-        // Keep first option (Todas las Ligas)
         leagueSelect.innerHTML = '<option value="">Todas las Ligas</option>';
-
         leagues.forEach(league => {
             const option = document.createElement('option');
             option.value = league;
@@ -110,16 +377,13 @@ function populateTeamFilter(league) {
     const teamStep = document.getElementById('team-step');
 
     if (!league) {
-        // Hide team step if no league selected
         teamStep.classList.add('hidden');
         selectedTeam = '';
         return;
     }
 
-    // Filter products by league to get teams
     const leagueProducts = allProducts.filter(p => p.league === league);
 
-    // Extract unique teams
     const teams = [...new Set(leagueProducts.map(p => {
         let name = p.name;
         name = name.replace(/\d{2}\/\d{2}/, '');
@@ -130,15 +394,12 @@ function populateTeamFilter(league) {
 
     if (teamSelect) {
         teamSelect.innerHTML = '<option value="">Todos los Equipos</option>';
-
         teams.forEach(team => {
             const option = document.createElement('option');
             option.value = team;
             option.textContent = team;
             teamSelect.appendChild(option);
         });
-
-        // Show team step
         teamStep.classList.remove('hidden');
     }
 }
@@ -161,54 +422,11 @@ function formatLeagueName(league) {
     return map[league] || league;
 }
 
-// Render products to grid
-function renderProducts() {
-    const grid = document.getElementById('product-grid');
-    const noResults = document.getElementById('no-results');
-
-    if (filteredProducts.length === 0) {
-        grid.innerHTML = '';
-        noResults.classList.remove('hidden');
-        return;
-    }
-
-    noResults.classList.add('hidden');
-
-    grid.innerHTML = filteredProducts.map(product => `
-        <article class="product-card" data-id="${product.id}">
-            <div class="product-image">
-                <span class="badge-sale">OFERTA</span>
-                <a href="/pages/producto.html?id=${product.id}">
-                    <img src="${product.image}" alt="${product.name}" class="primary-image" loading="lazy">
-                    <img src="${product.image.replace('/1_resultado.webp', '/2_resultado.webp')}" alt="${product.name}" class="secondary-image" loading="lazy">
-                </a>
-                <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
-            </div>
-            <div class="product-info">
-                <span class="product-category">${product.category}</span>
-                <h3 class="product-title">${product.name}</h3>
-                <div class="product-price">
-                    <span class="price-old">€${product.oldPrice.toFixed(2)}</span>
-                    <span class="price">€${product.price.toFixed(2)}</span>
-                </div>
-            </div>
-        </article>
-    `).join('');
-
-    // Attach click handlers for customize buttons
-    document.querySelectorAll('.btn-add').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const productId = parseInt(e.target.dataset.id);
-            openCustomizationModal(productId);
-        });
-    });
-}
-
 // Apply filters from URL parameters
 function applyURLFilters() {
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category');
-    // Note: URL filters might need update for new structure, but keeping basic category support
+    // URL filters support
 }
 
 // Attach event listeners
@@ -264,6 +482,9 @@ function attachEventListeners() {
 function applyFilters() {
     const searchTerm = document.getElementById('search-input').value.toLowerCase();
     const sortBy = document.getElementById('sort-select').value;
+
+    // Reset to page 1 when filters change
+    currentPage = 1;
 
     // Filter products
     filteredProducts = allProducts.filter(product => {
