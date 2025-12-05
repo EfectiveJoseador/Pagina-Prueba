@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Profile Logic
+    // Profile Logic - Logout Button Only
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async (e) => {
@@ -303,49 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Logout error:', error);
                     alert('Error al cerrar sesión: ' + error.message);
                 }
-            }
-        });
-    }
-
-    // Check Auth State on Profile Page
-    if (window.location.pathname.includes('perfil.html')) {
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                if (!user.emailVerified) {
-                    // Double check verification
-                    await user.reload();
-                    if (!user.emailVerified) {
-                        alert('Debes verificar tu correo para acceder a esta sección.');
-                        await signOut(auth);
-                        window.location.href = '/pages/login.html';
-                        return;
-                    }
-                }
-
-                // Load user data
-                const userRef = ref(db, 'users/' + user.uid);
-                const snapshot = await get(userRef);
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    const usernameEl = document.querySelector('.user-info h3');
-                    const emailEl = document.querySelector('.user-info p');
-                    const avatarEl = document.querySelector('.avatar');
-
-                    if (usernameEl) usernameEl.textContent = data.username || 'Usuario';
-                    if (emailEl) emailEl.textContent = user.email;
-                    if (avatarEl) avatarEl.textContent = (data.username || 'U')[0].toUpperCase();
-                } else {
-                    // Fallback
-                    const usernameEl = document.querySelector('.user-info h3');
-                    const emailEl = document.querySelector('.user-info p');
-                    const avatarEl = document.querySelector('.avatar');
-
-                    if (usernameEl) usernameEl.textContent = user.displayName || 'Usuario';
-                    if (emailEl) emailEl.textContent = user.email;
-                    if (avatarEl) avatarEl.textContent = (user.displayName || 'U')[0].toUpperCase();
-                }
-            } else {
-                window.location.href = '/pages/login.html';
             }
         });
     }
