@@ -308,7 +308,8 @@ function renderProducts() {
 // INITIALIZATION
 // ============================================
 function init() {
-    allProducts = products;
+    // Shuffle products for random order on each load
+    allProducts = shuffleArray([...products]);
 
     // Apply special pricing rules
     applySpecialPricing();
@@ -323,6 +324,15 @@ function init() {
     attachEventListeners();
     setupModal();
     applyURLFilters();
+}
+
+// Fisher-Yates shuffle for random product order
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 // Apply special pricing based on category/name

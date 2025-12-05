@@ -86,16 +86,11 @@ function renderBestSellers() {
     const grid = document.querySelector('.products-grid');
     if (!grid) return;
 
-    // IDs of products to show in "Más Vendidos"
-    const bestSellerIds = [134, 701, 112, 602];
+    // Get weekly rotated products
+    const bestSellerIds = getWeeklyBestSellers();
+    const bestSellers = bestSellerIds.map(id => products.find(p => p.id === id)).filter(Boolean);
 
-    const bestSellers = products.filter(p => bestSellerIds.includes(p.id));
-
-    // Sort them to match the order of IDs if needed, or just let them appear
-    // To strictly follow the ID order:
-    const sortedBestSellers = bestSellerIds.map(id => bestSellers.find(p => p.id === id)).filter(Boolean);
-
-    grid.innerHTML = sortedBestSellers.map(product => `
+    grid.innerHTML = bestSellers.map(product => `
         <article class="product-card">
             <div class="product-image">
                 ${product.sale ? '<span class="badge-sale">OFERTA</span>' : ''}
@@ -114,4 +109,39 @@ function renderBestSellers() {
             </div>
         </article>
     `).join('');
+}
+
+// Weekly rotation system for "Más Vendidos"
+function getWeeklyBestSellers() {
+    const ROTATION_KEY = 'bestSellers_week';
+    const ROTATION_DATE_KEY = 'bestSellers_date';
+    const PRODUCTS_COUNT = 6; // Show 6 products
+
+    const stored = localStorage.getItem(ROTATION_KEY);
+    const storedDate = localStorage.getItem(ROTATION_DATE_KEY);
+    const now = Date.now();
+    const oneWeek = 7 * 24 * 60 * 60 * 1000; // 7 days in ms
+
+    // Return stored if less than 1 week old AND same count
+    if (stored && storedDate && (now - parseInt(storedDate)) < oneWeek) {
+        try {
+            const parsed = JSON.parse(stored);
+            // Regenerate if count changed
+            if (parsed.length === PRODUCTS_COUNT) {
+                return parsed;
+            }
+        } catch (e) {
+            // If parse fails, generate new
+        }
+    }
+
+    // Generate new random selection
+    const shuffled = [...products].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, PRODUCTS_COUNT).map(p => p.id);
+
+    // Store for next week
+    localStorage.setItem(ROTATION_KEY, JSON.stringify(selected));
+    localStorage.setItem(ROTATION_DATE_KEY, now.toString());
+
+    return selected;
 }
