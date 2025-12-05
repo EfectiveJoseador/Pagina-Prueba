@@ -13,7 +13,7 @@ let addresses = [];
 // ============================================
 // CONFIGURATION
 // ============================================
-const FORMSUBMIT_EMAIL = "camisetazocontacto@gmail.com"; // Email para FormSubmit
+const WEB3FORMS_KEY = "8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8"; // Web3Forms API Key
 const PAYPAL_USERNAME = "camisetazo"; // Usuario de PayPal
 
 // ============================================
@@ -202,7 +202,7 @@ function initPaymentMethods() {
 }
 
 // ============================================
-// ORDER CONFIRMATION & FORMSUBMIT
+// ORDER CONFIRMATION & WEB3FORMS
 // ============================================
 
 function confirmOrder() {
@@ -305,15 +305,18 @@ function confirmOrder() {
 
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
 
-                // Guardar pedido en Firebase ANTES del submit
-                saveOrder(orderData).finally(() => {
+                // Guardar pedido y enviar email via Web3Forms
+                (async () => {
+                    await saveOrder(orderData);
+                    await sendOrderViaWeb3Forms(orderData);
+
                     // Limpiar carrito
                     localStorage.removeItem('cart');
                     localStorage.removeItem('appliedPacks');
 
-                    // Enviar formulario - FormSubmit redirigirá automáticamente a _next
-                    sendOrderViaFormSubmit(orderData);
-                });
+                    // Redirigir a página de éxito
+                    window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+                })();
 
                 return;
             }
@@ -333,30 +336,22 @@ function confirmOrder() {
         confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
         confirmBtn.disabled = true;
 
-        // Guardar pedido en Firebase ANTES del submit
-        saveOrder(orderData).finally(() => {
+        // Guardar pedido y enviar email via Web3Forms
+        (async () => {
+            await saveOrder(orderData);
+            await sendOrderViaWeb3Forms(orderData);
+
             // Limpiar carrito
             localStorage.removeItem('cart');
             localStorage.removeItem('appliedPacks');
 
-            // Enviar formulario - FormSubmit redirigirá automáticamente a _next
-            sendOrderViaFormSubmit(orderData);
-        });
+            // Redirigir a página de éxito
+            window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+        })();
     }
 }
 
-function sendOrderViaFormSubmit(orderData) {
-    const form = document.getElementById('pedidoForm');
-    if (!form) {
-        console.error('Form not found');
-        return Promise.resolve();
-    }
-
-    // Redirección después del envío
-    const successUrl = window.location.origin + '/pages/orden-exitosa.html?order=' + orderData.orderId;
-    const nextInput = document.getElementById('_next_redirect');
-    if (nextInput) nextInput.value = successUrl;
-
+async function sendOrderViaWeb3Forms(orderData) {
     // === CAMPO 1: Customer Info (Plantilla) ===
     const sa = orderData.shippingAddress || {};
     const customerInfo = `Contact Name: ${sa.name || ''}
@@ -368,9 +363,6 @@ Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
 Instagram: @${(sa.instagram || '').replace('@', '')}`;
 
-    const customerInfoInput = document.getElementById('customerInfo');
-    if (customerInfoInput) customerInfoInput.value = customerInfo;
-
     // === CAMPO 2: Purchased Products ===
     let productsText = '';
     orderData.items.forEach((item) => {
@@ -381,17 +373,37 @@ Instagram: @${(sa.instagram || '').replace('@', '')}`;
         productsText += qty + 'x ' + item.name + ' · ' + size + ' · ' + version + ' — €' + price + '\n';
     });
 
-    const productsInput = document.getElementById('productsInfo');
-    if (productsInput) productsInput.value = productsText.trim();
-
     // === CAMPO 3: Total Paid ===
-    const totalInput = document.getElementById('totalPaid');
-    if (totalInput) totalInput.value = '€' + orderData.total.toFixed(2);
+    const totalPaid = '€' + orderData.total.toFixed(2);
 
-    console.log('Submitting FormSubmit...');
-    form.submit();
+    // Preparar FormData para Web3Forms
+    const formData = new FormData();
+    formData.append("access_key", WEB3FORMS_KEY);
+    formData.append("subject", "Nuevo pedido con pago confirmado - " + orderData.orderId);
+    formData.append("cliente", customerInfo);
+    formData.append("productos", productsText.trim());
+    formData.append("total", totalPaid);
 
-    return Promise.resolve();
+    try {
+        console.log('Enviando a Web3Forms...');
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            console.log('Web3Forms: Email enviado correctamente');
+            return true;
+        } else {
+            console.error('Web3Forms error:', data.message);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error al enviar Web3Forms:', error);
+        return false;
+    }
 }
 
 async function saveOrder(orderData) {

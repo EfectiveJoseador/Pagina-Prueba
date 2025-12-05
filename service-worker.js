@@ -26,7 +26,7 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   const cacheWhitelist = [CACHE_NAME];
-  
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -37,28 +37,28 @@ self.addEventListener('activate', (event) => {
         })
       );
     })
-    .then(() => self.clients.claim())
+      .then(() => self.clients.claim())
   );
 });
 
 
 self.addEventListener('fetch', (event) => {
-  
+
   if (event.request.method !== 'GET') return;
-  
-  // Permitir requests de Vercel Analytics y Google Analytics sin interferencia
+
+  // Permitir requests de analytics y Web3Forms sin interferencia
   if (
     event.request.url.includes('analytics.vercel.com') ||
     event.request.url.includes('www.googletagmanager.com') ||
-    event.request.url.includes('formsubmit.co')
+    event.request.url.includes('api.web3forms.com')
   ) {
     return; // fall back to network without caching intercept
   }
-  
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        
+
         if (response && response.status === 200) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME)
@@ -69,7 +69,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       })
       .catch(() => {
-        
+
         return caches.match(event.request);
       })
   );

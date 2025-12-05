@@ -28,21 +28,17 @@
     <div id="header-placeholder"></div>
 
     <!-- ===================================================== -->
-    <!--   FORMULARIO OCULTO DE FORM SUBMIT (CORREGIDO)        -->
+    <!--   FORMULARIO OCULTO WEB3FORMS (Migrado de FormSubmit)  -->
     <!-- ===================================================== -->
 
-    <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST"
-        style="display:none;">
+    <form id="pedidoForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
+        <!-- Web3Forms Config -->
+        <input type="hidden" name="access_key" value="8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8">
+        <input type="hidden" name="subject" value="Nuevo pedido con pago confirmado">
+        <input type="hidden" name="redirect" id="_next_redirect">
+        <input type="checkbox" name="botcheck" style="display:none;">
 
-        <!-- Config FormSubmit (igual que el backup que funciona) -->
-        <input type="hidden" name="_next" id="_next_redirect">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
-        <input type="hidden" name="_language" value="es">
-        <input type="hidden" name="_template" value="table">
-        <input type="text" name="_honey" style="display:none">
-
-        <!-- SOLO 3 CAMPOS QUE SE ENVÍAN (nombres sin espacios) -->
+        <!-- Datos del pedido -->
         <input type="hidden" name="cliente" id="customerInfo">
         <input type="hidden" name="productos" id="productsInfo">
         <input type="hidden" name="total" id="totalPaid">
