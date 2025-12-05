@@ -1,0 +1,135 @@
+/* ============================================ */
+/* PAGINATION STYLES                            */
+/* ============================================ */
+.pagination-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0;
+    padding: 1rem 0;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.pagination-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination-prev,
+.pagination-next {
+    min-width: 44px;
+}
+
+.pagination-ellipsis {
+    padding: 0 0.5rem;
+    color: var(--text-muted);
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* ============================================ */
+/* LAZY LOADING IMAGE STYLES                    */
+/* ============================================ */
+.lazy-image {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: var(--bg-body);
+}
+
+.lazy-image.loaded {
+    opacity: 1;
+}
+
+.lazy-image.error {
+    opacity: 0.5;
+}
+
+/* Prevent layout shift */
+.product-image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--bg-body);
+}
+
+.product-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Secondary image hover effect */
+.product-card .secondary-image {
+    opacity: 0;
+    z-index: 1;
+}
+
+.product-card:hover .secondary-image.loaded {
+    opacity: 1;
+}
+
+.product-card:hover .primary-image.loaded {
+    opacity: 0;
+}
+
+/* ============================================ */
+/* RESPONSIVE                                   */
+/* ============================================ */
+@media (max-width: 768px) {
+    .pagination-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+
+    .pagination {
+        gap: 0.35rem;
+    }
+
+    .pagination-container {
+        margin: 2rem 0;
+    }
+}
