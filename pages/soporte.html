@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soporte - Camisetazo</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -19,7 +21,7 @@
 
 <body>
     <div id="header-placeholder"></div>
-    
+
     <main class="auth-container">
         <div class="auth-card" style="max-width: 600px;">
             <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--text-main);">
@@ -30,11 +32,12 @@
                 ¿Tienes problemas con tu pedido? Cuéntanos y te ayudaremos a resolverlo.
             </p>
 
-            <form action="https://formsubmit.co/camisetazocontacto@gmail.com" method="POST">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_next" value="http://localhost/pages/mensaje-enviado.html">
-                <input type="hidden" name="_subject" value="Solicitud de Soporte - Camisetazo">
-                <input type="hidden" name="_template" value="table">
+            <form id="soporteForm" action="https://api.web3forms.com/submit" method="POST">
+                <!-- Web3Forms Config -->
+                <input type="hidden" name="access_key" value="8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8">
+                <input type="hidden" name="subject" value="Solicitud de Soporte - Camisetazo">
+                <input type="hidden" name="redirect" value="/pages/mensaje-enviado.html">
+                <input type="checkbox" name="botcheck" style="display:none;">
 
                 <div class="form-group">
                     <label>Nombre Completo</label>
@@ -64,7 +67,8 @@
                     <label>Tipo de Problema</label>
                     <div class="input-icon">
                         <i class="fas fa-exclamation-circle"></i>
-                        <select name="tipo_problema" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-body); color: var(--text-main); font-size: 1rem;">
+                        <select name="tipo_problema" required
+                            style="width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-body); color: var(--text-main); font-size: 1rem;">
                             <option value="">Selecciona una opción</option>
                             <option value="Envío">Problema con el envío</option>
                             <option value="Producto">Problema con el producto</option>
@@ -77,7 +81,7 @@
 
                 <div class="form-group">
                     <label>Descripción del Problema</label>
-                    <textarea name="descripcion" required placeholder="Descripción detallada del problema..." 
+                    <textarea name="descripcion" required placeholder="Descripción detallada del problema..."
                         style="width: 100%; min-height: 150px; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-body); color: var(--text-main); font-family: var(--font-body); font-size: 1rem; resize: vertical;"></textarea>
                 </div>
 
@@ -90,7 +94,7 @@
     </main>
 
     <div id="footer-placeholder"></div>
-    
+
     <script src="/js/theme.js"></script>
     <script src="/js/components.js"></script>
 </body>
