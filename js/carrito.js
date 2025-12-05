@@ -148,6 +148,12 @@ const Cart = {
     },
 
     renderPackIndicators(totalQty) {
+        // DO NOT show pack popups in checkout page
+        const isCheckoutPage = window.location.pathname.includes('checkout');
+        if (isCheckoutPage) {
+            return; // Skip rendering pack indicators in checkout
+        }
+
         // Target the summary card
         const summaryCard = document.querySelector('.cart-summary');
         if (!summaryCard) return;

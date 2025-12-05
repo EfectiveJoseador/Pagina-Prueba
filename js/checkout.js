@@ -1,4 +1,4 @@
-import { auth, db } from './firebase-config.js';
+﻿import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import Cart from './carrito.js';
@@ -9,6 +9,12 @@ import Cart from './carrito.js';
 let currentUser = null;
 let selectedAddressId = null;
 let addresses = [];
+
+// ============================================
+// CONFIGURATION
+// ============================================
+const FORMSUBMIT_EMAIL = "camisetazocontacto@gmail.com"; // Email para FormSubmit
+const PAYPAL_USERNAME = "camisetazo"; // Usuario de PayPal
 
 // ============================================
 // ADDRESS MANAGEMENT
@@ -76,7 +82,6 @@ function renderAddresses(addressArray) {
         </label>
     `).join('');
 
-    // Add event listeners to radio buttons
     document.querySelectorAll('input[name="shipping-address"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
             selectAddress(e.target.value);
@@ -87,7 +92,6 @@ function renderAddresses(addressArray) {
 function selectAddress(addressId) {
     selectedAddressId = addressId;
 
-    // Update visual selection
     document.querySelectorAll('.address-option').forEach(option => {
         if (option.dataset.id === addressId) {
             option.classList.add('selected');
@@ -96,20 +100,17 @@ function selectAddress(addressId) {
         }
     });
 
-    // Hide warning if visible
     const warning = document.getElementById('address-warning');
     if (warning) {
         warning.style.display = 'none';
     }
 
-    // Show payment section
     const paymentSection = document.getElementById('payment-section');
     if (paymentSection) {
         paymentSection.style.display = 'block';
         paymentSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // Initialize payment methods
     initPaymentMethods();
 }
 
@@ -153,26 +154,25 @@ async function saveNewAddress(e) {
     e.preventDefault();
     if (!currentUser) return;
 
+    const instagramInput = document.getElementById('new-address-instagram');
     const addressData = {
         name: document.getElementById('new-address-name').value.trim(),
         street: document.getElementById('new-address-street').value.trim(),
         city: document.getElementById('new-address-city').value.trim(),
         zip: document.getElementById('new-address-zip').value.trim(),
-        phone: document.getElementById('new-address-phone').value.trim()
+        phone: document.getElementById('new-address-phone').value.trim(),
+        instagram: instagramInput ? instagramInput.value.trim() : ''
     };
 
     try {
         const addressesRef = ref(db, `users/${currentUser.uid}/addresses`);
         const newAddressRef = await push(addressesRef, addressData);
 
-        // Reload addresses
         await loadUserAddresses();
 
-        // Select the new address automatically
         const newAddressId = newAddressRef.key;
         selectAddress(newAddressId);
 
-        // Hide form
         hideNewAddressForm();
     } catch (error) {
         console.error('Error saving address:', error);
@@ -186,165 +186,77 @@ async function saveNewAddress(e) {
 
 function initPaymentMethods() {
     const paymentRadios = document.querySelectorAll('input[name="payment"]');
-    const paypalContainer = document.getElementById('paypal-button-container');
-    const cardButton = document.getElementById('card-payment-btn');
+    const bizumForm = document.getElementById('bizum-form');
+
+    if (!paymentRadios || paymentRadios.length === 0) return;
 
     paymentRadios.forEach(radio => {
         radio.addEventListener('change', (e) => {
-            if (e.target.value === 'paypal') {
-                paypalContainer.style.display = 'block';
-                cardButton.style.display = 'none';
-                initPayPal();
-            } else if (e.target.value === 'card') {
-                paypalContainer.style.display = 'none';
-                cardButton.style.display = 'block';
+            if (e.target.value === 'bizum') {
+                if (bizumForm) bizumForm.style.display = 'block';
+            } else {
+                if (bizumForm) bizumForm.style.display = 'none';
             }
         });
     });
+}
 
-    // Initialize default payment method (PayPal)
+// ============================================
+// ORDER CONFIRMATION & FORMSUBMIT
+// ============================================
+
+function confirmOrder() {
+    if (!selectedAddressId) {
+        showAddressWarning();
+        return;
+    }
+
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
-    if (selectedPayment && selectedPayment.value === 'paypal') {
-        paypalContainer.style.display = 'block';
-        cardButton.style.display = 'none';
-        initPayPal();
-    }
-
-    // Card payment button handler
-    if (cardButton) {
-        cardButton.addEventListener('click', processCardPayment);
-    }
-}
-
-// ============================================
-// PAYPAL INTEGRATION
-// ============================================
-function initPayPal() {
-    const paypalContainer = document.getElementById('paypal-button-container');
-    if (!paypalContainer || typeof paypal === 'undefined') return;
-
-    // Check if address is selected
-    if (!selectedAddressId) {
-        showAddressWarning();
+    if (!selectedPayment) {
+        alert('Por favor, selecciona un método de pago');
         return;
     }
 
-    // Clear container
-    paypalContainer.innerHTML = '';
+    const paymentMethod = selectedPayment.value;
 
-    // Hide if cart is empty
-    if (Cart.items.length === 0) {
-        paypalContainer.style.display = 'none';
-        return;
-    }
+    if (paymentMethod === 'bizum') {
+        const bizumPhone = document.getElementById('bizum-phone').value.trim();
+        const bizumName = document.getElementById('bizum-name').value.trim();
 
-    paypalContainer.style.display = 'block';
-
-    paypal.Buttons({
-        style: {
-            layout: 'vertical',
-            color: 'blue',
-            shape: 'rect',
-            label: 'paypal'
-        },
-        createOrder: function (data, actions) {
-            if (!selectedAddressId) {
-                showAddressWarning();
-                return Promise.reject(new Error('No address selected'));
-            }
-
-            const calculations = Cart.calculateTotal();
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: calculations.total.toFixed(2),
-                        currency_code: 'EUR',
-                        breakdown: {
-                            item_total: {
-                                value: calculations.subtotal.toFixed(2),
-                                currency_code: 'EUR'
-                            },
-                            shipping: {
-                                value: calculations.shipping.toFixed(2),
-                                currency_code: 'EUR'
-                            }
-                        }
-                    }
-                }]
-            });
-        },
-        onApprove: async function (data, actions) {
-            return actions.order.capture().then(async function (details) {
-                // Save order to Firebase
-                await saveOrder(data.orderID, 'paypal', details);
-
-                // Clear cart
-                localStorage.removeItem('cart');
-                localStorage.removeItem('appliedPacks');
-
-                // Redirect to success page
-                window.location.href = `/pages/orden-exitosa.html?order=${data.orderID}`;
-            });
-        },
-        onError: function (err) {
-            console.error('PayPal Error:', err);
-            alert('Hubo un error al procesar el pago. Por favor, inténtalo de nuevo.');
+        if (!bizumPhone || !bizumName) {
+            alert('Por favor, completa los datos de Bizum');
+            return;
         }
-    }).render('#paypal-button-container');
-}
 
-// ============================================
-// CARD PAYMENT
-// ============================================
-async function processCardPayment() {
-    if (!selectedAddressId) {
-        showAddressWarning();
-        return;
+        if (!/^[0-9]{9}$/.test(bizumPhone)) {
+            alert('El teléfono debe tener 9 dígitos');
+            return;
+        }
     }
-
-    const btn = document.getElementById('card-payment-btn');
-    const originalText = btn.textContent;
-
-    btn.textContent = 'Procesando...';
-    btn.disabled = true;
-
-    // Simulate payment processing
-    setTimeout(async () => {
-        const orderId = 'ORD-' + Date.now();
-
-        // Save order to Firebase
-        await saveOrder(orderId, 'card', {});
-
-        // Clear cart
-        localStorage.removeItem('cart');
-        localStorage.removeItem('appliedPacks');
-
-        // Redirect to success page
-        window.location.href = `/pages/orden-exitosa.html?order=${orderId}`;
-    }, 2000);
-}
-
-// ============================================
-// ORDER SAVING
-// ============================================
-async function saveOrder(orderId, paymentMethod, paymentDetails) {
-    if (!currentUser || !selectedAddressId) return;
 
     const selectedAddress = addresses.find(a => a.id === selectedAddressId);
     const calculations = Cart.calculateTotal();
+    const orderId = 'ORD-' + Date.now();
+
+    if (!calculations || isNaN(calculations.total)) {
+        alert('Error al calcular el total del pedido. Actualiza la página e inténtalo de nuevo.');
+        return;
+    }
 
     const orderData = {
-        id: orderId,
+        orderId: orderId,
         date: new Date().toISOString(),
+        dateFormatted: new Date().toLocaleString('es-ES'),
         status: 'processing',
         items: Cart.items.map(item => {
-            const product = Cart.items.find(i => i.id === item.id);
             return {
                 id: item.id,
-                name: item.name || 'Producto',
+                name: item.name || `Producto ${item.id}`,
                 quantity: item.quantity || item.qty || 1,
                 size: item.size || 'M',
-                price: item.price || 0
+                version: item.version || 'aficionado',
+                price: item.price || 0,
+                customization: item.customization || {}
             };
         }),
         total: calculations.total,
@@ -352,14 +264,145 @@ async function saveOrder(orderId, paymentMethod, paymentDetails) {
         shipping: calculations.shipping,
         shippingAddress: selectedAddress,
         paymentMethod: paymentMethod,
-        paymentDetails: paymentDetails
+        userEmail: currentUser ? currentUser.email : 'No autenticado'
     };
 
+    if (paymentMethod === 'bizum') {
+        orderData.bizumPhone = document.getElementById('bizum-phone').value.trim();
+        orderData.bizumName = document.getElementById('bizum-name').value.trim();
+    } else if (paymentMethod === 'paypal') {
+        orderData.paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${orderData.total.toFixed(2)}`;
+    }
+
+    const confirmBtn = document.getElementById('confirm-order-btn');
+    if (!confirmBtn) return;
+
+    // PAYPAL FLOW
+    if (paymentMethod === 'paypal') {
+        const paypalUrl = orderData.paypalLink;
+
+        let paypalWindow = window.open(paypalUrl, '_blank');
+
+        if (!paypalWindow) {
+            alert('Por favor, permite ventanas emergentes para completar el pago.');
+            return;
+        }
+
+        const originalText = confirmBtn.innerHTML;
+        confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Pago en proceso...';
+        confirmBtn.disabled = true;
+
+        let elapsed = 0;
+        const intervalMs = 500;
+        const timeoutMs = 120000; // 2 minutos de seguridad
+
+        const checkClosed = setInterval(() => {
+            elapsed += intervalMs;
+
+            // Si el navegador ha destruido la referencia o la ventana se ha cerrado
+            if (!paypalWindow || paypalWindow.closed) {
+                clearInterval(checkClosed);
+
+                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
+
+                // Guardar pedido en Firebase ANTES del submit
+                saveOrder(orderData).finally(() => {
+                    // Limpiar carrito
+                    localStorage.removeItem('cart');
+                    localStorage.removeItem('appliedPacks');
+
+                    // Enviar formulario - FormSubmit redirigirá automáticamente a _next
+                    sendOrderViaFormSubmit(orderData);
+                });
+
+                return;
+            }
+
+            // Failsafe: si pasa demasiado tiempo, damos por terminado
+            if (elapsed >= timeoutMs) {
+                clearInterval(checkClosed);
+                alert('No se ha podido detectar el cierre de PayPal. Si has completado el pago, revisa tu correo.');
+                confirmBtn.innerHTML = originalText;
+                confirmBtn.disabled = false;
+            }
+        }, intervalMs);
+
+    } else {
+        // BIZUM FLOW (sin popup)
+        const originalText = confirmBtn.innerHTML;
+        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+        confirmBtn.disabled = true;
+
+        // Guardar pedido en Firebase ANTES del submit
+        saveOrder(orderData).finally(() => {
+            // Limpiar carrito
+            localStorage.removeItem('cart');
+            localStorage.removeItem('appliedPacks');
+
+            // Enviar formulario - FormSubmit redirigirá automáticamente a _next
+            sendOrderViaFormSubmit(orderData);
+        });
+    }
+}
+
+function sendOrderViaFormSubmit(orderData) {
+    const form = document.getElementById('pedidoForm');
+    if (!form) {
+        console.error('Form not found');
+        return Promise.resolve();
+    }
+
+    // Redirección después del envío
+    const successUrl = window.location.origin + '/pages/orden-exitosa.html?order=' + orderData.orderId;
+    const nextInput = document.getElementById('_next_redirect');
+    if (nextInput) nextInput.value = successUrl;
+
+    // === CAMPO 1: Customer Info (Plantilla) ===
+    const sa = orderData.shippingAddress || {};
+    const customerInfo = `Contact Name: ${sa.name || ''}
+Address Line: ${sa.street || ''}
+City: ${sa.city || ''}
+State: ${sa.city || ''}
+Country: España
+Postal Code: ${sa.zip || ''}
+Phone Number: ${sa.phone || ''}
+Instagram: @${(sa.instagram || '').replace('@', '')}`;
+
+    const customerInfoInput = document.getElementById('customerInfo');
+    if (customerInfoInput) customerInfoInput.value = customerInfo;
+
+    // === CAMPO 2: Purchased Products ===
+    let productsText = '';
+    orderData.items.forEach((item) => {
+        const qty = item.quantity || 1;
+        const size = item.size || 'M';
+        const version = item.version || 'fan';
+        const price = (item.price * qty).toFixed(2);
+        productsText += qty + 'x ' + item.name + ' · ' + size + ' · ' + version + ' — €' + price + '\n';
+    });
+
+    const productsInput = document.getElementById('productsInfo');
+    if (productsInput) productsInput.value = productsText.trim();
+
+    // === CAMPO 3: Total Paid ===
+    const totalInput = document.getElementById('totalPaid');
+    if (totalInput) totalInput.value = '€' + orderData.total.toFixed(2);
+
+    console.log('Submitting FormSubmit...');
+    form.submit();
+
+    return Promise.resolve();
+}
+
+async function saveOrder(orderData) {
+    if (!currentUser) return;
+
     try {
-        const orderRef = ref(db, `orders/${currentUser.uid}/${orderId}`);
+        const orderRef = ref(db, `orders/${currentUser.uid}/${orderData.orderId}`);
         await set(orderRef, orderData);
     } catch (error) {
-        console.error('Error saving order:', error);
+        console.error('Error saving order to Firebase:', error);
+        // No lanzamos error: el pedido ya se ha enviado por email
     }
 }
 
@@ -393,7 +436,6 @@ function showLoginPrompt() {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // New address form controls
     const addNewAddressBtn = document.getElementById('add-new-address-btn');
     const cancelNewAddressBtn = document.getElementById('cancel-new-address-btn');
     const newAddressForm = document.getElementById('new-address-form');
@@ -410,21 +452,32 @@ document.addEventListener('DOMContentLoaded', () => {
         newAddressForm.addEventListener('submit', saveNewAddress);
     }
 
-    // Check auth state and load addresses
+    const confirmBtn = document.getElementById('confirm-order-btn');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', confirmOrder);
+    }
+
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
             await loadUserAddresses();
         } else {
-            // User not logged in - still allow checkout but show login prompt
             showLoginPrompt();
         }
     });
 
-    // Update shipping cost in summary
     const calculations = Cart.calculateTotal();
     const shippingEl = document.getElementById('checkout-shipping');
+    const subtotalEl = document.getElementById('checkout-subtotal');
+    const totalEl = document.getElementById('checkout-total');
+
     if (shippingEl) {
         shippingEl.textContent = calculations.shipping === 0 ? 'Gratis' : `€${calculations.shipping.toFixed(2)}`;
+    }
+    if (subtotalEl) {
+        subtotalEl.textContent = `€${calculations.subtotal.toFixed(2)}`;
+    }
+    if (totalEl) {
+        totalEl.textContent = `€${calculations.total.toFixed(2)}`;
     }
 });

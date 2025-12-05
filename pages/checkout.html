@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -20,31 +20,46 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/carrito.css">
     <link rel="stylesheet" href="/css/auth.css">
-
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
 </head>
 
 <body>
 
-    <header class="checkout-header">
-        <div class="container">
-            <a href="/index.html" class="logo-link">
-                <img src="/assets/img/logos/logo.jpg" alt="Camisetazo" class="logo-img">
-                <span>CAMISETAZO</span>
-            </a>
-            <div class="checkout-steps">
-                <span class="step completed">Carrito</span>
-                <span class="separator">/</span>
-                <span class="step active">Envío y Pago</span>
-            </div>
-        </div>
-    </header>
+    <!-- Header generado por JS -->
+    <div id="header-placeholder"></div>
+
+    <!-- ===================================================== -->
+    <!--   FORMULARIO OCULTO DE FORM SUBMIT (CORREGIDO)        -->
+    <!-- ===================================================== -->
+
+    <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST"
+        style="display:none;">
+
+        <!-- Config FormSubmit (igual que el backup que funciona) -->
+        <input type="hidden" name="_next" id="_next_redirect">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
+        <input type="hidden" name="_language" value="es">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none">
+
+        <!-- SOLO 3 CAMPOS QUE SE ENVÍAN (nombres sin espacios) -->
+        <input type="hidden" name="cliente" id="customerInfo">
+        <input type="hidden" name="productos" id="productsInfo">
+        <input type="hidden" name="total" id="totalPaid">
+    </form>
+
+    <!-- ===================================================== -->
+    <!--                CONTENEDOR PRINCIPAL                  -->
+    <!-- ===================================================== -->
 
     <main class="checkout-container">
         <div class="checkout-layout">
-            <!-- Form -->
+
+            <!-- ============================= -->
+            <!--      COLUMNA DE FORMULARIOS   -->
+            <!-- ============================= -->
             <section class="checkout-form-section">
+
                 <!-- Selección de Dirección -->
                 <div class="checkout-section">
                     <div
@@ -56,7 +71,6 @@
                     </div>
 
                     <div id="saved-addresses-list" class="saved-addresses-list">
-                        <!-- Direcciones guardadas se cargan aquí -->
                         <p style="text-align: center; color: var(--text-muted); padding: 2rem;">
                             Cargando direcciones...
                         </p>
@@ -68,9 +82,10 @@
                     </div>
                 </div>
 
-                <!-- Formulario para Nueva Dirección (oculto por defecto) -->
+                <!-- Formulario Nueva Dirección -->
                 <div id="new-address-form-container" style="display: none;" class="checkout-section">
                     <h3 style="margin-bottom: 1rem;">Nueva Dirección</h3>
+
                     <form id="new-address-form">
                         <div class="form-group">
                             <label>Nombre Completo</label>
@@ -98,10 +113,16 @@
                             <input type="tel" id="new-address-phone" required placeholder="+34 600 000 000">
                         </div>
 
+                        <div class="form-group">
+                            <label>Instagram <span style="color: #ef4444;">*</span></label>
+                            <input type="text" id="new-address-instagram" placeholder="@tu_usuario" required>
+                        </div>
+
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Guardar y Usar
                             </button>
+
                             <button type="button" id="cancel-new-address-btn" class="btn"
                                 style="background: var(--border); color: var(--text-main);">
                                 Cancelar
@@ -110,7 +131,7 @@
                     </form>
                 </div>
 
-                <!-- Métodos de Pago (solo visible cuando hay dirección seleccionada) -->
+                <!-- Métodos de Pago -->
                 <div id="payment-section" class="checkout-section" style="display: none;">
                     <h2>Método de Pago</h2>
 
@@ -120,29 +141,47 @@
                             <span>PayPal</span>
                             <i class="fab fa-paypal"></i>
                         </label>
+
                         <label class="payment-option">
-                            <input type="radio" name="payment" value="card">
-                            <span>Tarjeta de Crédito/Débito</span>
-                            <i class="fas fa-credit-card"></i>
+                            <input type="radio" name="payment" value="bizum">
+                            <span>Bizum</span>
+                            <i class="fas fa-mobile-alt"></i>
                         </label>
                     </div>
 
-                    <!-- PayPal Button Container -->
-                    <div id="paypal-button-container" style="margin-top: 1.5rem; display: none;"></div>
+                    <!-- Form Bizum -->
+                    <div id="bizum-form" style="display:none; margin-top:1.5rem;">
+                        <div class="form-group">
+                            <label>Número de Teléfono Bizum</label>
+                            <input type="tel" id="bizum-phone" placeholder="600000000" maxlength="9" pattern="[0-9]{9}">
+                            <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                                Introduce 9 dígitos.
+                            </small>
+                        </div>
 
-                    <!-- Card Payment Button -->
-                    <button type="button" id="card-payment-btn" class="btn btn-block btn-primary"
-                        style="margin-top: 1.5rem; display: none;">
-                        <i class="fas fa-credit-card"></i> Pagar con Tarjeta
+                        <div class="form-group">
+                            <label>Nombre Completo (asociado a Bizum)</label>
+                            <input type="text" id="bizum-name" placeholder="Juan Pérez">
+                        </div>
+                    </div>
+
+                    <!-- Botón Confirmar -->
+                    <button type="button" id="confirm-order-btn" class="btn btn-block btn-primary"
+                        style="margin-top: 1.5rem;">
+                        <i class="fas fa-check-circle"></i> Confirmar Pedido
                     </button>
                 </div>
             </section>
 
-            <!-- Order Summary Sidebar -->
+            <!-- ==================================== -->
+            <!--          RESUMEN DEL PEDIDO          -->
+            <!-- ==================================== -->
+
             <aside class="cart-summary checkout-summary">
                 <h3>Tu Pedido</h3>
+
                 <div id="checkout-items" class="checkout-items-list">
-                    <!-- Items injected by JS -->
+                    <!-- Items cargados por JS -->
                 </div>
 
                 <div class="summary-divider"></div>
@@ -151,10 +190,12 @@
                     <span>Subtotal</span>
                     <span id="checkout-subtotal">€0.00</span>
                 </div>
+
                 <div class="summary-row">
                     <span>Envío</span>
                     <span id="checkout-shipping">Gratis</span>
                 </div>
+
                 <div class="summary-row total">
                     <span>Total</span>
                     <span id="checkout-total">€0.00</span>
@@ -169,8 +210,10 @@
 
     <!-- Scripts -->
     <script src="/js/theme.js"></script>
+    <script src="/js/components.js"></script>
     <script type="module" src="/js/carrito.js"></script>
     <script type="module" src="/js/checkout.js"></script>
+
 </body>
 
 </html>
