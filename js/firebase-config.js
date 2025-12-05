@@ -1,5 +1,5 @@
 // Firebase Configuration
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, setPersistence, browserLocalPersistence, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
@@ -14,13 +14,20 @@ const firebaseConfig = {
     measurementId: "G-GS53GWE2Z0"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase (singleton pattern to prevent multiple initializations)
+let app;
+if (getApps().length === 0) {
+    app = initializeApp(firebaseConfig);
+} else {
+    app = getApp();
+}
+
 const auth = getAuth(app);
 const db = getDatabase(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Set persistence
+// Set persistence to LOCAL - stays even after browser close
+// This is a promise but localStorage persistence is the default anyway
 setPersistence(auth, browserLocalPersistence).catch((error) => {
     console.error("Auth persistence error:", error);
 });
