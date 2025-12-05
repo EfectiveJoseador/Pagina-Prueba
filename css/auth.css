@@ -903,3 +903,70 @@
 [data-theme="dark"] .order-card:hover {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
+
+/* ============================================ */
+/* ORDER ITEM ROWS                             */
+/* ============================================ */
+
+.order-item-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+}
+
+.order-item-qty {
+    font-weight: 600;
+    color: var(--primary);
+    min-width: 2rem;
+}
+
+.order-item-name {
+    flex: 1;
+}
+
+.order-item-size {
+    font-size: 0.8rem;
+    padding: 0.15rem 0.5rem;
+    background: var(--bg-body);
+    border-radius: 4px;
+    color: var(--text-muted);
+}
+
+/* ============================================ */
+/* COPY TRACKING BUTTON                        */
+/* ============================================ */
+
+.copy-tracking-btn {
+    background: none;
+    border: none;
+    color: #10b981;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    margin-left: auto;
+}
+
+.copy-tracking-btn:hover {
+    background: rgba(16, 185, 129, 0.15);
+    transform: scale(1.1);
+}
+
+.tracking-number {
+    font-family: monospace;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .order-item-size {
+    background: #334155;
+}
+
+[data-theme="dark"] .copy-tracking-btn {
+    color: #34d399;
+}
+
+[data-theme="dark"] .copy-tracking-btn:hover {
+    background: rgba(52, 211, 153, 0.15);
+}
