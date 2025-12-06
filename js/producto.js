@@ -409,37 +409,54 @@ function updateCartCount() {
 }
 
 function loadRelatedProducts() {
-    // Logic to find related products:
-    // 1. Same League (most relevant)
-    // 2. Same Category (fallback)
-    // Exclude current product
+    // Extract team base name from product name (e.g., "Real Madrid" from "Real Madrid 25/26 Local")
+    const getTeamBase = (name) => {
+        return name
+            .replace(/\d{2}\/\d{2}/, '')  // Remove season (25/26, 02/03)
+            .replace(/(Local|Visitante|Tercera|Retro|Icon)/gi, '')
+            .replace(/\(Kids\)/gi, '')
+            .trim();
+    };
 
-    let related = products.filter(p => p.id !== product.id && p.league === product.league);
+    const currentTeam = getTeamBase(product.name);
 
-    // If not enough products from same league, add from same category
-    if (related.length < 4) {
-        const moreRelated = products.filter(p =>
-            p.id !== product.id &&
-            p.category === product.category &&
-            !related.includes(p)
-        );
-        related = [...related, ...moreRelated];
-    }
+    // Priority 1: Same team (different variants like Local, Visitante, Kids, Retro)
+    const sameTeam = products.filter(p =>
+        p.id !== product.id && getTeamBase(p.name) === currentTeam
+    );
 
-    // Shuffle and pick 4
-    const finalRelated = related.sort(() => Math.random() - 0.5).slice(0, 4);
+    // Priority 2: Same league (excluding already found)
+    const sameLeague = products.filter(p =>
+        p.id !== product.id &&
+        p.league === product.league &&
+        getTeamBase(p.name) !== currentTeam
+    );
+
+    // Priority 3: Same category (fallback)
+    const sameCategory = products.filter(p =>
+        p.id !== product.id &&
+        p.category === product.category &&
+        p.league !== product.league &&
+        getTeamBase(p.name) !== currentTeam
+    );
+
+    // Combine: team first, then shuffled league, then shuffled category
+    const shuffledLeague = sameLeague.sort(() => Math.random() - 0.5);
+    const shuffledCategory = sameCategory.sort(() => Math.random() - 0.5);
+
+    const combined = [...sameTeam, ...shuffledLeague, ...shuffledCategory];
+    const finalRelated = combined.slice(0, 8);
 
     const grid = document.getElementById('related-grid');
 
-    // Use the exact same card structure as Tienda for consistency
-    grid.innerHTML = finalRelated.map(p => `
+    // Create carousel structure with arrows
+    const cardsHtml = finalRelated.map(p => `
         <article class="product-card">
             <div class="product-image">
                 <span class="badge-sale">OFERTA</span>
                 <a href="/pages/producto.html?id=${p.id}">
                     <img src="${p.image}" alt="${p.name}" loading="lazy">
                 </a>
-                <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
             </div>
             <div class="product-info">
                 <span class="product-category">${p.category}</span>
@@ -452,8 +469,54 @@ function loadRelatedProducts() {
         </article>
     `).join('');
 
-    // Re-attach quick view listeners if needed (optional for related section but good for consistency)
-    // For now, we just ensure the links work, which they do via the <a> tag.
+    grid.innerHTML = `
+        <button class="carousel-arrow carousel-arrow-left" id="related-prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="carousel-container">
+            <div class="carousel-track">
+                ${cardsHtml}
+            </div>
+        </div>
+        <button class="carousel-arrow carousel-arrow-right" id="related-next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+
+    // Initialize carousel navigation
+    initRelatedCarousel();
+}
+
+function initRelatedCarousel() {
+    const track = document.querySelector('#related-grid .carousel-track');
+    const prevBtn = document.getElementById('related-prev');
+    const nextBtn = document.getElementById('related-next');
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const cardWidth = 240;
+    let scrollPosition = 0;
+
+    function updateArrows() {
+        const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+        prevBtn.classList.toggle('disabled', scrollPosition <= 0);
+        nextBtn.classList.toggle('disabled', scrollPosition >= maxScroll - 10);
+    }
+
+    prevBtn.addEventListener('click', () => {
+        scrollPosition = Math.max(0, scrollPosition - cardWidth * 2);
+        track.style.transform = `translateX(-${scrollPosition}px)`;
+        updateArrows();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+        scrollPosition = Math.min(maxScroll, scrollPosition + cardWidth * 2);
+        track.style.transform = `translateX(-${scrollPosition}px)`;
+        updateArrows();
+    });
+
+    updateArrows();
 }
 
 // Update cart count on page load
