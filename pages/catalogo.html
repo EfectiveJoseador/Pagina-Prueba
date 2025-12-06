@@ -16,68 +16,8 @@
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
-    <style>
-        .collections-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .collection-card {
-            position: relative;
-            height: 300px;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            box-shadow: var(--shadow-md);
-        }
-
-        .collection-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .collection-bg {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .collection-card:hover .collection-bg {
-            transform: scale(1.05);
-        }
-
-        .collection-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 2rem;
-        }
-
-        .collection-title {
-            color: white;
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .collection-link {
-            color: var(--accent);
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/badges.css">
 </head>
 
 <body>
@@ -86,44 +26,102 @@
 
     <main>
         <div class="hero-small" style="background: var(--bg-card); padding: 4rem 2rem; text-align: center;">
-            <h1 style="font-family: var(--font-heading); font-size: 3rem; margin-bottom: 1rem;">Nuestras Colecciones
+            <h1 style="font-family: var(--font-heading); font-size: 3rem; margin-bottom: 1rem;">Catálogo Completo
             </h1>
-            <p style="color: var(--text-muted); font-size: 1.2rem;">Explora por categoría y encuentra tu estilo.</p>
+            <p style="color: var(--text-muted); font-size: 1.2rem;">Explora todas nuestras categorías y encuentra tu
+                estilo.</p>
         </div>
 
-        <div class="collections-grid">
-            <a href="/pages/tienda.html?category=futbol" class="collection-card">
-                <img src="/assets/colecciones/camfut_resultado.webp" alt="Fútbol" class="collection-bg">
-                <div class="collection-overlay">
-                    <h2 class="collection-title">Fútbol</h2>
-                    <span class="collection-link">Ver Camisetas <i class="fas fa-arrow-right"></i></span>
-                </div>
-            </a>
+        <section class="section collections-section">
+            <div class="grid-catalogo">
 
-            <a href="/pages/tienda.html?category=nba" class="collection-card">
-                <img src="/assets/colecciones/nba_resultado.webp" alt="NBA" class="collection-bg">
-                <div class="collection-overlay">
-                    <h2 class="collection-title">NBA</h2>
-                    <span class="collection-link">Ver Basket <i class="fas fa-arrow-right"></i></span>
+                <!-- Fútbol - Con dropdown -->
+                <div class="catalogo-card catalogo-card-clickable has-dropdown"
+                    data-link="/pages/tienda.html?category=futbol">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/camfut_resultado.webp" alt="Camisetas Fútbol" class="catalogo-img"
+                            loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Camisetas Fútbol</h3>
+                        <p>La Liga, Premier, Serie A, Bundesliga y más</p>
+                        <button class="catalogo-btn dropdown-btn">
+                            Ver opciones <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/pages/tienda.html?category=futbol">General <i class="fas fa-arrow-right"></i></a>
+                            <a href="/pages/tienda.html?category=futbol&filter=retro">Retro <i
+                                    class="fas fa-arrow-right"></i></a>
+                            <a href="/pages/tienda.html?category=futbol&filter=2526">Nueva Temporada <i
+                                    class="fas fa-arrow-right"></i></a>
+                            <a href="/pages/tienda.html?category=futbol&filter=kids">Conjuntos Niños <i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
                 </div>
-            </a>
 
-            <a href="/pages/tienda.html?category=zapatillas" class="collection-card">
-                <img src="/assets/colecciones/zapa_resultado.webp" alt="Zapatillas" class="collection-bg">
-                <div class="collection-overlay">
-                    <h2 class="collection-title">Zapatillas</h2>
-                    <span class="collection-link">Ver Sneakers <i class="fas fa-arrow-right"></i></span>
+                <!-- NBA - Simple -->
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nba">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/nba_resultado.webp" alt="NBA" class="catalogo-img" loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NBA</h3>
+                        <p>Camisetas oficiales de todos los equipos</p>
+                        <a href="/pages/tienda.html?category=nba" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-            </a>
 
-            <a href="/pages/tienda.html?category=nfl" class="collection-card">
-                <img src="/assets/colecciones/nfl_resultado.webp" alt="NFL" class="collection-bg">
-                <div class="collection-overlay">
-                    <h2 class="collection-title">NFL</h2>
-                    <span class="collection-link">Ver Jerseys <i class="fas fa-arrow-right"></i></span>
+                <!-- Zapatillas - Simple -->
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=zapatillas">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/zapa_resultado.webp" alt="Zapatillas" class="catalogo-img"
+                            loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Zapatillas</h3>
+                        <p>Las mejores marcas al mejor precio</p>
+                        <a href="/pages/tienda.html?category=zapatillas" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-            </a>
-        </div>
+
+                <!-- NFL - Simple -->
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nfl">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/nfl_resultado.webp" alt="NFL" class="catalogo-img" loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NFL</h3>
+                        <p>Football americano oficial</p>
+                        <a href="/pages/tienda.html?category=nfl" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- F1 - Simple (si tienes esta categoría) -->
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=f1">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/images/f1_resultado.webp" alt="F1" class="catalogo-img" loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>F1</h3>
+                        <p>Equipos y pilotos de Fórmula 1</p>
+                        <a href="/pages/tienda.html?category=f1" class="catalogo-btn" onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
     </main>
 
     <div id="footer-placeholder"></div>
@@ -132,6 +130,52 @@
     <script src="/js/components.js"></script>
     <script type="module" src="/js/firebase-global.js"></script>
     <script type="module" src="/js/carrito.js"></script>
+
+    <!-- Catalogo Cards JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle dropdown buttons
+            document.querySelectorAll('.dropdown-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const card = btn.closest('.catalogo-card');
+
+                    document.querySelectorAll('.catalogo-card.dropdown-open').forEach(openCard => {
+                        if (openCard !== card) openCard.classList.remove('dropdown-open');
+                    });
+
+                    card.classList.toggle('dropdown-open');
+                });
+            });
+
+            // Handle clickable cards
+            document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.dropdown-menu') || e.target.closest('.dropdown-btn') || e.target.closest('.catalogo-btn')) {
+                        return;
+                    }
+                    const link = card.dataset.link;
+                    if (link) window.location.href = link;
+                });
+            });
+
+            // Handle dropdown menu links
+            document.querySelectorAll('.dropdown-menu a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.catalogo-card')) {
+                    document.querySelectorAll('.catalogo-card.dropdown-open').forEach(card => {
+                        card.classList.remove('dropdown-open');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

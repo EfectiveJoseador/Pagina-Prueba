@@ -11,6 +11,41 @@ const FEATURED_CONFIG = {
 };
 
 // ============================================
+// SMART LABEL SYSTEM FOR "LO MÁS VENDIDO"
+// ============================================
+const LABEL_TYPES = {
+    NUEVO: { text: 'NUEVO', class: 'badge-nuevo', color: '#10b981' },
+    TENDENCIA: { text: 'TENDENCIA', class: 'badge-trending', color: '#8b5cf6' },
+    POPULAR: { text: 'POPULAR', class: 'badge-popular', color: '#f59e0b' },
+    TOP_PICKS: { text: 'TOP PICKS', class: 'badge-top', color: '#3b82f6' }
+};
+
+// Current season detection (25/26 for 2024-2025)
+const CURRENT_SEASON = '25/26';
+
+function getProductLabel(product, index) {
+    const name = product.name || '';
+    const isRetro = product.retro || product.league === 'retro' || name.toLowerCase().includes('retro');
+    const isCurrentSeason = name.includes(CURRENT_SEASON) || name.includes('24/25');
+
+    // Never show NUEVO for retro products
+    if (isRetro) {
+        // Assign varied labels for retro products
+        const retroLabels = [LABEL_TYPES.TENDENCIA, LABEL_TYPES.POPULAR, LABEL_TYPES.TOP_PICKS];
+        return retroLabels[index % retroLabels.length];
+    }
+
+    // Show NUEVO only for current season products
+    if (isCurrentSeason && product.new !== false) {
+        return LABEL_TYPES.NUEVO;
+    }
+
+    // For other products, rotate through professional labels
+    const labels = [LABEL_TYPES.TENDENCIA, LABEL_TYPES.POPULAR, LABEL_TYPES.TOP_PICKS];
+    return labels[index % labels.length];
+}
+
+// ============================================
 // PERFORMANCE DETECTION
 // ============================================
 function detectLowPerformance() {
@@ -54,8 +89,61 @@ async function initHome() {
     // Apply special pricing rules
     applySpecialPricing();
 
+    // Initialize Catalogo Cards (dropdowns and clickable cards)
+    initCatalogoCards();
+
     // Render Best Sellers from Firebase
     await renderBestSellers();
+}
+
+// ============================================
+// CATALOGO CARDS - Dropdowns & Click Handler
+// ============================================
+function initCatalogoCards() {
+    // Handle dropdown buttons
+    document.querySelectorAll('.dropdown-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent card click
+            const card = btn.closest('.catalogo-card');
+
+            // Close other dropdowns
+            document.querySelectorAll('.catalogo-card.dropdown-open').forEach(openCard => {
+                if (openCard !== card) openCard.classList.remove('dropdown-open');
+            });
+
+            // Toggle this dropdown
+            card.classList.toggle('dropdown-open');
+        });
+    });
+
+    // Handle clickable cards
+    document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Don't navigate if clicking dropdown menu or button
+            if (e.target.closest('.dropdown-menu') || e.target.closest('.dropdown-btn') || e.target.closest('.catalogo-btn')) {
+                return;
+            }
+
+            const link = card.dataset.link;
+            if (link) window.location.href = link;
+        });
+    });
+
+    // Handle dropdown menu links (prevent card click propagation)
+    document.querySelectorAll('.dropdown-menu a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.catalogo-card')) {
+            document.querySelectorAll('.catalogo-card.dropdown-open').forEach(card => {
+                card.classList.remove('dropdown-open');
+            });
+        }
+    });
 }
 
 // ============================================
@@ -108,10 +196,10 @@ async function renderBestSellers() {
             return;
         }
 
-        grid.innerHTML = bestSellers.map(product => `
+        grid.innerHTML = bestSellers.map((product, index) => {
+            return `
             <article class="product-card">
                 <div class="product-image">
-                    ${product.sale ? '<span class="badge-sale">OFERTA</span>' : ''}
                     <a href="/pages/producto.html?id=${product.id}">
                         <img src="${product.image}" alt="${product.name}" loading="lazy">
                     </a>
@@ -126,16 +214,16 @@ async function renderBestSellers() {
                     </div>
                 </div>
             </article>
-        `).join('');
+        `}).join('');
 
     } catch (error) {
         console.error('Error loading featured products:', error);
         // Fallback to random products if Firebase fails
         const fallbackProducts = products.slice(0, FEATURED_CONFIG.PRODUCT_COUNT);
-        grid.innerHTML = fallbackProducts.map(product => `
+        grid.innerHTML = fallbackProducts.map((product, index) => {
+            return `
             <article class="product-card">
                 <div class="product-image">
-                    ${product.sale ? '<span class="badge-sale">OFERTA</span>' : ''}
                     <a href="/pages/producto.html?id=${product.id}">
                         <img src="${product.image}" alt="${product.name}" loading="lazy">
                     </a>
@@ -150,7 +238,7 @@ async function renderBestSellers() {
                     </div>
                 </div>
             </article>
-        `).join('');
+        `}).join('');
     }
 }
 

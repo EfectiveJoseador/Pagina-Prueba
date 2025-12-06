@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/badges.css">
 </head>
 
 <body>
@@ -44,34 +45,82 @@
             </div>
         </section>
 
-        <!-- Collections Grid -->
+        <!-- Collections Grid - Premium Catalog Style -->
         <section class="section collections-section">
-            <h2 class="section-title">Colecciones Destacadas</h2>
-            <div class="collections-grid">
-                <a href="/pages/tienda.html?category=futbol" class="collection-card">
-                    <img src="assets/colecciones/camfut_resultado.webp" alt="Fútbol" loading="lazy">
-                    <div class="collection-overlay">
-                        <h3>Fútbol</h3>
+            <h2 class="section-title">Catálogo</h2>
+            <div class="grid-catalogo">
+
+                <!-- Fútbol - Con dropdown -->
+                <div class="catalogo-card catalogo-card-clickable has-dropdown"
+                    data-link="/pages/tienda.html?category=futbol">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/colecciones/camfut_resultado.webp" alt="Camisetas Fútbol" class="catalogo-img"
+                            loading="lazy">
                     </div>
-                </a>
-                <a href="/pages/tienda.html?category=nba" class="collection-card">
-                    <img src="assets/colecciones/nba_resultado.webp" alt="NBA" loading="lazy">
-                    <div class="collection-overlay">
+                    <div class="catalogo-info">
+                        <h3>Camisetas Fútbol</h3>
+                        <p>La Liga, Premier, Serie A, Bundesliga y más</p>
+                        <button class="catalogo-btn dropdown-btn">
+                            Ver opciones <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/pages/tienda.html?category=futbol">General <i class="fas fa-arrow-right"></i></a>
+                            <a href="/pages/tienda.html?category=futbol&filter=retro">Retro <i
+                                    class="fas fa-arrow-right"></i></a>
+                            <a href="/pages/tienda.html?category=futbol&filter=2526">Nueva Temporada <i
+                                    class="fas fa-arrow-right"></i></a>
+                            <a href="/pages/tienda.html?category=futbol&filter=kids">Conjuntos Niños <i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NBA - Simple -->
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nba">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/colecciones/nba_resultado.webp" alt="NBA" class="catalogo-img" loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
                         <h3>NBA</h3>
+                        <p>Camisetas oficiales de todos los equipos</p>
+                        <a href="/pages/tienda.html?category=nba" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
-                </a>
-                <a href="/pages/tienda.html?category=zapatillas" class="collection-card">
-                    <img src="assets/colecciones/zapa_resultado.webp" alt="Zapatillas" loading="lazy">
-                    <div class="collection-overlay">
+                </div>
+
+                <!-- Zapatillas - Simple -->
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=zapatillas">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/colecciones/zapa_resultado.webp" alt="Zapatillas" class="catalogo-img"
+                            loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
                         <h3>Zapatillas</h3>
+                        <p>Las mejores marcas al mejor precio</p>
+                        <a href="/pages/tienda.html?category=zapatillas" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
-                </a>
-                <a href="/pages/tienda.html?category=nfl" class="collection-card">
-                    <img src="assets/colecciones/nfl_resultado.webp" alt="NFL" loading="lazy">
-                    <div class="collection-overlay">
+                </div>
+
+                <!-- NFL - Simple -->
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nfl">
+                    <div class="catalogo-img-wrap">
+                        <img src="assets/colecciones/nfl_resultado.webp" alt="NFL" class="catalogo-img" loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
                         <h3>NFL</h3>
+                        <p>Football americano oficial</p>
+                        <a href="/pages/tienda.html?category=nfl" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
-                </a>
+                </div>
+
             </div>
         </section>
 
