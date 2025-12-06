@@ -8,15 +8,18 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/fi
 onAuthStateChanged(auth, (user) => {
     const userIcon = document.querySelector('.header-actions a[href="/pages/login.html"]');
 
-    if (user && user.emailVerified) {
-        // User is signed in - change icon link to profile
-        if (userIcon) {
+    if (user) {
+        // User is signed in - store auth state regardless of email verification
+        window.isUserAuthenticated = true;
+        window.currentUser = user;
+
+        // Only change icon if email is verified (for profile access)
+        if (user.emailVerified && userIcon) {
             userIcon.href = '/pages/perfil.html';
             userIcon.title = 'Mi Perfil';
         }
-        // Store auth state for quick checks
-        window.isUserAuthenticated = true;
-        window.currentUser = user;
+
+        console.log('🔐 User authenticated:', user.uid, 'Email verified:', user.emailVerified);
     } else {
         // User is not signed in
         if (userIcon) {

@@ -261,7 +261,7 @@ function confirmOrder() {
         date: new Date().toISOString(),
         dateFormatted: new Date().toLocaleString('es-ES'),
         createdAt: Date.now(),
-        status: 'pendiente_de_confirmacion',
+        status: 'pendiente',
         trackingNumber: null,
         items: Cart.items.map(item => {
             return {
@@ -435,14 +435,43 @@ Instagram: @${(sa.instagram || '').replace('@', '')}`;
 }
 
 async function saveOrder(orderData) {
-    if (!currentUser) return;
+    if (!currentUser) {
+        console.error('❌ Cannot save order: No user authenticated');
+        return false;
+    }
 
     try {
-        const orderRef = ref(db, `orders/${currentUser.uid}/${orderData.orderId}`);
-        await set(orderRef, orderData);
+        console.log('📦 Saving order to Firebase...');
+        console.log('User UID:', currentUser.uid);
+        console.log('Order ID:', orderData.orderId);
+
+        // Use ordersByUser path as per Firebase rules
+        const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${orderData.orderId}`);
+
+        // Ensure all required fields are present
+        const orderToSave = {
+            ...orderData,
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            status: orderData.status || 'pendiente',
+            createdAt: orderData.createdAt || Date.now(),
+            trackingNumber: orderData.trackingNumber || ''
+        };
+
+        await set(orderRef, orderToSave);
+        console.log('✅ Order saved successfully to Firebase');
+        return true;
     } catch (error) {
-        console.error('Error saving order to Firebase:', error);
-        // No lanzamos error: el pedido ya se ha enviado por email
+        console.error('❌ Error saving order to Firebase:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+
+        // Check for common Firebase errors
+        if (error.code === 'PERMISSION_DENIED') {
+            console.error('⚠️ Firebase permission denied. Check if email is verified or rules are too restrictive.');
+        }
+
+        return false;
     }
 }
 

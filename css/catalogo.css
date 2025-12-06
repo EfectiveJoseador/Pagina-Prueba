@@ -512,7 +512,7 @@
         grid-template-columns: 1fr;
     }
 }
-/* Botón para mostrar filtros (visible cuando sidebar está cerrada) */
+/* Botï¿½n para mostrar filtros (visible cuando sidebar estï¿½ cerrada) */
 .btn-show-filters {
     display: none;
     align-items: center;
@@ -529,8 +529,6 @@
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
 }
-
-.btn-show-filters:hover {`n    background: var(--primary);`n    color: white;`n    border-color: var(--primary);`n    transform: translateY(-2px);`n    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);`n}
 
 .sidebar-closed .btn-show-filters {
     display: flex;
