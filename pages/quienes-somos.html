@@ -5,90 +5,879 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiénes Somos - Camisetazo</title>
+    <meta name="description"
+        content="Conoce a Camisetazo - Tu tienda de confianza para camisetas deportivas premium desde 2020.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons & Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/producto.css">
+
     <style>
-        .clients-grid {
+        /* ============================================ */
+        /* ABOUT HERO SECTION                          */
+        /* ============================================ */
+        .about-hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-body) 100%);
+            border-radius: var(--radius-lg);
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .about-hero h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--text-main) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+            line-height: 1.8;
+        }
+
+        /* ============================================ */
+        /* STATS SECTION                               */
+        /* ============================================ */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
         }
 
-        .client-img {
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .stat-card .stat-number {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: block;
+        }
+
+        .stat-card .stat-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================ */
+        /* GALLERY SECTION                             */
+        /* ============================================ */
+        .gallery-section {
+            margin-top: 4rem;
+        }
+
+        .gallery-section h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-main) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gallery-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* ============================================ */
+        /* CAROUSEL CONTAINER                          */
+        /* ============================================ */
+        .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+
+        .carousel-track-wrapper {
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        /* Carousel Slide */
+        .carousel-slide {
+            flex: 0 0 33.333%;
+            padding: 0.5rem;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 1024px) {
+            .carousel-slide {
+                flex: 0 0 50%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .carousel-slide {
+                flex: 0 0 100%;
+            }
+
+            .carousel-container {
+                padding: 0 40px;
+            }
+        }
+
+        /* Client Image Card - CLEAN, NO SHADOWS */
+        .client-card {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            aspect-ratio: 1 / 1;
+            background: var(--bg-card);
+        }
+
+        .client-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .client-card img {
             width: 100%;
-            height: 150px;
+            height: 100%;
             object-fit: cover;
-            border-radius: var(--radius-md);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
 
-        .client-img:hover {
+        .client-card:hover img {
             transform: scale(1.05);
         }
 
-        .about-hero {
+        /* Watermark - Impact font, no background */
+        .watermark {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
             text-align: center;
-            padding: 4rem 2rem;
+            pointer-events: none;
+        }
+
+        .watermark span {
+            font-family: 'Bebas Neue', 'Impact', 'Arial Black', sans-serif;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            text-shadow:
+                2px 2px 4px rgba(0, 0, 0, 0.9),
+                -1px -1px 2px rgba(0, 0, 0, 0.7),
+                1px -1px 2px rgba(0, 0, 0, 0.7),
+                -1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Navigation Arrows */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            margin-bottom: 3rem;
+            border: none;
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            color: var(--text-main);
+        }
+
+        .carousel-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-btn.prev {
+            left: 0;
+        }
+
+        .carousel-btn.next {
+            right: 0;
+        }
+
+        /* Carousel Dots */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            opacity: 0.3;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            opacity: 1;
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        /* Lightbox watermark - Fixed position, stays during zoom */
+        .lightbox-watermark {
+            position: fixed;
+            bottom: 130px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        .lightbox-watermark span {
+            font-family: 'Bebas Neue', 'Impact', 'Arial Black', sans-serif;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            text-shadow:
+                2px 2px 4px rgba(0, 0, 0, 0.9),
+                -1px -1px 2px rgba(0, 0, 0, 0.7),
+                1px -1px 2px rgba(0, 0, 0, 0.7),
+                -1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE                                  */
+        /* ============================================ */
+        @media (max-width: 768px) {
+            .about-hero {
+                padding: 3rem 1.5rem;
+            }
+
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-hero p {
+                font-size: 1rem;
+            }
+
+            .stat-card .stat-number {
+                font-size: 2rem;
+            }
+
+            .carousel-btn {
+                width: 35px;
+                height: 35px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div id="header-placeholder"></div>
-    <main class="container" style="padding: 4rem 1.5rem;">
 
+    <main class="container" style="padding: 4rem 2rem; max-width: 1400px; margin: 0 auto;">
+
+        <!-- Hero Section -->
         <section class="about-hero">
-            <h1 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 2rem;">Quiénes Somos</h1>
-            <p
-                style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); max-width: 800px; margin-left: auto; margin-right: auto;">
-                En Camisetazo nos apasiona conectar a los verdaderos amantes del deporte con artículos premium de las
-                mejores marcas.
-                Nos especializamos en ofrecer productos de alta calidad y artículos exclusivos que permiten vivir la
-                emoción del deporte al mejor precio.
+            <h1>Quiénes Somos</h1>
+            <p>
+                En <strong>Camisetazo</strong> nos apasiona conectar a los verdaderos amantes del deporte con artículos
+                premium de las mejores marcas. Nos especializamos en ofrecer productos de alta calidad y artículos
+                exclusivos que permiten vivir la emoción del deporte al mejor precio.
             </p>
-            <p
-                style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); max-width: 800px; margin-left: auto; margin-right: auto;">
+            <p>
                 Fundada en 2020, hemos crecido gracias a la confianza de miles de clientes satisfechos. Nuestro
-                compromiso es la calidad,
-                la rapidez en los envíos y una atención al cliente excepcional.
+                compromiso es la calidad, la rapidez en los envíos y una atención al cliente excepcional.
             </p>
         </section>
 
-        <section>
-            <h2 style="text-align: center; margin-bottom: 2rem;">Clientes Satisfechos</h2>
-            <div class="clients-grid">
-                <!-- Images from assets/clientes -->
-                <img src="/assets/clientes/cliente1.jpg" alt="Cliente Satisfecho" class="client-img"
-                    onerror="this.style.display='none'">
-                <img src="/assets/clientes/cliente2.jpg" alt="Cliente Satisfecho" class="client-img"
-                    onerror="this.style.display='none'">
-                <img src="/assets/clientes/cliente3.jpg" alt="Cliente Satisfecho" class="client-img"
-                    onerror="this.style.display='none'">
-                <img src="/assets/clientes/cliente4.jpg" alt="Cliente Satisfecho" class="client-img"
-                    onerror="this.style.display='none'">
-                <img src="/assets/clientes/cliente5.jpg" alt="Cliente Satisfecho" class="client-img"
-                    onerror="this.style.display='none'">
-                <img src="/assets/clientes/cliente6.jpg" alt="Cliente Satisfecho" class="client-img"
-                    onerror="this.style.display='none'">
-                <img src="/assets/clientes/cliente7.jpg" alt="Cliente Satisfecho" class="client-img"
-                    onerror="this.style.display='none'">
-                <img src="/assets/clientes/cliente8.jpg" alt="Cliente Satisfecho" class="client-img"
-                    onerror="this.style.display='none'">
+        <!-- Stats Section -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <span class="stat-number">300+</span>
+                <span class="stat-label">Clientes Satisfechos</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-shipping-fast"></i>
+                <span class="stat-number">600+</span>
+                <span class="stat-label">Envíos Realizados</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-star"></i>
+                <span class="stat-number">4.9</span>
+                <span class="stat-label">Valoración Media</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar-check"></i>
+                <span class="stat-number">5</span>
+                <span class="stat-label">Años de Experiencia</span>
             </div>
         </section>
 
+        <!-- Customer Gallery Carousel -->
+        <section class="gallery-section">
+            <h2>Nuestros Clientes</h2>
+            <p class="gallery-subtitle">Fotos reales de nuestros proveedores</p>
+
+            <div class="carousel-container">
+                <button class="carousel-btn prev" aria-label="Anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="carousel-track-wrapper">
+                    <div class="carousel-track" id="carousel-track">
+                        <!-- Slides injected by JS -->
+                    </div>
+                </div>
+
+                <button class="carousel-btn next" aria-label="Siguiente">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="carousel-dots" id="carousel-dots"></div>
+        </section>
+
     </main>
+
+    <!-- Image Lightbox Modal (same as producto.html) -->
+    <div class="image-lightbox" id="image-lightbox">
+        <div class="lightbox-overlay" id="lightbox-overlay"></div>
+        <button class="lightbox-close" id="lightbox-close">&times;</button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="lightbox-content">
+            <div class="lightbox-image-wrapper" id="lightbox-wrapper">
+                <img id="lightbox-image" src="" alt="Imagen ampliada">
+            </div>
+        </div>
+        <!-- Watermark outside wrapper so it stays fixed during zoom -->
+        <div class="lightbox-watermark">
+            <span>@CAMISETAZO._</span>
+        </div>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Zoom Slider Control -->
+        <div class="zoom-control" id="zoom-control">
+            <button class="zoom-btn zoom-in" id="zoom-in-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="zoom-slider-container">
+                <input type="range" id="zoom-slider" class="zoom-slider" min="100" max="300" value="100"
+                    orient="vertical">
+            </div>
+            <button class="zoom-btn zoom-out" id="zoom-out-btn">
+                <i class="fas fa-minus"></i>
+            </button>
+            <span class="zoom-level" id="zoom-level-display">100%</span>
+        </div>
+
+        <div class="lightbox-thumbnails" id="lightbox-thumbnails">
+            <!-- Thumbnails injected by JS -->
+        </div>
+    </div>
+
     <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
     <script src="/js/theme.js"></script>
     <script src="/js/components.js"></script>
     <script type="module" src="/js/firebase-global.js"></script>
     <script type="module" src="/js/carrito.js"></script>
+    <script src="/js/image-protection.js"></script>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const CLIENT_IMAGES = [
+            'cliente1_resultado.webp', 'cliente2_resultado.webp', 'cliente3_resultado.webp',
+            'cliente4_resultado.webp', 'cliente5_resultado.webp', 'cliente6_resultado.webp',
+            'cliente7_resultado.webp', 'cliente8_resultado.webp', 'cliente9_resultado.webp',
+            'cliente10_resultado.webp', 'cliente11_resultado.webp', 'cliente12_resultado.webp',
+            'cliente13_resultado.webp', 'cliente14_resultado.webp', 'cliente15_resultado.webp',
+            'cliente16_resultado.webp', 'cliente17_resultado.webp', 'cliente18_resultado.webp',
+            'cliente19_resultado.webp', 'cliente20_resultado.webp', 'cliente21_resultado.webp',
+            'cliente22_resultado.webp', 'cliente23_resultado.webp', 'cliente24_resultado.webp',
+            'cliente25_resultado.webp', 'cliente26_resultado.webp', 'cliente27_resultado.webp',
+            'cliente28_resultado.webp'
+        ];
+
+        const WATERMARK_TEXT = '@camisetazo._';
+        const AUTOPLAY_INTERVAL = 4000;
+
+        // ============================================
+        // CAROUSEL STATE
+        // ============================================
+        let currentSlide = 0;
+        let slidesPerView = 3;
+        let autoplayTimer = null;
+        let isHovering = false;
+        let lightboxImages = [];
+        let currentLightboxIndex = 0;
+
+        // ============================================
+        // LIGHTBOX STATE (same as producto.js)
+        // ============================================
+        let zoomLevel = 1;
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let translateX = 0, translateY = 0;
+        let lastTouchDistance = 0;
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSlidesPerView();
+            renderCarousel();
+            setupCarouselControls();
+            initLightbox();
+            startAutoplay();
+
+            window.addEventListener('resize', () => {
+                updateSlidesPerView();
+                goToSlide(currentSlide);
+            });
+        });
+
+        function updateSlidesPerView() {
+            if (window.innerWidth <= 640) {
+                slidesPerView = 1;
+            } else if (window.innerWidth <= 1024) {
+                slidesPerView = 2;
+            } else {
+                slidesPerView = 3;
+            }
+        }
+
+        // ============================================
+        // CAROUSEL RENDERING
+        // ============================================
+        function renderCarousel() {
+            const track = document.getElementById('carousel-track');
+            const dotsContainer = document.getElementById('carousel-dots');
+
+            // Shuffle images
+            const shuffled = [...CLIENT_IMAGES].sort(() => Math.random() - 0.5);
+            lightboxImages = shuffled.map(img => `/assets/clientes/${img}`);
+
+            // Render slides
+            track.innerHTML = shuffled.map((img, index) => `
+                <div class="carousel-slide">
+                    <div class="client-card" data-index="${index}">
+                        <img 
+                            src="/assets/clientes/${img}" 
+                            alt="Cliente Satisfecho de Camisetazo"
+                            loading="${index < 6 ? 'eager' : 'lazy'}"
+                        >
+                        <div class="watermark">
+                            <span>${WATERMARK_TEXT}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render dots
+            const totalDots = Math.ceil(shuffled.length / slidesPerView);
+            dotsContainer.innerHTML = Array(totalDots).fill(0).map((_, i) =>
+                `<button class="carousel-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></button>`
+            ).join('');
+
+            // Add click handlers to cards
+            document.querySelectorAll('.client-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const index = parseInt(card.dataset.index);
+                    openLightbox(index);
+                });
+            });
+        }
+
+        // ============================================
+        // CAROUSEL CONTROLS
+        // ============================================
+        function setupCarouselControls() {
+            const prevBtn = document.querySelector('.carousel-btn.prev');
+            const nextBtn = document.querySelector('.carousel-btn.next');
+            const dotsContainer = document.getElementById('carousel-dots');
+            const container = document.querySelector('.carousel-container');
+
+            prevBtn.addEventListener('click', () => {
+                goToSlide(currentSlide - 1);
+                resetAutoplay();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                goToSlide(currentSlide + 1);
+                resetAutoplay();
+            });
+
+            dotsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('carousel-dot')) {
+                    goToSlide(parseInt(e.target.dataset.index) * slidesPerView);
+                    resetAutoplay();
+                }
+            });
+
+            // Pause on hover
+            container.addEventListener('mouseenter', () => {
+                isHovering = true;
+                stopAutoplay();
+            });
+
+            container.addEventListener('mouseleave', () => {
+                isHovering = false;
+                startAutoplay();
+            });
+
+            // Touch swipe support
+            let touchStartX = 0;
+            container.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            container.addEventListener('touchend', (e) => {
+                const diff = touchStartX - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 50) {
+                    goToSlide(currentSlide + (diff > 0 ? 1 : -1));
+                    resetAutoplay();
+                }
+            }, { passive: true });
+        }
+
+        function goToSlide(index) {
+            const totalSlides = CLIENT_IMAGES.length;
+            const maxIndex = totalSlides - slidesPerView;
+            currentSlide = Math.max(0, Math.min(index, maxIndex));
+
+            const track = document.getElementById('carousel-track');
+            track.style.transform = `translateX(${-(currentSlide * (100 / slidesPerView))}%)`;
+
+            // Update dots
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === Math.floor(currentSlide / slidesPerView));
+            });
+        }
+
+        function startAutoplay() {
+            if (autoplayTimer || isHovering) return;
+            autoplayTimer = setInterval(() => {
+                const maxIndex = CLIENT_IMAGES.length - slidesPerView;
+                goToSlide(currentSlide >= maxIndex ? 0 : currentSlide + 1);
+            }, AUTOPLAY_INTERVAL);
+        }
+
+        function stopAutoplay() {
+            if (autoplayTimer) {
+                clearInterval(autoplayTimer);
+                autoplayTimer = null;
+            }
+        }
+
+        function resetAutoplay() {
+            stopAutoplay();
+            if (!isHovering) startAutoplay();
+        }
+
+        // ============================================
+        // LIGHTBOX SYSTEM (same as producto.js)
+        // ============================================
+        function initLightbox() {
+            const lightbox = document.getElementById('image-lightbox');
+            const wrapper = document.getElementById('lightbox-wrapper');
+            const zoomSlider = document.getElementById('zoom-slider');
+
+            // Close handlers
+            document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
+            document.getElementById('lightbox-overlay')?.addEventListener('click', closeLightbox);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!lightbox.classList.contains('active')) return;
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') navigateLightbox(-1);
+                if (e.key === 'ArrowRight') navigateLightbox(1);
+            });
+
+            // Arrow navigation
+            document.getElementById('lightbox-prev')?.addEventListener('click', () => navigateLightbox(-1));
+            document.getElementById('lightbox-next')?.addEventListener('click', () => navigateLightbox(1));
+
+            // Zoom slider control
+            if (zoomSlider) {
+                zoomSlider.addEventListener('input', (e) => {
+                    zoomLevel = parseInt(e.target.value) / 100;
+                    updateZoomDisplay();
+                    clampTranslation();
+                    applyTransform();
+                });
+            }
+
+            // Zoom buttons
+            document.getElementById('zoom-in-btn')?.addEventListener('click', () => {
+                setZoomLevel(Math.min(3, zoomLevel + 0.25));
+            });
+
+            document.getElementById('zoom-out-btn')?.addEventListener('click', () => {
+                setZoomLevel(Math.max(1, zoomLevel - 0.25));
+            });
+
+            // Mouse wheel zoom
+            if (wrapper) {
+                wrapper.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? -0.15 : 0.15;
+                    setZoomLevel(Math.min(3, Math.max(1, zoomLevel + delta)));
+                }, { passive: false });
+
+                // Double click to toggle zoom
+                wrapper.addEventListener('dblclick', () => {
+                    setZoomLevel(zoomLevel > 1 ? 1 : 2);
+                });
+
+                // Mouse drag for panning
+                wrapper.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    wrapper.classList.add('dragging');
+                });
+
+                wrapper.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    translateX += e.clientX - startX;
+                    translateY += e.clientY - startY;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    clampTranslation();
+                    applyTransform();
+                });
+
+                wrapper.addEventListener('mouseleave', () => {
+                    isDragging = false;
+                    wrapper.classList.remove('dragging');
+                });
+
+                // Touch support
+                wrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
+                wrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+                wrapper.addEventListener('touchend', () => { isDragging = false; lastTouchDistance = 0; });
+            }
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                const w = document.getElementById('lightbox-wrapper');
+                if (w) w.classList.remove('dragging');
+            });
+        }
+
+        function handleTouchStart(e) {
+            if (e.touches.length === 2) {
+                lastTouchDistance = getTouchDistance(e.touches);
+            } else if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (e.touches.length === 2) {
+                const currentDistance = getTouchDistance(e.touches);
+                const delta = (currentDistance - lastTouchDistance) * 0.01;
+                lastTouchDistance = currentDistance;
+                setZoomLevel(Math.min(3, Math.max(1, zoomLevel + delta)));
+            } else if (e.touches.length === 1 && isDragging) {
+                translateX += e.touches[0].clientX - startX;
+                translateY += e.touches[0].clientY - startY;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                clampTranslation();
+                applyTransform();
+            }
+        }
+
+        function getTouchDistance(touches) {
+            return Math.hypot(
+                touches[0].clientX - touches[1].clientX,
+                touches[0].clientY - touches[1].clientY
+            );
+        }
+
+        function setZoomLevel(level) {
+            zoomLevel = level;
+            const slider = document.getElementById('zoom-slider');
+            if (slider) slider.value = Math.round(zoomLevel * 100);
+            updateZoomDisplay();
+            if (zoomLevel === 1) { translateX = 0; translateY = 0; }
+            clampTranslation();
+            const wrapper = document.getElementById('lightbox-wrapper');
+            if (wrapper) wrapper.classList.toggle('zoomed', zoomLevel > 1);
+            applyTransform();
+        }
+
+        function updateZoomDisplay() {
+            const display = document.getElementById('zoom-level-display');
+            if (display) display.textContent = Math.round(zoomLevel * 100) + '%';
+        }
+
+        function clampTranslation() {
+            const image = document.getElementById('lightbox-image');
+            if (!image || zoomLevel <= 1) { translateX = 0; translateY = 0; return; }
+            const rect = image.getBoundingClientRect();
+            const maxX = (rect.width * (zoomLevel - 1)) / (2 * zoomLevel);
+            const maxY = (rect.height * (zoomLevel - 1)) / (2 * zoomLevel);
+            translateX = Math.max(-maxX, Math.min(maxX, translateX));
+            translateY = Math.max(-maxY, Math.min(maxY, translateY));
+        }
+
+        function resetZoom() {
+            zoomLevel = 1;
+            translateX = 0;
+            translateY = 0;
+            const slider = document.getElementById('zoom-slider');
+            if (slider) slider.value = 100;
+            updateZoomDisplay();
+            const wrapper = document.getElementById('lightbox-wrapper');
+            if (wrapper) wrapper.classList.remove('zoomed');
+            applyTransform();
+        }
+
+        function applyTransform() {
+            const image = document.getElementById('lightbox-image');
+            if (image) {
+                const factor = 1 + (zoomLevel - 1) * 0.5;
+                image.style.transform = `scale(${zoomLevel}) translate(${translateX / factor}px, ${translateY / factor}px)`;
+            }
+        }
+
+        function openLightbox(index) {
+            const lightbox = document.getElementById('image-lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const thumbsContainer = document.getElementById('lightbox-thumbnails');
+
+            currentLightboxIndex = index;
+
+            // Render thumbnails
+            if (thumbsContainer) {
+                thumbsContainer.innerHTML = lightboxImages.map((src, i) => `
+                    <div class="lightbox-thumb ${i === currentLightboxIndex ? 'active' : ''}" data-index="${i}">
+                        <img src="${src}" alt="Miniatura ${i + 1}">
+                    </div>
+                `).join('');
+
+                thumbsContainer.querySelectorAll('.lightbox-thumb').forEach(thumb => {
+                    thumb.addEventListener('click', () => {
+                        currentLightboxIndex = parseInt(thumb.dataset.index);
+                        updateLightboxImage();
+                    });
+                });
+            }
+
+            resetZoom();
+            lightboxImage.src = lightboxImages[currentLightboxIndex];
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('image-lightbox');
+            if (lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+                resetZoom();
+            }
+        }
+
+        function navigateLightbox(direction) {
+            currentLightboxIndex = (currentLightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
+            updateLightboxImage();
+            resetZoom();
+        }
+
+        function updateLightboxImage() {
+            const lightboxImage = document.getElementById('lightbox-image');
+            if (lightboxImage) lightboxImage.src = lightboxImages[currentLightboxIndex];
+            document.querySelectorAll('.lightbox-thumb').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === currentLightboxIndex);
+            });
+            resetZoom();
+        }
+    </script>
 </body>
 
 </html>
