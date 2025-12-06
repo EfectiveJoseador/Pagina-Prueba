@@ -440,7 +440,6 @@
     position: relative;
     width: 100%;
     display: block;
-    /* Override .product-grid display: grid */
 }
 
 .carousel-container {
