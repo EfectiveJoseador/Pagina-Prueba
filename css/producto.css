@@ -666,12 +666,13 @@
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.15s ease, transform 0.15s ease;
     padding: 0.25rem 0.5rem;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     gap: 0.35rem;
+    will-change: transform;
 }
 
 .size-guide-link:hover {
@@ -683,7 +684,7 @@
     font-size: 0.9rem;
 }
 
-/* Size Guide Modal */
+/* Size Guide Modal - Optimized for performance */
 .size-guide-modal {
     position: fixed;
     top: 0;
@@ -691,13 +692,18 @@
     right: 0;
     bottom: 0;
     z-index: 9999;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    will-change: opacity;
 }
 
 .size-guide-modal.active {
-    display: flex;
+    opacity: 1;
+    visibility: visible;
 }
 
 .size-guide-overlay {
@@ -706,9 +712,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    animation: fadeIn 0.3s ease;
+    background: rgba(0, 0, 0, 0.75);
+    /* backdrop-filter removed for performance */
 }
 
 .size-guide-content {
@@ -720,8 +725,16 @@
     max-height: 85vh;
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: slideUpFade 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(20px) scale(0.98);
+    opacity: 0;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
     border: 1px solid var(--border);
+    will-change: transform, opacity;
+}
+
+.size-guide-modal.active .size-guide-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
 }
 
 .size-guide-content h3 {
@@ -752,8 +765,9 @@
     justify-content: center;
     cursor: pointer;
     color: var(--text-main);
-    transition: all 0.2s ease;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
     z-index: 10;
+    will-change: transform;
 }
 
 .size-guide-close:hover {
@@ -761,18 +775,6 @@
     color: white;
     border-color: var(--primary);
     transform: rotate(90deg);
-}
-
-@keyframes slideUpFade {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
 }
 
 /* ============================================ */

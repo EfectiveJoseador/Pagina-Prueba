@@ -14,12 +14,21 @@
         '.product-card img',
         '.main-image img',
         '.thumbnails img',
+        '.thumbnail img',
+        '.lightbox-thumbnails img',
+        '.lightbox-thumbnail img',
         '.gallery-image img',
         '.lightbox-image-wrapper img',
+        '.image-modal img',
+        '.modal-thumbnails img',
+        '.zoom-modal img',
         '#main-img',
         '#lightbox-image',
         '.client-card img',
-        '.carousel-slide img'
+        '.carousel-slide img',
+        '[class*="thumbnail"] img',
+        '[class*="lightbox"] img',
+        '[class*="modal"] img'
     ];
 
     // ============================================
@@ -86,8 +95,8 @@
             return true;
         }
 
-        // Check if it's within a protected container
-        const protectedContainer = element.closest('.product-image, .product-card, .main-image, .client-card');
+        // Check if it's within a protected container (including lightbox/modal)
+        const protectedContainer = element.closest('.product-image, .product-card, .main-image, .client-card, .lightbox, .modal, .image-modal, .zoom-modal, [class*="lightbox"], [class*="modal"], [class*="thumbnail"]');
         return !!protectedContainer;
     }
 
@@ -160,9 +169,19 @@
             .product-card img,
             .main-image img,
             .thumbnails img,
+            .thumbnail img,
+            .lightbox-thumbnails img,
+            .lightbox-thumbnail img,
             .gallery-image img,
             .client-card img,
             .carousel-slide img,
+            .lightbox-image-wrapper img,
+            .image-modal img,
+            .modal-thumbnails img,
+            .zoom-modal img,
+            [class*="thumbnail"] img,
+            [class*="lightbox"] img,
+            [class*="modal"] img,
             #main-img,
             #lightbox-image {
                 user-select: none !important;
@@ -190,7 +209,10 @@
             .product-image,
             .product-card,
             .main-image,
-            .client-card {
+            .client-card,
+            [class*="thumbnail"],
+            [class*="lightbox"],
+            [class*="modal"] {
                 position: relative;
             }
         `;

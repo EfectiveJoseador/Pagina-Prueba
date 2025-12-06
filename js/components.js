@@ -14,7 +14,7 @@ const Components = {
 
                 <nav class="nav-menu" id="navMenu">
                     <a href="/index.html" class="nav-link">Inicio</a>
-                    <a href="/pages/catalogo.html" class="nav-link">Colecciones</a>
+                    <a href="/pages/catalogo.html" class="nav-link">Catálogo</a>
                     <a href="/pages/tienda.html" class="nav-link">Tienda</a>
                     <a href="/pages/quienes-somos.html" class="nav-link">Nosotros</a>
                 </nav>
