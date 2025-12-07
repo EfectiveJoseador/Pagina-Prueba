@@ -58,6 +58,27 @@ function clearError(elementId) {
     }
 }
 
+// Redirect authenticated users away from login page
+onAuthStateChanged(auth, async (user) => {
+    // Only run on login page
+    if (!window.location.pathname.includes('login.html')) return;
+
+    if (user && user.emailVerified) {
+        // Check if admin
+        try {
+            const idTokenResult = await user.getIdTokenResult(true);
+            if (idTokenResult.claims.admin === true) {
+                window.location.href = '/pages/admin.html';
+            } else {
+                window.location.href = '/pages/perfil.html';
+            }
+        } catch (error) {
+            console.error('Error checking admin status:', error);
+            window.location.href = '/pages/perfil.html';
+        }
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Recaptcha
     let recaptchaVerifier;

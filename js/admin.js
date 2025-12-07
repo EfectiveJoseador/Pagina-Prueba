@@ -472,8 +472,7 @@ window.viewOrderDetails = async function (path) {
                 <h3><i class="fas fa-credit-card"></i> Pago</h3>
                 <p><strong>Método:</strong> ${order.paymentMethod || 'N/A'}</p>
                 ${order.paymentMethod === 'bizum' ? `
-                    <p><strong>Teléfono:</strong> ${order.bizumPhone || 'N/A'}</p>
-                    <p><strong>Nombre:</strong> ${order.bizumName || 'N/A'}</p>
+                    <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram:</strong> ${order.bizumInstagram || 'N/A'}</p>
                 ` : ''}
                 ${order.payment?.confirmedBy ? `<p><strong>Confirmado por:</strong> ${order.payment.confirmedBy}</p>` : ''}
             </div>

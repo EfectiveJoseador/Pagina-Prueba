@@ -301,8 +301,7 @@ function confirmOrder() {
     };
 
     if (paymentMethod === 'bizum') {
-        orderData.bizumPhone = document.getElementById('bizum-phone').value.trim();
-        orderData.bizumName = document.getElementById('bizum-name').value.trim();
+        orderData.bizumInstagram = document.getElementById('bizum-instagram').value.trim();
     } else if (paymentMethod === 'paypal') {
         orderData.paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal.toFixed(2)}`;
     }
