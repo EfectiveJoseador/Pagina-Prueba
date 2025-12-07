@@ -4,7 +4,7 @@ import products from './products-data.js';
 const patchPrices = {
     none: 0,
     liga: 1,
-    champions: 2,
+    champions: 1,
     europa: 1,
     premier: 1,
     seriea: 1,
@@ -482,35 +482,82 @@ function loadRelatedProducts() {
 }
 
 function initRelatedCarousel() {
-    const track = document.querySelector('#related-grid .carousel-track');
+    const grid = document.getElementById('related-grid');
+    const track = grid?.querySelector('.carousel-track');
     const prevBtn = document.getElementById('related-prev');
     const nextBtn = document.getElementById('related-next');
 
     if (!track || !prevBtn || !nextBtn) return;
 
-    const cardWidth = 240;
-    let scrollPosition = 0;
+    const originalCards = Array.from(track.querySelectorAll('.product-card'));
+    if (originalCards.length === 0) return;
 
-    function updateArrows() {
-        const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
-        prevBtn.classList.toggle('disabled', scrollPosition <= 0);
-        nextBtn.classList.toggle('disabled', scrollPosition >= maxScroll - 10);
+    const cardWidth = 220 + 24; // card width (220px) + gap (1.5rem = 24px)
+    const totalCards = originalCards.length;
+
+    // Clone all cards and append/prepend for seamless loop
+    originalCards.forEach(card => {
+        const cloneEnd = card.cloneNode(true);
+        const cloneStart = card.cloneNode(true);
+        cloneEnd.classList.add('carousel-clone');
+        cloneStart.classList.add('carousel-clone');
+        track.appendChild(cloneEnd);
+        track.insertBefore(cloneStart, track.firstChild);
+    });
+
+    // Start at the first "real" card (after the prepended clones)
+    let currentIndex = totalCards;
+    let isTransitioning = false;
+
+    function updateCarousel(animate = true) {
+        if (!animate) {
+            track.style.transition = 'none';
+        } else {
+            track.style.transition = 'transform 0.3s ease';
+        }
+        const translateX = -(currentIndex * cardWidth);
+        track.style.transform = `translateX(${translateX}px)`;
     }
 
-    prevBtn.addEventListener('click', () => {
-        scrollPosition = Math.max(0, scrollPosition - cardWidth * 2);
-        track.style.transform = `translateX(-${scrollPosition}px)`;
-        updateArrows();
+    function handleTransitionEnd() {
+        isTransitioning = false;
+        // If we've scrolled to the cloned section at the end, jump to the real start
+        if (currentIndex >= totalCards * 2) {
+            currentIndex = totalCards;
+            updateCarousel(false);
+        }
+        // If we've scrolled to the cloned section at the start, jump to the real end
+        if (currentIndex < totalCards) {
+            currentIndex = totalCards + (currentIndex);
+            updateCarousel(false);
+        }
+    }
+
+    track.addEventListener('transitionend', handleTransitionEnd);
+
+    prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (isTransitioning) return;
+        isTransitioning = true;
+        currentIndex--;
+        updateCarousel();
     });
 
-    nextBtn.addEventListener('click', () => {
-        const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
-        scrollPosition = Math.min(maxScroll, scrollPosition + cardWidth * 2);
-        track.style.transform = `translateX(-${scrollPosition}px)`;
-        updateArrows();
+    nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (isTransitioning) return;
+        isTransitioning = true;
+        currentIndex++;
+        updateCarousel();
     });
 
-    updateArrows();
+    // Initial position (no animation)
+    updateCarousel(false);
+    // Force a reflow then enable transitions
+    track.offsetHeight;
+    track.style.transition = 'transform 0.3s ease';
 }
 
 // Update cart count on page load

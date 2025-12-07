@@ -190,42 +190,53 @@
                     <div class="option-group">
                         <label class="option-label" for="version-select">Versión</label>
                         <select id="version-select" class="select-input">
-                            <option value="aficionado">Aficionado (Standard)</option>
-                            <option value="jugador">Jugador (Premium +€5)</option>
+                            <option value="aficionado">Version Fan</option>
+                            <option value="jugador">Version Jugador (+€5)</option>
                         </select>
                     </div>
 
-                    <!-- Nombre -->
-                    <div class="option-group">
-                        <label class="option-label" for="name-input">Nombre <span
-                                style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">(Opcional)</span></label>
-                        <input type="text" id="name-input" class="text-input" placeholder="Ej: MESSI" maxlength="15"
-                            pattern="[A-Za-zÀ-ÿ\s]+">
-                        <small class="input-hint">Máximo 15 caracteres, solo letras</small>
-                    </div>
+                    <!-- Personalización (Nombre + Dorsal) -->
+                    <div class="option-group"
+                        style="background: var(--bg-body); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                        <label class="option-label" style="margin-bottom: 1rem;">Personalización <span
+                                style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">Opcional
+                                (+€2)</span></label>
 
-                    <!-- Dorsal -->
-                    <div class="option-group">
-                        <label class="option-label" for="number-input">Dorsal <span
-                                style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">(Opcional)</span></label>
-                        <input type="text" id="number-input" class="text-input" placeholder="Ej: 10" maxlength="2"
-                            inputmode="numeric" pattern="[0-9]*">
-                        <small class="input-hint">Entre 0 y 99</small>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <!-- Nombre -->
+                            <div>
+                                <label for="name-input"
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem;">Nombre</label>
+                                <input type="text" id="name-input" class="text-input" placeholder="Ej: MESSI"
+                                    maxlength="15" pattern="[A-Za-zÀ-ÿ\s]+">
+                            </div>
+                            <!-- Dorsal -->
+                            <div>
+                                <label for="number-input"
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem;">Dorsal</label>
+                                <input type="text" id="number-input" class="text-input" placeholder="Ej: 10"
+                                    maxlength="2" inputmode="numeric" pattern="[0-9]*">
+                            </div>
+                        </div>
+                        <small class="input-hint" style="margin-top: 0.5rem; display: block;">Nombre: máx. 15 letras |
+                            Dorsal: 0-99</small>
                     </div>
 
                     <!-- Parches -->
                     <div class="option-group">
-                        <label class="option-label" for="patch-select">Parches</label>
+                        <label class="option-label" for="patch-select">Parches <span
+                                style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">Opcional
+                                (+€1)</span></label>
                         <select id="patch-select" class="select-input">
                             <option value="none">Sin parches</option>
-                            <option value="liga">Parche Liga (+€1)</option>
-                            <option value="champions">Parche Champions League (+€2)</option>
-                            <option value="europa">Parche Europa League (+€1)</option>
-                            <option value="premier">Parche Premier League (+€1)</option>
-                            <option value="seriea">Parche Serie A (+€1)</option>
-                            <option value="mundial">Parche Mundial de Clubes (+€1)</option>
-                            <option value="copamundo">Parche Copa del Mundo (+€1)</option>
-                            <option value="conmemorativo">Parche Conmemorativo (+€1)</option>
+                            <option value="liga">Parche Liga</option>
+                            <option value="champions">Parche Champions League</option>
+                            <option value="europa">Parche Europa League</option>
+                            <option value="premier">Parche Premier League</option>
+                            <option value="seriea">Parche Serie A</option>
+                            <option value="mundial">Parche Mundial de Clubes</option>
+                            <option value="copamundo">Parche Copa del Mundo</option>
+                            <option value="conmemorativo">Parche Conmemorativo</option>
                         </select>
                     </div>
 

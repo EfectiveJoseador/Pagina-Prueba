@@ -47,83 +47,133 @@
 
         <!-- Collections Grid - Premium Catalog Style -->
         <section class="section collections-section">
-            <h2 class="section-title">Catálogo</h2>
-            <div class="grid-catalogo">
+            <div class="section-header">
+                <h2 class="section-title">Catálogo</h2>
+                <a href="/pages/catalogo.html" class="link-arrow">Ver todo <i class="fas fa-arrow-right"></i></a>
+            </div>
 
-                <!-- Fútbol - Con dropdown -->
-                <div class="catalogo-card catalogo-card-clickable has-dropdown"
-                    data-link="/pages/tienda.html?category=futbol">
-                    <div class="catalogo-img-wrap">
-                        <img src="assets/colecciones/camfut_resultado.webp" alt="Camisetas Fútbol" class="catalogo-img"
-                            loading="lazy">
-                    </div>
-                    <div class="catalogo-info">
-                        <h3>Camisetas Fútbol</h3>
-                        <p>La Liga, Premier, Serie A, Bundesliga y más</p>
-                        <button class="catalogo-btn dropdown-btn">
-                            Ver opciones <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="https://2020soccer.x.yupoo.com/albums">General <i
-                                    class="fas fa-arrow-right"></i></a>
-                            <a href="https://classic-football-fhirts052.x.yupoo.com/">Retro <i
-                                    class="fas fa-arrow-right"></i></a>
-                            <a href="https://yongfa1688.x.yupoo.com/">Nueva Temporada <i
-                                    class="fas fa-arrow-right"></i></a>
-                            <a href="https://aosendi.x.yupoo.com/albums">Conjuntos 1 <i
-                                    class="fas fa-arrow-right"></i></a>
-                            <a href="https://dongshanstore.x.yupoo.com/">Conjuntos 2 <i
-                                    class="fas fa-arrow-right"></i></a>
+            <!-- Carousel de Catálogo -->
+            <div class="catalogo-carousel" id="catalogo-carousel">
+                <button class="carousel-arrow carousel-arrow-left" id="catalogo-prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-container">
+                    <div class="carousel-track" id="catalogo-track">
+
+                        <!-- Fútbol - Con dropdown -->
+                        <div class="catalogo-card catalogo-card-clickable has-dropdown"
+                            data-link="https://2020soccer.x.yupoo.com/albums">
+                            <div class="catalogo-img-wrap">
+                                <img src="assets/colecciones/camfut_resultado.webp" alt="Camisetas Fútbol"
+                                    class="catalogo-img" loading="lazy">
+                            </div>
+                            <div class="catalogo-info">
+                                <h3>Camisetas Fútbol</h3>
+                                <p>La Liga, Premier, Serie A, Bundesliga y más</p>
+                                <button class="catalogo-btn dropdown-btn">
+                                    Ver opciones <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="https://2020soccer.x.yupoo.com/albums">General <i
+                                            class="fas fa-arrow-right"></i></a>
+                                    <a href="https://classic-football-fhirts052.x.yupoo.com/">Retro <i
+                                            class="fas fa-arrow-right"></i></a>
+                                    <a href="https://yongfa1688.x.yupoo.com/">Nueva Temporada <i
+                                            class="fas fa-arrow-right"></i></a>
+                                    <a href="https://aosendi.x.yupoo.com/albums">Conjuntos 1 <i
+                                            class="fas fa-arrow-right"></i></a>
+                                    <a href="https://dongshanstore.x.yupoo.com/">Conjuntos 2 <i
+                                            class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- NBA - Simple -->
+                        <div class="catalogo-card catalogo-card-clickable" data-link="https://x.yupoo.com/photos/05941188/albums">
+                            <div class="catalogo-img-wrap">
+                                <img src="assets/colecciones/nba_resultado.webp" alt="NBA" class="catalogo-img"
+                                    loading="lazy">
+                            </div>
+                            <div class="catalogo-info">
+                                <h3>NBA</h3>
+                                <p>Camisetas oficiales de todos los equipos</p>
+                                <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn"
+                                    onclick="event.stopPropagation()">
+                                    Ver colección <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Zapatillas - Simple -->
+                        <div class="catalogo-card catalogo-card-clickable"
+                            data-link="https://eu1688.x.yupoo.com/albums">
+                            <div class="catalogo-img-wrap">
+                                <img src="assets/colecciones/zapa_resultado.webp" alt="Zapatillas" class="catalogo-img"
+                                    loading="lazy">
+                            </div>
+                            <div class="catalogo-info">
+                                <h3>Zapatillas</h3>
+                                <p>Las mejores marcas al mejor precio</p>
+                                <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn"
+                                    onclick="event.stopPropagation()">
+                                    Ver colección <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- NFL - Simple -->
+                        <div class="catalogo-card catalogo-card-clickable" data-link="https://eu1688.x.yupoo.com/albums">
+                            <div class="catalogo-img-wrap">
+                                <img src="assets/colecciones/nfl_resultado.webp" alt="NFL" class="catalogo-img"
+                                    loading="lazy">
+                            </div>
+                            <div class="catalogo-info">
+                                <h3>NFL</h3>
+                                <p>Football americano oficial</p>
+                                <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn"
+                                    onclick="event.stopPropagation()">
+                                    Ver colección <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- F1 - Simple -->
+                        <div class="catalogo-card catalogo-card-clickable" data-link="https://x.yupoo.com/photos/yiyisports2016/collections/3551571">
+                            <div class="catalogo-img-wrap">
+                                <img src="assets/images/f1_resultado.webp" alt="F1" class="catalogo-img" loading="lazy">
+                            </div>
+                            <div class="catalogo-info">
+                                <h3>F1</h3>
+                                <p>Equipos y pilotos de Fórmula 1</p>
+                                <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="catalogo-btn"
+                                    onclick="event.stopPropagation()">
+                                    Ver colección <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Mandos PS4 - Simple -->
+                        <div class="catalogo-card catalogo-card-clickable"
+                            data-link="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?tab=t.0">
+                            <div class="catalogo-img-wrap">
+                                <img src="assets/images/ps4_resultado.webp" alt="Mandos PS4" class="catalogo-img"
+                                    loading="lazy">
+                            </div>
+                            <div class="catalogo-info">
+                                <h3>Mandos PS4</h3>
+                                <p>Dualshock 4 calidad 1.1</p>
+                                <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?tab=t.0"
+                                    class="catalogo-btn" onclick="event.stopPropagation()">
+                                    Ver colección <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
-                <!-- NBA - Simple -->
-                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nba">
-                    <div class="catalogo-img-wrap">
-                        <img src="assets/colecciones/nba_resultado.webp" alt="NBA" class="catalogo-img" loading="lazy">
-                    </div>
-                    <div class="catalogo-info">
-                        <h3>NBA</h3>
-                        <p>Camisetas oficiales de todos los equipos</p>
-                        <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn"
-                            onclick="event.stopPropagation()">
-                            Ver colección <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Zapatillas - Simple -->
-                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=zapatillas">
-                    <div class="catalogo-img-wrap">
-                        <img src="assets/colecciones/zapa_resultado.webp" alt="Zapatillas" class="catalogo-img"
-                            loading="lazy">
-                    </div>
-                    <div class="catalogo-info">
-                        <h3>Zapatillas</h3>
-                        <p>Las mejores marcas al mejor precio</p>
-                        <a href="/pages/tienda.html?category=zapatillas" class="catalogo-btn"
-                            onclick="event.stopPropagation()">
-                            Ver colección <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- NFL - Simple -->
-                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nfl">
-                    <div class="catalogo-img-wrap">
-                        <img src="assets/colecciones/nfl_resultado.webp" alt="NFL" class="catalogo-img" loading="lazy">
-                    </div>
-                    <div class="catalogo-info">
-                        <h3>NFL</h3>
-                        <p>Football americano oficial</p>
-                        <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn"
-                            onclick="event.stopPropagation()">
-                            Ver colección <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-
+                <button class="carousel-arrow carousel-arrow-right" id="catalogo-next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </section>
 

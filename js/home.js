@@ -89,7 +89,10 @@ async function initHome() {
     // Apply special pricing rules
     applySpecialPricing();
 
-    // Initialize Catalogo Cards (dropdowns and clickable cards)
+    // Initialize Catalog Carousel (must be first to clone cards)
+    initCatalogoCarousel();
+
+    // Initialize Catalogo Cards (dropdowns and clickable cards) - after carousel clones cards
     initCatalogoCards();
 
     // Render Best Sellers from Firebase
@@ -97,14 +100,108 @@ async function initHome() {
 }
 
 // ============================================
-// CATALOGO CARDS - Dropdowns & Click Handler
+// CATALOGO CAROUSEL - Infinite Seamless Loop
 // ============================================
+function initCatalogoCarousel() {
+    const carousel = document.getElementById('catalogo-carousel');
+    if (!carousel) return;
+
+    const track = carousel.querySelector('.carousel-track');
+    const prevBtn = document.getElementById('catalogo-prev');
+    const nextBtn = document.getElementById('catalogo-next');
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const originalCards = Array.from(track.querySelectorAll('.catalogo-card'));
+    if (originalCards.length === 0) return;
+
+    const cardWidth = 280 + 24; // card width + gap (1.5rem = 24px)
+    const totalCards = originalCards.length;
+
+    // Clone all cards and append/prepend for seamless loop
+    originalCards.forEach(card => {
+        const cloneEnd = card.cloneNode(true);
+        const cloneStart = card.cloneNode(true);
+        cloneEnd.classList.add('carousel-clone');
+        cloneStart.classList.add('carousel-clone');
+        track.appendChild(cloneEnd);
+        track.insertBefore(cloneStart, track.firstChild);
+    });
+
+    // Start at the first "real" card (after the prepended clones)
+    let currentIndex = totalCards;
+    let isTransitioning = false;
+
+    function updateCarousel(animate = true) {
+        if (!animate) {
+            track.style.transition = 'none';
+        } else {
+            track.style.transition = 'transform 0.3s ease';
+        }
+        const translateX = -(currentIndex * cardWidth);
+        track.style.transform = `translateX(${translateX}px)`;
+    }
+
+    function handleTransitionEnd() {
+        isTransitioning = false;
+        // If we've scrolled to the cloned section at the end, jump to the real start
+        if (currentIndex >= totalCards * 2) {
+            currentIndex = totalCards;
+            updateCarousel(false);
+        }
+        // If we've scrolled to the cloned section at the start, jump to the real end
+        if (currentIndex < totalCards) {
+            currentIndex = totalCards + (currentIndex);
+            updateCarousel(false);
+        }
+    }
+
+    track.addEventListener('transitionend', handleTransitionEnd);
+
+    prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (isTransitioning) return;
+        isTransitioning = true;
+        currentIndex--;
+        updateCarousel();
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (isTransitioning) return;
+        isTransitioning = true;
+        currentIndex++;
+        updateCarousel();
+    });
+
+    // Initial position (no animation)
+    updateCarousel(false);
+    // Force a reflow then enable transitions
+    track.offsetHeight;
+    track.style.transition = 'transform 0.3s ease';
+}
+
+
+// ============================================
+// CATALOGO CARDS - Dropdowns & Click Handler (Event Delegation)
+// ============================================
+let catalogoCardsInitialized = false;
+
 function initCatalogoCards() {
-    // Handle dropdown buttons
-    document.querySelectorAll('.dropdown-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent card click
-            const card = btn.closest('.catalogo-card');
+    // Prevent duplicate event listener registration
+    if (catalogoCardsInitialized) return;
+    catalogoCardsInitialized = true;
+
+    // Use event delegation on document for dropdown buttons (works with clones)
+    document.addEventListener('click', (e) => {
+        // Handle dropdown buttons
+        const dropdownBtn = e.target.closest('.dropdown-btn');
+        if (dropdownBtn) {
+            e.stopPropagation();
+            e.preventDefault();
+            const card = dropdownBtn.closest('.catalogo-card');
 
             // Close other dropdowns
             document.querySelectorAll('.catalogo-card.dropdown-open').forEach(openCard => {
@@ -113,31 +210,39 @@ function initCatalogoCards() {
 
             // Toggle this dropdown
             card.classList.toggle('dropdown-open');
-        });
-    });
+            return;
+        }
 
-    // Handle clickable cards
-    document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
-        card.addEventListener('click', (e) => {
+        // Handle dropdown menu links
+        const dropdownLink = e.target.closest('.dropdown-menu a');
+        if (dropdownLink) {
+            e.stopPropagation();
+            // Let the link work normally
+            return;
+        }
+
+        // Handle catalogo-btn clicks
+        const catalogoBtn = e.target.closest('.catalogo-btn:not(.dropdown-btn)');
+        if (catalogoBtn) {
+            e.stopPropagation();
+            // Let the link work normally
+            return;
+        }
+
+        // Handle clickable cards
+        const clickableCard = e.target.closest('.catalogo-card-clickable');
+        if (clickableCard) {
             // Don't navigate if clicking dropdown menu or button
             if (e.target.closest('.dropdown-menu') || e.target.closest('.dropdown-btn') || e.target.closest('.catalogo-btn')) {
                 return;
             }
 
-            const link = card.dataset.link;
+            const link = clickableCard.dataset.link;
             if (link) window.location.href = link;
-        });
-    });
+            return;
+        }
 
-    // Handle dropdown menu links (prevent card click propagation)
-    document.querySelectorAll('.dropdown-menu a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
+        // Close dropdown when clicking outside
         if (!e.target.closest('.catalogo-card')) {
             document.querySelectorAll('.catalogo-card.dropdown-open').forEach(card => {
                 card.classList.remove('dropdown-open');

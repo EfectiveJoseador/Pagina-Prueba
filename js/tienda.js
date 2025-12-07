@@ -30,7 +30,7 @@ let imageObserver = null;
 const patchPrices = {
     none: 0,
     liga: 1,
-    champions: 2,
+    champions: 1,
     europa: 1,
     premier: 1,
     seriea: 1,
