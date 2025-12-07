@@ -22,6 +22,7 @@ let filteredProducts = [];
 let currentProduct = null;
 let selectedLeague = '';
 let selectedTeam = '';
+let selectedKids = '';
 let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
@@ -643,6 +644,12 @@ function attachEventListeners() {
         applyFilters();
     });
 
+    // Kids Filter
+    document.getElementById('filter-kids').addEventListener('change', (e) => {
+        selectedKids = e.target.value;
+        applyFilters();
+    });
+
     // Sort
     document.getElementById('sort-select').addEventListener('change', applyFilters);
 
@@ -663,7 +670,9 @@ function attachEventListeners() {
         document.getElementById('filter-league').value = '';
         selectedLeague = '';
         selectedTeam = '';
+        selectedKids = '';
         document.getElementById('team-step').classList.add('hidden');
+        document.getElementById('filter-kids').value = '';
 
         document.getElementById('search-input').value = '';
         document.getElementById('sort-select').value = 'default';
@@ -690,10 +699,36 @@ function applyFilters() {
             matchesTeam = product.name.includes(selectedTeam);
         }
 
-        return matchesSearch && matchesLeague && matchesTeam;
+        // Kids filter matching
+        let matchesKids = true;
+        const nameLower = product.name.toLowerCase();
+        const isKidsProduct = nameLower.includes('kids') || nameLower.includes('niño');
+
+        if (selectedKids === 'kids') {
+            matchesKids = isKidsProduct;
+        } else if (selectedKids === 'adults') {
+            matchesKids = !isKidsProduct;
+        }
+
+        return matchesSearch && matchesLeague && matchesTeam && matchesKids;
     });
 
-    // Sort products
+    // Sort by product type: Local > Visitante > Tercera > Kids
+    function getProductTypeOrder(name) {
+        const nameLower = name.toLowerCase();
+        const isKids = nameLower.includes('kids') || nameLower.includes('niño');
+
+        if (isKids) return 4; // Kids last
+        if (nameLower.includes('tercera')) return 3;
+        if (nameLower.includes('visitante') || name.includes(' F')) return 2; // F = Fuera/Away
+        if (nameLower.includes('local') || name.includes(' L')) return 1; // L = Local
+        return 5; // Others (retro, etc.)
+    }
+
+    // Apply type sorting first
+    filteredProducts.sort((a, b) => getProductTypeOrder(a.name) - getProductTypeOrder(b.name));
+
+    // Then apply price sorting if selected (maintains type order as secondary)
     if (sortBy === 'price-asc') {
         filteredProducts.sort((a, b) => a.price - b.price);
     } else if (sortBy === 'price-desc') {

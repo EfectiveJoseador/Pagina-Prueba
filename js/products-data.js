@@ -621,7 +621,7 @@ const products = [
         category: "futbol",
         league: "ligue1",
         price: 89.99,
-        image: "/assets/productos/Ligue 1/PSG2526L/1_resultado.webp",
+        image: "/assets/productos/Ligue 1/Paris2526L/1_resultado.webp",
         new: true,
         sale: false
     },
@@ -632,16 +632,6 @@ const products = [
         league: "ligue1",
         price: 89.99,
         image: "/assets/productos/Ligue 1/PSG2526T/1_resultado.webp",
-        new: true,
-        sale: false
-    },
-    {
-        id: 505,
-        name: "Paris FC 25/26 Local",
-        category: "futbol",
-        league: "ligue1",
-        price: 74.99,
-        image: "/assets/productos/Ligue 1/Paris2526L/1_resultado.webp",
         new: true,
         sale: false
     },
@@ -710,7 +700,7 @@ const products = [
         category: "futbol",
         league: "ligaarabe",
         price: 79.99,
-        image: "/assets/productos/Liga Arabe/AlNassr2526L/1_resultado.webp",
+        image: "/assets/productos/Liga Arabe/Al-Nassr2526L/1_resultado.webp",
         new: true,
         sale: false
     },

@@ -3,61 +3,74 @@
  * Imported last to override all other badge styles
  */
 
-/* Sale Badge with Rotating Purple Neon Glow - Subtle intensity */
+/* Sale Badge - Compact with gradient and animated glow */
 .product-card .badge-sale,
 .product-image .badge-sale,
 .badge-sale {
     position: absolute !important;
-    top: 0.75rem !important;
-    right: 0.75rem !important;
+    top: 0.5rem !important;
+    right: 0.5rem !important;
     color: white !important;
-    padding: 0.4rem 0.9rem !important;
-    border-radius: 2rem !important;
-    font-size: 0.75rem !important;
-    font-weight: 700 !important;
+    padding: 0.25rem 0.6rem !important;
+    border-radius: 0.35rem !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
+    letter-spacing: 0.8px !important;
     z-index: 10 !important;
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-    border: 1px solid rgba(168, 85, 247, 0.2) !important;
-    animation: rotatingNeon 2.5s linear infinite !important;
+    background: linear-gradient(135deg, #dc2626 0%, #9333ea 100%) !important;
+    border: 1px solid rgba(139, 92, 246, 0.4) !important;
+    box-shadow:
+        0 2px 10px rgba(147, 51, 234, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+    animation: badgePulse 2s ease-in-out infinite !important;
+    overflow: hidden !important;
 }
 
-/* Rotating neon glow - reduced intensity */
-@keyframes rotatingNeon {
-    0% {
-        box-shadow:
-            10px 0 18px -4px rgba(192, 132, 252, 0.45),
-            0 0 10px rgba(168, 85, 247, 0.3),
-            0 0 20px rgba(168, 85, 247, 0.15);
-    }
+/* Shimmer effect overlay */
+.badge-sale::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent) !important;
+    animation: badgeShimmer 3s ease-in-out infinite !important;
+}
 
-    25% {
+/* Subtle pulse glow */
+@keyframes badgePulse {
+
+    0%,
+    100% {
         box-shadow:
-            0 10px 18px -4px rgba(192, 132, 252, 0.45),
-            0 0 10px rgba(168, 85, 247, 0.3),
-            0 0 20px rgba(168, 85, 247, 0.15);
+            0 2px 10px rgba(147, 51, 234, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        transform: scale(1);
     }
 
     50% {
         box-shadow:
-            -10px 0 18px -4px rgba(192, 132, 252, 0.45),
-            0 0 10px rgba(168, 85, 247, 0.3),
-            0 0 20px rgba(168, 85, 247, 0.15);
+            0 4px 20px rgba(147, 51, 234, 0.6),
+            0 0 25px rgba(139, 92, 246, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+        transform: scale(1.02);
+    }
+}
+
+/* Shimmer animation */
+@keyframes badgeShimmer {
+    0% {
+        left: -100%;
     }
 
-    75% {
-        box-shadow:
-            0 -10px 18px -4px rgba(192, 132, 252, 0.45),
-            0 0 10px rgba(168, 85, 247, 0.3),
-            0 0 20px rgba(168, 85, 247, 0.15);
-    }
-
+    50%,
     100% {
-        box-shadow:
-            10px 0 18px -4px rgba(192, 132, 252, 0.45),
-            0 0 10px rgba(168, 85, 247, 0.3),
-            0 0 20px rgba(168, 85, 247, 0.15);
+        left: 100%;
     }
 }
 

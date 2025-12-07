@@ -253,12 +253,22 @@ function addToCart() {
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
 
-    // Validation
+    // Validation: Name and number must be both filled or both empty
+    const hasName = name.length > 0;
+    const hasNumber = number.length > 0;
+
+    if (hasName !== hasNumber) {
+        alert('Debes completar tanto el nombre como el dorsal, o dejar ambos vacíos');
+        return;
+    }
+
+    // Validation: Name format
     if (name && !/^[A-Za-zÀ-ÿ\s]+$/.test(name)) {
         alert('El nombre solo puede contener letras y espacios');
         return;
     }
 
+    // Validation: Number format
     if (number) {
         const numValue = parseInt(number);
         if (number.length > 2 || numValue < 0 || numValue > 99 || isNaN(numValue)) {
