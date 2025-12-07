@@ -1,7 +1,7 @@
 /* Catalog Styles */
 
-/* Escalado 125% solo para la página de tienda */
-.page-tienda {
+/* Escalado 125% solo para el contenido de la tienda (no afecta header/footer) */
+.page-tienda .catalog-container {
     zoom: 1.25;
 }
 
