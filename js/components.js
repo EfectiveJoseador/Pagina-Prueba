@@ -20,7 +20,6 @@ const Components = {
                 </nav>
 
                 <div class="header-actions">
-                    <button class="icon-btn" id="search-btn" aria-label="Buscar"><i class="fas fa-search"></i></button>
                     <a href="/pages/carrito.html" class="icon-btn" aria-label="Carrito">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-badge" id="cart-count">0</span>
