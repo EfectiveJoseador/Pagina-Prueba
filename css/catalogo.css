@@ -1,11 +1,23 @@
 /* Catalog Styles */
 
+/* Escalado 125% solo para el contenido de la tienda en desktop (no afecta header/footer) */
+.page-tienda .catalog-container {
+    zoom: 1.25;
+}
+
+/* Desactivar zoom en móviles para mejor usabilidad */
+@media (max-width: 900px) {
+    .page-tienda .catalog-container {
+        zoom: 1;
+    }
+}
+
 .catalog-container {
     display: grid;
     grid-template-columns: 280px 1fr;
     gap: 2rem;
     align-items: start;
-    padding: 2rem 5%;
+    padding: 2rem 2%;
     transition: grid-template-columns 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -250,17 +262,17 @@
     opacity: 0.5;
 }
 
-/* Products Grid */
+/* Products Grid - 4 columnas con filtros visibles */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
     transition: grid-template-columns 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 4 columnas cuando sidebar está cerrada */
+/* 5 columnas cuando sidebar está cerrada */
 .sidebar-closed .product-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
 .product-card {
@@ -474,15 +486,33 @@
 }
 
 /* Responsive */
-@media (max-width: 1280px) {
+@media (max-width: 1600px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .sidebar-closed .product-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (max-width: 1400px) {
     .product-grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    .sidebar-closed .product-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
 @media (max-width: 1024px) {
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sidebar-closed .product-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -505,13 +535,18 @@
     #sort-select {
         width: 100%;
     }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 600px) {
     .product-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
+
 /* Bot�n para mostrar filtros (visible cuando sidebar est� cerrada) */
 .btn-show-filters {
     display: none;
@@ -548,7 +583,7 @@
     }
 
     .product-card .product-info {
-        padding: 1rem;
+        padding: 0.875rem;
     }
 
     .product-card .product-category {
@@ -557,26 +592,31 @@
     }
 
     .product-card .product-title {
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.4rem;
+        min-height: 2.2em;
     }
 
     .product-card .product-price {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     .product-card .price-old {
-        font-size: 0.85rem;
-    }
-
-    .product-card .btn-add-cart {
-        padding: 0.7rem;
         font-size: 0.8rem;
     }
 
+    /* Botón de añadir al carrito más grande y táctil */
+    .product-card .btn-add-cart {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+        min-height: 44px;
+        /* Mínimo recomendado para toque */
+        touch-action: manipulation;
+    }
+
     .product-card .badge-sale {
-        font-size: 0.7rem;
-        padding: 0.3rem 0.6rem;
+        font-size: 0.65rem;
+        padding: 0.25rem 0.5rem;
     }
 
     .filters-sidebar {
@@ -585,5 +625,68 @@
 
     .filter-section h3 {
         font-size: 1rem;
+    }
+
+    /* Toolbar móvil */
+    .catalog-toolbar {
+        padding: 0 0.5rem;
+        gap: 0.75rem;
+    }
+
+    .search-bar.expanded input {
+        padding: 0.75rem 1rem 0.75rem 2.75rem;
+        font-size: 16px;
+        /* Previene zoom en iOS */
+    }
+
+    #sort-select {
+        min-width: 140px;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Paginación móvil */
+    .pagination-btn {
+        min-width: 40px;
+        min-height: 40px;
+        padding: 0.5rem;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 400px) {
+    .product-grid {
+        gap: 0.75rem;
+    }
+
+    .product-card .product-info {
+        padding: 0.75rem;
+    }
+
+    .product-card .product-title {
+        font-size: 0.8rem;
+    }
+
+    .product-card .product-price {
+        font-size: 0.95rem;
+    }
+
+    .catalog-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .search-bar.expanded {
+        width: 100%;
+        order: 2;
+    }
+
+    #sort-select {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .btn-show-filters {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
     }
 }

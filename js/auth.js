@@ -12,7 +12,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, set, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-// Helper: Map Firebase Error Codes to Spanishh
+// Helper: Map Firebase Error Codes to Spanish
 function mapAuthError(code) {
     switch (code) {
         case 'auth/email-already-in-use': return 'Este email ya está registrado.';

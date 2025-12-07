@@ -42,12 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('product-name').textContent = product.name;
     document.getElementById('product-price').textContent = `€${product.price.toFixed(2)}`;
 
-    // Inject Offer Badge
-    const categoryTag = document.getElementById('product-category');
-    const badge = document.createElement('span');
-    badge.className = 'badge-sale';
-    badge.textContent = 'OFERTA';
-    categoryTag.parentNode.insertBefore(badge, categoryTag);
 
     if (product.oldPrice) {
         const oldPriceEl = document.getElementById('product-old-price');

@@ -186,6 +186,14 @@
     vertical-align: middle;
 }
 
+/* Override para badge en product-details (no absolute) */
+.product-details .badge-sale {
+    position: static !important;
+    display: inline-block !important;
+    margin-right: 0.5rem;
+    animation: none !important;
+}
+
 .product-title {
     font-family: var(--font-heading);
     font-size: 2.5rem;
@@ -596,12 +604,57 @@
         flex-direction: column;
     }
 
+    /* Quantity selector: - left, number center, + right */
+    .quantity-selector {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .quantity-selector button {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+    }
+
+    .quantity-selector input {
+        flex: 1;
+        text-align: center;
+    }
+
     .btn-add-cart-lg {
         padding: 1rem;
     }
 
+    /* Carousel táctil en móvil - scroll nativo */
     .carousel-container {
-        padding: 0 3rem;
+        padding: 0 1rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .carousel-container::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari */
+    }
+
+    .carousel-track {
+        transform: none !important;
+        /* Disable JS transform */
+        scroll-snap-align: start;
+    }
+
+    .carousel-track .product-card {
+        scroll-snap-align: start;
+    }
+
+    /* Ocultar flechas en móvil - usar deslizamiento */
+    .carousel-arrow {
+        display: none;
     }
 
     .related-products .product-card {
@@ -613,7 +666,7 @@
 
 @media (max-width: 480px) {
     .carousel-container {
-        padding: 0 2.5rem;
+        padding: 0 0.75rem;
     }
 
     .related-products .product-card {
@@ -1100,7 +1153,8 @@
         top: auto;
         bottom: 5rem;
         transform: none;
-        flex-direction: row;
+        flex-direction: row-reverse;
+        /* - left, + right */
         padding: 0.5rem;
     }
 

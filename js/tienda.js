@@ -9,7 +9,7 @@ import products from './products-data.js';
 // CONFIGURATION
 // ============================================
 const CONFIG = {
-    PRODUCTS_PER_PAGE: 16,
+    PRODUCTS_PER_PAGE: 20,
     LAZY_LOAD_THRESHOLD: '200px', // Load images before they enter viewport
     PLACEHOLDER_COLOR: '#e0e0e0'
 };
@@ -56,8 +56,24 @@ const extraPrices = {
 };
 
 // ============================================
-// LAZY LOADING SYSTEM
+// PRIORITY IMAGE LOADING SYSTEM
+// Optimized for LCP, reduced network, staggered loading
 // ============================================
+
+// Loading queue and state management
+const imageLoadingState = {
+    primaryQueue: [],      // Queue for primary images (1_resultado)
+    secondaryQueue: [],    // Queue for secondary images (2_resultado) 
+    activeLoads: 0,        // Current number of active network requests
+    maxConcurrent: 4,      // Maximum simultaneous image loads
+    primaryLoaded: new Set(), // Track which primaries are loaded
+    isProcessing: false
+};
+
+let primaryObserver = null;
+let secondaryObserver = null;
+let hoverObserver = null;
+
 function initLazyLoading() {
     // Check for IntersectionObserver support
     if (!('IntersectionObserver' in window)) {
@@ -68,51 +84,221 @@ function initLazyLoading() {
         return;
     }
 
-    // Create observer for lazy loading
-    imageObserver = new IntersectionObserver((entries, observer) => {
+    // Reset state for new page
+    resetLoadingState();
+
+    // Create observer for PRIMARY images - high priority, larger threshold
+    primaryObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                loadImage(img);
-                observer.unobserve(img);
+                queuePrimaryImage(img);
+                primaryObserver.unobserve(img);
             }
         });
     }, {
-        rootMargin: CONFIG.LAZY_LOAD_THRESHOLD,
+        rootMargin: '300px', // Start loading earlier for primary images
         threshold: 0.01
     });
 
-    // Observe all lazy images
-    observeLazyImages();
+    // Create observer for SECONDARY images - low priority, only when in viewport
+    secondaryObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                queueSecondaryImage(img);
+                secondaryObserver.unobserve(img);
+            }
+        });
+    }, {
+        rootMargin: '50px', // Only when very close to viewport
+        threshold: 0.1
+    });
+
+    // Start observing images
+    observeImages();
 }
 
-function observeLazyImages() {
-    if (!imageObserver) return;
+function resetLoadingState() {
+    imageLoadingState.primaryQueue = [];
+    imageLoadingState.secondaryQueue = [];
+    imageLoadingState.activeLoads = 0;
+    imageLoadingState.primaryLoaded = new Set();
+    imageLoadingState.isProcessing = false;
+}
 
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
+function observeImages() {
+    // Reset observers
+    if (primaryObserver) {
+        document.querySelectorAll('img.primary-image[data-src]').forEach((img, index) => {
+            // Add row priority based on visual position
+            img.dataset.priority = Math.floor(index / getColumnsPerRow());
+            img.dataset.index = index;
+            primaryObserver.observe(img);
+        });
+    }
+
+    if (secondaryObserver) {
+        document.querySelectorAll('img.secondary-image[data-src]').forEach((img, index) => {
+            img.dataset.index = index;
+            secondaryObserver.observe(img);
+        });
+    }
+
+    // Add hover listeners for secondary images
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('mouseenter', handleProductHover, { once: true });
     });
 }
 
-function loadImage(img) {
-    const src = img.dataset.src;
-    if (!src) return;
+// Renamed from observeLazyImages for backward compatibility
+function observeLazyImages() {
+    observeImages();
+}
 
-    // Create a new image to preload
+function getColumnsPerRow() {
+    const grid = document.getElementById('product-grid');
+    if (!grid) return 4;
+
+    const gridStyle = window.getComputedStyle(grid);
+    const columns = gridStyle.gridTemplateColumns.split(' ').length;
+    return columns || 4;
+}
+
+function queuePrimaryImage(img) {
+    const priority = parseInt(img.dataset.priority) || 0;
+    const index = parseInt(img.dataset.index) || 0;
+
+    imageLoadingState.primaryQueue.push({
+        img,
+        priority,
+        index,
+        type: 'primary'
+    });
+
+    // Sort by priority (row), then by index (column)
+    imageLoadingState.primaryQueue.sort((a, b) => {
+        if (a.priority !== b.priority) return a.priority - b.priority;
+        return a.index - b.index;
+    });
+
+    processLoadQueue();
+}
+
+function queueSecondaryImage(img) {
+    // Only queue if the corresponding primary is loaded
+    const card = img.closest('.product-card');
+    const primaryImg = card?.querySelector('.primary-image');
+
+    if (!primaryImg || !imageLoadingState.primaryLoaded.has(primaryImg)) {
+        // Wait for primary to load first
+        return;
+    }
+
+    const index = parseInt(img.dataset.index) || 0;
+
+    imageLoadingState.secondaryQueue.push({
+        img,
+        priority: 999, // Low priority
+        index,
+        type: 'secondary'
+    });
+
+    processLoadQueue();
+}
+
+function handleProductHover(e) {
+    const card = e.currentTarget;
+    const secondaryImg = card.querySelector('.secondary-image[data-src]');
+
+    if (secondaryImg) {
+        // Force load secondary image on hover
+        queueSecondaryImage(secondaryImg);
+    }
+}
+
+function processLoadQueue() {
+    if (imageLoadingState.isProcessing) return;
+    imageLoadingState.isProcessing = true;
+
+    const processNext = () => {
+        // Check if we can load more
+        if (imageLoadingState.activeLoads >= imageLoadingState.maxConcurrent) {
+            imageLoadingState.isProcessing = false;
+            return;
+        }
+
+        // Prioritize primary images over secondary
+        let item = imageLoadingState.primaryQueue.shift();
+
+        // If no primary images, try secondary
+        if (!item && imageLoadingState.secondaryQueue.length > 0) {
+            item = imageLoadingState.secondaryQueue.shift();
+        }
+
+        if (!item) {
+            imageLoadingState.isProcessing = false;
+            return;
+        }
+
+        imageLoadingState.activeLoads++;
+        loadImageWithPriority(item.img, item.type, () => {
+            imageLoadingState.activeLoads--;
+
+            // Small delay between loads to prevent network congestion
+            setTimeout(processNext, 50);
+        });
+
+        // Continue processing if we have capacity
+        if (imageLoadingState.activeLoads < imageLoadingState.maxConcurrent) {
+            setTimeout(processNext, 100);
+        }
+    };
+
+    processNext();
+}
+
+function loadImageWithPriority(img, type, callback) {
+    const src = img.dataset.src;
+    if (!src) {
+        callback();
+        return;
+    }
+
     const tempImg = new Image();
 
     tempImg.onload = () => {
         img.src = src;
         img.classList.add('loaded');
         img.removeAttribute('data-src');
+
+        // Track primary images that are loaded
+        if (type === 'primary') {
+            imageLoadingState.primaryLoaded.add(img);
+
+            // Now try to queue the secondary image for this product
+            const card = img.closest('.product-card');
+            const secondaryImg = card?.querySelector('.secondary-image[data-src]');
+            if (secondaryImg && secondaryObserver) {
+                // Re-observe to trigger loading when appropriate
+                secondaryObserver.observe(secondaryImg);
+            }
+        }
+
+        callback();
     };
 
     tempImg.onerror = () => {
-        // Fallback to placeholder on error
         img.classList.add('error');
+        callback();
     };
 
     tempImg.src = src;
+}
+
+// Legacy function for compatibility
+function loadImage(img) {
+    loadImageWithPriority(img, 'primary', () => { });
 }
 
 // ============================================
@@ -134,11 +320,8 @@ function goToPage(page) {
     currentPage = page;
     renderProducts();
 
-    // Scroll to top of products smoothly
-    const grid = document.getElementById('product-grid');
-    if (grid) {
-        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    // Scroll to top of page smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function renderPagination() {

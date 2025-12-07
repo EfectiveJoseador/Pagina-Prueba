@@ -1,0 +1,12 @@
+{
+    "name": "admin-scripts",
+    "version": "1.0.0",
+    "description": "Scripts de administración para Firebase",
+    "main": "set-admin.js",
+    "scripts": {
+        "set-admin": "node set-admin.js"
+    },
+    "dependencies": {
+        "firebase-admin": "^11.11.0"
+    }
+}
