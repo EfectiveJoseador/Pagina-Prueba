@@ -37,6 +37,9 @@
                 <button class="nav-item active" data-target="orders">
                     <i class="fas fa-box"></i> Mis Pedidos
                 </button>
+                <button class="nav-item" data-target="points">
+                    <i class="fas fa-star"></i> Mis Puntos
+                </button>
                 <button class="nav-item" data-target="address">
                     <i class="fas fa-map-marker-alt"></i> Direcciones
                 </button>
@@ -56,6 +59,103 @@
                 <div id="orders-list" class="orders-list">
                     <!-- Los pedidos se cargarán dinámicamente -->
                     <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Cargando pedidos...</p>
+                </div>
+            </div>
+
+            <!-- Points Section -->
+            <div id="points" class="content-section">
+                <h2>Mis Puntos</h2>
+
+                <!-- Points Summary Cards -->
+                <div class="points-summary"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="points-card"
+                        style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(99, 102, 241, 0.1) 100%); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+                        <i class="fas fa-clock" style="font-size: 1.5rem; color: #f59e0b; margin-bottom: 0.5rem;"></i>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem;">Puntos
+                            Pendientes</p>
+                        <span id="pending-points" style="font-size: 2rem; font-weight: 700; color: #f59e0b;">0</span>
+                    </div>
+                    <div class="points-card"
+                        style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(34, 197, 94, 0.1) 100%); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+                        <i class="fas fa-star" style="font-size: 1.5rem; color: #22c55e; margin-bottom: 0.5rem;"></i>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem;">Puntos
+                            Disponibles</p>
+                        <span id="available-points" style="font-size: 2rem; font-weight: 700; color: #22c55e;">0</span>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div
+                    style="background: var(--bg-card); padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
+                        <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                        Ganas <strong>10 puntos</strong> por cada camiseta. Los puntos pasan a disponibles cuando subes
+                        las fotos de tu pedido.
+                    </p>
+                </div>
+
+                <!-- Rewards Store Button -->
+                <button id="open-rewards-store" style="
+                    width: 100%;
+                    margin-bottom: 2rem;
+                    padding: 1rem 1.5rem;
+                    background: linear-gradient(135deg, #8b5cf6 0%, #c026d3 50%, #ec4899 100%);
+                    border: none;
+                    border-radius: 12px;
+                    color: white;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.75rem;
+                    position: relative;
+                    overflow: hidden;
+                    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+                    transition: all 0.3s ease;
+                ">
+                    <i class="fas fa-gift" style="font-size: 1.25rem;"></i>
+                    <span>Tienda de Puntos</span>
+                    <i class="fas fa-star" style="font-size: 0.9rem; opacity: 0.8;"></i>
+                </button>
+                <style>
+                    #open-rewards-store:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 6px 30px rgba(192, 38, 211, 0.5);
+                    }
+
+                    #open-rewards-store::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: -100%;
+                        width: 100%;
+                        height: 100%;
+                        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                        animation: shimmer 3s infinite;
+                    }
+
+                    @keyframes shimmer {
+                        0% {
+                            left: -100%;
+                        }
+
+                        50%,
+                        100% {
+                            left: 100%;
+                        }
+                    }
+                </style>
+
+                <!-- Transaction History -->
+                <div style="margin-top: 1rem;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Historial de Transacciones</h3>
+                    <div id="points-history" style="max-height: 300px; overflow-y: auto;">
+                        <p style="text-align: center; color: var(--text-muted); padding: 1rem;">Cargando historial...
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -217,6 +317,77 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Rewards Store Modal -->
+    <div id="rewards-modal" class="modal" style="display: none;">
+        <div class="modal-content"
+            style="background: var(--bg-card); padding: 2rem; border-radius: 16px; max-width: 600px; margin: 2rem auto; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button id="close-rewards-modal"
+                style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 style="margin-bottom: 0.5rem;"><i class="fas fa-gift" style="color: var(--primary);"></i> Tienda de
+                Puntos</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Canjea tus puntos por descuentos exclusivos</p>
+
+            <div id="rewards-list" style="display: grid; gap: 1rem;">
+                <!-- Reward Cards -->
+                <div class="reward-card" data-reward="discount_10"
+                    style="background: var(--bg-body); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s;">
+                    <div>
+                        <h4 style="margin: 0 0 0.25rem; font-size: 1rem;">10% Descuento</h4>
+                        <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">En tu próxima compra</p>
+                    </div>
+                    <button class="btn-redeem" data-cost="20"
+                        style="background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        20 <i class="fas fa-star" style="font-size: 0.75rem;"></i>
+                    </button>
+                </div>
+
+                <div class="reward-card" data-reward="discount_15"
+                    style="background: var(--bg-body); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s;">
+                    <div>
+                        <h4 style="margin: 0 0 0.25rem; font-size: 1rem;">15% Descuento</h4>
+                        <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">En tu próxima compra</p>
+                    </div>
+                    <button class="btn-redeem" data-cost="40"
+                        style="background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        40 <i class="fas fa-star" style="font-size: 0.75rem;"></i>
+                    </button>
+                </div>
+
+                <div class="reward-card" data-reward="discount_20"
+                    style="background: var(--bg-body); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s;">
+                    <div>
+                        <h4 style="margin: 0 0 0.25rem; font-size: 1rem;">20% Descuento</h4>
+                        <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">En tu próxima compra</p>
+                    </div>
+                    <button class="btn-redeem" data-cost="60"
+                        style="background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        60 <i class="fas fa-star" style="font-size: 0.75rem;"></i>
+                    </button>
+                </div>
+
+                <div class="reward-card" data-reward="free_shirt"
+                    style="background: linear-gradient(135deg, var(--bg-body) 0%, rgba(234, 179, 8, 0.1) 100%); padding: 1.25rem; border-radius: 12px; border: 2px solid #eab308; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s;">
+                    <div>
+                        <h4 style="margin: 0 0 0.25rem; font-size: 1rem;"><i class="fas fa-crown"
+                                style="color: #eab308;"></i> Camiseta Gratis</h4>
+                        <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">Valor: 19,90€ (extras
+                            aparte)</p>
+                    </div>
+                    <button class="btn-redeem" data-cost="100"
+                        style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        100 <i class="fas fa-star" style="font-size: 0.75rem;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 1.5rem;">
+                Tus puntos disponibles: <strong id="modal-available-points">0</strong>
+            </p>
         </div>
     </div>
 

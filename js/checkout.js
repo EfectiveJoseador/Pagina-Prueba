@@ -3,6 +3,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/fi
 import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import Cart from './carrito.js';
 import products from './products-data.js';
+import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
 
 // ============================================
 // STATE MANAGEMENT
@@ -10,6 +11,9 @@ import products from './products-data.js';
 let currentUser = null;
 let selectedAddressId = null;
 let addresses = [];
+let selectedCoupon = null;
+let appliedDiscount = 0;
+let userCoupons = [];
 
 // ============================================
 // CONFIGURATION
@@ -253,6 +257,14 @@ function confirmOrder() {
         return;
     }
 
+    // Calculate final total with discount
+    const finalTotal = selectedCoupon
+        ? Math.max(0, calculations.total - appliedDiscount)
+        : calculations.total;
+
+    // Calculate total shirt quantity for points
+    const totalShirtQuantity = Cart.items.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
+
     const orderData = {
         orderId: orderId,
         userId: currentUser.uid,
@@ -278,18 +290,21 @@ function confirmOrder() {
                 customization: item.customization || {}
             };
         }),
-        total: calculations.total,
+        total: finalTotal,
         subtotal: calculations.subtotal,
         shipping: calculations.shipping,
+        discount: appliedDiscount,
+        couponUsed: selectedCoupon ? selectedCoupon.id : null,
         shippingAddress: selectedAddress,
-        paymentMethod: paymentMethod
+        paymentMethod: paymentMethod,
+        pointsToEarn: totalShirtQuantity * 10
     };
 
     if (paymentMethod === 'bizum') {
         orderData.bizumPhone = document.getElementById('bizum-phone').value.trim();
         orderData.bizumName = document.getElementById('bizum-name').value.trim();
     } else if (paymentMethod === 'paypal') {
-        orderData.paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${orderData.total.toFixed(2)}`;
+        orderData.paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal.toFixed(2)}`;
     }
 
     const confirmBtn = document.getElementById('confirm-order-btn');
@@ -329,6 +344,16 @@ function confirmOrder() {
                         await saveOrder(orderData);
                         await sendOrderViaWeb3Forms(orderData);
 
+                        // Add pending points
+                        if (orderData.pointsToEarn > 0) {
+                            await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
+                        }
+
+                        // Mark coupon as used
+                        if (selectedCoupon) {
+                            await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
+                        }
+
                         // Limpiar carrito
                         localStorage.removeItem('cart');
                         localStorage.removeItem('appliedPacks');
@@ -366,6 +391,16 @@ function confirmOrder() {
             try {
                 await saveOrder(orderData);
                 await sendOrderViaWeb3Forms(orderData);
+
+                // Add pending points
+                if (orderData.pointsToEarn > 0) {
+                    await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
+                }
+
+                // Mark coupon as used
+                if (selectedCoupon) {
+                    await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
+                }
 
                 // Limpiar carrito
                 localStorage.removeItem('cart');
@@ -556,6 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             currentUser = user;
             await loadUserAddresses();
+            await loadUserCoupons();
         } else {
             showLoginPrompt();
         }
@@ -575,4 +611,90 @@ document.addEventListener('DOMContentLoaded', () => {
     if (totalEl) {
         totalEl.textContent = `€${calculations.total.toFixed(2)}`;
     }
+
+    // Coupon selector event listener
+    const couponSelect = document.getElementById('apply-coupon');
+    if (couponSelect) {
+        couponSelect.addEventListener('change', applyCouponDiscount);
+    }
 });
+
+// ============================================
+// COUPON MANAGEMENT
+// ============================================
+
+async function loadUserCoupons() {
+    if (!currentUser) return;
+
+    console.log('📋 Loading coupons for user:', currentUser.uid);
+    userCoupons = await getUserCoupons(currentUser.uid);
+    console.log('📋 Coupons loaded:', userCoupons);
+
+    const couponSection = document.getElementById('coupon-section');
+    const couponSelect = document.getElementById('apply-coupon');
+
+    if (couponSection) {
+        couponSection.style.display = 'block';
+
+        if (userCoupons.length > 0 && couponSelect) {
+            // Populate select with coupons
+            couponSelect.innerHTML = '<option value="">Sin cupón</option>';
+            userCoupons.forEach(coupon => {
+                const optionText = coupon.type === 'percentage'
+                    ? `${coupon.value}% descuento`
+                    : `€${coupon.value.toFixed(2)} descuento`;
+                couponSelect.innerHTML += `<option value="${coupon.id}">${optionText}</option>`;
+            });
+        } else {
+            // No coupons available - show message
+            couponSection.innerHTML = `
+                <div style="text-align: center; padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">
+                    <i class="fas fa-ticket-alt" style="opacity: 0.5;"></i>
+                    No tienes cupones disponibles.
+                    <a href="/pages/perfil.html" style="color: var(--primary); text-decoration: none;">Canjea puntos</a>
+                </div>
+            `;
+        }
+    }
+}
+
+function applyCouponDiscount() {
+    const couponSelect = document.getElementById('apply-coupon');
+    const couponId = couponSelect?.value;
+    const discountApplied = document.getElementById('discount-applied');
+    const discountText = document.getElementById('discount-text');
+    const totalEl = document.getElementById('checkout-total');
+
+    // Reset
+    selectedCoupon = null;
+    appliedDiscount = 0;
+
+    const calculations = Cart.calculateTotal();
+    let finalTotal = calculations.total;
+
+    if (couponId) {
+        const coupon = userCoupons.find(c => c.id === couponId);
+        if (coupon) {
+            selectedCoupon = coupon;
+
+            if (coupon.type === 'percentage') {
+                appliedDiscount = (calculations.subtotal * coupon.value) / 100;
+                if (discountText) discountText.textContent = `-${coupon.value}% = -€${appliedDiscount.toFixed(2)}`;
+            } else {
+                appliedDiscount = Math.min(coupon.value, calculations.subtotal);
+                if (discountText) discountText.textContent = `-€${appliedDiscount.toFixed(2)}`;
+            }
+
+            finalTotal = Math.max(0, calculations.total - appliedDiscount);
+
+            if (discountApplied) discountApplied.style.display = 'block';
+        }
+    } else {
+        if (discountApplied) discountApplied.style.display = 'none';
+    }
+
+    if (totalEl) {
+        totalEl.textContent = `€${finalTotal.toFixed(2)}`;
+    }
+}
+

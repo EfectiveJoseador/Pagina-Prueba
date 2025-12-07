@@ -6,6 +6,7 @@
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, onValue, update, get, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { convertToAvailable } from './points.js';
 
 // ============================================
 // SECURITY: Admin verification
@@ -284,9 +285,10 @@ function renderOrders() {
                     ` : ''}
                 </td>
                 <td class="order-status">
-                    <select class="status-select status-${order.status}" onchange="updateOrderStatus('${order.path}', this.value)">
+                    <select class="status-select status-${order.status}" onchange="updateOrderStatus('${order.path}', this.value, '${order.uid}', '${order.orderId}')">
                         <option value="pendiente" ${order.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
                         <option value="confirmado" ${order.status === 'confirmado' ? 'selected' : ''}>Confirmado</option>
+                        <option value="imagenes_cliente" ${order.status === 'imagenes_cliente' ? 'selected' : ''}>📷 Imágenes Cliente</option>
                         <option value="enviado" ${order.status === 'enviado' ? 'selected' : ''}>Enviado</option>
                         <option value="entregado" ${order.status === 'entregado' ? 'selected' : ''}>Entregado</option>
                         <option value="cancelado" ${order.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
@@ -318,13 +320,13 @@ function renderOrders() {
 // ============================================
 
 // Update order status
-window.updateOrderStatus = async function (path, newStatus) {
+window.updateOrderStatus = async function (path, newStatus, uid, orderId) {
     if (!isAdmin) {
         alert('No tienes permisos');
         return;
     }
 
-    const validStatuses = ['pendiente', 'confirmado', 'enviado', 'entregado', 'cancelado'];
+    const validStatuses = ['pendiente', 'confirmado', 'imagenes_cliente', 'enviado', 'entregado', 'cancelado'];
     if (!validStatuses.includes(newStatus)) {
         alert('Estado inválido');
         return;
@@ -338,7 +340,17 @@ window.updateOrderStatus = async function (path, newStatus) {
             updatedBy: auth.currentUser.email
         });
 
-        showToast(`Estado actualizado a: ${newStatus}`);
+        // If status is 'imagenes_cliente', convert pending points to available
+        if (newStatus === 'imagenes_cliente' && uid && orderId) {
+            const converted = await convertToAvailable(uid, orderId);
+            if (converted) {
+                showToast(`Estado actualizado y puntos convertidos a disponibles`);
+            } else {
+                showToast(`Estado actualizado a: ${newStatus}`);
+            }
+        } else {
+            showToast(`Estado actualizado a: ${newStatus}`);
+        }
     } catch (error) {
         console.error('Error updating status:', error);
         alert('Error al actualizar estado: ' + error.message);

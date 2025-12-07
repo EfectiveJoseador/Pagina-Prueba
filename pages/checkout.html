@@ -256,6 +256,23 @@
                     <span id="checkout-total">€0.00</span>
                 </div>
 
+                <!-- Coupon Selector -->
+                <div id="coupon-section"
+                    style="margin-top: 1rem; padding: 1rem; background: var(--bg-body); border-radius: 10px; border: 1px solid var(--border); display: none;">
+                    <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                        <i class="fas fa-ticket-alt" style="color: var(--primary);"></i> Aplicar cupón
+                    </label>
+                    <select id="apply-coupon"
+                        style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text-main); font-size: 0.9rem;">
+                        <option value="">Sin cupón</option>
+                        <!-- Populated by JS -->
+                    </select>
+                    <div id="discount-applied"
+                        style="display: none; margin-top: 0.5rem; font-size: 0.85rem; color: #22c55e;">
+                        <i class="fas fa-check-circle"></i> <span id="discount-text">Descuento aplicado</span>
+                    </div>
+                </div>
+
                 <div class="secure-badge" style="margin-top: 1rem;">
                     <i class="fas fa-lock"></i> Pago 100% Seguro
                 </div>

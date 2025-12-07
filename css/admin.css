@@ -415,6 +415,11 @@ body {
     color: #ef4444;
 }
 
+.status-select.status-imagenes_cliente {
+    background: rgba(192, 38, 211, 0.2);
+    color: #c026d3;
+}
+
 /* Tracking Input */
 .tracking-input input {
     background: #1a1a2e;
@@ -640,6 +645,11 @@ body {
 .status-badge.status-cancelado {
     background: rgba(239, 68, 68, 0.2);
     color: #ef4444;
+}
+
+.status-badge.status-imagenes_cliente {
+    background: rgba(192, 38, 211, 0.2);
+    color: #c026d3;
 }
 
 /* Items Table */

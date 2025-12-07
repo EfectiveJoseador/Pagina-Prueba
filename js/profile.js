@@ -6,6 +6,7 @@ import {
     updateProfile
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, set, get, update, remove, push, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { loadUserPoints, loadPointsHistory, redeemCoupon, REWARDS } from './points.js';
 
 // ============================================
 // STATE MANAGEMENT
@@ -179,6 +180,7 @@ function renderOrders(orders) {
         const statusConfig = {
             'pendiente': { icon: 'fa-clock', bg: 'rgba(126, 126, 126, 0.15)', color: '#9ca3af' },
             'confirmado': { icon: 'fa-check-circle', bg: 'rgba(59, 130, 246, 0.15)', color: '#3b82f6' },
+            'imagenes_cliente': { icon: 'fa-camera', bg: 'rgba(192, 38, 211, 0.15)', color: '#c026d3' },
             'enviado': { icon: 'fa-shipping-fast', bg: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b' },
             'entregado': { icon: 'fa-box-open', bg: 'rgba(34, 197, 94, 0.15)', color: '#22c55e' }
         };
@@ -445,7 +447,7 @@ function normalizeStatus(status) {
     }
 
     // Check if already valid
-    const validStatuses = ['pendiente', 'confirmado', 'enviado', 'entregado'];
+    const validStatuses = ['pendiente', 'confirmado', 'imagenes_cliente', 'enviado', 'entregado'];
     if (validStatuses.includes(lower)) {
         return lower;
     }
@@ -458,6 +460,7 @@ function getStatusInfo(status) {
     const statusMap = {
         'pendiente': { text: 'Pendiente', icon: 'fas fa-clock', class: 'estado-pendiente' },
         'confirmado': { text: 'Confirmado', icon: 'fas fa-check-circle', class: 'estado-confirmado' },
+        'imagenes_cliente': { text: 'Imágenes Cliente', icon: 'fas fa-camera', class: 'estado-imagenes' },
         'enviado': { text: 'Enviado', icon: 'fas fa-truck', class: 'estado-enviado' },
         'entregado': { text: 'Entregado', icon: 'fas fa-gift', class: 'estado-entregado' }
     };
@@ -820,11 +823,143 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadOrders();
             await loadAddresses();
             await loadPreferences();
+            await loadPoints();
 
             // Initialize order status config in Firebase (if not exists)
             initOrderStatusConfig();
         } else {
             window.location.href = '/pages/login.html';
         }
+    });
+
+    // ============================================
+    // POINTS SECTION
+    // ============================================
+
+    async function loadPoints() {
+        if (!currentUser) return;
+
+        const points = await loadUserPoints(currentUser.uid);
+
+        // Update display
+        const pendingEl = document.getElementById('pending-points');
+        const availableEl = document.getElementById('available-points');
+        const modalAvailableEl = document.getElementById('modal-available-points');
+
+        if (pendingEl) pendingEl.textContent = points.pendingPoints;
+        if (availableEl) availableEl.textContent = points.availablePoints;
+        if (modalAvailableEl) modalAvailableEl.textContent = points.availablePoints;
+
+        // Load history
+        const history = await loadPointsHistory(currentUser.uid);
+        renderPointsHistory(history);
+
+        // Update redeem buttons state
+        updateRedeemButtons(points.availablePoints);
+    }
+
+    function renderPointsHistory(history) {
+        const container = document.getElementById('points-history');
+        if (!container) return;
+
+        if (history.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <i class="fas fa-history" style="font-size: 2rem; opacity: 0.5; margin-bottom: 0.5rem;"></i>
+                    <p>Aún no tienes transacciones de puntos.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = history.slice(0, 20).map(entry => {
+            const isPositive = entry.points > 0;
+            const date = new Date(entry.timestamp).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+            return `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; border-bottom: 1px solid var(--border);">
+                    <div>
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--text-main);">${entry.description}</p>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">${date}</span>
+                    </div>
+                    <span style="font-weight: 700; color: ${isPositive ? '#22c55e' : '#ef4444'};">
+                        ${isPositive ? '+' : ''}${entry.points}
+                    </span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function updateRedeemButtons(availablePoints) {
+        document.querySelectorAll('.btn-redeem').forEach(btn => {
+            const cost = parseInt(btn.dataset.cost);
+            if (availablePoints < cost) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            } else {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+        });
+    }
+
+    // Rewards modal controls
+    const openRewardsBtn = document.getElementById('open-rewards-store');
+    const closeRewardsBtn = document.getElementById('close-rewards-modal');
+    const rewardsModal = document.getElementById('rewards-modal');
+
+    if (openRewardsBtn) {
+        openRewardsBtn.addEventListener('click', () => {
+            if (rewardsModal) rewardsModal.style.display = 'block';
+        });
+    }
+
+    if (closeRewardsBtn) {
+        closeRewardsBtn.addEventListener('click', () => {
+            if (rewardsModal) rewardsModal.style.display = 'none';
+        });
+    }
+
+    // Close modal on outside click
+    if (rewardsModal) {
+        rewardsModal.addEventListener('click', (e) => {
+            if (e.target === rewardsModal) {
+                rewardsModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Redeem buttons
+    document.querySelectorAll('.btn-redeem').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            if (!currentUser) return;
+
+            const rewardCard = btn.closest('.reward-card');
+            const rewardId = rewardCard?.dataset.reward;
+            const cost = parseInt(btn.dataset.cost);
+
+            if (!rewardId) return;
+
+            const reward = REWARDS.find(r => r.id === rewardId);
+            if (!reward) return;
+
+            if (!confirm(`¿Canjear ${cost} puntos por ${reward.name}?`)) return;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            const coupon = await redeemCoupon(currentUser.uid, rewardId);
+
+            if (coupon) {
+                alert(`✅ ¡Cupón canjeado! Ya puedes usarlo en tu próxima compra.`);
+                await loadPoints();
+            } else {
+                alert('❌ Error al canjear el cupón. Verifica que tienes suficientes puntos.');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = `${cost} <i class="fas fa-star" style="font-size: 0.75rem;"></i>`;
+        });
     });
 });
