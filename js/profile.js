@@ -83,7 +83,7 @@ function loadOrders() {
                     <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
                     <p style="font-size: 1.1rem;">Aún no tienes pedidos realizados.</p>
                     <p style="font-size: 0.9rem; margin-top: 0.5rem;">¡Explora nuestra tienda y haz tu primer pedido!</p>
-                    <a href="/pages/catalogo.html" class="btn-shop-now" style="display: inline-flex; margin-top: 1rem;">
+                    <a href="/pages/tienda.html" class="btn-shop-now" style="display: inline-flex; margin-top: 1rem;">
                         <i class="fas fa-shopping-bag"></i> Ir a la Tienda
                     </a>
                 </div>
@@ -97,7 +97,7 @@ function loadOrders() {
                 <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
                 <p style="font-size: 1.1rem;">No se encontraron pedidos.</p>
                 <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">Puede que aún no hayas realizado ningún pedido.</p>
-                <a href="/pages/catalogo.html" class="btn-shop-now" style="display: inline-flex; margin-top: 1rem;">
+                <a href="/pages/tienda.html" class="btn-shop-now" style="display: inline-flex; margin-top: 1rem;">
                     <i class="fas fa-shopping-bag"></i> Ir a la Tienda
                 </a>
             </div>

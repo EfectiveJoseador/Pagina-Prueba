@@ -2,6 +2,7 @@
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import Cart from './carrito.js';
+import products from './products-data.js';
 
 // ============================================
 // STATE MANAGEMENT
@@ -264,13 +265,16 @@ function confirmOrder() {
         status: 'pendiente',
         trackingNumber: null,
         items: Cart.items.map(item => {
+            // Find the product to get its image
+            const product = products.find(p => p.id === item.id);
             return {
                 id: item.id,
-                name: item.name || `Producto ${item.id}`,
+                name: item.name || product?.name || `Producto ${item.id}`,
+                image: item.image || product?.image || '/assets/placeholder.webp',
                 quantity: item.quantity || item.qty || 1,
                 size: item.size || 'M',
                 version: item.version || 'aficionado',
-                price: item.price || 0,
+                price: item.price || product?.price || 0,
                 customization: item.customization || {}
             };
         }),
