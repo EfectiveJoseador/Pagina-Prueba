@@ -1,5 +1,10 @@
 /* Catalog Styles */
 
+/* Escalado 125% solo para la página de tienda */
+.page-tienda {
+    zoom: 1.25;
+}
+
 .catalog-container {
     display: grid;
     grid-template-columns: 280px 1fr;
