@@ -9,7 +9,7 @@ import products from './products-data.js';
 // CONFIGURATION
 // ============================================
 const CONFIG = {
-    PRODUCTS_PER_PAGE: 16,
+    PRODUCTS_PER_PAGE: 20,
     LAZY_LOAD_THRESHOLD: '200px', // Load images before they enter viewport
     PLACEHOLDER_COLOR: '#e0e0e0'
 };
