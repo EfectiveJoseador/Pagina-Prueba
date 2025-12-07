@@ -10,16 +10,41 @@
     // CONFIGURATION
     // ============================================
     const PROTECTED_SELECTORS = [
+        // Product images
         '.product-image img',
         '.product-card img',
         '.main-image img',
+        '.primary-image',
+        '.secondary-image',
+
+        // Thumbnails and gallery
         '.thumbnails img',
+        '.thumb img',
         '.gallery-image img',
+
+        // Lightbox / Zoom modal
         '.lightbox-image-wrapper img',
+        '.lightbox-thumbnails img',
+        '.lightbox-thumb img',
+        '.lightbox-content img',
         '#main-img',
         '#lightbox-image',
+        '.image-lightbox img',
+
+        // Modal thumbnails
+        '.modal-thumb img',
+        '.modal-gallery img',
+        '.zoom-modal img',
+
+        // Client testimonials
         '.client-card img',
-        '.carousel-slide img'
+        '.client-image img',
+        '.testimonial-image img',
+
+        // Carousel and sliders
+        '.carousel-slide img',
+        '.swiper-slide img',
+        '.slider-image img'
     ];
 
     // ============================================
@@ -87,7 +112,12 @@
         }
 
         // Check if it's within a protected container
-        const protectedContainer = element.closest('.product-image, .product-card, .main-image, .client-card');
+        const protectedContainer = element.closest(
+            '.product-image, .product-card, .main-image, .client-card, ' +
+            '.thumbnails, .thumb, .lightbox-content, .lightbox-thumbnails, ' +
+            '.image-lightbox, .zoom-modal, .modal-gallery, ' +
+            '.client-image, .testimonial-image, .carousel-slide'
+        );
         return !!protectedContainer;
     }
 
@@ -123,7 +153,11 @@
     // ADD TRANSPARENT OVERLAY
     // ============================================
     function addOverlay(img) {
-        const container = img.closest('.product-image, .product-card, .main-image, .client-card');
+        const container = img.closest(
+            '.product-image, .product-card, .main-image, .client-card, ' +
+            '.thumbnails, .thumb, .lightbox-content, .lightbox-thumbnails, ' +
+            '.image-lightbox, .client-image, .testimonial-image'
+        );
 
         if (!container) return;
         if (container.querySelector('.product-image-overlay')) return; // Already has overlay
@@ -154,15 +188,29 @@
         if (document.getElementById('image-protection-css')) return;
 
         const css = `
-            /* Image Protection Styles */
+            /* Image Protection Styles - All protected images */
             .product-image,
             .product-image img,
             .product-card img,
             .main-image img,
+            .primary-image,
+            .secondary-image,
             .thumbnails img,
+            .thumb img,
             .gallery-image img,
+            .lightbox-image-wrapper img,
+            .lightbox-thumbnails img,
+            .lightbox-thumb img,
+            .lightbox-content img,
+            .image-lightbox img,
+            .modal-thumb img,
+            .modal-gallery img,
+            .zoom-modal img,
             .client-card img,
+            .client-image img,
+            .testimonial-image img,
             .carousel-slide img,
+            .swiper-slide img,
             #main-img,
             #lightbox-image {
                 user-select: none !important;
@@ -190,7 +238,14 @@
             .product-image,
             .product-card,
             .main-image,
-            .client-card {
+            .client-card,
+            .thumbnails,
+            .thumb,
+            .lightbox-content,
+            .lightbox-thumbnails,
+            .image-lightbox,
+            .client-image,
+            .testimonial-image {
                 position: relative;
             }
         `;
