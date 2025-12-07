@@ -11,8 +11,14 @@ import {
     RecaptchaVerifier
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, set, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { sanitizeInput, isValidEmail, checkRateLimit, getRemainingAttempts } from './security.js';
 
-// Helper: Map Firebase Error Codes to Spanish
+// Rate limit key for login attempts
+const LOGIN_RATE_LIMIT_KEY = 'login_attempts';
+const MAX_LOGIN_ATTEMPTS = 5;
+const RATE_LIMIT_WINDOW_MS = 300000; // 5 minutes
+
+// Helper: Map Firebase Error Codes to Spanish (sanitized to prevent user enumeration)
 function mapAuthError(code) {
     switch (code) {
         case 'auth/email-already-in-use': return 'Este email ya está registrado.';
@@ -20,12 +26,14 @@ function mapAuthError(code) {
         case 'auth/operation-not-allowed': return 'Operación no permitida. Contacta soporte.';
         case 'auth/weak-password': return 'La contraseña es muy débil (mínimo 6 caracteres).';
         case 'auth/user-disabled': return 'Esta cuenta ha sido deshabilitada.';
-        case 'auth/user-not-found': return 'No existe una cuenta con este email.';
-        case 'auth/wrong-password': return 'Contraseña incorrecta.';
-        case 'auth/too-many-requests': return 'Demasiados intentos. Inténtalo más tarde.';
+        // Avoid user enumeration - use generic message
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+            return 'Email o contraseña incorrectos.';
+        case 'auth/too-many-requests': return 'Demasiados intentos. Inténtalo en unos minutos.';
         case 'auth/network-request-failed': return 'Error de conexión. Verifica tu internet.';
-        case 'auth/invalid-credential': return 'Credenciales inválidas.';
-        default: return `Ocurrió un error inesperado: ${code}. Inténtalo de nuevo.`;
+        default: return 'Ocurrió un error. Inténtalo de nuevo.';
     }
 }
 
@@ -107,9 +115,22 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             clearError('login-error');
 
-            const email = loginForm.querySelector('input[type="email"]').value;
+            const email = sanitizeInput(loginForm.querySelector('input[type="email"]').value, 255);
             const password = loginForm.querySelector('input[type="password"]').value;
             const btn = loginForm.querySelector('button');
+
+            // Validate email format
+            if (!isValidEmail(email)) {
+                showError('login-error', 'Por favor, introduce un email válido.');
+                return;
+            }
+
+            // Check rate limit before attempting login
+            if (!checkRateLimit(LOGIN_RATE_LIMIT_KEY, MAX_LOGIN_ATTEMPTS, RATE_LIMIT_WINDOW_MS)) {
+                const remaining = getRemainingAttempts(LOGIN_RATE_LIMIT_KEY, MAX_LOGIN_ATTEMPTS);
+                showError('login-error', `Demasiados intentos. Espera 5 minutos antes de volver a intentarlo.`);
+                return;
+            }
 
             try {
                 btn.textContent = 'Entrando...';
