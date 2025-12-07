@@ -1,0 +1,18 @@
+# Learn more about Firebase Hosting
+https://firebase.google.com/docs/hosting
+
+# Firebase cache
+.firebase/
+
+# Functions
+functions/node_modules/
+functions/lib/
+
+# Logs
+*.log
+firebase-debug.log
+firebase-debug.*.log
+
+# Environment
+.env
+.env.local
