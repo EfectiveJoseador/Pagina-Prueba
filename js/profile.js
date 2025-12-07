@@ -6,7 +6,7 @@ import {
     updateProfile
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, set, get, update, remove, push, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { loadUserPoints, loadPointsHistory, redeemCoupon, REWARDS } from './points.js';
+import { loadUserPoints, loadPointsHistory, redeemCoupon, getUserCoupons, REWARDS } from './points.js';
 
 // ============================================
 // STATE MANAGEMENT
@@ -850,12 +850,73 @@ document.addEventListener('DOMContentLoaded', () => {
         if (availableEl) availableEl.textContent = points.availablePoints;
         if (modalAvailableEl) modalAvailableEl.textContent = points.availablePoints;
 
+        // Load and display coupons
+        const coupons = await getUserCoupons(currentUser.uid);
+        renderUserCoupons(coupons);
+
         // Load history
         const history = await loadPointsHistory(currentUser.uid);
         renderPointsHistory(history);
 
         // Update redeem buttons state
         updateRedeemButtons(points.availablePoints);
+    }
+
+    function renderUserCoupons(coupons) {
+        const container = document.getElementById('user-coupons');
+        if (!container) return;
+
+        if (coupons.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 1.5rem; color: var(--text-muted); width: 100%;">
+                    <i class="fas fa-ticket-alt" style="font-size: 2rem; opacity: 0.3; margin-bottom: 0.5rem;"></i>
+                    <p style="margin: 0.5rem 0 0 0;">No tienes cupones disponibles.</p>
+                    <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem;">¡Canjea puntos en la Tienda de Puntos!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = coupons.map(coupon => {
+            const discountText = coupon.type === 'percentage'
+                ? `${coupon.value}%`
+                : `€${coupon.value.toFixed(2)}`;
+            const date = new Date(coupon.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+
+            return `
+                <div style="
+                    background: linear-gradient(135deg, rgba(192, 38, 211, 0.15), rgba(139, 92, 246, 0.1));
+                    border: 1px dashed #c026d3;
+                    border-radius: 10px;
+                    padding: 1rem;
+                    min-width: 140px;
+                    text-align: center;
+                    position: relative;
+                ">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #c026d3;">${discountText}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-main); font-weight: 600;">DESCUENTO</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem;">
+                        <i class="fas fa-clock"></i> Obtenido: ${date}
+                    </div>
+                    <div style="
+                        position: absolute;
+                        top: -8px;
+                        right: -8px;
+                        background: #22c55e;
+                        color: white;
+                        border-radius: 50%;
+                        width: 24px;
+                        height: 24px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 0.7rem;
+                    ">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
     function renderPointsHistory(history) {
