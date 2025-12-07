@@ -1,48 +1,227 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Acceso | Camisetazo</title>
   <style>
-    :root{ --bg:#071735; --card:#0b2346; --muted:#a8c3ff; --text:#dbeeff; --accent:#3b82f6; --danger:#ef4444; --ok:#22c55e; }
-    *{ box-sizing: border-box; }
-    body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; background: var(--bg); color: var(--text); }
-    .container{ min-height:100dvh; display:grid; place-items:center; padding:24px; }
-    .panel{ width:100%; max-width:960px; display:grid; grid-template-columns: 1fr 1fr; gap:24px; background: #071b36; border:1px solid rgba(63,106,173,.2); border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.35); padding:24px; }
-    @media (max-width: 860px){ .panel{ grid-template-columns:1fr; max-width:560px; } }
+    :root {
+      --bg: #071735;
+      --card: #0b2346;
+      --muted: #a8c3ff;
+      --text: #dbeeff;
+      --accent: #3b82f6;
+      --danger: #ef4444;
+      --ok: #22c55e;
+    }
 
-    .brand{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
-    .brand img{ width:40px; height:40px; border-radius:8px; object-fit:cover; }
-    .brand h1{ margin:0; font-size:1.25rem; letter-spacing:.3px; color:#9fe0ff; }
-    .muted{ color: var(--muted); font-size:.95rem; }
+    * {
+      box-sizing: border-box;
+    }
 
-    .card{ background: var(--card); border:1px solid rgba(42,91,168,.22); border-radius: 12px; padding:18px; }
-    .tabs{ display:flex; gap:6px; background: rgba(10,31,61,.6); padding:6px; border-radius:10px; border:1px solid rgba(42,91,168,.18); }
-    .tab{ flex:1; text-align:center; padding:10px 12px; border-radius:8px; cursor:pointer; user-select:none; font-weight:700; color:#bfe4ff; }
-    .tab[aria-selected="true"]{ background: #123161; color:#fff; border:1px solid rgba(99,143,211,.35); }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+    }
 
-    form{ display:grid; gap:12px; margin-top:14px; }
-    label{ font-weight:600; font-size:.95rem; color:#cde2ff; }
-    input{ width:100%; padding:12px; border-radius:10px; border:1px solid rgba(99,143,211,.25); background:#081a36; color:#fff; outline: none; }
-    input:focus{ border-color:#3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.18); }
-    .row{ display:grid; gap:12px; grid-template-columns: 1fr 1fr; }
-    @media (max-width:560px){ .row{ grid-template-columns:1fr; } }
+    .container {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
 
-    .actions{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:4px; }
-    .btn{ background: var(--accent); color:#fff; border:none; padding:12px 16px; border-radius:10px; font-weight:800; cursor:pointer; letter-spacing:.2px; }
-    .btn[disabled]{ opacity:.6; cursor:not-allowed; }
-    .btn.secondary{ background: transparent; border:1px solid rgba(99,143,211,.35); color:#cfe7ff; }
+    .panel {
+      width: 100%;
+      max-width: 960px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      background: #071b36;
+      border: 1px solid rgba(63, 106, 173, .2);
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+      padding: 24px;
+    }
 
-    .err{ background: rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.35); color:#fecaca; padding:10px; border-radius:10px; font-size:.95rem; }
-    .ok{ background: rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.35); color:#bbf7d0; padding:10px; border-radius:10px; font-size:.95rem; }
+    @media (max-width: 860px) {
+      .panel {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+      }
+    }
 
-    .help{ color:#9cc6ff; font-size:.9rem; }
-    a.help{ color:#9cc6ff; text-decoration: underline; cursor:pointer; }
-    .small{ font-size:.85rem; color:#a8c3ff; }
-    .hidden{ display:none !important; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: .3px;
+      color: #9fe0ff;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(42, 91, 168, .22);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      background: rgba(10, 31, 61, .6);
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid rgba(42, 91, 168, .18);
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+      color: #bfe4ff;
+    }
+
+    .tab[aria-selected="true"] {
+      background: #123161;
+      color: #fff;
+      border: 1px solid rgba(99, 143, 211, .35);
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: .95rem;
+      color: #cde2ff;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(99, 143, 211, .25);
+      background: #081a36;
+      color: #fff;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .18);
+    }
+
+    .row {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width:560px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: .2px;
+    }
+
+    .btn[disabled] {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(99, 143, 211, .35);
+      color: #cfe7ff;
+    }
+
+    .err {
+      background: rgba(239, 68, 68, .12);
+      border: 1px solid rgba(239, 68, 68, .35);
+      color: #fecaca;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: .95rem;
+    }
+
+    .ok {
+      background: rgba(34, 197, 94, .12);
+      border: 1px solid rgba(34, 197, 94, .35);
+      color: #bbf7d0;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: .95rem;
+    }
+
+    .help {
+      color: #9cc6ff;
+      font-size: .9rem;
+    }
+
+    a.help {
+      color: #9cc6ff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .small {
+      font-size: .85rem;
+      color: #a8c3ff;
+    }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="panel">
@@ -55,8 +234,10 @@
 
         <div class="card">
           <div class="tabs" role="tablist" aria-label="Autenticación">
-            <button id="tab-login" class="tab" role="tab" aria-selected="true" aria-controls="panel-login">Iniciar sesión</button>
-            <button id="tab-register" class="tab" role="tab" aria-selected="false" aria-controls="panel-register">Crear cuenta</button>
+            <button id="tab-login" class="tab" role="tab" aria-selected="true" aria-controls="panel-login">Iniciar
+              sesión</button>
+            <button id="tab-register" class="tab" role="tab" aria-selected="false" aria-controls="panel-register">Crear
+              cuenta</button>
           </div>
 
           <div id="panel-login" role="tabpanel" aria-labelledby="tab-login">
@@ -68,7 +249,8 @@
               </div>
               <div>
                 <label for="login-password">Contraseña</label>
-                <input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="6" />
+                <input id="login-password" name="password" type="password" autocomplete="current-password" required
+                  minlength="6" />
                 <div id="login-password-error" class="small hidden"></div>
               </div>
               <div class="actions">
@@ -89,14 +271,16 @@
                 </div>
                 <div>
                   <label for="reg-password">Contraseña</label>
-                  <input id="reg-password" name="password" type="password" autocomplete="new-password" required minlength="6" />
+                  <input id="reg-password" name="password" type="password" autocomplete="new-password" required
+                    minlength="6" />
                   <div class="small">Mínimo 6 caracteres</div>
                   <div id="reg-password-error" class="small hidden"></div>
                 </div>
               </div>
               <div>
                 <label for="reg-password2">Confirmar contraseña</label>
-                <input id="reg-password2" name="password2" type="password" autocomplete="new-password" required minlength="6" />
+                <input id="reg-password2" name="password2" type="password" autocomplete="new-password" required
+                  minlength="6" />
                 <div id="reg-password2-error" class="small hidden"></div>
               </div>
               <div class="actions">
@@ -150,13 +334,13 @@
     const show = (el) => el.classList.remove('hidden');
     const hide = (el) => el.classList.add('hidden');
 
-    function emailValido(email){
+    function emailValido(email) {
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
       return re.test(String(email || '').trim());
     }
 
-    function mapAuthError(code){
-      switch(code){
+    function mapAuthError(code) {
+      switch (code) {
         case 'auth/email-already-in-use': return 'Este email ya está registrado.';
         case 'auth/invalid-email': return 'El email no es válido.';
         case 'auth/operation-not-allowed': return 'Operación no permitida. Contacta soporte.';
@@ -180,15 +364,15 @@
     const panelLogin = $('#panel-login');
     const panelRegister = $('#panel-register');
 
-    function selectTab(which){
+    function selectTab(which) {
       const loginSelected = which === 'login';
       tabLogin.setAttribute('aria-selected', String(loginSelected));
       tabRegister.setAttribute('aria-selected', String(!loginSelected));
-      if (loginSelected){ hide(panelRegister); show(panelLogin); }
+      if (loginSelected) { hide(panelRegister); show(panelLogin); }
       else { hide(panelLogin); show(panelRegister); }
     }
-    tabLogin.addEventListener('click', ()=> selectTab('login'));
-    tabRegister.addEventListener('click', ()=> selectTab('register'));
+    tabLogin.addEventListener('click', () => selectTab('login'));
+    tabRegister.addEventListener('click', () => selectTab('register'));
 
     // 4) Login con email/contraseña
     const loginForm = $('#form-login');
@@ -196,26 +380,26 @@
     const loginPass = $('#login-password');
     const loginMsg = $('#login-msg');
 
-    loginForm.addEventListener('submit', async (e)=>{
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       // Limpiar mensajes
-      loginMsg.className = 'hidden'; loginMsg.textContent='';
-      $('#login-email-error').className = 'small hidden'; $('#login-password-error').className='small hidden';
+      loginMsg.className = 'hidden'; loginMsg.textContent = '';
+      $('#login-email-error').className = 'small hidden'; $('#login-password-error').className = 'small hidden';
 
       // Validación
       const email = loginEmail.value.trim();
       const pass = loginPass.value;
       let ok = true;
-      if (!emailValido(email)){ ok = false; const el=$('#login-email-error'); el.textContent='Introduce un email válido.'; el.className='small'; }
-      if (!pass || pass.length < 6){ ok = false; const el=$('#login-password-error'); el.textContent='La contraseña debe tener al menos 6 caracteres.'; el.className='small'; }
+      if (!emailValido(email)) { ok = false; const el = $('#login-email-error'); el.textContent = 'Introduce un email válido.'; el.className = 'small'; }
+      if (!pass || pass.length < 6) { ok = false; const el = $('#login-password-error'); el.textContent = 'La contraseña debe tener al menos 6 caracteres.'; el.className = 'small'; }
       if (!ok) return;
 
       // Procesar
-      const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent='Accediendo...';
+      const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent = 'Accediendo...';
       try {
         await signInWithEmailAndPassword(auth, email, pass);
         loginMsg.className = 'ok'; loginMsg.textContent = 'Sesión iniciada correctamente.';
-      } catch(err){
+      } catch (err) {
         console.error('Login error:', err);
         loginMsg.className = 'err'; loginMsg.textContent = mapAuthError(err?.code);
       } finally {
@@ -224,21 +408,21 @@
     });
 
     // Recuperar contraseña
-    $('#btn-forgot').addEventListener('click', async ()=>{
+    $('#btn-forgot').addEventListener('click', async () => {
       const email = (loginEmail.value || '').trim();
-      loginMsg.className = 'hidden'; loginMsg.textContent='';
-      if (!emailValido(email)){
-        const el=$('#login-email-error'); el.textContent='Introduce un email válido para recuperar tu contraseña.'; el.className='small';
+      loginMsg.className = 'hidden'; loginMsg.textContent = '';
+      if (!emailValido(email)) {
+        const el = $('#login-email-error'); el.textContent = 'Introduce un email válido para recuperar tu contraseña.'; el.className = 'small';
         return;
       }
-      const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent='Enviando email...';
-      try{
+      const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent = 'Enviando email...';
+      try {
         await sendPasswordResetEmail(auth, email);
-        loginMsg.className='ok'; loginMsg.textContent='Hemos enviado un correo para restablecer tu contraseña.';
-      }catch(err){
+        loginMsg.className = 'ok'; loginMsg.textContent = 'Hemos enviado un correo para restablecer tu contraseña.';
+      } catch (err) {
         console.error('Password reset error:', err);
-        loginMsg.className='err'; loginMsg.textContent=mapAuthError(err?.code);
-      }finally{ btn.disabled=false; btn.textContent=prev; }
+        loginMsg.className = 'err'; loginMsg.textContent = mapAuthError(err?.code);
+      } finally { btn.disabled = false; btn.textContent = prev; }
     });
 
     // 5) Registro con email/contraseña
@@ -248,26 +432,26 @@
     const regPass2 = $('#reg-password2');
     const regMsg = $('#reg-msg');
 
-    $('#btn-clear-reg').addEventListener('click', ()=>{ regForm.reset(); regMsg.className='hidden'; regMsg.textContent=''; ['#reg-email-error','#reg-password-error','#reg-password2-error'].forEach(s=>{ const el=$(s); el.textContent=''; el.className='small hidden'; }); });
+    $('#btn-clear-reg').addEventListener('click', () => { regForm.reset(); regMsg.className = 'hidden'; regMsg.textContent = '';['#reg-email-error', '#reg-password-error', '#reg-password2-error'].forEach(s => { const el = $(s); el.textContent = ''; el.className = 'small hidden'; }); });
 
-    regForm.addEventListener('submit', async (e)=>{
+    regForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       // Limpiar mensajes
-      regMsg.className='hidden'; regMsg.textContent='';
-      ['#reg-email-error','#reg-password-error','#reg-password2-error'].forEach(s=>{ const el=$(s); el.textContent=''; el.className='small hidden'; });
+      regMsg.className = 'hidden'; regMsg.textContent = '';
+      ['#reg-email-error', '#reg-password-error', '#reg-password2-error'].forEach(s => { const el = $(s); el.textContent = ''; el.className = 'small hidden'; });
 
       // Validación
       const email = regEmail.value.trim();
       const p1 = regPass.value; const p2 = regPass2.value;
       let ok = true;
-      if (!emailValido(email)){ ok=false; const el=$('#reg-email-error'); el.textContent='Introduce un email válido.'; el.className='small'; }
-      if (!p1 || p1.length < 6){ ok=false; const el=$('#reg-password-error'); el.textContent='La contraseña debe tener al menos 6 caracteres.'; el.className='small'; }
-      if (p1 !== p2){ ok=false; const el=$('#reg-password2-error'); el.textContent='Las contraseñas no coinciden.'; el.className='small'; }
+      if (!emailValido(email)) { ok = false; const el = $('#reg-email-error'); el.textContent = 'Introduce un email válido.'; el.className = 'small'; }
+      if (!p1 || p1.length < 6) { ok = false; const el = $('#reg-password-error'); el.textContent = 'La contraseña debe tener al menos 6 caracteres.'; el.className = 'small'; }
+      if (p1 !== p2) { ok = false; const el = $('#reg-password2-error'); el.textContent = 'Las contraseñas no coinciden.'; el.className = 'small'; }
       if (!ok) return;
 
       // Procesar
-      const btn = $('#btn-register'); const prev = btn.textContent; btn.disabled = true; btn.textContent='Creando cuenta...';
-      try{
+      const btn = $('#btn-register'); const prev = btn.textContent; btn.disabled = true; btn.textContent = 'Creando cuenta...';
+      try {
         const cred = await createUserWithEmailAndPassword(auth, email, p1);
         // Crear perfil mínimo en RTDB (sin datos sensibles)
         const uid = cred.user.uid;
@@ -278,39 +462,60 @@
         });
         // Enviar correo de verificación (con fallback si el dominio no está autorizado)
         let verifOk = false;
-        try{
+        try {
           await sendEmailVerification(cred.user, { url: window.location.origin + '/' });
           verifOk = true;
-        }catch(e){
-          if (e?.code === 'auth/invalid-continue-uri' || e?.code === 'auth/unauthorized-continue-uri'){
-            try{ await sendEmailVerification(cred.user); verifOk = true; }
-            catch(e2){ console.error('Fallback sendEmailVerification error:', e2); }
+        } catch (e) {
+          if (e?.code === 'auth/invalid-continue-uri' || e?.code === 'auth/unauthorized-continue-uri') {
+            try { await sendEmailVerification(cred.user); verifOk = true; }
+            catch (e2) { console.error('Fallback sendEmailVerification error:', e2); }
           } else {
             console.error('sendEmailVerification error:', e);
           }
         }
-        if (verifOk){
-          regMsg.className='ok'; regMsg.textContent='Cuenta creada correctamente. Te hemos enviado un correo de verificación. Revisa tu bandeja de entrada y el spam.';
+        if (verifOk) {
+          regMsg.className = 'ok'; regMsg.textContent = 'Cuenta creada correctamente. Te hemos enviado un correo de verificación. Revisa tu bandeja de entrada y el spam.';
         } else {
-          regMsg.className='ok'; regMsg.textContent='Cuenta creada correctamente. No pudimos enviar el correo de verificación ahora; podrás reenviarlo más tarde.';
+          regMsg.className = 'ok'; regMsg.textContent = 'Cuenta creada correctamente. No pudimos enviar el correo de verificación ahora; podrás reenviarlo más tarde.';
         }
         selectTab('login');
-      }catch(err){
+      } catch (err) {
         console.error('Register error:', err);
-        regMsg.className='err'; regMsg.textContent=mapAuthError(err?.code);
-      }finally{ btn.disabled=false; btn.textContent=prev; }
+        regMsg.className = 'err'; regMsg.textContent = mapAuthError(err?.code);
+      } finally { btn.disabled = false; btn.textContent = prev; }
     });
 
-    // 6) Reaccionar a cambios de sesión (opcionalmente redirigir)
-    onAuthStateChanged(auth, (user)=>{
-      if (user){
-        console.log('Usuario autenticado', { uid:user.uid, email:user.email });
-        // Si quieres, redirige después de login/registro:
-        // window.location.href = '/';
+    // 6) Reaccionar a cambios de sesión y redirigir según rol
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log('Usuario autenticado', { uid: user.uid, email: user.email });
+
+        // Verificar si es admin mediante custom claims
+        try {
+          const idTokenResult = await user.getIdTokenResult(true); // Force refresh para obtener claims actualizados
+          const isAdmin = idTokenResult.claims.admin === true;
+
+          console.log('🔍 Admin claim:', isAdmin);
+
+          if (isAdmin) {
+            // Es admin - redirigir al panel de administración
+            console.log('✅ Usuario es admin - redirigiendo a admin.html');
+            window.location.href = '/pages/admin.html';
+          } else {
+            // Usuario normal - redirigir al perfil
+            console.log('👤 Usuario normal - redirigiendo al perfil');
+            window.location.href = '/pages/perfil.html';
+          }
+        } catch (error) {
+          console.error('Error verificando claims:', error);
+          // En caso de error, redirigir al perfil normal
+          window.location.href = '/pages/perfil.html';
+        }
       } else {
         console.log('No autenticado');
       }
     });
   </script>
 </body>
+
 </html>

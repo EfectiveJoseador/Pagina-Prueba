@@ -792,6 +792,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check auth state
     onAuthStateChanged(auth, async (user) => {
         if (user) {
+            // FIRST: Check if user is admin and redirect to admin panel
+            try {
+                const idTokenResult = await user.getIdTokenResult(true);
+                if (idTokenResult.claims.admin === true) {
+                    console.log('✅ Usuario es admin - redirigiendo a panel de administración');
+                    window.location.href = '/pages/admin.html';
+                    return; // Stop execution, redirect will happen
+                }
+            } catch (error) {
+                console.error('Error verificando claims de admin:', error);
+            }
+
+            // Not admin - continue with normal profile
             currentUser = user;
 
             // Update user info in sidebar
