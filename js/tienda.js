@@ -134,11 +134,8 @@ function goToPage(page) {
     currentPage = page;
     renderProducts();
 
-    // Scroll to top of products smoothly
-    const grid = document.getElementById('product-grid');
-    if (grid) {
-        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    // Scroll to top of page smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function renderPagination() {
