@@ -194,6 +194,64 @@
                     <p>Cargando pedidos...</p>
                 </div>
             </section>
+
+            <!-- Promo Codes Section -->
+            <section class="promo-codes-section">
+                <h2 class="section-title"><i class="fas fa-tags"></i> Códigos Promocionales</h2>
+
+                <!-- Create New Code Form -->
+                <div class="promo-create-form">
+                    <h3>Crear Nuevo Código</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="promo-code">Código</label>
+                            <input type="text" id="promo-code" placeholder="Ej: VERANO20" maxlength="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="promo-type">Tipo</label>
+                            <select id="promo-type">
+                                <option value="percentage">% Porcentaje</option>
+                                <option value="fixed">€ Euros fijos</option>
+                                <option value="free_shipping">Envío gratis</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="promo-value">Valor</label>
+                            <input type="number" id="promo-value" placeholder="Ej: 10" min="1" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="promo-max-uses">Usos máx. (vacío = ilimitado)</label>
+                            <input type="number" id="promo-max-uses" placeholder="Ilimitado" min="1">
+                        </div>
+                        <button class="btn-create-promo" id="btn-create-promo">
+                            <i class="fas fa-plus"></i> Crear Código
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Existing Codes Table -->
+                <div class="promo-table-container">
+                    <table class="promo-codes-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                                <th>Usos</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="promo-codes-body">
+                            <!-- Codes injected by JS -->
+                        </tbody>
+                    </table>
+                    <div class="empty-state hidden" id="promo-empty-state">
+                        <i class="fas fa-tag"></i>
+                        <p>No hay códigos promocionales</p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 

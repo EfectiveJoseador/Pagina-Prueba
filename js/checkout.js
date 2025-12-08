@@ -14,6 +14,9 @@ let addresses = [];
 let selectedCoupon = null;
 let appliedDiscount = 0;
 let userCoupons = [];
+// Promo code state
+let appliedPromoCode = null;
+let promoDiscount = 0;
 
 // ============================================
 // CONFIGURATION
@@ -274,10 +277,9 @@ function confirmOrder() {
         return;
     }
 
-    // Calculate final total with discount
-    const finalTotal = selectedCoupon
-        ? Math.max(0, calculations.total - appliedDiscount)
-        : calculations.total;
+    // Calculate final total with all discounts (coupon + promo code)
+    const totalDiscounts = appliedDiscount + promoDiscount;
+    const finalTotal = Math.max(0, calculations.total - totalDiscounts);
 
     // Calculate total shirt quantity for points
     const totalShirtQuantity = Cart.items.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
@@ -310,8 +312,11 @@ function confirmOrder() {
         total: finalTotal,
         subtotal: calculations.subtotal,
         shipping: calculations.shipping,
-        discount: appliedDiscount,
+        discount: totalDiscounts,
         couponUsed: selectedCoupon ? selectedCoupon.id : null,
+        couponDiscount: appliedDiscount,
+        promoCodeUsed: appliedPromoCode ? appliedPromoCode.id : null,
+        promoCodeDiscount: promoDiscount,
         shippingAddress: selectedAddress,
         paymentMethod: paymentMethod,
         pointsToEarn: totalShirtQuantity * 10
@@ -456,8 +461,19 @@ Instagram: @${(sa.instagram || '').replace('@', '')}`;
         productsText += qty + 'x ' + item.name + ' · ' + size + ' · ' + version + ' — €' + price + '\n';
     });
 
-    // === CAMPO 3: Total Paid ===
-    const totalPaid = '€' + orderData.total.toFixed(2);
+    // === CAMPO 3: Total Info ===
+    let totalInfo = `Subtotal: €${orderData.subtotal.toFixed(2)}\n`;
+
+    if (orderData.promoCodeUsed) {
+        totalInfo += `Código promo (${orderData.promoCodeUsed}): -€${orderData.promoCodeDiscount.toFixed(2)}\n`;
+    }
+    if (orderData.couponUsed) {
+        totalInfo += `Cupón usado (${orderData.couponUsed}): -€${orderData.couponDiscount.toFixed(2)}\n`;
+    }
+    if (orderData.discount > 0) {
+        totalInfo += `Descuento total: -€${orderData.discount.toFixed(2)}\n`;
+    }
+    totalInfo += `TOTAL A PAGAR: €${orderData.total.toFixed(2)}`;
 
     // Preparar FormData para Web3Forms
     const formData = new FormData();
@@ -465,7 +481,7 @@ Instagram: @${(sa.instagram || '').replace('@', '')}`;
     formData.append("subject", "Nuevo pedido con pago confirmado - " + orderData.orderId);
     formData.append("cliente", customerInfo);
     formData.append("productos", productsText.trim());
-    formData.append("total", totalPaid);
+    formData.append("total", totalInfo);
 
     try {
         console.log('Enviando a Web3Forms...');
@@ -681,12 +697,12 @@ function applyCouponDiscount() {
     const discountText = document.getElementById('discount-text');
     const totalEl = document.getElementById('checkout-total');
 
-    // Reset
+    // Reset coupon (but keep promo code)
     selectedCoupon = null;
     appliedDiscount = 0;
 
     const calculations = Cart.calculateTotal();
-    let finalTotal = calculations.total;
+    let finalTotal = calculations.total - promoDiscount; // Apply promo discount first
 
     if (couponId) {
         const coupon = userCoupons.find(c => c.id === couponId);
@@ -701,7 +717,7 @@ function applyCouponDiscount() {
                 if (discountText) discountText.textContent = `-€${appliedDiscount.toFixed(2)}`;
             }
 
-            finalTotal = Math.max(0, calculations.total - appliedDiscount);
+            finalTotal = Math.max(0, finalTotal - appliedDiscount);
 
             if (discountApplied) discountApplied.style.display = 'block';
         }
@@ -714,3 +730,193 @@ function applyCouponDiscount() {
     }
 }
 
+// ============================================
+// PROMO CODE MANAGEMENT
+// ============================================
+
+async function applyPromoCode() {
+    const input = document.getElementById('promo-code-input');
+    const resultDiv = document.getElementById('promo-result');
+    const totalEl = document.getElementById('checkout-total');
+
+    const code = input?.value.trim().toUpperCase();
+
+    if (!code) {
+        showPromoResult('Por favor, introduce un código', 'error');
+        return;
+    }
+
+    // Check if user is logged in
+    if (!currentUser) {
+        showPromoResult('Debes iniciar sesión para usar códigos', 'error');
+        return;
+    }
+
+    // Disable button while validating
+    const btn = document.getElementById('apply-promo-btn');
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Validando...';
+    }
+
+    try {
+        // Try to get the promo code from Firebase
+        const promoRef = ref(db, `promoCodes/${code}`);
+        const snapshot = await get(promoRef);
+
+        if (!snapshot.exists()) {
+            showPromoResult('Código no válido', 'error');
+            resetPromoButton();
+            return;
+        }
+
+        const promo = snapshot.val();
+
+        // Check if code is active
+        if (!promo.active) {
+            showPromoResult('Este código ya no está activo', 'error');
+            resetPromoButton();
+            return;
+        }
+
+        // Check max uses
+        if (promo.maxUses && promo.usageCount >= promo.maxUses) {
+            showPromoResult('Este código ha alcanzado el límite de usos', 'error');
+            resetPromoButton();
+            return;
+        }
+
+        // Apply the discount based on type
+        appliedPromoCode = { ...promo, id: code };
+        const calculations = Cart.calculateTotal();
+
+        if (promo.type === 'free_shipping') {
+            // Check if shipping is already free (more than 1 item)
+            if (calculations.shipping === 0) {
+                showPromoResult('Ya tienes envío gratis en este pedido', 'error');
+                appliedPromoCode = null;
+                resetPromoButton();
+                return;
+            }
+            promoDiscount = calculations.shipping;
+            showPromoResult('¡Envío gratis aplicado!', 'success');
+        } else if (promo.type === 'percentage') {
+            promoDiscount = (calculations.subtotal * promo.value) / 100;
+            showPromoResult(`¡${promo.value}% de descuento aplicado! (-€${promoDiscount.toFixed(2)})`, 'success');
+        } else {
+            promoDiscount = Math.min(promo.value, calculations.subtotal);
+            showPromoResult(`¡€${promo.value} de descuento aplicado!`, 'success');
+        }
+
+        // Update total (considering both promo and coupon discounts)
+        let finalTotal = calculations.total - promoDiscount - appliedDiscount;
+        finalTotal = Math.max(0, finalTotal);
+
+        if (totalEl) {
+            totalEl.textContent = `€${finalTotal.toFixed(2)}`;
+        }
+
+        // Increment usage count in Firebase
+        try {
+            const usageRef = ref(db, `promoCodes/${code}/usageCount`);
+            const currentCount = promo.usageCount || 0;
+            await set(usageRef, currentCount + 1);
+            console.log('📊 Promo code usage incremented:', code, currentCount + 1);
+        } catch (err) {
+            console.warn('Could not increment usage count:', err);
+        }
+
+        // Change button to show it's applied
+        if (btn) {
+            btn.textContent = '✓ Aplicado';
+            btn.style.background = '#10b981';
+        }
+
+        // Disable input
+        if (input) {
+            input.disabled = true;
+        }
+
+        console.log('📦 Promo code applied:', code, promoDiscount);
+
+    } catch (error) {
+        console.error('Error applying promo code:', error);
+        showPromoResult('Error al validar el código', 'error');
+        resetPromoButton();
+    }
+}
+
+function showPromoResult(message, type) {
+    const resultDiv = document.getElementById('promo-result');
+    if (!resultDiv) return;
+
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+    resultDiv.style.color = type === 'success' ? '#10b981' : '#ef4444';
+}
+
+function resetPromoButton() {
+    const btn = document.getElementById('apply-promo-btn');
+    if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Aplicar código';
+        btn.style.background = '#6366f1';
+    }
+}
+
+function setupPromoCodeListeners() {
+    const applyBtn = document.getElementById('apply-promo-btn');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', applyPromoCode);
+    }
+
+    // Allow Enter key in promo input
+    const promoInput = document.getElementById('promo-code-input');
+    if (promoInput) {
+        promoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                applyPromoCode();
+            }
+        });
+    }
+
+    // Promo code accordion toggle
+    const promoToggle = document.getElementById('promo-toggle');
+    const promoContent = document.getElementById('promo-content');
+    const promoChevron = document.getElementById('promo-chevron');
+
+    if (promoToggle && promoContent) {
+        promoToggle.addEventListener('click', () => {
+            const isOpen = promoContent.style.display !== 'none';
+            promoContent.style.display = isOpen ? 'none' : 'block';
+            if (promoChevron) {
+                promoChevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
+            promoToggle.style.borderRadius = isOpen ? '10px' : '10px 10px 0 0';
+        });
+    }
+
+    // Coupon accordion toggle
+    const couponToggle = document.getElementById('coupon-toggle');
+    const couponContent = document.getElementById('coupon-content');
+    const couponChevron = document.getElementById('coupon-chevron');
+
+    if (couponToggle && couponContent) {
+        couponToggle.addEventListener('click', () => {
+            const isOpen = couponContent.style.display !== 'none';
+            couponContent.style.display = isOpen ? 'none' : 'block';
+            if (couponChevron) {
+                couponChevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
+            couponToggle.style.borderRadius = isOpen ? '10px' : '10px 10px 0 0';
+        });
+    }
+}
+
+// Initialize promo code listeners when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPromoCodeListeners);
+} else {
+    setupPromoCodeListeners();
+}

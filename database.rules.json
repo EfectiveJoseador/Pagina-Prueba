@@ -126,6 +126,39 @@
             ".read": true,
             ".write": "auth.token.admin === true"
         },
+        "promoCodes": {
+            ".read": "auth.token.admin === true",
+            ".write": "auth.token.admin === true",
+            "$codeId": {
+                ".read": "auth != null",
+                ".validate": "newData.hasChildren(['code', 'type', 'value', 'active'])",
+                "code": {
+                    ".validate": "newData.isString() && newData.val().length >= 3 && newData.val().length <= 30"
+                },
+                "type": {
+                    ".validate": "newData.isString() && (newData.val() === 'percentage' || newData.val() === 'fixed' || newData.val() === 'free_shipping')"
+                },
+                "value": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+                },
+                "active": {
+                    ".validate": "newData.isBoolean()"
+                },
+                "usageCount": {
+                    ".write": "auth != null",
+                    ".validate": "newData.isNumber() && newData.val() >= 0"
+                },
+                "maxUses": {
+                    ".validate": "newData.isNumber() || newData.val() === null"
+                },
+                "createdAt": {
+                    ".validate": "newData.isString()"
+                },
+                "createdBy": {
+                    ".validate": "newData.isString()"
+                }
+            }
+        },
         "$other": {
             ".read": false,
             ".write": false

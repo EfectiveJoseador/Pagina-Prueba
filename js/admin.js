@@ -94,6 +94,10 @@ function initPanel() {
 
     // Load all orders
     loadAllOrders();
+
+    // Load promo codes
+    setupPromoCodeListeners();
+    loadPromoCodes();
 }
 
 function setupEventListeners() {
@@ -558,3 +562,242 @@ document.addEventListener('keydown', (e) => {
         closeModal();
     }
 });
+
+// ============================================
+// PROMO CODES MANAGEMENT
+// ============================================
+let allPromoCodes = [];
+
+function loadPromoCodes() {
+    const promoCodesRef = ref(db, 'promoCodes');
+
+    onValue(promoCodesRef, (snapshot) => {
+        allPromoCodes = [];
+
+        if (snapshot.exists()) {
+            const codesData = snapshot.val();
+            Object.keys(codesData).forEach(codeId => {
+                allPromoCodes.push({
+                    ...codesData[codeId],
+                    id: codeId
+                });
+            });
+
+            // Sort by creation date (newest first)
+            allPromoCodes.sort((a, b) => {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+        }
+
+        renderPromoCodes();
+    }, (error) => {
+        console.error('Error loading promo codes:', error);
+        if (error.code === 'PERMISSION_DENIED') {
+            console.log('Permission denied for promo codes');
+        }
+    });
+}
+
+function renderPromoCodes() {
+    const tableBody = document.getElementById('promo-codes-body');
+    const emptyState = document.getElementById('promo-empty-state');
+
+    if (!tableBody) return;
+
+    if (allPromoCodes.length === 0) {
+        tableBody.innerHTML = '';
+        if (emptyState) emptyState.classList.remove('hidden');
+        return;
+    }
+
+    if (emptyState) emptyState.classList.add('hidden');
+
+    tableBody.innerHTML = allPromoCodes.map(code => {
+        let typeLabel, typeText;
+        if (code.type === 'percentage') {
+            typeLabel = `${code.value}%`;
+            typeText = 'Porcentaje';
+        } else if (code.type === 'free_shipping') {
+            typeLabel = '🚚';
+            typeText = 'Envío gratis';
+        } else {
+            typeLabel = `€${code.value}`;
+            typeText = 'Fijo';
+        }
+        const usageText = code.maxUses ? `${code.usageCount || 0}/${code.maxUses}` : `${code.usageCount || 0}/∞`;
+        const statusClass = code.active ? 'active' : 'inactive';
+        const statusText = code.active ? 'Activo' : 'Inactivo';
+
+        return `
+            <tr>
+                <td class="promo-code-cell"><code>${code.code}</code></td>
+                <td>${typeText}</td>
+                <td class="promo-value-cell">${typeLabel}</td>
+                <td>${usageText}</td>
+                <td>
+                    <span class="promo-status ${statusClass}">${statusText}</span>
+                </td>
+                <td class="promo-actions">
+                    <button class="btn-toggle-promo ${code.active ? 'deactivate' : 'activate'}" 
+                            onclick="togglePromoCode('${code.id}', ${!code.active})"
+                            title="${code.active ? 'Desactivar' : 'Activar'}">
+                        <i class="fas ${code.active ? 'fa-pause' : 'fa-play'}"></i>
+                    </button>
+                    <button class="btn-delete-promo" onclick="deletePromoCode('${code.id}', '${code.code}')" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+window.createPromoCode = async function () {
+    if (!isAdmin) {
+        alert('No tienes permisos');
+        return;
+    }
+
+    const codeInput = document.getElementById('promo-code');
+    const typeSelect = document.getElementById('promo-type');
+    const valueInput = document.getElementById('promo-value');
+    const maxUsesInput = document.getElementById('promo-max-uses');
+
+    const code = codeInput.value.trim().toUpperCase();
+    const type = typeSelect.value;
+    let value = parseFloat(valueInput.value) || 0;
+    const maxUses = maxUsesInput.value ? parseInt(maxUsesInput.value) : null;
+
+    // For free_shipping, set value to 0 automatically
+    if (type === 'free_shipping') {
+        value = 0;
+    }
+
+    // Validation
+    if (!code || code.length < 3) {
+        alert('El código debe tener al menos 3 caracteres');
+        return;
+    }
+
+    if (!/^[A-Z0-9]+$/.test(code)) {
+        alert('El código solo puede contener letras y números');
+        return;
+    }
+
+    // Only validate value for non-free_shipping types
+    if (type !== 'free_shipping' && (!value || value <= 0)) {
+        alert('El valor debe ser mayor que 0');
+        return;
+    }
+
+    if (type === 'percentage' && value > 100) {
+        alert('El porcentaje no puede ser mayor que 100');
+        return;
+    }
+
+    // Check if code already exists
+    const existingCode = allPromoCodes.find(c => c.code === code);
+    if (existingCode) {
+        alert('Este código ya existe');
+        return;
+    }
+
+    try {
+        const newCodeRef = ref(db, `promoCodes/${code}`);
+        await update(newCodeRef, {
+            code: code,
+            type: type,
+            value: value,
+            active: true,
+            usageCount: 0,
+            maxUses: maxUses,
+            createdAt: new Date().toISOString(),
+            createdBy: auth.currentUser.email
+        });
+
+        // Clear form
+        codeInput.value = '';
+        valueInput.value = '';
+        maxUsesInput.value = '';
+
+        showToast(`Código "${code}" creado correctamente`);
+    } catch (error) {
+        console.error('Error creating promo code:', error);
+        alert('Error al crear código: ' + error.message);
+    }
+};
+
+window.togglePromoCode = async function (codeId, newStatus) {
+    if (!isAdmin) {
+        alert('No tienes permisos');
+        return;
+    }
+
+    try {
+        const codeRef = ref(db, `promoCodes/${codeId}`);
+        await update(codeRef, {
+            active: newStatus
+        });
+
+        showToast(`Código ${newStatus ? 'activado' : 'desactivado'}`);
+    } catch (error) {
+        console.error('Error toggling promo code:', error);
+        alert('Error al cambiar estado: ' + error.message);
+    }
+};
+
+window.deletePromoCode = async function (codeId, codeName) {
+    if (!isAdmin) {
+        alert('No tienes permisos');
+        return;
+    }
+
+    if (!confirm(`¿Eliminar el código "${codeName}"?`)) {
+        return;
+    }
+
+    try {
+        const codeRef = ref(db, `promoCodes/${codeId}`);
+        await remove(codeRef);
+
+        showToast(`Código "${codeName}" eliminado`);
+    } catch (error) {
+        console.error('Error deleting promo code:', error);
+        alert('Error al eliminar código: ' + error.message);
+    }
+};
+
+// Add promo codes event listeners
+function setupPromoCodeListeners() {
+    const createBtn = document.getElementById('btn-create-promo');
+    if (createBtn) {
+        createBtn.addEventListener('click', createPromoCode);
+    }
+
+    // Allow Enter key in form
+    const promoCodeInput = document.getElementById('promo-code');
+    if (promoCodeInput) {
+        promoCodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                createPromoCode();
+            }
+        });
+    }
+
+    // Disable value field when free_shipping is selected
+    const typeSelect = document.getElementById('promo-type');
+    const valueInput = document.getElementById('promo-value');
+
+    if (typeSelect && valueInput) {
+        typeSelect.addEventListener('change', () => {
+            if (typeSelect.value === 'free_shipping') {
+                valueInput.value = '';
+                valueInput.disabled = true;
+                valueInput.placeholder = 'No aplica';
+            } else {
+                valueInput.disabled = false;
+                valueInput.placeholder = 'Ej: 10';
+            }
+        });
+    }
+}
