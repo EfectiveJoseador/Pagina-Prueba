@@ -990,3 +990,277 @@ body {
         justify-content: center;
     }
 }
+
+/* ============================================
+   USERS MANAGEMENT SECTION
+   ============================================ */
+.users-section {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.users-search-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.users-search-bar .search-box {
+    flex: 1;
+    min-width: 250px;
+}
+
+.btn-refresh {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-body);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-refresh:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.users-table-container {
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.users-table th {
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.users-table td.text-center {
+    text-align: center;
+}
+
+.user-email {
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.points-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.points-badge small {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.btn-view-user,
+.btn-edit-points {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-view-user {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+}
+
+.btn-view-user:hover {
+    background: #6366f1;
+    color: white;
+}
+
+.btn-edit-points {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.btn-edit-points:hover {
+    background: #f59e0b;
+    color: white;
+}
+
+/* User Modal Styles */
+.user-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.user-info-section,
+.user-points-section {
+    background: var(--bg-body);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.user-info-section h3,
+.user-points-section h3,
+.user-orders-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+.user-info-section h3 i {
+    color: #6366f1;
+}
+
+.user-points-section h3 i {
+    color: #f59e0b;
+}
+
+.user-orders-section h3 i {
+    color: #10b981;
+}
+
+.user-info-section p {
+    margin: 0.5rem 0;
+    color: var(--text-muted);
+}
+
+.user-info-section code {
+    font-size: 0.75rem;
+    background: var(--bg-card);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.points-display {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.point-box {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.point-box.available {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.point-box.pending {
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.point-box .value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.point-box .label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.btn-modify-points {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: transform 0.2s;
+}
+
+.btn-modify-points:hover {
+    transform: translateY(-2px);
+}
+
+.user-orders-section {
+    background: var(--bg-body);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.user-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-orders-table th,
+.user-orders-table td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.user-orders-table th {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.no-orders {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .user-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .users-table th:nth-child(5),
+    .users-table td:nth-child(5) {
+        display: none;
+    }
+}

@@ -98,6 +98,10 @@ function initPanel() {
     // Load promo codes
     setupPromoCodeListeners();
     loadPromoCodes();
+
+    // Load users
+    setupUsersListeners();
+    loadAllUsers();
 }
 
 function setupEventListeners() {
@@ -797,6 +801,311 @@ function setupPromoCodeListeners() {
             } else {
                 valueInput.disabled = false;
                 valueInput.placeholder = 'Ej: 10';
+            }
+        });
+    }
+}
+
+// ============================================
+// USER MANAGEMENT
+// ============================================
+let allUsers = [];
+let usersSearchFilter = '';
+
+function loadAllUsers() {
+    const loadingEl = document.getElementById('loading-users');
+    const emptyEl = document.getElementById('users-empty-state');
+    const tableBody = document.getElementById('users-table-body');
+
+    if (!loadingEl || !tableBody) return;
+
+    loadingEl.classList.remove('hidden');
+    if (emptyEl) emptyEl.classList.add('hidden');
+    tableBody.innerHTML = '';
+
+    const usersRef = ref(db, 'users');
+
+    onValue(usersRef, async (snapshot) => {
+        allUsers = [];
+
+        if (snapshot.exists()) {
+            const usersData = snapshot.val();
+
+            for (const [uid, userData] of Object.entries(usersData)) {
+                // Count user orders and get email from first order if needed
+                const ordersSnapshot = await get(ref(db, `ordersByUser/${uid}`));
+                let orderCount = 0;
+                let emailFromOrder = '';
+                let nameFromOrder = '';
+                let dateFromOrder = '';
+
+                if (ordersSnapshot.exists()) {
+                    const orders = ordersSnapshot.val();
+                    orderCount = Object.keys(orders).length;
+
+                    // Get email/name/date from first order if not in profile
+                    const firstOrder = Object.values(orders)[0];
+                    if (firstOrder) {
+                        emailFromOrder = firstOrder.customerEmail || firstOrder.userEmail || '';
+                        nameFromOrder = firstOrder.customerName || '';
+                    }
+
+                    // Get oldest order date as registration approximation
+                    const orderDates = Object.values(orders).map(o => o.date || o.createdAt).filter(d => d);
+                    if (orderDates.length > 0) {
+                        orderDates.sort((a, b) => new Date(a) - new Date(b));
+                        dateFromOrder = orderDates[0]; // oldest order
+                    }
+                }
+
+                allUsers.push({
+                    uid: uid,
+                    email: userData.email || emailFromOrder || 'Sin email',
+                    username: userData.username || nameFromOrder || '',
+                    pendingPoints: userData.pendingPoints || 0,
+                    availablePoints: userData.availablePoints || 0,
+                    createdAt: userData.createdAt || userData.verifiedAt || dateFromOrder || '',
+                    orderCount: orderCount
+                });
+            }
+
+            // Sort by creation date (newest first)
+            allUsers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        }
+
+        loadingEl.classList.add('hidden');
+        renderUsers();
+
+    }, (error) => {
+        console.error('Error loading users:', error);
+        loadingEl.classList.add('hidden');
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="error-message">
+                    <i class="fas fa-lock"></i>
+                    Error al cargar usuarios: ${error.message}
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function renderUsers() {
+    const tableBody = document.getElementById('users-table-body');
+    const emptyEl = document.getElementById('users-empty-state');
+
+    if (!tableBody) return;
+
+    // Filter users
+    let filtered = allUsers;
+    if (usersSearchFilter) {
+        const search = usersSearchFilter.toLowerCase();
+        filtered = allUsers.filter(u =>
+            (u.email && u.email.toLowerCase().includes(search)) ||
+            (u.username && u.username.toLowerCase().includes(search))
+        );
+    }
+
+    if (filtered.length === 0) {
+        tableBody.innerHTML = '';
+        if (emptyEl) emptyEl.classList.remove('hidden');
+        return;
+    }
+
+    if (emptyEl) emptyEl.classList.add('hidden');
+
+    tableBody.innerHTML = filtered.map(user => {
+        const totalPoints = user.availablePoints + user.pendingPoints;
+        const dateStr = user.createdAt
+            ? new Date(user.createdAt).toLocaleDateString('es-ES')
+            : 'N/A';
+
+        return `
+            <tr>
+                <td class="user-email">${user.email}</td>
+                <td>${user.username || '<em>Sin nombre</em>'}</td>
+                <td class="text-center">${user.orderCount}</td>
+                <td class="text-center">
+                    <span class="points-badge">
+                        ${user.availablePoints} <small>(+${user.pendingPoints} pend.)</small>
+                    </span>
+                </td>
+                <td class="text-center">${dateStr}</td>
+                <td class="user-actions">
+                    <button class="btn-view-user" onclick="viewUserDetails('${user.uid}')" title="Ver detalles">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-edit-points" onclick="openEditPoints('${user.uid}')" title="Modificar puntos">
+                        <i class="fas fa-coins"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+window.viewUserDetails = async function (uid) {
+    const user = allUsers.find(u => u.uid === uid);
+    if (!user) return;
+
+    const modal = document.getElementById('user-modal');
+    const modalBody = document.getElementById('user-modal-body');
+
+    if (!modal || !modalBody) return;
+
+    // Load user orders
+    let ordersHtml = '<p>Cargando pedidos...</p>';
+    try {
+        const ordersSnapshot = await get(ref(db, `ordersByUser/${uid}`));
+        if (ordersSnapshot.exists()) {
+            const orders = Object.entries(ordersSnapshot.val()).map(([id, order]) => ({
+                id, ...order
+            })).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            ordersHtml = `
+                <table class="user-orders-table">
+                    <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${orders.map(o => `
+                            <tr>
+                                <td>#${o.orderId || o.id}</td>
+                                <td>${new Date(o.date).toLocaleDateString('es-ES')}</td>
+                                <td>€${(o.total || 0).toFixed(2)}</td>
+                                <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        } else {
+            ordersHtml = '<p class="no-orders">Este usuario no tiene pedidos.</p>';
+        }
+    } catch (err) {
+        console.error('Error loading user orders:', err);
+        ordersHtml = `<p class="error">Error al cargar pedidos: ${err.message}</p>`;
+    }
+
+    modalBody.innerHTML = `
+        <div class="user-detail-grid">
+            <div class="user-info-section">
+                <h3><i class="fas fa-user"></i> Información</h3>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Nombre:</strong> ${user.username || 'Sin nombre'}</p>
+                <p><strong>UID:</strong> <code>${user.uid}</code></p>
+                <p><strong>Fecha de registro:</strong> ${user.createdAt ? new Date(user.createdAt).toLocaleString('es-ES') : 'N/A'}</p>
+            </div>
+            
+            <div class="user-points-section">
+                <h3><i class="fas fa-coins"></i> Puntos</h3>
+                <div class="points-display">
+                    <div class="point-box available">
+                        <span class="value">${user.availablePoints}</span>
+                        <span class="label">Disponibles</span>
+                    </div>
+                    <div class="point-box pending">
+                        <span class="value">${user.pendingPoints}</span>
+                        <span class="label">Pendientes</span>
+                    </div>
+                </div>
+                <button class="btn-modify-points" onclick="openEditPoints('${user.uid}')">
+                    <i class="fas fa-edit"></i> Modificar puntos
+                </button>
+            </div>
+        </div>
+        
+        <div class="user-orders-section">
+            <h3><i class="fas fa-shopping-bag"></i> Pedidos (${user.orderCount})</h3>
+            ${ordersHtml}
+        </div>
+    `;
+
+    modal.classList.add('active');
+};
+
+window.openEditPoints = function (uid) {
+    const user = allUsers.find(u => u.uid === uid);
+    if (!user) return;
+
+    const newAvailable = prompt(
+        `Modificar puntos DISPONIBLES para ${user.email}\nValor actual: ${user.availablePoints}\n\nIntroduce el nuevo valor:`,
+        user.availablePoints
+    );
+
+    if (newAvailable === null) return;
+
+    const points = parseInt(newAvailable);
+    if (isNaN(points) || points < 0) {
+        alert('Por favor, introduce un número válido (>= 0)');
+        return;
+    }
+
+    modifyUserPoints(uid, points, 'available');
+};
+
+async function modifyUserPoints(uid, newValue, type = 'available') {
+    try {
+        const field = type === 'available' ? 'availablePoints' : 'pendingPoints';
+        const userRef = ref(db, `users/${uid}/${field}`);
+        await set(userRef, newValue);
+
+        // Log the modification
+        const historyRef = ref(db, `users/${uid}/pointsHistory`);
+        await push(historyRef, {
+            type: 'admin_modification',
+            points: newValue,
+            timestamp: new Date().toISOString(),
+            description: `Puntos modificados por admin a ${newValue}`,
+            modifiedBy: auth.currentUser.email
+        });
+
+        showToast('Puntos actualizados correctamente');
+
+        // Refresh user in modal if open
+        const modal = document.getElementById('user-modal');
+        if (modal && modal.classList.contains('active')) {
+            viewUserDetails(uid);
+        }
+    } catch (error) {
+        console.error('Error modifying points:', error);
+        alert('Error al modificar puntos: ' + error.message);
+    }
+}
+
+function setupUsersListeners() {
+    // Search input
+    const searchInput = document.getElementById('search-users');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            usersSearchFilter = e.target.value;
+            renderUsers();
+        });
+    }
+
+    // Refresh button
+    const refreshBtn = document.getElementById('btn-refresh-users');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', loadAllUsers);
+    }
+
+    // User modal close
+    const userModalClose = document.getElementById('user-modal-close');
+    const userModal = document.getElementById('user-modal');
+
+    if (userModalClose && userModal) {
+        userModalClose.addEventListener('click', () => {
+            userModal.classList.remove('active');
+        });
+
+        userModal.addEventListener('click', (e) => {
+            if (e.target === userModal) {
+                userModal.classList.remove('active');
             }
         });
     }

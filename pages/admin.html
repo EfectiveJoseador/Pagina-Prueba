@@ -252,6 +252,49 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Users Management Section -->
+            <section class="users-section">
+                <h2 class="section-title"><i class="fas fa-users"></i> Gestión de Usuarios</h2>
+
+                <!-- Search -->
+                <div class="users-search-bar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-users" placeholder="Buscar por email o nombre...">
+                    </div>
+                    <button class="btn-refresh" id="btn-refresh-users">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+
+                <!-- Users Table -->
+                <div class="users-table-container">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Nombre</th>
+                                <th>Pedidos</th>
+                                <th>Puntos</th>
+                                <th>Registro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users injected by JS -->
+                        </tbody>
+                    </table>
+                    <div class="loading-orders" id="loading-users">
+                        <div class="spinner"></div>
+                        <p>Cargando usuarios...</p>
+                    </div>
+                    <div class="empty-state hidden" id="users-empty-state">
+                        <i class="fas fa-users-slash"></i>
+                        <p>No hay usuarios registrados</p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -263,6 +306,19 @@
                 <button class="modal-close" id="modal-close">&times;</button>
             </div>
             <div class="modal-body" id="modal-body">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- User Detail Modal -->
+    <div class="modal-overlay" id="user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalles del Usuario</h2>
+                <button class="modal-close" id="user-modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="user-modal-body">
                 <!-- Content injected by JS -->
             </div>
         </div>

@@ -1,6 +1,7 @@
 {
     "rules": {
         "users": {
+            ".read": "auth.token.admin === true",
             "$uid": {
                 ".read": "$uid === auth.uid || auth.token.admin === true",
                 ".write": "$uid === auth.uid || auth.token.admin === true",
