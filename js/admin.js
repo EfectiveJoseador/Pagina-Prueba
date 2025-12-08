@@ -266,8 +266,9 @@ function renderOrders() {
         const date = order.dateFormatted || new Date(order.date).toLocaleString('es-ES');
         const products = order.items?.map(i => `${i.name} x${i.quantity}`).join(', ') || '-';
         const truncatedProducts = products.length > 50 ? products.substring(0, 50) + '...' : products;
-        const isPaid = order.payment?.paid === true || order.paymentMethod === 'paypal'; // PayPal siempre está pagado
+        const isPaid = order.payment?.paid === true;
         const paymentMethod = order.paymentMethod || 'N/A';
+        const needsConfirmation = (paymentMethod === 'bizum' || paymentMethod === 'paypal') && !isPaid;
 
         return `
             <tr data-order-path="${order.path}">
@@ -286,7 +287,7 @@ function renderOrders() {
                     <span class="payment-status ${isPaid ? 'paid' : 'unpaid'}">
                         ${isPaid ? '<i class="fas fa-check"></i> Pagado' : '<i class="fas fa-clock"></i> Pendiente'}
                     </span>
-                    ${paymentMethod === 'bizum' && !isPaid ? `
+                    ${needsConfirmation ? `
                         <button class="btn-confirm-payment" onclick="confirmPayment('${order.path}')">
                             <i class="fas fa-check-circle"></i> Confirmar
                         </button>
@@ -387,14 +388,14 @@ window.updateTracking = async function (path, trackingNumber) {
     }
 };
 
-// Confirm payment (for Bizum)
+// Confirm payment (for Bizum and PayPal)
 window.confirmPayment = async function (path) {
     if (!isAdmin) {
         alert('No tienes permisos');
         return;
     }
 
-    if (!confirm('¿Confirmar que el pago ha sido recibido?')) {
+    if (!confirm('¿Confirmar que el pago ha sido recibido? El estado pasará a "Confirmado".')) {
         return;
     }
 
@@ -404,11 +405,12 @@ window.confirmPayment = async function (path) {
             'payment/paid': true,
             'payment/confirmedAt': new Date().toISOString(),
             'payment/confirmedBy': auth.currentUser.email,
+            status: 'confirmado',
             lastUpdated: new Date().toISOString(),
             updatedBy: auth.currentUser.email
         });
 
-        showToast('Pago confirmado');
+        showToast('Pago confirmado y estado actualizado a Confirmado');
     } catch (error) {
         console.error('Error confirming payment:', error);
         alert('Error al confirmar pago: ' + error.message);
