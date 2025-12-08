@@ -735,6 +735,28 @@ function applyFilters() {
         filteredProducts.sort((a, b) => b.price - a.price);
     }
 
+    // Track search and filter events
+    if (window.Analytics) {
+        // Track search
+        if (searchTerm && searchTerm.length >= 2) {
+            window.Analytics.trackSearch(searchTerm, filteredProducts.length);
+        }
+
+        // Track filter usage
+        if (selectedLeague) {
+            window.Analytics.trackFilterUse('league', selectedLeague);
+        }
+        if (selectedTeam) {
+            window.Analytics.trackFilterUse('team', selectedTeam);
+        }
+        if (selectedKids) {
+            window.Analytics.trackFilterUse('kids', selectedKids);
+        }
+        if (sortBy !== 'default') {
+            window.Analytics.trackFilterUse('sort', sortBy);
+        }
+    }
+
     renderProducts();
 }
 

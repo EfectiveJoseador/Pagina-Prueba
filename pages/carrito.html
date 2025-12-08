@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito - Camisetazo</title>
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-GS53GWE2Z0');
+    </script>
+    <script src="/js/analytics.js"></script>
+
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,11 +44,15 @@
             <section class="cart-items-section">
                 <div id="cart-items-list" class="cart-items-list">
                     <!-- Items injected by JS -->
-                    <div class="empty-cart-msg hidden">
-                        <i class="fas fa-shopping-basket"></i>
-                        <p>Tu carrito está vacío.</p>
-                        <a href="/pages/catalogo.html" class="btn btn-primary">Ir a comprar</a>
-                    </div>
+                </div>
+                <div class="empty-cart-msg hidden">
+                    <i class="fas fa-shopping-basket"></i>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text-main);">Tu carrito está
+                        vacío</h3>
+                    <p>¡Explora nuestra tienda y encuentra camisetas increíbles!</p>
+                    <a href="/pages/tienda.html" class="btn-shop-now">
+                        Ir a la Tienda
+                    </a>
                 </div>
             </section>
 

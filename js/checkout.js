@@ -117,6 +117,18 @@ function selectAddress(addressId) {
     }
 
     initPaymentMethods();
+
+    // Track begin checkout when address is selected
+    const calculations = Cart.calculateTotal();
+    if (window.Analytics && Cart.items.length > 0) {
+        window.Analytics.trackBeginCheckout(Cart.items, calculations.total);
+
+        // Also track shipping info
+        const selectedAddr = addresses.find(a => a.id === addressId);
+        if (selectedAddr) {
+            window.Analytics.trackAddShippingInfo(selectedAddr);
+        }
+    }
 }
 
 // ============================================
@@ -203,6 +215,11 @@ function initPaymentMethods() {
                 if (bizumForm) bizumForm.style.display = 'block';
             } else {
                 if (bizumForm) bizumForm.style.display = 'none';
+            }
+
+            // Track payment method selection
+            if (window.Analytics) {
+                window.Analytics.trackAddPaymentInfo(e.target.value);
             }
         });
     });

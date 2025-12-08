@@ -57,7 +57,7 @@ const Cart = {
         this.updateHeaderCount();
     },
 
-    add(id, qty = 1, size = 'M', version = 'aficionado') {
+    add(id, qty = 1, size = 'M', version = 'aficionado', customizations = {}) {
         const existing = this.items.find(i => i.id === id && i.size === size && i.version === version);
         if (existing) {
             existing.qty += qty;
@@ -66,9 +66,24 @@ const Cart = {
         }
         this.save();
         this.render();
+
+        // Track add to cart event
+        const product = products.find(p => p.id === id);
+        if (product && window.Analytics) {
+            window.Analytics.trackAddToCart(product, qty, { size, version, ...customizations });
+        }
     },
 
     remove(index) {
+        // Track remove from cart before removing
+        const item = this.items[index];
+        if (item && window.Analytics) {
+            const product = products.find(p => p.id === item.id);
+            if (product) {
+                window.Analytics.trackRemoveFromCart(product, item.qty || 1);
+            }
+        }
+
         this.items.splice(index, 1);
         this.save();
         this.render();

@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil - Camisetazo</title>
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-GS53GWE2Z0');
+    </script>
+
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -192,7 +201,7 @@
                 <div class="settings-card"
                     style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
                     <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Seguridad</h3>
-                    <button id="change-password-btn" class="btn btn-primary">
+                    <button id="change-password-btn" class="btn-change-password">
                         <i class="fas fa-key"></i> Cambiar Contraseña
                     </button>
                     <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
@@ -206,13 +215,13 @@
                     <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Preferencias</h3>
                     <form id="preferences-form">
                         <div class="form-group" style="margin-bottom: 1rem;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input type="checkbox" id="newsletter-pref"
-                                    style="width: 18px; height: 18px; accent-color: var(--primary);">
-                                <span>Recibir novedades y ofertas por email</span>
+                            <label class="custom-checkbox-label">
+                                <input type="checkbox" id="newsletter-pref" class="custom-checkbox">
+                                <span class="checkbox-box"></span>
+                                <span class="checkbox-text">Recibir novedades y ofertas por email</span>
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn-save-preferences">
                             <i class="fas fa-save"></i> Guardar Preferencias
                         </button>
                         <div id="preferences-message" style="margin-top: 1rem; display: none;"></div>

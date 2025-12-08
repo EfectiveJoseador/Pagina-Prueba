@@ -151,6 +151,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial preview update
     updatePreview();
+
+    // Track product view
+    if (window.Analytics) {
+        window.Analytics.trackProductView({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            category: product.category,
+            team: product.team || product.league
+        });
+    }
 });
 
 // Apply special pricing logic
@@ -326,6 +337,11 @@ function addToCart() {
 
     // Success feedback - Toast notification
     showToast(`${product.name} añadido al carrito`);
+
+    // Track add to cart event
+    if (window.Analytics) {
+        window.Analytics.trackAddToCart(product, quantity, customization);
+    }
 }
 
 // Toast notification system

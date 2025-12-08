@@ -73,8 +73,51 @@ function loadOrders() {
     // Use ordersByUser path to match where orders are saved
     const ordersRef = ref(db, `ordersByUser/${currentUser.uid}`);
 
+    // Flag to track if orders loaded successfully
+    let ordersLoaded = false;
+
+    // Timeout to detect if orders fail to load (possible extension interference)
+    const loadTimeout = setTimeout(() => {
+        if (!ordersLoaded) {
+            const currentContent = ordersList.innerHTML;
+            // Only show help message if still showing "Cargando..."
+            if (currentContent.includes('Cargando pedidos')) {
+                ordersList.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2.5rem; margin-bottom: 1rem; color: #f59e0b;"></i>
+                        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Los pedidos están tardando en cargar</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.8;">
+                            Esto puede deberse a extensiones del navegador que interfieren con la conexión.
+                        </p>
+                        <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                            <p style="font-size: 0.9rem; margin: 0;">
+                                <i class="fas fa-lightbulb" style="color: #6366f1;"></i>
+                                <strong>Solución:</strong> Prueba abrir esta página en <strong>modo incógnito</strong> 
+                                (Ctrl+Shift+N en Chrome/Edge) o desactiva temporalmente las extensiones.
+                            </p>
+                        </div>
+                        <button onclick="location.reload()" style="
+                            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+                            color: white;
+                            border: none;
+                            padding: 0.75rem 1.5rem;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-weight: 600;
+                            margin-top: 0.5rem;
+                        ">
+                            <i class="fas fa-redo"></i> Reintentar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    }, 10000); // 10 seconds timeout
+
     // Usar onValue para actualización en tiempo real
     onValue(ordersRef, (snapshot) => {
+        ordersLoaded = true;
+        clearTimeout(loadTimeout);
         if (snapshot.exists()) {
             const orders = snapshot.val();
             renderOrders(orders);
@@ -91,16 +134,35 @@ function loadOrders() {
             `;
         }
     }, (error) => {
+        ordersLoaded = true;
+        clearTimeout(loadTimeout);
         console.error('Error loading orders:', error);
-        // Mostrar mensaje amigable
+        // Mostrar mensaje con sugerencia de modo incógnito
         ordersList.innerHTML = `
-            <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                <p style="font-size: 1.1rem;">No se encontraron pedidos.</p>
-                <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">Puede que aún no hayas realizado ningún pedido.</p>
-                <a href="/pages/tienda.html" class="btn-shop-now" style="display: inline-flex; margin-top: 1rem;">
-                    <i class="fas fa-shopping-bag"></i> Ir a la Tienda
-                </a>
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fas fa-exclamation-circle" style="font-size: 2.5rem; margin-bottom: 1rem; color: #ef4444;"></i>
+                <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Error al cargar los pedidos</p>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.8;">
+                    Puede que una extensión del navegador esté bloqueando la conexión.
+                </p>
+                <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                    <p style="font-size: 0.9rem; margin: 0;">
+                        <i class="fas fa-lightbulb" style="color: #6366f1;"></i>
+                        <strong>Solución:</strong> Prueba en <strong>modo incógnito</strong> (Ctrl+Shift+N) 
+                        o desactiva las extensiones de seguimiento de precios.
+                    </p>
+                </div>
+                <button onclick="location.reload()" style="
+                    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+                    color: white;
+                    border: none;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 600;
+                ">
+                    <i class="fas fa-redo"></i> Reintentar
+                </button>
             </div>
         `;
     });
