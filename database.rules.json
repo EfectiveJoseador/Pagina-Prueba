@@ -96,8 +96,14 @@
                         },
                         "province": {
                             ".validate": "newData.isString() && newData.val().length <= 100"
+                        },
+                        "instagram": {
+                            ".validate": "newData.isString() && newData.val().length <= 100"
                         }
                     }
+                },
+                "lastAddressEditDate": {
+                    ".validate": "newData.isString()"
                 }
             }
         },
@@ -115,6 +121,12 @@
                     },
                     "status": {
                         ".validate": "newData.isString() && (newData.val() === 'pendiente' || newData.val() === 'procesando' || newData.val() === 'enviado' || newData.val() === 'entregado' || newData.val() === 'cancelado' || newData.val() === 'imagenes_cliente' || newData.val() === 'confirmado')"
+                    },
+                    "addressEditCount": {
+                        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1"
+                    },
+                    "addressEditedAt": {
+                        ".validate": "newData.isString()"
                     }
                 }
             }

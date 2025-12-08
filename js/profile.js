@@ -482,9 +482,67 @@ function renderOrders(orders) {
                     </button>
                 </div>
             ` : ''}
+            
+            <!-- Edit Address Button (only for pending orders that haven't been edited) -->
+            ${normalizedStatus === 'pendiente' && !order.addressEditCount ? `
+                <div style="
+                    margin-top: 1.25rem;
+                    padding-top: 1rem;
+                    border-top: 1px dashed var(--border);
+                ">
+                    <button 
+                        class="edit-order-address-btn"
+                        data-order-id="${order.orderId || order.id}"
+                        style="
+                            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+                            color: white;
+                            border: none;
+                            padding: 0.6rem 1.25rem;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-size: 0.85rem;
+                            font-weight: 600;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            transition: all 0.2s ease;
+                            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.25);
+                        "
+                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 16px rgba(99, 102, 241, 0.4)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(99, 102, 241, 0.25)'"
+                    >
+                        <i class="fas fa-edit"></i>
+                        <span>Editar Dirección</span>
+                    </button>
+                </div>
+            ` : ''}
+            ${normalizedStatus === 'pendiente' && order.addressEditCount ? `
+                <div style="
+                    margin-top: 1rem;
+                    padding: 0.5rem 0.75rem;
+                    background: rgba(34, 197, 94, 0.1);
+                    border-radius: 8px;
+                    color: #22c55e;
+                    font-size: 0.8rem;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.4rem;
+                ">
+                    <i class="fas fa-check-circle"></i>
+                    Dirección ya editada
+                </div>
+            ` : ''}
         </div>
     `;
     }).join('');
+
+    // Add event listeners for edit address buttons
+    document.querySelectorAll('.edit-order-address-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const orderId = btn.dataset.orderId;
+            openEditOrderAddressModal(orderId);
+        });
+    });
 }
 
 // Legacy status mapping (English -> Spanish)
@@ -1085,4 +1143,241 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = `${cost} <i class="fas fa-star" style="font-size: 0.75rem;"></i>`;
         });
     });
+
+    // Order Address Edit Modal controls
+    setupOrderAddressModalListeners();
 });
+
+// ============================================
+// ORDER ADDRESS EDITING
+// ============================================
+
+const WEB3FORMS_KEY = "8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8";
+let currentEditingOrderId = null;
+let currentEditingOrder = null;
+
+function setupOrderAddressModalListeners() {
+    const modal = document.getElementById('order-address-modal');
+    const closeBtn = document.getElementById('close-order-address-modal');
+    const cancelBtn = document.getElementById('cancel-order-address-btn');
+    const form = document.getElementById('order-address-form');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeOrderAddressModal);
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeOrderAddressModal);
+    }
+
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeOrderAddressModal();
+            }
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', handleOrderAddressSubmit);
+    }
+}
+
+function closeOrderAddressModal() {
+    const modal = document.getElementById('order-address-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    currentEditingOrderId = null;
+    currentEditingOrder = null;
+    document.getElementById('order-address-form')?.reset();
+    const errorEl = document.getElementById('order-address-error');
+    if (errorEl) errorEl.style.display = 'none';
+}
+
+async function openEditOrderAddressModal(orderId) {
+    if (!currentUser) return;
+
+    const modal = document.getElementById('order-address-modal');
+    const errorEl = document.getElementById('order-address-error');
+
+    if (errorEl) errorEl.style.display = 'none';
+
+    // Check user rate limit (1 edit per week)
+    try {
+        const userRef = ref(db, `users/${currentUser.uid}/lastAddressEditDate`);
+        const snapshot = await get(userRef);
+
+        if (snapshot.exists()) {
+            const lastEditDate = new Date(snapshot.val());
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+            if (lastEditDate > oneWeekAgo) {
+                const nextEditDate = new Date(lastEditDate);
+                nextEditDate.setDate(nextEditDate.getDate() + 7);
+                alert(`Solo puedes editar direcciones una vez por semana. Podrás volver a editar el ${nextEditDate.toLocaleDateString('es-ES')}.`);
+                return;
+            }
+        }
+    } catch (error) {
+        console.error('Error checking rate limit:', error);
+    }
+
+    // Load order data
+    try {
+        const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${orderId}`);
+        const orderSnapshot = await get(orderRef);
+
+        if (!orderSnapshot.exists()) {
+            alert('No se pudo cargar el pedido.');
+            return;
+        }
+
+        const order = orderSnapshot.val();
+        currentEditingOrderId = orderId;
+        currentEditingOrder = order;
+
+        // Check if already edited
+        if (order.addressEditCount && order.addressEditCount >= 1) {
+            alert('Este pedido ya ha sido editado anteriormente.');
+            return;
+        }
+
+        // Populate form with current address
+        const addr = order.shippingAddress || order.shippingInfo || {};
+        document.getElementById('order-address-order-id').value = orderId;
+        document.getElementById('order-address-name').value = addr.name || addr.fullName || '';
+        document.getElementById('order-address-street').value = addr.street || addr.address || '';
+        document.getElementById('order-address-city').value = addr.city || '';
+        document.getElementById('order-address-zip').value = addr.zip || addr.postalCode || '';
+        document.getElementById('order-address-province').value = addr.province || '';
+        document.getElementById('order-address-phone').value = addr.phone || '';
+        document.getElementById('order-address-instagram').value = addr.instagram || '';
+
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error loading order:', error);
+        alert('Error al cargar el pedido. Inténtalo de nuevo.');
+    }
+}
+
+async function handleOrderAddressSubmit(e) {
+    e.preventDefault();
+
+    if (!currentUser || !currentEditingOrderId || !currentEditingOrder) return;
+
+    const submitBtn = document.getElementById('save-order-address-btn');
+    const errorEl = document.getElementById('order-address-error');
+    const originalBtnText = submitBtn.innerHTML;
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+    // Collect new address data
+    const newAddress = {
+        name: document.getElementById('order-address-name').value.trim(),
+        street: document.getElementById('order-address-street').value.trim(),
+        city: document.getElementById('order-address-city').value.trim(),
+        zip: document.getElementById('order-address-zip').value.trim(),
+        province: document.getElementById('order-address-province').value,
+        phone: document.getElementById('order-address-phone').value.trim(),
+        instagram: document.getElementById('order-address-instagram').value.trim().replace(/^@/, '')
+    };
+
+    try {
+        // Update order in Firebase
+        const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${currentEditingOrderId}`);
+
+        await update(orderRef, {
+            shippingAddress: newAddress,
+            shippingInfo: newAddress, // Update both for compatibility
+            addressEditCount: 1,
+            addressEditedAt: new Date().toISOString()
+        });
+
+        // Update user's last edit date
+        const userEditRef = ref(db, `users/${currentUser.uid}/lastAddressEditDate`);
+        await set(userEditRef, new Date().toISOString());
+
+        // Send updated confirmation email via Web3Forms
+        const emailSent = await sendAddressUpdateEmail({
+            ...currentEditingOrder,
+            shippingAddress: newAddress,
+            orderId: currentEditingOrderId
+        });
+
+        if (emailSent) {
+            alert('✅ Dirección actualizada y correo de confirmación reenviado.');
+        } else {
+            alert('✅ Dirección actualizada. El correo no pudo enviarse, pero el pedido está guardado.');
+        }
+
+        closeOrderAddressModal();
+
+        // Reload orders to update UI
+        await loadOrders();
+
+    } catch (error) {
+        console.error('Error updating order address:', error);
+        if (errorEl) {
+            errorEl.textContent = 'Error al actualizar la dirección. Inténtalo de nuevo.';
+            errorEl.style.display = 'block';
+        }
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+    }
+}
+
+async function sendAddressUpdateEmail(orderData) {
+    const sa = orderData.shippingAddress || {};
+
+    // Build customer info like in checkout.js
+    const customerInfo = `Contact Name: ${sa.name || ''}
+Address Line: ${sa.street || ''}
+City: ${sa.city || ''}
+Province: ${sa.province || ''}
+Country: España
+Postal Code: ${sa.zip || ''}
+Phone Number: ${sa.phone || ''}
+Instagram: @${(sa.instagram || '').replace('@', '')}`;
+
+    // Build products text
+    let productsText = '';
+    const items = orderData.items || orderData.products || [];
+    items.forEach((item) => {
+        const qty = item.quantity || 1;
+        const size = item.size || 'M';
+        const version = item.version || 'fan';
+        const price = ((item.price || 0) * qty).toFixed(2);
+        productsText += qty + 'x ' + (item.name || 'Producto') + ' · ' + size + ' · ' + version + ' — €' + price + '\n';
+    });
+
+    // Build total info
+    let totalInfo = `TOTAL: €${orderData.total ? Number(orderData.total).toFixed(2) : '0.00'}`;
+
+    const formData = new FormData();
+    formData.append("access_key", WEB3FORMS_KEY);
+    formData.append("subject", `[DIRECCIÓN ACTUALIZADA] Pedido ${orderData.orderId}`);
+    formData.append("cliente", customerInfo);
+    formData.append("productos", productsText.trim());
+    formData.append("total", totalInfo);
+    formData.append("nota", "⚠️ El cliente ha actualizado su dirección de envío.");
+
+    try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+        return response.ok && data.success;
+    } catch (error) {
+        console.error('Error sending email:', error);
+        return false;
+    }
+}
+

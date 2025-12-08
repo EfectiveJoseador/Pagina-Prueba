@@ -183,7 +183,7 @@ async function saveNewAddress(e) {
         zip: document.getElementById('new-address-zip').value.trim(),
         province: provinceInput ? provinceInput.value : '',
         phone: document.getElementById('new-address-phone').value.trim(),
-        instagram: instagramInput ? instagramInput.value.trim() : ''
+        instagram: instagramInput ? instagramInput.value.trim().replace(/^@/, '') : ''
     };
 
     try {
@@ -254,16 +254,9 @@ function confirmOrder() {
     const paymentMethod = selectedPayment.value;
 
     if (paymentMethod === 'bizum') {
-        const bizumPhone = document.getElementById('bizum-phone').value.trim();
-        const bizumName = document.getElementById('bizum-name').value.trim();
-
-        if (!bizumPhone || !bizumName) {
-            alert('Por favor, completa los datos de Bizum');
-            return;
-        }
-
-        if (!/^[0-9]{9}$/.test(bizumPhone)) {
-            alert('El teléfono debe tener 9 dígitos');
+        const bizumInstagram = document.getElementById('bizum-instagram').value.trim();
+        if (!bizumInstagram) {
+            alert('Por favor, introduce tu usuario de Instagram para Bizum');
             return;
         }
     }
@@ -323,7 +316,7 @@ function confirmOrder() {
     };
 
     if (paymentMethod === 'bizum') {
-        orderData.bizumInstagram = document.getElementById('bizum-instagram').value.trim();
+        orderData.bizumInstagram = document.getElementById('bizum-instagram').value.trim().replace(/^@/, '');
     } else if (paymentMethod === 'paypal') {
         orderData.paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal.toFixed(2)}`;
     }
@@ -442,6 +435,8 @@ function confirmOrder() {
 async function sendOrderViaWeb3Forms(orderData) {
     // === CAMPO 1: Customer Info (Plantilla) ===
     const sa = orderData.shippingAddress || {};
+    // Use bizumInstagram if available (for Bizum payments), otherwise use shipping address instagram
+    const instagramUser = orderData.bizumInstagram || sa.instagram || '';
     const customerInfo = `Contact Name: ${sa.name || ''}
 Address Line: ${sa.street || ''}
 City: ${sa.city || ''}
@@ -449,7 +444,7 @@ Province: ${sa.province || ''}
 Country: España
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
-Instagram: @${(sa.instagram || '').replace('@', '')}`;
+Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Bizum)' : ''}`;
 
     // === CAMPO 2: Purchased Products ===
     let productsText = '';

@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update preview on any change
     document.getElementById('version-select').addEventListener('change', updatePreview);
-    document.getElementById('name-input').addEventListener('input', updatePreview);
+    document.getElementById('name-input').addEventListener('input', handleNameInput);
     document.getElementById('number-input').addEventListener('input', handleDorsalInput);
     document.getElementById('patch-select').addEventListener('change', updatePreview);
 
@@ -148,6 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load related products
     loadRelatedProducts();
+
+    // Apply product category restrictions (Kids, NBA, Retro)
+    applyProductRestrictions();
 
     // Initial preview update
     updatePreview();
@@ -190,6 +193,76 @@ function applySpecialPricing(p) {
     p.oldPrice = oldPrice;
     p.price = newPrice;
     p.sale = true;
+}
+
+// ============================================
+// PRODUCT CATEGORY RESTRICTIONS
+// ============================================
+// Kids, NBA, Retro: Fixed 'aficionado' version (no player version)
+// NBA: Mandatory dorsal, no patches
+
+function isRestrictedCategory() {
+    if (!product) return { isRestricted: false, isNBA: false };
+    const nameLower = product.name.toLowerCase();
+    const isKids = nameLower.includes('kids') || nameLower.includes('niño');
+    const isRetro = product.name.trim().endsWith('R') || product.league === 'retro';
+    const isNBA = product.category === 'nba' || product.league === 'nba';
+
+    return {
+        isRestricted: isKids || isNBA || isRetro,
+        isNBA: isNBA,
+        isKids: isKids,
+        isRetro: isRetro
+    };
+}
+
+function applyProductRestrictions() {
+    const { isRestricted, isNBA } = isRestrictedCategory();
+
+    const versionSelect = document.getElementById('version-select');
+    const versionGroup = versionSelect?.closest('.option-group');
+    const patchSelect = document.getElementById('patch-select');
+    const patchGroup = patchSelect?.closest('.option-group');
+    const numberInput = document.getElementById('number-input');
+    const numberLabel = numberInput?.previousElementSibling;
+    const nameInput = document.getElementById('name-input');
+    const nameLabel = nameInput?.previousElementSibling;
+
+    // For Kids, NBA, Retro: Hide version dropdown, force aficionado
+    if (isRestricted && versionGroup) {
+        versionGroup.style.display = 'none';
+        if (versionSelect) {
+            versionSelect.value = 'aficionado';
+        }
+    }
+
+    // For NBA: Hide patches (no mandatory name/dorsal)
+    if (isNBA) {
+        // Hide patch dropdown
+        if (patchGroup) {
+            patchGroup.style.display = 'none';
+        }
+        if (patchSelect) {
+            patchSelect.value = 'none';
+        }
+    }
+}
+
+// Handle name input with real-time validation (only letters and spaces)
+function handleNameInput(e) {
+    let value = e.target.value;
+
+    // Remove any character that is not a letter (including accents) or space
+    // Allow: A-Z, a-z, accented letters (À-ÿ), and spaces
+    value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+
+    // Limit to 15 characters
+    if (value.length > 15) {
+        value = value.slice(0, 15);
+    }
+
+    e.target.value = value;
+    updatePreview();
 }
 
 // Handle dorsal input with real-time validation (max 2 digits)
@@ -239,13 +312,17 @@ function updatePreview() {
         details.push(patchName);
     }
 
-    // Name and number
+    // Name and number (+€2 if both provided)
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
-    if (name) {
+    if (name && number) {
+        totalPrice += 2;
         details.push(`Nombre: ${name.toUpperCase()}`);
-    }
-    if (number) {
+        details.push(`Dorsal: ${number}`);
+        details.push('Personalización: +€2');
+    } else if (name) {
+        details.push(`Nombre: ${name.toUpperCase()}`);
+    } else if (number) {
         details.push(`Dorsal: ${number}`);
     }
     if (selectedSize) {
@@ -302,6 +379,10 @@ function addToCart() {
     if (customization.version === 'jugador') totalPrice += 15;
     if (customization.patch && customization.patch !== 'none') {
         totalPrice += patchPrices[customization.patch] || 0;
+    }
+    // Add personalization cost (+€2 if name and number)
+    if (customization.name && customization.number) {
+        totalPrice += 2;
     }
 
     // Get quantity
