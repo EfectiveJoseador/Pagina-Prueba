@@ -162,6 +162,8 @@
     /* Premium effects */
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    /* IMPORTANT: Create stacking context for absolute children */
+    z-index: 1;
 }
 
 .cart-summary:hover {
@@ -271,20 +273,21 @@
 }
 
 .empty-cart-msg p {
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
     color: var(--text-muted);
     font-size: 1.05rem;
 }
 
 /* Shop Now Button for Empty Cart */
-.empty-cart-msg .btn-shop-now {
+.btn-shop-now {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
     font-weight: 600;
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
     cursor: pointer;
     text-decoration: none;
@@ -292,28 +295,16 @@
     background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
     color: white !important;
     box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
-    margin-top: 1rem;
 }
 
-.empty-cart-msg .btn-shop-now:hover {
+.btn-shop-now:hover {
     background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
     box-shadow: 0 6px 20px rgba(249, 115, 22, 0.45);
     transform: translateY(-2px);
 }
 
-.empty-cart-msg .btn-shop-now:active {
+.btn-shop-now:active {
     transform: translateY(0);
-}
-
-/* Dark Theme */
-[data-theme="dark"] .empty-cart-msg .btn-shop-now {
-    background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
-    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25);
-}
-
-[data-theme="dark"] .empty-cart-msg .btn-shop-now:hover {
-    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
-    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
 }
 
 /* Checkout Specific */
@@ -455,10 +446,16 @@
     .cart-layout,
     .checkout-layout {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 
     .cart-summary {
         position: static;
+    }
+
+    /* Add spacing between cart items and summary for better mobile layout */
+    .cart-items-section {
+        margin-bottom: 0;
     }
 }
 
@@ -487,6 +484,8 @@
     opacity: 1;
     /* Move UP to reveal above the card */
     transform: translateY(-110%);
+    z-index: 100;
+    pointer-events: auto;
 }
 
 .pack-badge {
@@ -593,7 +592,42 @@
         0 0 20px rgba(52, 211, 153, 0.5);
 }
 
-/* Responsive adjustments */
+/* MOBILE FIX: Pack indicator needs proper positioning on mobile */
+@media (max-width: 900px) {
+    .pack-indicator-container {
+        /* Switch to static positioning in mobile layout */
+        position: static !important;
+        z-index: 10;
+        margin-bottom: 0;
+        pointer-events: auto;
+        display: none;
+    }
+
+    .pack-indicator-container.visible {
+        display: block !important;
+        animation: packSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    /* Reduce spacing between cart items and pack popup */
+    .cart-items-section {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Keyframe animation for pack popup entrance */
+@keyframes packSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments for badge */
 @media (max-width: 768px) {
     .pack-badge {
         font-size: 1rem;

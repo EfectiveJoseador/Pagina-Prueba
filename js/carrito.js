@@ -173,12 +173,29 @@ const Cart = {
         const summaryCard = document.querySelector('.cart-summary');
         if (!summaryCard) return;
 
-        // Create or get container INSIDE summary card
+        // Check if mobile layout (under 900px)
+        const isMobile = window.innerWidth <= 900;
+
+        // Create or get container
         let container = document.getElementById('pack-indicator-container');
         if (!container) {
             container = document.createElement('div');
             container.id = 'pack-indicator-container';
             container.className = 'pack-indicator-container';
+
+            // On mobile, insert BEFORE the summary card
+            // On desktop, insert INSIDE the summary card for absolute positioning
+            if (isMobile) {
+                summaryCard.parentNode.insertBefore(container, summaryCard);
+            } else {
+                summaryCard.appendChild(container);
+            }
+        }
+
+        // Handle resize: move container if layout changes
+        if (isMobile && container.parentNode === summaryCard) {
+            summaryCard.parentNode.insertBefore(container, summaryCard);
+        } else if (!isMobile && container.parentNode !== summaryCard) {
             summaryCard.appendChild(container);
         }
 
@@ -223,9 +240,12 @@ const Cart = {
         container.appendChild(badge);
 
         // Show container with animation
-        // Use requestAnimationFrame to ensure transition works
+        // Use requestAnimationFrame to ensure CSS transition works
         requestAnimationFrame(() => {
-            container.classList.add('visible');
+            requestAnimationFrame(() => {
+                container.classList.add('visible');
+                console.log('📦 Pack popup shown:', packType, 'x', multiplier.toString());
+            });
         });
     },
 
