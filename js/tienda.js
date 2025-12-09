@@ -421,17 +421,29 @@ function attachEventListeners() {
     // Sort
     document.getElementById('sort-select').addEventListener('change', applyFilters);
 
-    // Close filters button
+    // Close filters button (X in sidebar)
     document.getElementById('close-filters').addEventListener('click', () => {
         const container = document.querySelector('.catalog-container');
-        container.classList.add('sidebar-closed');
+        container.classList.remove('sidebar-open');
+        document.body.style.overflow = ''; // Re-enable scroll
     });
 
-    // Show filters button
+    // Show filters button (opens offcanvas)
     document.getElementById('show-filters').addEventListener('click', () => {
         const container = document.querySelector('.catalog-container');
-        container.classList.remove('sidebar-closed');
+        container.classList.add('sidebar-open');
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
     });
+
+    // Backdrop click closes sidebar
+    const backdrop = document.querySelector('.filters-backdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', () => {
+            const container = document.querySelector('.catalog-container');
+            container.classList.remove('sidebar-open');
+            document.body.style.overflow = '';
+        });
+    }
 
     // Clear filters
     document.getElementById('clear-filters').addEventListener('click', () => {
