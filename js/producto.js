@@ -55,12 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Generate thumbnails for all available product images
     const thumbnailsContainer = document.querySelector('.thumbnails');
-    const basePath = product.image.replace('/1_resultado.webp', '');
+    const basePath = product.image.replace('/1.webp', '');
 
     // Try to load images 1-4
     const imagePromises = [];
     for (let i = 1; i <= 4; i++) {
-        const imagePath = `${basePath}/${i}_resultado.webp`;
+        const imagePath = `${basePath}/${i}.webp`;
         imagePromises.push(
             new Promise((resolve) => {
                 const img = new Image();
