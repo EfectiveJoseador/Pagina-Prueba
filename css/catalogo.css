@@ -1,8 +1,15 @@
 /* Catalog Styles */
 
-/* Escalado 125% solo para el contenido de la tienda en desktop (no afecta header/footer) */
+/* Escalado base: 90% para pantallas menores a 1800px */
 .page-tienda .catalog-container {
-    zoom: 1.25;
+    zoom: 0.9;
+}
+
+/* Escalado 125% solo para monitores grandes (>1800px) */
+@media (min-width: 1800px) {
+    .page-tienda .catalog-container {
+        zoom: 1.25;
+    }
 }
 
 /* Desactivar zoom en móviles para mejor usabilidad */
