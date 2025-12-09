@@ -1,8 +1,8 @@
 /**
- * Image Loader Module - Phased Lazy Loading System
+ * Image Loader Module - Row-based Parallel Loading
  * 
- * Phase 1: Load primary images (1_mini.webp) row-by-row, top to bottom
- * Phase 2: Preload hover images (2_mini.webp) in background after primaries
+ * For each product card, loads BOTH 1_mini.webp and 2_mini.webp in parallel
+ * Processing order: Row 1 complete → Row 2 complete → Row 3, etc.
  * 
  * @module imageLoader
  */
@@ -11,28 +11,23 @@
 // CONFIGURATION
 // ============================================
 const CONFIG = {
-    MAX_CONCURRENT_LOADS: 4,      // Max simultaneous network requests
-    LOAD_DELAY_MS: 50,            // Delay between loads to prevent congestion
-    PRIMARY_ROOT_MARGIN: '300px', // Start loading primaries early
-    SECONDARY_ROOT_MARGIN: '50px', // Load secondaries when closer to viewport
+    MAX_CONCURRENT_CARDS: 4,      // Max cards loading simultaneously (each card = 2 images)
+    LOAD_DELAY_MS: 30,            // Delay between card batches
+    ROOT_MARGIN: '200px',         // Start loading before cards enter viewport
     GRID_SELECTOR: '#product-grid',
-    PRIMARY_IMAGE_SELECTOR: 'img.primary-image[data-src]',
-    SECONDARY_IMAGE_SELECTOR: 'img.secondary-image[data-src]',
-    PRODUCT_CARD_SELECTOR: '.product-card'
+    PRODUCT_CARD_SELECTOR: '.product-card',
+    PRIMARY_IMAGE_SELECTOR: '.primary-image[data-src]',
+    SECONDARY_IMAGE_SELECTOR: '.secondary-image[data-src]'
 };
 
 // ============================================
 // STATE
 // ============================================
 const state = {
-    primaryQueue: [],           // Queue of primary images waiting to load
-    secondaryQueue: [],         // Queue of secondary images waiting to load
-    activeLoads: 0,             // Current active network requests
-    isProcessing: false,        // Whether queue processor is running
-    loadedPrimaries: new Set(), // Track loaded primary images
-    cachedHovers: new Set(),    // Track preloaded hover image URLs
-    primaryObserver: null,
-    secondaryObserver: null,
+    cardQueue: [],              // Queue of cards waiting to load
+    activeCardLoads: 0,         // Current cards being processed
+    isProcessing: false,
+    observer: null,
     isMobile: false
 };
 
@@ -42,70 +37,53 @@ const state = {
 
 /**
  * Initialize the image loading system
- * Call this once after DOM is ready
  */
 export function init() {
-    // Detect mobile (no hover capability)
     state.isMobile = !window.matchMedia('(hover: hover)').matches;
 
-    // Check for IntersectionObserver support
     if (!('IntersectionObserver' in window)) {
         fallbackLoadAll();
         return;
     }
 
     resetState();
-    createObservers();
+    createObserver();
 
-    console.log('[ImageLoader] Initialized', state.isMobile ? '(mobile)' : '(desktop)');
+    console.log('[ImageLoader] Initialized - parallel card loading');
 }
 
 /**
- * Observe newly rendered product images
- * Call this after rendering/updating the product grid
+ * Observe newly rendered product cards
  */
 export function observeNewImages() {
-    if (!state.primaryObserver) {
+    if (!state.observer) {
         fallbackLoadAll();
         return;
     }
 
     const columnsPerRow = getColumnsPerRow();
 
-    // Observe primary images with row-based priority
-    document.querySelectorAll(CONFIG.PRIMARY_IMAGE_SELECTOR).forEach((img, index) => {
+    // Observe each product card with row-based priority
+    document.querySelectorAll(CONFIG.PRODUCT_CARD_SELECTOR).forEach((card, index) => {
         const row = Math.floor(index / columnsPerRow);
-        img.dataset.loadPriority = row;
-        img.dataset.loadIndex = index;
-        state.primaryObserver.observe(img);
-    });
+        const col = index % columnsPerRow;
 
-    // Observe secondary images
-    document.querySelectorAll(CONFIG.SECONDARY_IMAGE_SELECTOR).forEach((img, index) => {
-        img.dataset.loadIndex = index;
-        state.secondaryObserver.observe(img);
-    });
+        // Store priority data on the card
+        card.dataset.loadRow = row;
+        card.dataset.loadCol = col;
+        card.dataset.loadIndex = index;
 
-    // Add hover listeners (desktop only)
-    if (!state.isMobile) {
-        document.querySelectorAll(CONFIG.PRODUCT_CARD_SELECTOR).forEach(card => {
-            card.addEventListener('mouseenter', handleHover, { once: true });
-        });
-    }
+        state.observer.observe(card);
+    });
 }
 
 /**
- * Clean up observers and state
- * Call when navigating away or before re-initializing
+ * Clean up
  */
 export function destroy() {
-    if (state.primaryObserver) {
-        state.primaryObserver.disconnect();
-        state.primaryObserver = null;
-    }
-    if (state.secondaryObserver) {
-        state.secondaryObserver.disconnect();
-        state.secondaryObserver = null;
+    if (state.observer) {
+        state.observer.disconnect();
+        state.observer = null;
     }
     resetState();
 }
@@ -115,39 +93,22 @@ export function destroy() {
 // ============================================
 
 function resetState() {
-    state.primaryQueue = [];
-    state.secondaryQueue = [];
-    state.activeLoads = 0;
+    state.cardQueue = [];
+    state.activeCardLoads = 0;
     state.isProcessing = false;
-    state.loadedPrimaries = new Set();
-    state.cachedHovers = new Set();
 }
 
-function createObservers() {
-    // PRIMARY observer - larger root margin for earlier loading
-    state.primaryObserver = new IntersectionObserver((entries) => {
+function createObserver() {
+    state.observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                enqueuePrimary(entry.target);
-                state.primaryObserver.unobserve(entry.target);
+                enqueueCard(entry.target);
+                state.observer.unobserve(entry.target);
             }
         });
     }, {
-        rootMargin: CONFIG.PRIMARY_ROOT_MARGIN,
+        rootMargin: CONFIG.ROOT_MARGIN,
         threshold: 0.01
-    });
-
-    // SECONDARY observer - smaller margin, loads after primary
-    state.secondaryObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                enqueueSecondary(entry.target);
-                state.secondaryObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        rootMargin: CONFIG.SECONDARY_ROOT_MARGIN,
-        threshold: 0.1
     });
 }
 
@@ -164,47 +125,23 @@ function getColumnsPerRow() {
 // QUEUE MANAGEMENT
 // ============================================
 
-function enqueuePrimary(img) {
-    const priority = parseInt(img.dataset.loadPriority) || 0;
-    const index = parseInt(img.dataset.loadIndex) || 0;
+function enqueueCard(card) {
+    const row = parseInt(card.dataset.loadRow) || 0;
+    const col = parseInt(card.dataset.loadCol) || 0;
+    const index = parseInt(card.dataset.loadIndex) || 0;
 
-    state.primaryQueue.push({
-        img,
-        priority,  // Row number (lower = higher priority)
-        index,     // Column position within row
-        type: 'primary'
+    state.cardQueue.push({
+        card,
+        row,
+        col,
+        index
     });
 
-    // Sort: by row first, then by column within row
-    state.primaryQueue.sort((a, b) => {
-        if (a.priority !== b.priority) return a.priority - b.priority;
-        return a.index - b.index;
+    // Sort by row first, then by column within row
+    state.cardQueue.sort((a, b) => {
+        if (a.row !== b.row) return a.row - b.row;
+        return a.col - b.col;
     });
-
-    processQueue();
-}
-
-function enqueueSecondary(img) {
-    // Only queue secondary if its primary is already loaded
-    const card = img.closest(CONFIG.PRODUCT_CARD_SELECTOR);
-    const primaryImg = card?.querySelector('.primary-image');
-
-    if (!primaryImg || !state.loadedPrimaries.has(primaryImg)) {
-        // Primary not loaded yet - will be queued when primary completes
-        return;
-    }
-
-    const index = parseInt(img.dataset.loadIndex) || 0;
-
-    state.secondaryQueue.push({
-        img,
-        priority: 1000 + index, // Lower priority than primaries, but ordered by position
-        index,
-        type: 'secondary'
-    });
-
-    // Sort secondaries by their original index (top to bottom)
-    state.secondaryQueue.sort((a, b) => a.index - b.index);
 
     processQueue();
 }
@@ -214,36 +151,30 @@ function processQueue() {
     state.isProcessing = true;
 
     const processNext = () => {
-        // Check concurrent load limit
-        if (state.activeLoads >= CONFIG.MAX_CONCURRENT_LOADS) {
+        // Check concurrent limit
+        if (state.activeCardLoads >= CONFIG.MAX_CONCURRENT_CARDS) {
             state.isProcessing = false;
             return;
         }
 
-        // Prioritize primaries over secondaries
-        let item = state.primaryQueue.shift();
-
-        // If no primaries, try secondaries
-        if (!item && state.secondaryQueue.length > 0) {
-            item = state.secondaryQueue.shift();
-        }
+        const item = state.cardQueue.shift();
 
         if (!item) {
             state.isProcessing = false;
             return;
         }
 
-        state.activeLoads++;
+        state.activeCardLoads++;
 
-        loadImage(item.img, item.type, () => {
-            state.activeLoads--;
-            // Stagger next load to prevent network congestion
+        // Load both images for this card in parallel
+        loadCardImages(item.card, () => {
+            state.activeCardLoads--;
             setTimeout(processNext, CONFIG.LOAD_DELAY_MS);
         });
 
-        // Continue processing if we have capacity
-        if (state.activeLoads < CONFIG.MAX_CONCURRENT_LOADS) {
-            setTimeout(processNext, CONFIG.LOAD_DELAY_MS * 2);
+        // Continue if we have capacity
+        if (state.activeCardLoads < CONFIG.MAX_CONCURRENT_CARDS) {
+            setTimeout(processNext, CONFIG.LOAD_DELAY_MS);
         }
     };
 
@@ -251,92 +182,58 @@ function processQueue() {
 }
 
 // ============================================
-// IMAGE LOADING
+// IMAGE LOADING (PARALLEL PER CARD)
 // ============================================
 
-function loadImage(img, type, callback) {
-    const src = img.dataset.src;
-    if (!src) {
-        callback();
-        return;
+function loadCardImages(card, callback) {
+    const primaryImg = card.querySelector(CONFIG.PRIMARY_IMAGE_SELECTOR);
+    const secondaryImg = card.querySelector(CONFIG.SECONDARY_IMAGE_SELECTOR);
+
+    const promises = [];
+
+    // Load primary image
+    if (primaryImg && primaryImg.dataset.src) {
+        promises.push(loadSingleImage(primaryImg));
     }
 
-    const tempImg = new Image();
+    // Load secondary image in parallel
+    if (secondaryImg && secondaryImg.dataset.src) {
+        promises.push(loadSingleImage(secondaryImg));
+    }
 
-    tempImg.onload = () => {
-        // Apply loaded image
-        img.src = src;
-        img.classList.add('loaded');
-        img.removeAttribute('data-src');
-
-        if (type === 'primary') {
-            state.loadedPrimaries.add(img);
-
-            // Trigger secondary loading for this card
-            const card = img.closest(CONFIG.PRODUCT_CARD_SELECTOR);
-            const secondaryImg = card?.querySelector(CONFIG.SECONDARY_IMAGE_SELECTOR);
-            if (secondaryImg && state.secondaryObserver) {
-                state.secondaryObserver.observe(secondaryImg);
-            }
-        } else if (type === 'secondary') {
-            // Track as cached for hover functionality
-            state.cachedHovers.add(src);
-        }
-
+    // Wait for both to complete (or fail)
+    Promise.all(promises).then(() => {
+        card.classList.add('images-loaded');
         callback();
-    };
-
-    tempImg.onerror = () => {
-        img.classList.add('load-error');
+    }).catch(() => {
         callback();
-    };
-
-    tempImg.src = src;
+    });
 }
 
-// ============================================
-// HOVER HANDLING
-// ============================================
+function loadSingleImage(img) {
+    return new Promise((resolve) => {
+        const src = img.dataset.src;
+        if (!src) {
+            resolve();
+            return;
+        }
 
-function handleHover(e) {
-    const card = e.currentTarget;
-    const secondaryImg = card.querySelector('.secondary-image');
+        const tempImg = new Image();
 
-    if (!secondaryImg) return;
+        tempImg.onload = () => {
+            img.src = src;
+            img.classList.add('loaded');
+            img.removeAttribute('data-src');
+            resolve();
+        };
 
-    const hoverSrc = secondaryImg.dataset.src;
+        tempImg.onerror = () => {
+            img.classList.add('load-error');
+            resolve(); // Resolve anyway to not block other images
+        };
 
-    // If already loaded (has src, no data-src), nothing to do
-    if (!hoverSrc) return;
-
-    // If already cached in memory, apply immediately
-    if (state.cachedHovers.has(hoverSrc)) {
-        secondaryImg.src = hoverSrc;
-        secondaryImg.classList.add('loaded');
-        secondaryImg.removeAttribute('data-src');
-        return;
-    }
-
-    // Not cached - force immediate priority load
-    // Add loading state
-    secondaryImg.classList.add('loading');
-
-    const tempImg = new Image();
-
-    tempImg.onload = () => {
-        secondaryImg.src = hoverSrc;
-        secondaryImg.classList.remove('loading');
-        secondaryImg.classList.add('loaded');
-        secondaryImg.removeAttribute('data-src');
-        state.cachedHovers.add(hoverSrc);
-    };
-
-    tempImg.onerror = () => {
-        secondaryImg.classList.remove('loading');
-        secondaryImg.classList.add('load-error');
-    };
-
-    tempImg.src = hoverSrc;
+        tempImg.src = src;
+    });
 }
 
 // ============================================
@@ -344,7 +241,7 @@ function handleHover(e) {
 // ============================================
 
 function fallbackLoadAll() {
-    console.log('[ImageLoader] Fallback mode - loading all images');
+    console.log('[ImageLoader] Fallback - loading all images');
     document.querySelectorAll('img[data-src]').forEach(img => {
         img.src = img.dataset.src;
         img.removeAttribute('data-src');
