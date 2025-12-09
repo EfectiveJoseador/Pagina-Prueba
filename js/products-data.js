@@ -11,7 +11,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Alaves2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Alaves2526L/1.webp",
         new: true,
         sale: false
     },
@@ -21,7 +21,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Albacete2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Albacete2526L/1.webp",
         new: true,
         sale: false
     },
@@ -31,7 +31,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 64.99,
-        image: "/assets/productos/La Liga/AthelticKids2526T/1_resultado.webp",
+        image: "/assets/productos/La Liga/AthelticKids2526T/1.webp",
         new: true,
         sale: false,
         kids: true
@@ -42,7 +42,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 89.99,
-        image: "/assets/productos/La Liga/Athletic0103FR/1_resultado.webp",
+        image: "/assets/productos/La Liga/Athletic0103FR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -53,7 +53,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Athletic2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Athletic2526L/1.webp",
         new: true,
         sale: false
     },
@@ -63,7 +63,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 89.99,
-        image: "/assets/productos/La Liga/Atletico0203LR/1_resultado.webp",
+        image: "/assets/productos/La Liga/Atletico0203LR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -74,7 +74,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Atletico2526F/1_resultado.webp",
+        image: "/assets/productos/La Liga/Atletico2526F/1.webp",
         new: true,
         sale: false
     },
@@ -84,7 +84,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Atletico2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Atletico2526L/1.webp",
         new: true,
         sale: false
     },
@@ -94,7 +94,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 89.99,
-        image: "/assets/productos/La Liga/Atletico9596TR/1_resultado.webp",
+        image: "/assets/productos/La Liga/Atletico9596TR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -105,7 +105,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 64.99,
-        image: "/assets/productos/La Liga/AtleticoKids2526F/1_resultado.webp",
+        image: "/assets/productos/La Liga/AtleticoKids2526F/1.webp",
         new: true,
         sale: false,
         kids: true
@@ -116,7 +116,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 84.99,
-        image: "/assets/productos/La Liga/Barcelona2526F/1_resultado.webp",
+        image: "/assets/productos/La Liga/Barcelona2526F/1.webp",
         new: true,
         sale: false
     },
@@ -126,7 +126,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 84.99,
-        image: "/assets/productos/La Liga/Barcelona2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Barcelona2526L/1.webp",
         new: true,
         sale: false
     },
@@ -136,7 +136,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 84.99,
-        image: "/assets/productos/La Liga/Barcelona2526T/1_resultado.webp",
+        image: "/assets/productos/La Liga/Barcelona2526T/1.webp",
         new: true,
         sale: false
     },
@@ -146,7 +146,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 94.99,
-        image: "/assets/productos/La Liga/Barcelona9697LR/1_resultado.webp",
+        image: "/assets/productos/La Liga/Barcelona9697LR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -157,7 +157,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Betis2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Betis2526L/1.webp",
         new: true,
         sale: false
     },
@@ -167,7 +167,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Celta2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Celta2526L/1.webp",
         new: true,
         sale: false
     },
@@ -177,7 +177,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 74.99,
-        image: "/assets/productos/La Liga/Elche2526F/1_resultado.webp",
+        image: "/assets/productos/La Liga/Elche2526F/1.webp",
         new: true,
         sale: false
     },
@@ -187,7 +187,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 74.99,
-        image: "/assets/productos/La Liga/Elche2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Elche2526L/1.webp",
         new: true,
         sale: false
     },
@@ -197,7 +197,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 89.99,
-        image: "/assets/productos/La Liga/Espanyol9920LR/1_resultado.webp",
+        image: "/assets/productos/La Liga/Espanyol9920LR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -208,7 +208,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Getafe2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Getafe2526L/1.webp",
         new: true,
         sale: false
     },
@@ -218,7 +218,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Girona2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Girona2526L/1.webp",
         new: true,
         sale: false
     },
@@ -228,7 +228,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 74.99,
-        image: "/assets/productos/La Liga/Granada2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Granada2526L/1.webp",
         new: true,
         sale: false
     },
@@ -238,7 +238,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/LasPalmas2526F/1_resultado.webp",
+        image: "/assets/productos/La Liga/LasPalmas2526F/1.webp",
         new: true,
         sale: false
     },
@@ -248,7 +248,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/LasPalmas2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/LasPalmas2526L/1.webp",
         new: true,
         sale: false
     },
@@ -258,7 +258,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 74.99,
-        image: "/assets/productos/La Liga/Leganes2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Leganes2526L/1.webp",
         new: true,
         sale: false
     },
@@ -268,7 +268,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 74.99,
-        image: "/assets/productos/La Liga/Levante2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Levante2526L/1.webp",
         new: true,
         sale: false
     },
@@ -278,7 +278,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 74.99,
-        image: "/assets/productos/La Liga/Malaga2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Malaga2526L/1.webp",
         new: true,
         sale: false
     },
@@ -288,7 +288,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 59.99,
-        image: "/assets/productos/La Liga/MalagaKids2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/MalagaKids2526L/1.webp",
         new: true,
         sale: false,
         kids: true
@@ -299,7 +299,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Mallorca2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Mallorca2526L/1.webp",
         new: true,
         sale: false
     },
@@ -309,7 +309,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Osasuna2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Osasuna2526L/1.webp",
         new: true,
         sale: false
     },
@@ -319,7 +319,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 74.99,
-        image: "/assets/productos/La Liga/Oviedo2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Oviedo2526L/1.webp",
         new: true,
         sale: false
     },
@@ -329,7 +329,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Rayo2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Rayo2526L/1.webp",
         new: true,
         sale: false
     },
@@ -339,7 +339,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 89.99,
-        image: "/assets/productos/La Liga/RealMadrid2526F/1_resultado.webp",
+        image: "/assets/productos/La Liga/RealMadrid2526F/1.webp",
         new: true,
         sale: false
     },
@@ -349,7 +349,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 89.99,
-        image: "/assets/productos/La Liga/RealMadrid2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/RealMadrid2526L/1.webp",
         new: true,
         sale: false
     },
@@ -359,7 +359,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 89.99,
-        image: "/assets/productos/La Liga/RealMadrid2526T/1_resultado.webp",
+        image: "/assets/productos/La Liga/RealMadrid2526T/1.webp",
         new: true,
         sale: false
     },
@@ -369,7 +369,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/RealSociedad2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/RealSociedad2526L/1.webp",
         new: true,
         sale: false
     },
@@ -379,7 +379,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Sevilla2526F/1_resultado.webp",
+        image: "/assets/productos/La Liga/Sevilla2526F/1.webp",
         new: true,
         sale: false
     },
@@ -389,7 +389,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Sevilla2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Sevilla2526L/1.webp",
         new: true,
         sale: false
     },
@@ -399,7 +399,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Sevilla2526T/1_resultado.webp",
+        image: "/assets/productos/La Liga/Sevilla2526T/1.webp",
         new: true,
         sale: false
     },
@@ -409,7 +409,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Valencia2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Valencia2526L/1.webp",
         new: true,
         sale: false
     },
@@ -419,7 +419,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Valladolid2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Valladolid2526L/1.webp",
         new: true,
         sale: false
     },
@@ -429,7 +429,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         price: 79.99,
-        image: "/assets/productos/La Liga/Villarreal2526L/1_resultado.webp",
+        image: "/assets/productos/La Liga/Villarreal2526L/1.webp",
         new: true,
         sale: false
     },
@@ -441,7 +441,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 84.99,
-        image: "/assets/productos/Premier League/Arsenal2525L/1_resultado.webp",
+        image: "/assets/productos/Premier League/Arsenal2525L/1.webp",
         new: true,
         sale: false
     },
@@ -451,7 +451,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 84.99,
-        image: "/assets/productos/Premier League/Arsenal2526F/1_resultado.webp",
+        image: "/assets/productos/Premier League/Arsenal2526F/1.webp",
         new: true,
         sale: false
     },
@@ -461,7 +461,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 79.99,
-        image: "/assets/productos/Premier League/AstonVilla2526L/1_resultado.webp",
+        image: "/assets/productos/Premier League/AstonVilla2526L/1.webp",
         new: true,
         sale: false
     },
@@ -471,7 +471,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 84.99,
-        image: "/assets/productos/Premier League/Chealsea2526L/1_resultado.webp",
+        image: "/assets/productos/Premier League/Chealsea2526L/1.webp",
         new: true,
         sale: false
     },
@@ -481,7 +481,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 79.99,
-        image: "/assets/productos/Premier League/CrystalPalace2526L/1_resultado.webp",
+        image: "/assets/productos/Premier League/CrystalPalace2526L/1.webp",
         new: true,
         sale: false
     },
@@ -491,7 +491,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 89.99,
-        image: "/assets/productos/Premier League/ManCity2526F/1_resultado.webp",
+        image: "/assets/productos/Premier League/ManCity2526F/1.webp",
         new: true,
         sale: false
     },
@@ -501,7 +501,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 89.99,
-        image: "/assets/productos/Premier League/ManUnited2526L/1_resultado.webp",
+        image: "/assets/productos/Premier League/ManUnited2526L/1.webp",
         new: true,
         sale: false
     },
@@ -511,7 +511,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 84.99,
-        image: "/assets/productos/Premier League/Newcastle2526L/1_resultado.webp",
+        image: "/assets/productos/Premier League/Newcastle2526L/1.webp",
         new: true,
         sale: false
     },
@@ -521,7 +521,7 @@ const products = [
         category: "futbol",
         league: "premier",
         price: 64.99,
-        image: "/assets/productos/Premier League/UnitedKids2526F/1_resultado.webp",
+        image: "/assets/productos/Premier League/UnitedKids2526F/1.webp",
         new: true,
         sale: false,
         kids: true
@@ -534,7 +534,7 @@ const products = [
         category: "futbol",
         league: "seriea",
         price: 79.99,
-        image: "/assets/productos/Serie A/Lazio2526F/1_resultado.webp",
+        image: "/assets/productos/Serie A/Lazio2526F/1.webp",
         new: true,
         sale: false
     },
@@ -544,7 +544,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 94.99,
-        image: "/assets/productos/Serie A/Milan9798LR/1_resultado.webp",
+        image: "/assets/productos/Serie A/Milan9798LR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -555,7 +555,7 @@ const products = [
         category: "futbol",
         league: "seriea",
         price: 84.99,
-        image: "/assets/productos/Serie A/Napoli2526L/1_resultado.webp",
+        image: "/assets/productos/Serie A/Napoli2526L/1.webp",
         new: true,
         sale: false
     },
@@ -565,7 +565,7 @@ const products = [
         category: "futbol",
         league: "seriea",
         price: 64.99,
-        image: "/assets/productos/Serie A/RomaKids2526L/1_resultado.webp",
+        image: "/assets/productos/Serie A/RomaKids2526L/1.webp",
         new: true,
         sale: false,
         kids: true
@@ -578,7 +578,7 @@ const products = [
         category: "futbol",
         league: "bundesliga",
         price: 89.99,
-        image: "/assets/productos/Bundesliga/Munich2526L/1_resultado.webp",
+        image: "/assets/productos/Bundesliga/Munich2526L/1.webp",
         new: true,
         sale: false
     },
@@ -588,7 +588,7 @@ const products = [
         category: "futbol",
         league: "bundesliga",
         price: 79.99,
-        image: "/assets/productos/Bundesliga/Schalke2526L/1_resultado.webp",
+        image: "/assets/productos/Bundesliga/Schalke2526L/1.webp",
         new: true,
         sale: false
     },
@@ -600,7 +600,7 @@ const products = [
         category: "futbol",
         league: "ligue1",
         price: 64.99,
-        image: "/assets/productos/Ligue 1/MarseillaKids2526F/1_resultado.webp",
+        image: "/assets/productos/Ligue 1/MarseillaKids2526F/1.webp",
         new: true,
         sale: false,
         kids: true
@@ -611,7 +611,7 @@ const products = [
         category: "futbol",
         league: "ligue1",
         price: 79.99,
-        image: "/assets/productos/Ligue 1/Monaco2526F/1_resultado.webp",
+        image: "/assets/productos/Ligue 1/Monaco2526F/1.webp",
         new: true,
         sale: false
     },
@@ -621,7 +621,7 @@ const products = [
         category: "futbol",
         league: "ligue1",
         price: 89.99,
-        image: "/assets/productos/Ligue 1/Paris2526L/1_resultado.webp",
+        image: "/assets/productos/Ligue 1/Paris2526L/1.webp",
         new: true,
         sale: false
     },
@@ -631,7 +631,7 @@ const products = [
         category: "futbol",
         league: "ligue1",
         price: 89.99,
-        image: "/assets/productos/Ligue 1/PSG2526T/1_resultado.webp",
+        image: "/assets/productos/Ligue 1/PSG2526T/1.webp",
         new: true,
         sale: false
     },
@@ -643,7 +643,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 99.99,
-        image: "/assets/productos/Internacional/España0809LR/1_resultado.webp",
+        image: "/assets/productos/Internacional/España0809LR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -654,7 +654,7 @@ const products = [
         category: "futbol",
         league: "selecciones",
         price: 89.99,
-        image: "/assets/productos/Internacional/España2425L/1_resultado.webp",
+        image: "/assets/productos/Internacional/España2425L/1.webp",
         new: true,
         sale: false
     },
@@ -664,7 +664,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 99.99,
-        image: "/assets/productos/Internacional/Francia9899LR/1_resultado.webp",
+        image: "/assets/productos/Internacional/Francia9899LR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -675,7 +675,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 99.99,
-        image: "/assets/productos/Internacional/Holanda9899LR/1_resultado.webp",
+        image: "/assets/productos/Internacional/Holanda9899LR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -688,7 +688,7 @@ const products = [
         category: "futbol",
         league: "brasileirao",
         price: 74.99,
-        image: "/assets/productos/Brasileirão Série A/Flamengo2526T/1_resultado.webp",
+        image: "/assets/productos/Brasileirão Série A/Flamengo2526T/1.webp",
         new: true,
         sale: false
     },
@@ -700,7 +700,7 @@ const products = [
         category: "futbol",
         league: "ligaarabe",
         price: 79.99,
-        image: "/assets/productos/Liga Arabe/Al-Nassr2526L/1_resultado.webp",
+        image: "/assets/productos/Liga Arabe/Al-Nassr2526L/1.webp",
         new: true,
         sale: false
     },
@@ -712,7 +712,7 @@ const products = [
         category: "futbol",
         league: "retro",
         price: 89.99,
-        image: "/assets/productos/SAF (Argentina)/Boca0102LR/1_resultado.webp",
+        image: "/assets/productos/SAF (Argentina)/Boca0102LR/1.webp",
         new: false,
         sale: false,
         retro: true
@@ -723,7 +723,7 @@ const products = [
         category: "futbol",
         league: "saf",
         price: 74.99,
-        image: "/assets/productos/SAF (Argentina)/River2526L/1_resultado.webp",
+        image: "/assets/productos/SAF (Argentina)/River2526L/1.webp",
         new: true,
         sale: false
     },
@@ -733,7 +733,7 @@ const products = [
         category: "futbol",
         league: "saf",
         price: 59.99,
-        image: "/assets/productos/SAF (Argentina)/RiverKids2526L/1_resultado.webp",
+        image: "/assets/productos/SAF (Argentina)/RiverKids2526L/1.webp",
         new: true,
         sale: false,
         kids: true
@@ -746,7 +746,7 @@ const products = [
         category: "nba",
         league: "nba",
         price: 95.00,
-        image: "/assets/productos/NBA/Lakers1/1_resultado.webp",
+        image: "/assets/productos/NBA/Lakers1/1.webp",
         new: false,
         sale: true,
         oldPrice: 110.00
@@ -757,7 +757,7 @@ const products = [
         category: "nba",
         league: "nba",
         price: 95.00,
-        image: "/assets/productos/NBA/Oklahoma/1_resultado.webp",
+        image: "/assets/productos/NBA/Oklahoma/1.webp",
         new: true,
         sale: false
     },
@@ -767,10 +767,11 @@ const products = [
         category: "nba",
         league: "nba",
         price: 95.00,
-        image: "/assets/productos/NBA/Phila1/1_resultado.webp",
+        image: "/assets/productos/NBA/Phila1/1.webp",
         new: false,
         sale: false
     }
 ];
 
 export default products;
+
