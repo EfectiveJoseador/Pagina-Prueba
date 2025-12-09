@@ -674,6 +674,14 @@ function initRelatedCarousel() {
     // Force a reflow then enable transitions
     track.offsetHeight;
     track.style.transition = 'transform 0.3s ease';
+
+    // Mobile: Hide swipe hint after user scrolls
+    const carouselContainer = grid?.querySelector('.carousel-container');
+    if (carouselContainer) {
+        carouselContainer.addEventListener('scroll', () => {
+            carouselContainer.classList.add('scrolled');
+        }, { once: true, passive: true });
+    }
 }
 
 // Update cart count on page load
