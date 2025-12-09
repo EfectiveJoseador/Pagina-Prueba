@@ -67,8 +67,18 @@ const Cart = {
         this.save();
         this.render();
 
-        // Track add to cart event
+        // Show toast notification
         const product = products.find(p => p.id === id);
+        if (product && window.Toast) {
+            window.Toast.success(`${product.name} añadido al carrito`);
+        }
+
+        // Animate cart badge
+        if (window.CartBadge) {
+            window.CartBadge.animate();
+        }
+
+        // Track add to cart event
         if (product && window.Analytics) {
             window.Analytics.trackAddToCart(product, qty, { size, version, ...customizations });
         }
@@ -77,16 +87,20 @@ const Cart = {
     remove(index) {
         // Track remove from cart before removing
         const item = this.items[index];
-        if (item && window.Analytics) {
-            const product = products.find(p => p.id === item.id);
-            if (product) {
-                window.Analytics.trackRemoveFromCart(product, item.qty || 1);
-            }
+        const product = item ? products.find(p => p.id === item.id) : null;
+
+        if (item && window.Analytics && product) {
+            window.Analytics.trackRemoveFromCart(product, item.qty || 1);
         }
 
         this.items.splice(index, 1);
         this.save();
         this.render();
+
+        // Show toast notification
+        if (window.Toast) {
+            window.Toast.info('Producto eliminado del carrito');
+        }
     },
 
     updateQty(index, newQty) {

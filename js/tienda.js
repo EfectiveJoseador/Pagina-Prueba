@@ -909,8 +909,15 @@ function updatePreview() {
     // Close modal
     closeModal();
 
-    // Show confirmation
-    alert(`${currentProduct.name} añadido al carrito!\nTotal: €${totalPrice.toFixed(2)}`);
+    // Show confirmation with Toast instead of alert
+    if (window.Toast) {
+        window.Toast.success(`${currentProduct.name} añadido al carrito`);
+    }
+
+    // Animate cart badge
+    if (window.CartBadge) {
+        window.CartBadge.animate();
+    }
 }
 
 // Add item to cart (uses localStorage)

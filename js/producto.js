@@ -416,8 +416,17 @@ function addToCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 
-    // Success feedback - Toast notification
-    showToast(`${product.name} añadido al carrito`);
+    // Success feedback - Use unified Toast system if available
+    if (window.Toast) {
+        window.Toast.success(`${product.name} añadido al carrito`);
+    } else {
+        showToast(`${product.name} añadido al carrito`);
+    }
+
+    // Animate cart badge
+    if (window.CartBadge) {
+        window.CartBadge.animate();
+    }
 
     // Track add to cart event
     if (window.Analytics) {
