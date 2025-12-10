@@ -1,4 +1,53 @@
 /**
+ * Service Worker & Cache Cleanup
+ * Forces update of old Service Workers that were blocking analytics
+ */
+(function () {
+    const SW_VERSION = 'v2'; // Match this with service-worker.js CACHE_NAME version
+    const CLEANUP_KEY = 'sw_cleanup_' + SW_VERSION;
+
+    // Only run cleanup once per version
+    if (localStorage.getItem(CLEANUP_KEY)) return;
+
+    if ('serviceWorker' in navigator) {
+        // Unregister all Service Workers and clear caches
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            registrations.forEach(function (registration) {
+                registration.unregister().then(function (success) {
+                    if (success) {
+                        console.log('🧹 Service Worker desregistrado para actualización');
+                    }
+                });
+            });
+        });
+
+        // Clear all caches
+        if ('caches' in window) {
+            caches.keys().then(function (names) {
+                names.forEach(function (name) {
+                    caches.delete(name);
+                    console.log('🧹 Cache eliminado:', name);
+                });
+            });
+        }
+
+        // Mark cleanup as done for this version
+        localStorage.setItem(CLEANUP_KEY, Date.now().toString());
+
+        // Re-register the new Service Worker
+        navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+            console.log('✅ Nuevo Service Worker registrado');
+            // Force the waiting worker to become active
+            if (registration.waiting) {
+                registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+        }).catch(function (error) {
+            console.log('Service Worker registration failed:', error);
+        });
+    }
+})();
+
+/**
  * Theme Manager
  * Handles Light/Dark mode toggling and persistence.
  */
