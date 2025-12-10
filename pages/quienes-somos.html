@@ -560,7 +560,7 @@
                 <i class="fas fa-plus"></i>
             </button>
             <div class="zoom-slider-container">
-                <input type="range" id="zoom-slider" class="zoom-slider" min="100" max="300" value="100"
+                <input type="range" id="zoom-slider" class="zoom-slider" min="100" max="200" value="100"
                     orient="vertical">
             </div>
             <button class="zoom-btn zoom-out" id="zoom-out-btn">
@@ -587,19 +587,9 @@
         // ============================================
         // CONFIGURATION
         // ============================================
-        const CLIENT_IMAGES = [
-            'cliente1_resultado.webp', 'cliente2_resultado.webp', 'cliente3_resultado.webp',
-            'cliente4_resultado.webp', 'cliente5_resultado.webp', 'cliente6_resultado.webp',
-            'cliente7_resultado.webp', 'cliente8_resultado.webp', 'cliente9_resultado.webp',
-            'cliente10_resultado.webp', 'cliente11_resultado.webp', 'cliente12_resultado.webp',
-            'cliente13_resultado.webp', 'cliente14_resultado.webp', 'cliente15_resultado.webp',
-            'cliente16_resultado.webp', 'cliente17_resultado.webp', 'cliente18_resultado.webp',
-            'cliente19_resultado.webp', 'cliente20_resultado.webp', 'cliente21_resultado.webp',
-            'cliente22_resultado.webp', 'cliente23_resultado.webp', 'cliente24_resultado.webp',
-            'cliente25_resultado.webp', 'cliente26_resultado.webp', 'cliente27_resultado.webp',
-            'cliente28_resultado.webp'
-        ];
-
+        // Las imágenes se cargan dinámicamente desde clientes.json
+        // Para actualizar: ejecutar "node scripts/update-clients.js"
+        let CLIENT_IMAGES = [];
         const WATERMARK_TEXT = '@camisetazo._';
 
         // ============================================
@@ -618,9 +608,21 @@
         let lastTouchDistance = 0;
 
         // ============================================
-        // INITIALIZATION
+        // INITIALIZATION - Load images from JSON
         // ============================================
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Cargar imágenes desde el JSON generado por el script
+            try {
+                const response = await fetch('/assets/clientes/clientes.json');
+                const data = await response.json();
+                CLIENT_IMAGES = data.images || [];
+                console.log(`✅ Cargadas ${CLIENT_IMAGES.length} imágenes de clientes`);
+            } catch (error) {
+                console.warn('⚠️ No se pudo cargar clientes.json, usando fallback');
+                // Fallback: intentar cargar imágenes numeradas
+                CLIENT_IMAGES = Array.from({ length: 50 }, (_, i) => `cliente${i + 1}.webp`);
+            }
+
             renderCarousel();
             initClientsCarousel();
             initLightbox();
@@ -791,26 +793,26 @@
                 });
             }
 
-            // Zoom buttons
+            // Zoom buttons - very small step for smooth progressive zoom
             document.getElementById('zoom-in-btn')?.addEventListener('click', () => {
-                setZoomLevel(Math.min(3, zoomLevel + 0.25));
+                setZoomLevel(Math.min(2, zoomLevel + 0.05));
             });
 
             document.getElementById('zoom-out-btn')?.addEventListener('click', () => {
-                setZoomLevel(Math.max(1, zoomLevel - 0.25));
+                setZoomLevel(Math.max(1, zoomLevel - 0.05));
             });
 
-            // Mouse wheel zoom
+            // Mouse wheel zoom - smooth increments
             if (wrapper) {
                 wrapper.addEventListener('wheel', (e) => {
                     e.preventDefault();
-                    const delta = e.deltaY > 0 ? -0.15 : 0.15;
-                    setZoomLevel(Math.min(3, Math.max(1, zoomLevel + delta)));
+                    const delta = e.deltaY > 0 ? -0.08 : 0.08;
+                    setZoomLevel(Math.min(2, Math.max(1, zoomLevel + delta)));
                 }, { passive: false });
 
                 // Double click to toggle zoom
                 wrapper.addEventListener('dblclick', () => {
-                    setZoomLevel(zoomLevel > 1 ? 1 : 2);
+                    setZoomLevel(zoomLevel > 1 ? 1 : 1.5);
                 });
 
                 // Mouse drag for panning
@@ -905,11 +907,18 @@
         function clampTranslation() {
             const image = document.getElementById('lightbox-image');
             if (!image || zoomLevel <= 1) { translateX = 0; translateY = 0; return; }
-            const rect = image.getBoundingClientRect();
-            const maxX = (rect.width * (zoomLevel - 1)) / (2 * zoomLevel);
-            const maxY = (rect.height * (zoomLevel - 1)) / (2 * zoomLevel);
-            translateX = Math.max(-maxX, Math.min(maxX, translateX));
-            translateY = Math.max(-maxY, Math.min(maxY, translateY));
+
+            // Get the displayed image dimensions
+            const displayedWidth = image.offsetWidth;
+            const displayedHeight = image.offsetHeight;
+
+            // Calculate how much we can pan based on zoom level
+            // At zoomLevel 2, the image is 2x bigger, so we can pan by half the original size
+            const maxPanX = (displayedWidth * (zoomLevel - 1)) / 2;
+            const maxPanY = (displayedHeight * (zoomLevel - 1)) / 2;
+
+            translateX = Math.max(-maxPanX, Math.min(maxPanX, translateX));
+            translateY = Math.max(-maxPanY, Math.min(maxPanY, translateY));
         }
 
         function resetZoom() {
@@ -928,8 +937,8 @@
             const image = document.getElementById('lightbox-image');
             const watermark = document.getElementById('lightbox-watermark-overlay');
             if (image) {
-                const factor = 1 + (zoomLevel - 1) * 0.5;
-                const transformValue = `scale(${zoomLevel}) translate(${translateX / factor}px, ${translateY / factor}px)`;
+                // Direct transform without factor adjustment for smoother feel
+                const transformValue = `scale(${zoomLevel}) translate(${translateX / zoomLevel}px, ${translateY / zoomLevel}px)`;
                 image.style.transform = transformValue;
                 // Apply same transform to watermark so it scales and moves with the image
                 if (watermark) {
