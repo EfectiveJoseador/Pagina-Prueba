@@ -143,73 +143,117 @@
         }
 
         /* ============================================ */
-        /* CAROUSEL CONTAINER                          */
+        /* CAROUSEL - Same style as producto.html      */
         /* ============================================ */
-        .carousel-container {
+        .clients-carousel {
             position: relative;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 50px;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 100%;
         }
 
-        .carousel-track-wrapper {
+        #clients-grid {
+            position: relative;
+            width: 100%;
+            display: block;
+        }
+
+        .carousel-container {
+            position: relative;
             overflow: hidden;
-            border-radius: var(--radius-lg);
+            padding: 0 3.5rem;
+            width: 100%;
         }
 
         .carousel-track {
             display: flex;
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            will-change: transform;
+            gap: 1.5rem;
+            transition: transform 0.15s ease-out;
         }
 
-        /* Carousel Slide */
-        .carousel-slide {
-            flex: 0 0 33.333%;
-            padding: 0.5rem;
-            box-sizing: border-box;
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            color: var(--text-main);
+            box-shadow: var(--shadow-sm);
         }
 
-        @media (max-width: 1024px) {
-            .carousel-slide {
-                flex: 0 0 50%;
-            }
+        .carousel-arrow:hover {
+            background: var(--bg-body);
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(99, 102, 241, 0.15);
         }
 
-        @media (max-width: 640px) {
-            .carousel-slide {
-                flex: 0 0 100%;
-            }
-
-            .carousel-container {
-                padding: 0 40px;
-            }
+        .carousel-arrow.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
-        /* Client Image Card - CLEAN, NO SHADOWS */
+        .carousel-arrow-left {
+            left: 0;
+        }
+
+        .carousel-arrow-right {
+            right: 0;
+        }
+
+        /* Client Cards - Same structure as product cards */
         .client-card {
-            position: relative;
+            min-width: 220px;
+            max-width: 220px;
+            width: 220px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             cursor: pointer;
-            aspect-ratio: 1 / 1;
-            background: var(--bg-card);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
 
         .client-card:hover {
             box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
         }
 
-        .client-card img {
+        .client-image {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            overflow: hidden;
+            background: var(--bg-body);
+        }
+
+        .client-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            object-position: center;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .client-card:hover img {
-            transform: scale(1.05);
+        .client-card:hover .client-image img {
+            transform: scale(1.1);
         }
 
         /* Watermark - Impact font, no background */
@@ -220,6 +264,7 @@
             right: 0;
             text-align: center;
             pointer-events: none;
+            z-index: 5;
         }
 
         .watermark span {
@@ -236,63 +281,151 @@
                 -1px 1px 2px rgba(0, 0, 0, 0.7);
         }
 
-        /* Navigation Arrows */
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--bg-card);
-            border: none;
-            box-shadow: var(--shadow-md);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 10;
-            color: var(--text-main);
+        /* ============================================ */
+        /* RESPONSIVE - Same as producto.html          */
+        /* ============================================ */
+        @media (max-width: 768px) {
+
+            /* Carousel táctil en móvil - scroll nativo */
+            .carousel-container {
+                padding: 0 1rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none;
+            }
+
+            .carousel-container::-webkit-scrollbar {
+                display: none;
+            }
+
+            .carousel-track {
+                transform: none !important;
+                scroll-snap-align: start;
+            }
+
+            .carousel-track .client-card {
+                scroll-snap-align: start;
+            }
+
+            /* Ocultar flechas en móvil - usar deslizamiento */
+            .carousel-arrow {
+                display: none;
+            }
+
+            .client-card {
+                min-width: 180px;
+                max-width: 180px;
+                width: 180px;
+            }
+
+            /* Mobile carousel hint */
+            .clients-carousel {
+                position: relative;
+            }
+
+            .clients-carousel::after {
+                content: '';
+                position: absolute;
+                top: 60px;
+                right: 0;
+                width: 40px;
+                height: calc(100% - 60px);
+                background: linear-gradient(to left, var(--bg-body) 0%, transparent 100%);
+                pointer-events: none;
+                z-index: 5;
+            }
+
+            /* Swipe indicator */
+            .carousel-container::after {
+                content: '';
+                position: absolute;
+                right: 8px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 24px;
+                height: 24px;
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 50%;
+                z-index: 10;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                animation: pulseHint 2s ease-in-out infinite;
+            }
+
+            .carousel-container::before {
+                content: '›';
+                position: absolute;
+                right: 8px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 24px;
+                height: 24px;
+                z-index: 11;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: var(--primary);
+                animation: slideHint 1.5s ease-in-out infinite;
+                pointer-events: none;
+            }
+
+            @keyframes pulseHint {
+
+                0%,
+                100% {
+                    opacity: 1;
+                    transform: translateY(-50%) scale(1);
+                }
+
+                50% {
+                    opacity: 0.8;
+                    transform: translateY(-50%) scale(0.95);
+                }
+            }
+
+            @keyframes slideHint {
+
+                0%,
+                100% {
+                    transform: translateY(-50%) translateX(0);
+                }
+
+                50% {
+                    transform: translateY(-50%) translateX(3px);
+                }
+            }
+
+            .carousel-container.scrolled::after,
+            .carousel-container.scrolled::before {
+                display: none;
+            }
+
+            .clients-carousel .carousel-container {
+                padding-right: 0;
+            }
+
+            .clients-carousel .client-card {
+                min-width: 42vw;
+                max-width: 42vw;
+                width: 42vw;
+            }
         }
 
-        .carousel-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-50%) scale(1.1);
-        }
+        @media (max-width: 480px) {
+            .carousel-container {
+                padding: 0 0.75rem;
+            }
 
-        .carousel-btn.prev {
-            left: 0;
-        }
-
-        .carousel-btn.next {
-            right: 0;
-        }
-
-        /* Carousel Dots */
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .carousel-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--text-muted);
-            opacity: 0.3;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .carousel-dot.active {
-            opacity: 1;
-            background: var(--primary);
-            transform: scale(1.2);
+            .clients-carousel .client-card {
+                min-width: 45vw;
+                max-width: 45vw;
+                width: 45vw;
+            }
         }
 
         /* Lightbox watermark - Fixed position, stays during zoom */
@@ -338,11 +471,6 @@
 
             .stat-card .stat-number {
                 font-size: 2rem;
-            }
-
-            .carousel-btn {
-                width: 35px;
-                height: 35px;
             }
         }
     </style>
@@ -391,28 +519,24 @@
             </div>
         </section>
 
-        <!-- Customer Gallery Carousel -->
-        <section class="gallery-section">
+        <!-- Customer Gallery Carousel - Same structure as producto.html -->
+        <section class="gallery-section clients-carousel">
             <h2>Nuestros Clientes</h2>
             <p class="gallery-subtitle">Fotos reales de nuestros proveedores</p>
 
-            <div class="carousel-container">
-                <button class="carousel-btn prev" aria-label="Anterior">
+            <div id="clients-grid">
+                <button class="carousel-arrow carousel-arrow-left" id="clients-prev">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-
-                <div class="carousel-track-wrapper">
+                <div class="carousel-container">
                     <div class="carousel-track" id="carousel-track">
                         <!-- Slides injected by JS -->
                     </div>
                 </div>
-
-                <button class="carousel-btn next" aria-label="Siguiente">
+                <button class="carousel-arrow carousel-arrow-right" id="clients-next">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
-
-            <div class="carousel-dots" id="carousel-dots"></div>
         </section>
 
     </main>
@@ -484,15 +608,10 @@
         ];
 
         const WATERMARK_TEXT = '@camisetazo._';
-        const AUTOPLAY_INTERVAL = 4000;
 
         // ============================================
-        // CAROUSEL STATE
+        // CAROUSEL STATE - Same as producto.js
         // ============================================
-        let currentSlide = 0;
-        let slidesPerView = 3;
-        let autoplayTimer = null;
-        let isHovering = false;
         let lightboxImages = [];
         let currentLightboxIndex = 0;
 
@@ -509,43 +628,25 @@
         // INITIALIZATION
         // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-            updateSlidesPerView();
             renderCarousel();
-            setupCarouselControls();
+            initClientsCarousel();
             initLightbox();
-            startAutoplay();
-
-            window.addEventListener('resize', () => {
-                updateSlidesPerView();
-                goToSlide(currentSlide);
-            });
         });
 
-        function updateSlidesPerView() {
-            if (window.innerWidth <= 640) {
-                slidesPerView = 1;
-            } else if (window.innerWidth <= 1024) {
-                slidesPerView = 2;
-            } else {
-                slidesPerView = 3;
-            }
-        }
-
         // ============================================
-        // CAROUSEL RENDERING
+        // CAROUSEL RENDERING - Same structure as producto.js
         // ============================================
         function renderCarousel() {
             const track = document.getElementById('carousel-track');
-            const dotsContainer = document.getElementById('carousel-dots');
 
             // Shuffle images
             const shuffled = [...CLIENT_IMAGES].sort(() => Math.random() - 0.5);
             lightboxImages = shuffled.map(img => `/assets/clientes/${img}`);
 
-            // Render slides
+            // Render slides - Same card structure as producto.html related products
             track.innerHTML = shuffled.map((img, index) => `
-                <div class="carousel-slide">
-                    <div class="client-card" data-index="${index}">
+                <article class="client-card" data-index="${index}">
+                    <div class="client-image">
                         <img 
                             src="/assets/clientes/${img}" 
                             alt="Cliente Satisfecho de Camisetazo"
@@ -555,16 +656,10 @@
                             <span>${WATERMARK_TEXT}</span>
                         </div>
                     </div>
-                </div>
+                </article>
             `).join('');
 
-            // Render dots
-            const totalDots = Math.ceil(shuffled.length / slidesPerView);
-            dotsContainer.innerHTML = Array(totalDots).fill(0).map((_, i) =>
-                `<button class="carousel-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></button>`
-            ).join('');
-
-            // Add click handlers to cards
+            // Add click handlers to cards for lightbox
             document.querySelectorAll('.client-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const index = parseInt(card.dataset.index);
@@ -574,89 +669,99 @@
         }
 
         // ============================================
-        // CAROUSEL CONTROLS
+        // CAROUSEL CONTROLS - Same as producto.js (initRelatedCarousel)
         // ============================================
-        function setupCarouselControls() {
-            const prevBtn = document.querySelector('.carousel-btn.prev');
-            const nextBtn = document.querySelector('.carousel-btn.next');
-            const dotsContainer = document.getElementById('carousel-dots');
-            const container = document.querySelector('.carousel-container');
+        function initClientsCarousel() {
+            const grid = document.getElementById('clients-grid');
+            const track = grid?.querySelector('.carousel-track');
+            const prevBtn = document.getElementById('clients-prev');
+            const nextBtn = document.getElementById('clients-next');
 
-            prevBtn.addEventListener('click', () => {
-                goToSlide(currentSlide - 1);
-                resetAutoplay();
+            if (!track || !prevBtn || !nextBtn) return;
+
+            const originalCards = Array.from(track.querySelectorAll('.client-card'));
+            if (originalCards.length === 0) return;
+
+            const cardWidth = 220 + 24; // card width (220px) + gap (1.5rem = 24px)
+            const totalCards = originalCards.length;
+
+            // Clone all cards and append/prepend for seamless loop
+            originalCards.forEach(card => {
+                const cloneEnd = card.cloneNode(true);
+                const cloneStart = card.cloneNode(true);
+                cloneEnd.classList.add('carousel-clone');
+                cloneStart.classList.add('carousel-clone');
+                track.appendChild(cloneEnd);
+                track.insertBefore(cloneStart, track.firstChild);
             });
 
-            nextBtn.addEventListener('click', () => {
-                goToSlide(currentSlide + 1);
-                resetAutoplay();
+            // Re-attach click handlers to cloned cards
+            track.querySelectorAll('.client-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const index = parseInt(card.dataset.index);
+                    openLightbox(index);
+                });
             });
 
-            dotsContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('carousel-dot')) {
-                    goToSlide(parseInt(e.target.dataset.index) * slidesPerView);
-                    resetAutoplay();
+            // Start at the first "real" card (after the prepended clones)
+            let currentIndex = totalCards;
+
+            function updateCarousel(animate = true) {
+                if (!animate) {
+                    track.style.transition = 'none';
+                } else {
+                    // Faster transition for more responsive feel
+                    track.style.transition = 'transform 0.15s ease-out';
                 }
-            });
+                const translateX = -(currentIndex * cardWidth);
+                track.style.transform = `translateX(${translateX}px)`;
 
-            // Pause on hover
-            container.addEventListener('mouseenter', () => {
-                isHovering = true;
-                stopAutoplay();
-            });
-
-            container.addEventListener('mouseleave', () => {
-                isHovering = false;
-                startAutoplay();
-            });
-
-            // Touch swipe support
-            let touchStartX = 0;
-            container.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-
-            container.addEventListener('touchend', (e) => {
-                const diff = touchStartX - e.changedTouches[0].screenX;
-                if (Math.abs(diff) > 50) {
-                    goToSlide(currentSlide + (diff > 0 ? 1 : -1));
-                    resetAutoplay();
+                // Instant jump correction for infinite loop (no waiting for transitionend)
+                if (animate) {
+                    setTimeout(() => {
+                        // If we've scrolled to the cloned section at the end, jump to the real start
+                        if (currentIndex >= totalCards * 2) {
+                            currentIndex = totalCards;
+                            track.style.transition = 'none';
+                            track.style.transform = `translateX(${-(currentIndex * cardWidth)}px)`;
+                        }
+                        // If we've scrolled to the cloned section at the start, jump to the real end
+                        if (currentIndex < totalCards) {
+                            currentIndex = totalCards + currentIndex;
+                            track.style.transition = 'none';
+                            track.style.transform = `translateX(${-(currentIndex * cardWidth)}px)`;
+                        }
+                    }, 160); // Slightly after transition ends
                 }
-            }, { passive: true });
-        }
-
-        function goToSlide(index) {
-            const totalSlides = CLIENT_IMAGES.length;
-            const maxIndex = totalSlides - slidesPerView;
-            currentSlide = Math.max(0, Math.min(index, maxIndex));
-
-            const track = document.getElementById('carousel-track');
-            track.style.transform = `translateX(${-(currentSlide * (100 / slidesPerView))}%)`;
-
-            // Update dots
-            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === Math.floor(currentSlide / slidesPerView));
-            });
-        }
-
-        function startAutoplay() {
-            if (autoplayTimer || isHovering) return;
-            autoplayTimer = setInterval(() => {
-                const maxIndex = CLIENT_IMAGES.length - slidesPerView;
-                goToSlide(currentSlide >= maxIndex ? 0 : currentSlide + 1);
-            }, AUTOPLAY_INTERVAL);
-        }
-
-        function stopAutoplay() {
-            if (autoplayTimer) {
-                clearInterval(autoplayTimer);
-                autoplayTimer = null;
             }
-        }
 
-        function resetAutoplay() {
-            stopAutoplay();
-            if (!isHovering) startAutoplay();
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                currentIndex--;
+                updateCarousel();
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                currentIndex++;
+                updateCarousel();
+            });
+
+            // Initial position (no animation)
+            updateCarousel(false);
+            // Force a reflow then enable transitions
+            track.offsetHeight;
+            track.style.transition = 'transform 0.15s ease-out';
+
+            // Mobile: Hide swipe hint after user scrolls
+            const carouselContainer = grid?.querySelector('.carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('scroll', () => {
+                    carouselContainer.classList.add('scrolled');
+                }, { once: true, passive: true });
+            }
         }
 
         // ============================================
