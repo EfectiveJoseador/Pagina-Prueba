@@ -1,14 +1,10 @@
 import products from './products-data.js';
-
-// Apply special pricing to match tienda.js
 function applySpecialPricing() {
     products.forEach(product => {
         const nameLower = product.name.toLowerCase();
         const isKids = nameLower.includes('kids') || nameLower.includes('niño');
         const isRetro = product.name.trim().endsWith('R') || product.league === 'retro';
         const isNBA = product.category === 'nba' || product.league === 'nba';
-
-        // Default to Normal
         let oldPrice = 25.00;
         let newPrice = 19.90;
 
@@ -22,18 +18,12 @@ function applySpecialPricing() {
             oldPrice = 27.00;
             newPrice = 21.90;
         }
-
-        // Apply changes
         product.oldPrice = oldPrice;
         product.price = newPrice;
         product.sale = true;
     });
 }
-
-// Apply pricing immediately on import
 applySpecialPricing();
-
-// Cart Manager
 const Cart = {
     items: [],
 
@@ -66,26 +56,19 @@ const Cart = {
         }
         this.save();
         this.render();
-
-        // Show toast notification
         const product = products.find(p => p.id === id);
         if (product && window.Toast) {
             window.Toast.success(`${product.name} añadido al carrito`);
         }
-
-        // Animate cart badge
         if (window.CartBadge) {
             window.CartBadge.animate();
         }
-
-        // Track add to cart event
         if (product && window.Analytics) {
             window.Analytics.trackAddToCart(product, qty, { size, version, ...customizations });
         }
     },
 
     remove(index) {
-        // Track remove from cart before removing
         const item = this.items[index];
         const product = item ? products.find(p => p.id === item.id) : null;
 
@@ -96,8 +79,6 @@ const Cart = {
         this.items.splice(index, 1);
         this.save();
         this.render();
-
-        // Show toast notification
         if (window.Toast) {
             window.Toast.info('Producto eliminado del carrito');
         }
@@ -105,7 +86,6 @@ const Cart = {
 
     updateQty(index, newQty) {
         if (newQty < 1) return;
-        // Handle both quantity and qty properties
         this.items[index].quantity = newQty;
         this.items[index].qty = newQty;
         this.save();
@@ -121,92 +101,62 @@ const Cart = {
     calculateTotal() {
         let totalQty = 0;
         let surcharges = 0;
-
-        // 1. Calculate total quantity and surcharges
         this.items.forEach(item => {
             const qty = item.quantity || item.qty || 1;
             totalQty += qty;
-
-            // Calculate surcharge: (Item Price - 19.90) * Qty
             const itemPrice = item.price || item.basePrice || 0;
             const surcharge = Math.max(0, itemPrice - 19.90);
             surcharges += surcharge * qty;
         });
 
         if (totalQty === 0) return { subtotal: 0, shipping: 0, total: 0 };
-
-        // 2. Calculate Pack Base Price (Cyclic every 5 units)
         const fullCycles = Math.floor(totalQty / 5);
         const remainder = totalQty % 5;
 
-        let packBasePrice = fullCycles * 85.90; // Megapack price
-
-        // Remainder logic
+        let packBasePrice = fullCycles * 85.90;
         if (remainder === 1) {
             packBasePrice += 19.90;
         } else if (remainder === 2) {
             packBasePrice += 19.90 * 2;
         } else if (remainder === 3) {
-            packBasePrice += 56.90; // Pack Popular
+            packBasePrice += 56.90;
         } else if (remainder === 4) {
             packBasePrice += 56.90 + 19.90;
         }
-
-        // 3. Subtotal (products only, no shipping)
         const subtotal = packBasePrice + surcharges;
-
-        // 4. Calculate Shipping
         let shipping = 0;
         if (totalQty === 1) {
             shipping = 1.90;
         }
-
-        // 5. Final Total (subtotal + shipping)
         const total = subtotal + shipping;
-
-        // Update Shipping Display
         const shippingEl = document.getElementById('shipping-price');
         if (shippingEl) {
             shippingEl.textContent = shipping === 0 ? 'Gratis' : `€${shipping.toFixed(2)}`;
         }
-
-        // Render Pack Indicators
         this.renderPackIndicators(totalQty);
 
         return { subtotal, shipping, total };
     },
 
     renderPackIndicators(totalQty) {
-        // DO NOT show pack popups in checkout page
         const isCheckoutPage = window.location.pathname.includes('checkout');
         if (isCheckoutPage) {
-            return; // Skip rendering pack indicators in checkout
+            return;
         }
-
-        // Target the summary card
         const summaryCard = document.querySelector('.cart-summary');
         if (!summaryCard) return;
-
-        // Check if mobile layout (under 900px)
         const isMobile = window.innerWidth <= 900;
-
-        // Create or get container
         let container = document.getElementById('pack-indicator-container');
         if (!container) {
             container = document.createElement('div');
             container.id = 'pack-indicator-container';
             container.className = 'pack-indicator-container';
-
-            // On mobile, insert BEFORE the summary card
-            // On desktop, insert INSIDE the summary card for absolute positioning
             if (isMobile) {
                 summaryCard.parentNode.insertBefore(container, summaryCard);
             } else {
                 summaryCard.appendChild(container);
             }
         }
-
-        // Handle resize: move container if layout changes
         if (isMobile && container.parentNode === summaryCard) {
             summaryCard.parentNode.insertBefore(container, summaryCard);
         } else if (!isMobile && container.parentNode !== summaryCard) {
@@ -214,12 +164,8 @@ const Cart = {
         }
 
         container.innerHTML = '';
-
-        // NEW LOGIC: Only multiples of 3 or 5
         const isMult3 = totalQty % 3 === 0 && totalQty > 0;
         const isMult5 = totalQty % 5 === 0 && totalQty > 0;
-
-        // If both, prefer MEGAPACK (superior pack)
         let packType = null;
         let multiplier = 0;
 
@@ -230,31 +176,22 @@ const Cart = {
             packType = 'popular';
             multiplier = totalQty / 3;
         }
-
-        // No pack activated
         if (!packType) {
             container.classList.remove('visible');
             return;
         }
-
-        // Create single badge
         const badge = document.createElement('div');
-        const glowLevel = Math.min(multiplier, 4); // Cap at x4 for glow
+        const glowLevel = Math.min(multiplier, 4);
 
         if (packType === 'popular') {
             badge.className = `pack-badge pack-popular glow-x${glowLevel}`;
-            // Never show x1
             badge.innerHTML = multiplier === 1 ? 'PACK POPULAR' : `PACK POPULAR ×${multiplier}`;
-        } else { // mega
+        } else {
             badge.className = `pack-badge pack-mega glow-x${glowLevel}`;
-            // Never show x1
             badge.innerHTML = multiplier === 1 ? 'MEGAPACK' : `MEGAPACK ×${multiplier}`;
         }
 
         container.appendChild(badge);
-
-        // Show container with animation
-        // Use requestAnimationFrame to ensure CSS transition works
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 container.classList.add('visible');
@@ -264,13 +201,10 @@ const Cart = {
     },
 
     render() {
-        // Check if we are on cart page
         const cartList = document.getElementById('cart-items-list');
         if (cartList) {
             this.renderCartPage(cartList);
         }
-
-        // Check if we are on checkout page
         const checkoutList = document.getElementById('checkout-items');
         if (checkoutList) {
             this.renderCheckoutPage(checkoutList);
@@ -298,40 +232,25 @@ const Cart = {
         this.items.forEach((item, index) => {
             const product = products.find(p => p.id === item.id);
             if (!product) return;
-
-            // ALWAYS use the base product price from the shop
-            // This matches what the user sees in tienda.html
             const displayPrice = product.price;
-
-            // Get customization data
             const custom = item.customization || {};
             const size = custom.size || item.size || 'N/A';
             const version = custom.version || item.version || 'aficionado';
             const name = custom.name || '';
             const number = custom.number || '';
             const patch = custom.patch || 'none';
-
-            // Build customization details
             let customDetails = `Talla: ${size}`;
-
-            // Add version
             if (version === 'jugador') {
                 customDetails += ' | Versión: Jugador';
             } else {
                 customDetails += ' | Versión: Aficionado';
             }
-
-            // Add name if exists
             if (name) {
                 customDetails += ` | Nombre: ${name}`;
             }
-
-            // Add number if exists
             if (number) {
                 customDetails += ` | Dorsal: ${number}`;
             }
-
-            // Add patch if not none
             if (patch && patch !== 'none') {
                 const patchNames = {
                     liga: 'Parche Liga',
@@ -370,8 +289,6 @@ const Cart = {
             `;
             container.appendChild(el);
         });
-
-        // Add Event Listeners
         container.querySelectorAll('.qty-btn-minus').forEach(btn => {
             btn.addEventListener('click', () => {
                 const index = btn.dataset.index;
@@ -389,8 +306,6 @@ const Cart = {
         container.querySelectorAll('.btn-remove').forEach(btn => {
             btn.addEventListener('click', () => this.remove(btn.dataset.index));
         });
-
-        // Update Totals
         const calculations = this.calculateTotal();
         document.getElementById('subtotal-price').textContent = `€${calculations.subtotal.toFixed(2)}`;
         document.getElementById('total-price').textContent = `€${calculations.total.toFixed(2)}`;
@@ -401,7 +316,6 @@ const Cart = {
         this.items.forEach(item => {
             const product = products.find(p => p.id === item.id);
             if (!product) return;
-            // Use base product price from shop
             const basePrice = product.price;
             const qty = item.quantity || item.qty || 1;
             const custom = item.customization || {};
@@ -431,8 +345,6 @@ const Cart = {
 
 document.addEventListener('DOMContentLoaded', () => {
     Cart.init();
-
-    // Listen for components injection (header)
     window.addEventListener('components:ready', () => {
         Cart.updateHeaderCount();
     });

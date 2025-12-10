@@ -1,6 +1,4 @@
 import products from './products-data.js';
-
-// Price mappings - must match HTML text
 const patchPrices = {
     none: 0,
     liga: 1,
@@ -17,25 +15,16 @@ let product = null;
 let selectedSize = 'L';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Get Product ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get('id'));
-
-    // Find Product
     product = products.find(p => p.id === productId);
 
     if (!product) {
-        // Redirect to catalog if not found
         window.location.href = '/pages/catalogo.html';
         return;
     }
-
-    // Apply special pricing rules
     applySpecialPricing(product);
-    // Also apply to all products for related items
     products.forEach(p => applySpecialPricing(p));
-
-    // Populate Data
     document.title = `${product.name} - Camisetazo`;
     document.getElementById('breadcrumb-name').textContent = product.name;
     document.getElementById('product-category').textContent = product.category;
@@ -52,12 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainImg = document.getElementById('main-img');
     mainImg.src = product.image;
     mainImg.alt = product.name;
-
-    // Generate thumbnails for all available product images
     const thumbnailsContainer = document.querySelector('.thumbnails');
     const basePath = product.image.replace('/1.webp', '');
-
-    // Try to load images 1-4
     const imagePromises = [];
     for (let i = 1; i <= 4; i++) {
         const imagePath = `${basePath}/${i}.webp`;
@@ -70,8 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         );
     }
-
-    // Wait for all image checks to complete
     let availableImages = [];
     let currentImageIndex = 0;
 
@@ -88,8 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             thumbnailsContainer.appendChild(thumb);
         });
-
-        // Arrow navigation
         const prevBtn = document.getElementById('prev-image');
         const nextBtn = document.getElementById('next-image');
 
@@ -110,8 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateMainImage();
         });
     });
-
-    // Size selector
     document.querySelectorAll('.size-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
@@ -120,8 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updatePreview();
         });
     });
-
-    // Quantity controls
     const qtyInput = document.getElementById('qty-input');
     document.getElementById('qty-minus').addEventListener('click', () => {
         const currentValue = parseInt(qtyInput.value);
@@ -136,26 +113,14 @@ document.addEventListener('DOMContentLoaded', () => {
             qtyInput.value = currentValue + 1;
         }
     });
-
-    // Update preview on any change
     document.getElementById('version-select').addEventListener('change', updatePreview);
     document.getElementById('name-input').addEventListener('input', handleNameInput);
     document.getElementById('number-input').addEventListener('input', handleDorsalInput);
     document.getElementById('patch-select').addEventListener('change', updatePreview);
-
-    // Add to cart button
     document.getElementById('add-to-cart-btn').addEventListener('click', addToCart);
-
-    // Load related products
     loadRelatedProducts();
-
-    // Apply product category restrictions (Kids, NBA, Retro)
     applyProductRestrictions();
-
-    // Initial preview update
     updatePreview();
-
-    // Track product view
     if (window.Analytics) {
         window.Analytics.trackProductView({
             id: product.id,
@@ -166,15 +131,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-// Apply special pricing logic
 function applySpecialPricing(p) {
     const nameLower = p.name.toLowerCase();
     const isKids = nameLower.includes('kids') || nameLower.includes('niño');
     const isRetro = p.name.trim().endsWith('R') || p.league === 'retro';
     const isNBA = p.category === 'nba' || p.league === 'nba';
-
-    // Default to Normal
     let oldPrice = 25.00;
     let newPrice = 19.90;
 
@@ -188,18 +149,10 @@ function applySpecialPricing(p) {
         oldPrice = 27.00;
         newPrice = 21.90;
     }
-
-    // Apply changes
     p.oldPrice = oldPrice;
     p.price = newPrice;
     p.sale = true;
 }
-
-// ============================================
-// PRODUCT CATEGORY RESTRICTIONS
-// ============================================
-// Kids, NBA, Retro: Fixed 'aficionado' version (no player version)
-// NBA: Mandatory dorsal, no patches
 
 function isRestrictedCategory() {
     if (!product) return { isRestricted: false, isNBA: false };
@@ -227,18 +180,13 @@ function applyProductRestrictions() {
     const numberLabel = numberInput?.previousElementSibling;
     const nameInput = document.getElementById('name-input');
     const nameLabel = nameInput?.previousElementSibling;
-
-    // For Kids, NBA, Retro: Hide version dropdown, force aficionado
     if (isRestricted && versionGroup) {
         versionGroup.style.display = 'none';
         if (versionSelect) {
             versionSelect.value = 'aficionado';
         }
     }
-
-    // For NBA: Hide patches (no mandatory name/dorsal)
     if (isNBA) {
-        // Hide patch dropdown
         if (patchGroup) {
             patchGroup.style.display = 'none';
         }
@@ -247,16 +195,9 @@ function applyProductRestrictions() {
         }
     }
 }
-
-// Handle name input with real-time validation (only letters and spaces)
 function handleNameInput(e) {
     let value = e.target.value;
-
-    // Remove any character that is not a letter (including accents) or space
-    // Allow: A-Z, a-z, accented letters (À-ÿ), and spaces
     value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
-
-    // Limit to 15 characters
     if (value.length > 15) {
         value = value.slice(0, 15);
     }
@@ -264,20 +205,12 @@ function handleNameInput(e) {
     e.target.value = value;
     updatePreview();
 }
-
-// Handle dorsal input with real-time validation (max 2 digits)
 function handleDorsalInput(e) {
     let value = e.target.value;
-
-    // Remove any non-digit characters
     value = value.replace(/\D/g, '');
-
-    // Limit to 2 digits
     if (value.length > 2) {
         value = value.slice(0, 2);
     }
-
-    // Ensure value is between 0-99
     if (value !== '') {
         const numValue = parseInt(value);
         if (numValue > 99) {
@@ -295,15 +228,11 @@ function updatePreview() {
     const basePrice = product.price;
     let totalPrice = basePrice;
     const details = [];
-
-    // Version
     const version = document.getElementById('version-select').value;
     if (version === 'jugador') {
         totalPrice += 5;
         details.push('Versión Jugador: +€5');
     }
-
-    // Patch
     const patch = document.getElementById('patch-select').value;
     if (patch && patch !== 'none') {
         const patchCost = patchPrices[patch] || 0;
@@ -311,8 +240,6 @@ function updatePreview() {
         const patchName = document.getElementById('patch-select').selectedOptions[0].text;
         details.push(patchName);
     }
-
-    // Name and number (+€2 if both provided)
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
     if (name && number) {
@@ -328,8 +255,6 @@ function updatePreview() {
     if (selectedSize) {
         details.push(`Talla: ${selectedSize}`);
     }
-
-    // Update preview display
     document.getElementById('preview-base').textContent = `€${basePrice.toFixed(2)}`;
     document.getElementById('preview-list').innerHTML = details.length > 0
         ? details.map(d => `<span>• ${d}</span>`).join('')
@@ -340,8 +265,6 @@ function updatePreview() {
 function addToCart() {
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
-
-    // Validation: Name and number must be both filled or both empty
     const hasName = name.length > 0;
     const hasNumber = number.length > 0;
 
@@ -349,14 +272,10 @@ function addToCart() {
         alert('Debes completar tanto el nombre como el dorsal, o dejar ambos vacíos');
         return;
     }
-
-    // Validation: Name format
     if (name && !/^[A-Za-zÀ-ÿ\s]+$/.test(name)) {
         alert('El nombre solo puede contener letras y espacios');
         return;
     }
-
-    // Validation: Number format
     if (number) {
         const numValue = parseInt(number);
         if (number.length > 2 || numValue < 0 || numValue > 99 || isNaN(numValue)) {
@@ -364,8 +283,6 @@ function addToCart() {
             return;
         }
     }
-
-    // Gather customization data
     const customization = {
         size: selectedSize,
         version: document.getElementById('version-select').value,
@@ -373,22 +290,15 @@ function addToCart() {
         number: number || '',
         patch: document.getElementById('patch-select').value
     };
-
-    // Calculate total price
     let totalPrice = product.price;
     if (customization.version === 'jugador') totalPrice += 5;
     if (customization.patch && customization.patch !== 'none') {
         totalPrice += patchPrices[customization.patch] || 0;
     }
-    // Add personalization cost (+€2 if name and number)
     if (customization.name && customization.number) {
         totalPrice += 2;
     }
-
-    // Get quantity
     const quantity = parseInt(document.getElementById('qty-input').value) || 1;
-
-    // Create cart item
     const cartItem = {
         id: product.id,
         name: product.name,
@@ -398,8 +308,6 @@ function addToCart() {
         quantity: quantity,
         customization: customization
     };
-
-    // Add to cart (localStorage)
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
     const existingIndex = cart.findIndex(item =>
@@ -415,40 +323,27 @@ function addToCart() {
 
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
-
-    // Success feedback - Use unified Toast system if available
     if (window.Toast) {
         window.Toast.success(`${product.name} añadido al carrito`);
     } else {
         showToast(`${product.name} añadido al carrito`);
     }
-
-    // Animate cart badge
     if (window.CartBadge) {
         window.CartBadge.animate();
     }
-
-    // Track add to cart event
     if (window.Analytics) {
         window.Analytics.trackAddToCart(product, quantity, customization);
     }
 }
-
-// Toast notification system
 function showToast(message) {
-    // Remove existing toast if any
     const existingToast = document.querySelector('.cart-toast');
     if (existingToast) existingToast.remove();
-
-    // Create toast element
     const toast = document.createElement('div');
     toast.className = 'cart-toast';
     toast.innerHTML = `
         <i class="fas fa-check-circle"></i>
         <span>${message}</span>
     `;
-
-    // Add styles if not already present
     if (!document.getElementById('toast-styles')) {
         const styles = document.createElement('style');
         styles.id = 'toast-styles';
@@ -501,8 +396,6 @@ function showToast(message) {
     }
 
     document.body.appendChild(toast);
-
-    // Auto remove after 3 seconds
     setTimeout(() => {
         toast.style.animation = 'toastSlideDown 0.3s ease forwards';
         setTimeout(() => toast.remove(), 300);
@@ -519,7 +412,6 @@ function updateCartCount() {
 }
 
 function loadRelatedProducts() {
-    // Extract team base name from product name (e.g., "Real Madrid" from "Real Madrid 25/26 Local")
     const getTeamBase = (name) => {
         return name
             .replace(/\d{2}\/\d{2}/, '')  // Remove season (25/26, 02/03)
@@ -529,28 +421,20 @@ function loadRelatedProducts() {
     };
 
     const currentTeam = getTeamBase(product.name);
-
-    // Priority 1: Same team (different variants like Local, Visitante, Kids, Retro)
     const sameTeam = products.filter(p =>
         p.id !== product.id && getTeamBase(p.name) === currentTeam
     );
-
-    // Priority 2: Same league (excluding already found)
     const sameLeague = products.filter(p =>
         p.id !== product.id &&
         p.league === product.league &&
         getTeamBase(p.name) !== currentTeam
     );
-
-    // Priority 3: Same category (fallback)
     const sameCategory = products.filter(p =>
         p.id !== product.id &&
         p.category === product.category &&
         p.league !== product.league &&
         getTeamBase(p.name) !== currentTeam
     );
-
-    // Combine: team first, then shuffled league, then shuffled category
     const shuffledLeague = sameLeague.sort(() => Math.random() - 0.5);
     const shuffledCategory = sameCategory.sort(() => Math.random() - 0.5);
 
@@ -558,8 +442,6 @@ function loadRelatedProducts() {
     const finalRelated = combined.slice(0, 8);
 
     const grid = document.getElementById('related-grid');
-
-    // Create carousel structure with arrows
     const cardsHtml = finalRelated.map(p => `
         <article class="product-card">
             <div class="product-image">
@@ -592,8 +474,6 @@ function loadRelatedProducts() {
             <i class="fas fa-chevron-right"></i>
         </button>
     `;
-
-    // Initialize carousel navigation
     initRelatedCarousel();
 }
 
@@ -608,10 +488,8 @@ function initRelatedCarousel() {
     const originalCards = Array.from(track.querySelectorAll('.product-card'));
     if (originalCards.length === 0) return;
 
-    const cardWidth = 220 + 24; // card width (220px) + gap (1.5rem = 24px)
+    const cardWidth = 220 + 24;
     const totalCards = originalCards.length;
-
-    // Clone all cards and append/prepend for seamless loop
     originalCards.forEach(card => {
         const cloneEnd = card.cloneNode(true);
         const cloneStart = card.cloneNode(true);
@@ -620,8 +498,6 @@ function initRelatedCarousel() {
         track.appendChild(cloneEnd);
         track.insertBefore(cloneStart, track.firstChild);
     });
-
-    // Start at the first "real" card (after the prepended clones)
     let currentIndex = totalCards;
     let isTransitioning = false;
 
@@ -637,12 +513,10 @@ function initRelatedCarousel() {
 
     function handleTransitionEnd() {
         isTransitioning = false;
-        // If we've scrolled to the cloned section at the end, jump to the real start
         if (currentIndex >= totalCards * 2) {
             currentIndex = totalCards;
             updateCarousel(false);
         }
-        // If we've scrolled to the cloned section at the start, jump to the real end
         if (currentIndex < totalCards) {
             currentIndex = totalCards + (currentIndex);
             updateCarousel(false);
@@ -668,14 +542,9 @@ function initRelatedCarousel() {
         currentIndex++;
         updateCarousel();
     });
-
-    // Initial position (no animation)
     updateCarousel(false);
-    // Force a reflow then enable transitions
     track.offsetHeight;
     track.style.transition = 'transform 0.3s ease';
-
-    // Mobile: Hide swipe hint after user scrolls
     const carouselContainer = grid?.querySelector('.carousel-container');
     if (carouselContainer) {
         carouselContainer.addEventListener('scroll', () => {
@@ -683,13 +552,7 @@ function initRelatedCarousel() {
         }, { once: true, passive: true });
     }
 }
-
-// Update cart count on page load
 updateCartCount();
-
-// ============================================
-// SIZE GUIDE MODAL
-// ============================================
 const SIZE_GUIDE_IMAGES = {
     kids: '/assets/images/guia tallas niños_resultado.webp',
     nba: '/assets/images/guias tallas nba_resultado.webp',
@@ -725,8 +588,6 @@ function closeSizeGuide() {
         document.body.style.overflow = '';
     }
 }
-
-// Initialize size guide listeners
 document.addEventListener('DOMContentLoaded', () => {
     const sizeGuideBtn = document.getElementById('size-guide-btn');
     const sizeGuideClose = document.getElementById('size-guide-close');
@@ -735,16 +596,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sizeGuideBtn) sizeGuideBtn.addEventListener('click', openSizeGuide);
     if (sizeGuideClose) sizeGuideClose.addEventListener('click', closeSizeGuide);
     if (sizeGuideOverlay) sizeGuideOverlay.addEventListener('click', closeSizeGuide);
-
-    // Close on Escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeSizeGuide();
     });
 });
-
-// ============================================
-// LIGHTBOX SYSTEM - Amazon Style with Zoom Slider
-// ============================================
 let lightboxImages = [];
 let currentLightboxIndex = 0;
 let zoomLevel = 1;
@@ -760,32 +615,22 @@ function initLightbox() {
     const wrapper = document.getElementById('lightbox-wrapper');
     const mainImageContainer = document.querySelector('.main-image');
     const zoomSlider = document.getElementById('zoom-slider');
-
-    // Open lightbox on main image click
     if (mainImageContainer) {
         mainImageContainer.addEventListener('click', (e) => {
             if (e.target.closest('.gallery-arrow')) return;
             openLightbox();
         });
     }
-
-    // Close handlers
     document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
     document.getElementById('lightbox-overlay')?.addEventListener('click', closeLightbox);
-
-    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
         if (!lightbox.classList.contains('active')) return;
         if (e.key === 'Escape') closeLightbox();
         if (e.key === 'ArrowLeft') navigateLightbox(-1);
         if (e.key === 'ArrowRight') navigateLightbox(1);
     });
-
-    // Arrow navigation
     document.getElementById('lightbox-prev')?.addEventListener('click', () => navigateLightbox(-1));
     document.getElementById('lightbox-next')?.addEventListener('click', () => navigateLightbox(1));
-
-    // Zoom slider control
     if (zoomSlider) {
         zoomSlider.addEventListener('input', (e) => {
             zoomLevel = parseInt(e.target.value) / 100;
@@ -794,8 +639,6 @@ function initLightbox() {
             applyTransform();
         });
     }
-
-    // Zoom buttons
     document.getElementById('zoom-in-btn')?.addEventListener('click', () => {
         setZoomLevel(Math.min(3, zoomLevel + 0.25));
     });
@@ -803,21 +646,15 @@ function initLightbox() {
     document.getElementById('zoom-out-btn')?.addEventListener('click', () => {
         setZoomLevel(Math.max(1, zoomLevel - 0.25));
     });
-
-    // Mouse wheel zoom
     if (wrapper) {
         wrapper.addEventListener('wheel', (e) => {
             e.preventDefault();
             const delta = e.deltaY > 0 ? -0.15 : 0.15;
             setZoomLevel(Math.min(3, Math.max(1, zoomLevel + delta)));
         }, { passive: false });
-
-        // Double click to toggle zoom
         wrapper.addEventListener('dblclick', () => {
             setZoomLevel(zoomLevel > 1 ? 1 : 2);
         });
-
-        // Mouse drag for panning - CONTROLLED speed
         wrapper.addEventListener('mousedown', (e) => {
             e.preventDefault();
             isDragging = true;
@@ -829,8 +666,6 @@ function initLightbox() {
         wrapper.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
             e.preventDefault();
-
-            // Controlled speed - 0.4x for smoother movement
             const deltaX = (e.clientX - startX);
             const deltaY = (e.clientY - startY);
 
@@ -855,8 +690,6 @@ function initLightbox() {
         const w = document.getElementById('lightbox-wrapper');
         if (w) w.classList.remove('dragging');
     });
-
-    // Touch support
     if (wrapper) {
         wrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
         wrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -934,8 +767,6 @@ function clampTranslation() {
         translateY = 0;
         return;
     }
-
-    // Calculate boundaries
     const rect = image.getBoundingClientRect();
     const maxX = (rect.width * (zoomLevel - 1)) / (2 * zoomLevel);
     const maxY = (rect.height * (zoomLevel - 1)) / (2 * zoomLevel);
@@ -959,8 +790,7 @@ function resetZoom() {
 function applyTransform() {
     const image = document.getElementById('lightbox-image');
     if (image) {
-        // Middle ground: divide by partial zoomLevel for balanced movement
-        const factor = 1 + (zoomLevel - 1) * 0.5; // At zoom 2x, factor = 1.5
+        const factor = 1 + (zoomLevel - 1) * 0.5;
         const tx = translateX / factor;
         const ty = translateY / factor;
         image.style.transform = `scale(${zoomLevel}) translate(${tx}px, ${ty}px)`;
@@ -1029,9 +859,6 @@ function updateLightboxImage() {
     document.querySelectorAll('.lightbox-thumb').forEach((thumb, i) => {
         thumb.classList.toggle('active', i === currentLightboxIndex);
     });
-    // Reset zoom when changing image
     resetZoom();
 }
-
-// Initialize lightbox when DOM is ready
 document.addEventListener('DOMContentLoaded', initLightbox);

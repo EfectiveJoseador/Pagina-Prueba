@@ -1,17 +1,10 @@
-/**
- * Mobile Filters Injection and Logic
- * Adds mobile-only filter panel to tienda.html
- */
+
 
 (function () {
     'use strict';
-
-    // Only proceed if we're on the tienda page
     if (!window.location.pathname.includes('tienda.html')) {
         return;
     }
-
-    // Inject Mobile Filter HTML
     function injectMobileFilters() {
         const mobileFilterHTML = `
             <!-- Mobile Filter Button (Only visible on mobile) -->
@@ -68,12 +61,8 @@
                 </div>
             </div>
         `;
-
-        // Inject at the end of body
         document.body.insertAdjacentHTML('beforeend', mobileFilterHTML);
     }
-
-    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -81,10 +70,7 @@
     }
 
     function init() {
-        // Inject the mobile filters
         injectMobileFilters();
-
-        // Wait a bit for tienda.js to initialize
         setTimeout(setupMobileFilters, 100);
     }
 
@@ -99,8 +85,6 @@
         const mobileLeagueSelect = document.getElementById('mobile-filter-league');
         const mobileTeamSelect = document.getElementById('mobile-filter-team');
         const mobileTeamStep = document.getElementById('mobile-team-step');
-
-        // Desktop elements (from tienda.js)
         const desktopLeagueSelect = document.getElementById('filter-league');
         const desktopTeamSelect = document.getElementById('filter-team');
 
@@ -108,31 +92,20 @@
             console.warn('Mobile filter elements not found');
             return;
         }
-
-        // Open panel
         function openPanel() {
             panel.classList.add('active');
             document.body.style.overflow = 'hidden';
-
-            // Sync mobile filters with desktop filters
             syncToMobile();
         }
-
-        // Close panel
         function closePanel() {
             panel.classList.remove('active');
             document.body.style.overflow = '';
         }
-
-        // Sync desktop filters TO mobile
         function syncToMobile() {
-            // Populate mobile league filter
             if (desktopLeagueSelect && mobileLeagueSelect) {
                 mobileLeagueSelect.innerHTML = desktopLeagueSelect.innerHTML;
                 mobileLeagueSelect.value = desktopLeagueSelect.value || '';
             }
-
-            // If desktop team step is visible, show mobile team step and sync
             const desktopTeamStep = document.getElementById('team-step');
             if (desktopTeamStep && !desktopTeamStep.classList.contains('hidden')) {
                 mobileTeamStep.classList.remove('hidden');
@@ -144,20 +117,13 @@
                 mobileTeamStep.classList.add('hidden');
             }
         }
-
-        // Apply mobile filters (sync to desktop and trigger filter)
         function applyFilters() {
             const selectedLeague = mobileLeagueSelect.value;
             const selectedTeam = mobileTeamSelect.value;
-
-            //  Set desktop values
             if (desktopLeagueSelect) {
                 desktopLeagueSelect.value = selectedLeague;
-                // Trigger change event to update desktop logic
                 desktopLeagueSelect.dispatchEvent(new Event('change'));
             }
-
-            // Small delay to ensure team select is populated
             setTimeout(() => {
                 if (selectedTeam && desktopTeamSelect) {
                     desktopTeamSelect.value = selectedTeam;
@@ -166,14 +132,10 @@
                 closePanel();
             }, 50);
         }
-
-        // Clear mobile filters
         function clearFilters() {
             mobileLeagueSelect.value = '';
             mobileTeamSelect.value = '';
             mobileTeamStep.classList.add('hidden');
-
-            // Clear desktop filters
             if (desktopLeagueSelect) {
                 desktopLeagueSelect.value = '';
                 desktopLeagueSelect.dispatchEvent(new Event('change'));
@@ -181,8 +143,6 @@
 
             closePanel();
         }
-
-        // Handle mobile league change (show team options)
         function handleMobileLeagueChange() {
             const selectedLeague = mobileLeagueSelect.value;
 
@@ -191,15 +151,9 @@
                 mobileTeamSelect.value = '';
                 return;
             }
-
-            // Populate mobile team options based on league
-            // Trigger desktop league change to populate its team select,
-            // then copy to mobile
             if (desktopLeagueSelect) {
                 desktopLeagueSelect.value = selectedLeague;
                 desktopLeagueSelect.dispatchEvent(new Event('change'));
-
-                // Wait for desktop to populate
                 setTimeout(() => {
                     const desktopTeamStep = document.getElementById('team-step');
                     if (desktopTeamStep && !desktopTeamStep.classList.contains('hidden')) {
@@ -209,8 +163,6 @@
                 }, 50);
             }
         }
-
-        // Event Listeners
         btn.addEventListener('click', openPanel);
         overlay.addEventListener('click', closePanel);
         closeBtn.addEventListener('click', closePanel);

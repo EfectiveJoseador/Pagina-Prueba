@@ -7,16 +7,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, set, get, update, remove, push, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { loadUserPoints, loadPointsHistory, redeemCoupon, getUserCoupons, REWARDS } from './points.js';
-
-// ============================================
-// STATE MANAGEMENT
-// ============================================
 let currentUser = null;
 let currentAddressId = null;
-
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
 
 function showMessage(elementId, message, isSuccess = true) {
     const el = document.getElementById(elementId);
@@ -36,10 +28,6 @@ function showMessage(elementId, message, isSuccess = true) {
     }
 }
 
-// ============================================
-// NAVIGATION BETWEEN SECTIONS
-// ============================================
-
 function initNavigation() {
     const navItems = document.querySelectorAll('.nav-item:not(.logout)');
     const sections = document.querySelectorAll('.content-section');
@@ -47,12 +35,8 @@ function initNavigation() {
     navItems.forEach(item => {
         item.addEventListener('click', () => {
             const target = item.dataset.target;
-
-            // Update active nav item
             navItems.forEach(nav => nav.classList.remove('active'));
             item.classList.add('active');
-
-            // Update active section
             sections.forEach(section => section.classList.remove('active'));
             const targetSection = document.getElementById(target);
             if (targetSection) {
@@ -62,25 +46,15 @@ function initNavigation() {
     });
 }
 
-// ============================================
-// ORDERS SECTION
-// ============================================
-
 function loadOrders() {
     if (!currentUser) return;
 
     const ordersList = document.getElementById('orders-list');
-    // Use ordersByUser path to match where orders are saved
     const ordersRef = ref(db, `ordersByUser/${currentUser.uid}`);
-
-    // Flag to track if orders loaded successfully
     let ordersLoaded = false;
-
-    // Timeout to detect if orders fail to load (possible extension interference)
     const loadTimeout = setTimeout(() => {
         if (!ordersLoaded) {
             const currentContent = ordersList.innerHTML;
-            // Only show help message if still showing "Cargando..."
             if (currentContent.includes('Cargando pedidos')) {
                 ordersList.innerHTML = `
                     <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
@@ -112,9 +86,7 @@ function loadOrders() {
                 `;
             }
         }
-    }, 10000); // 10 seconds timeout
-
-    // Usar onValue para actualización en tiempo real
+    }, 10000);
     onValue(ordersRef, (snapshot) => {
         ordersLoaded = true;
         clearTimeout(loadTimeout);
@@ -137,7 +109,6 @@ function loadOrders() {
         ordersLoaded = true;
         clearTimeout(loadTimeout);
         console.error('Error loading orders:', error);
-        // Mostrar mensaje con sugerencia de modo incógnito
         ordersList.innerHTML = `
             <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
                 <i class="fas fa-exclamation-circle" style="font-size: 2.5rem; margin-bottom: 1rem; color: #ef4444;"></i>
@@ -170,13 +141,9 @@ function loadOrders() {
 
 function renderOrders(orders) {
     const ordersList = document.getElementById('orders-list');
-
-    // Debug: log the raw orders object
     console.log('📦 Raw orders from Firebase:', orders);
 
     const ordersArray = Object.entries(orders).map(([id, order]) => ({ id, ...order }));
-
-    // Debug: log each order
     ordersArray.forEach((order, i) => {
         console.log(`📋 Order ${i + 1}:`, order);
         console.log('  - Products:', order.products || order.items);
@@ -184,8 +151,6 @@ function renderOrders(orders) {
         console.log('  - Total:', order.total);
         console.log('  - Status:', order.status);
     });
-
-    // Sort by date (most recent first) - try createdAt first, then date
     ordersArray.sort((a, b) => {
         const dateA = a.createdAt || new Date(a.date).getTime();
         const dateB = b.createdAt || new Date(b.date).getTime();
@@ -201,8 +166,6 @@ function renderOrders(orders) {
         `;
         return;
     }
-
-    // Check for delivered orders to trigger confetti (once per session)
     const hasNewDelivered = ordersArray.some(order => {
         const normalizedStatus = normalizeStatus(order.status);
         const confettiKey = `confetti_shown_${order.orderId || order.id}`;
@@ -220,14 +183,8 @@ function renderOrders(orders) {
     ordersList.innerHTML = ordersArray.map(order => {
         const normalizedStatus = normalizeStatus(order.status);
         const statusInfo = getStatusInfo(normalizedStatus);
-
-        // Get products - try both field names for compatibility
         const products = order.products || order.items || [];
-
-        // Get shipping info - try both field names for compatibility
         const shipping = order.shippingInfo || order.shippingAddress || {};
-
-        // Get date with time - try createdAt timestamp first
         const orderDateTime = order.createdAt
             ? new Date(order.createdAt).toLocaleString('es-ES', {
                 day: 'numeric',
@@ -237,8 +194,6 @@ function renderOrders(orders) {
                 minute: '2-digit'
             })
             : formatDate(order.date);
-
-        // Status configuration with colors
         const statusConfig = {
             'pendiente': { icon: 'fa-clock', bg: 'rgba(126, 126, 126, 0.15)', color: '#9ca3af' },
             'confirmado': { icon: 'fa-check-circle', bg: 'rgba(59, 130, 246, 0.15)', color: '#3b82f6' },
@@ -535,8 +490,6 @@ function renderOrders(orders) {
         </div>
     `;
     }).join('');
-
-    // Add event listeners for edit address buttons
     document.querySelectorAll('.edit-order-address-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const orderId = btn.dataset.orderId;
@@ -544,8 +497,6 @@ function renderOrders(orders) {
         });
     });
 }
-
-// Legacy status mapping (English -> Spanish)
 const LEGACY_STATUS_MAP = {
     'pending': 'pendiente',
     'confirmed': 'confirmado',
@@ -555,18 +506,12 @@ const LEGACY_STATUS_MAP = {
     'processing': 'pendiente',
     'pendiente_de_confirmacion': 'pendiente'
 };
-
-// Normalize status to new 4-state system
 function normalizeStatus(status) {
     if (!status) return 'pendiente';
     const lower = status.toLowerCase().trim();
-
-    // Check legacy map first
     if (LEGACY_STATUS_MAP[lower]) {
         return LEGACY_STATUS_MAP[lower];
     }
-
-    // Check if already valid
     const validStatuses = ['pendiente', 'confirmado', 'imagenes_cliente', 'enviado', 'entregado'];
     if (validStatuses.includes(lower)) {
         return lower;
@@ -574,8 +519,6 @@ function normalizeStatus(status) {
 
     return 'pendiente';
 }
-
-// Get status display info
 function getStatusInfo(status) {
     const statusMap = {
         'pendiente': { text: 'Pendiente', icon: 'fas fa-clock', class: 'estado-pendiente' },
@@ -586,8 +529,6 @@ function getStatusInfo(status) {
     };
     return statusMap[status] || statusMap['pendiente'];
 }
-
-// Confetti effect for delivered orders
 function triggerConfetti() {
     import('https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js')
         .then(() => {
@@ -601,15 +542,12 @@ function triggerConfetti() {
         })
         .catch(err => console.warn('Could not load confetti:', err));
 }
-
-// Initialize Firebase config for order status options (creates if not exists)
 async function initOrderStatusConfig() {
     try {
         const configRef = ref(db, 'config/order_status_options');
         const snapshot = await get(configRef);
 
         if (!snapshot.exists()) {
-            // Create the config node with valid status options
             await set(configRef, {
                 "0": "pendiente",
                 "1": "confirmado",
@@ -633,10 +571,6 @@ function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
 }
-
-// ============================================
-// ADDRESS SECTION
-// ============================================
 
 async function loadAddresses() {
     if (!currentUser) return;
@@ -699,8 +633,6 @@ function renderAddresses(addresses) {
             </div>
         </div>
     `).join('');
-
-    // Add event listeners
     document.querySelectorAll('.edit-address').forEach(btn => {
         btn.addEventListener('click', () => editAddress(btn.dataset.id));
     });
@@ -773,11 +705,9 @@ async function saveAddress(e) {
 
     try {
         if (currentAddressId) {
-            // Update existing address
             const addressRef = ref(db, `users/${currentUser.uid}/addresses/${currentAddressId}`);
             await update(addressRef, addressData);
         } else {
-            // Create new address
             const addressesRef = ref(db, `users/${currentUser.uid}/addresses`);
             await push(addressesRef, addressData);
         }
@@ -810,10 +740,6 @@ async function deleteAddress(addressId) {
         alert('Error al eliminar la dirección. Inténtalo de nuevo.');
     }
 }
-
-// ============================================
-// SETTINGS SECTION
-// ============================================
 
 async function changePassword() {
     if (!currentUser) return;
@@ -863,15 +789,8 @@ async function savePreferences(e) {
     }
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize navigation
     initNavigation();
-
-    // Address modal controls
     const addAddressBtn = document.getElementById('add-address-btn');
     const closeModalBtn = document.getElementById('close-address-modal');
     const cancelAddressBtn = document.getElementById('cancel-address-btn');
@@ -893,15 +812,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addressForm) {
         addressForm.addEventListener('submit', saveAddress);
     }
-
-    // Close modal on outside click
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
             closeAddressModal();
         }
     });
-
-    // Settings controls
     const changePasswordBtn = document.getElementById('change-password-btn');
     if (changePasswordBtn) {
         changePasswordBtn.addEventListener('click', changePassword);
@@ -911,26 +826,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (preferencesForm) {
         preferencesForm.addEventListener('submit', savePreferences);
     }
-
-    // Check auth state
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            // FIRST: Check if user is admin and redirect to admin panel
             try {
                 const idTokenResult = await user.getIdTokenResult(true);
                 if (idTokenResult.claims.admin === true) {
                     console.log('✅ Usuario es admin - redirigiendo a panel de administración');
                     window.location.href = '/pages/admin.html';
-                    return; // Stop execution, redirect will happen
+                    return;
                 }
             } catch (error) {
                 console.error('Error verificando claims de admin:', error);
             }
-
-            // Not admin - continue with normal profile
             currentUser = user;
-
-            // Update user info in sidebar
             const usernameEl = document.querySelector('.user-info h3');
             const emailEl = document.querySelector('.user-info p');
             const avatarEl = document.querySelector('.avatar');
@@ -938,30 +846,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (usernameEl) usernameEl.textContent = user.displayName || 'Usuario';
             if (emailEl) emailEl.textContent = user.email;
             if (avatarEl) avatarEl.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
-
-            // Load data
             await loadOrders();
             await loadAddresses();
             await loadPreferences();
             await loadPoints();
-
-            // Initialize order status config in Firebase (if not exists)
             initOrderStatusConfig();
         } else {
             window.location.href = '/pages/login.html';
         }
     });
 
-    // ============================================
-    // POINTS SECTION
-    // ============================================
-
     async function loadPoints() {
         if (!currentUser) return;
 
         const points = await loadUserPoints(currentUser.uid);
-
-        // Update display
         const pendingEl = document.getElementById('pending-points');
         const availableEl = document.getElementById('available-points');
         const modalAvailableEl = document.getElementById('modal-available-points');
@@ -969,16 +867,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pendingEl) pendingEl.textContent = points.pendingPoints;
         if (availableEl) availableEl.textContent = points.availablePoints;
         if (modalAvailableEl) modalAvailableEl.textContent = points.availablePoints;
-
-        // Load and display coupons
         const coupons = await getUserCoupons(currentUser.uid);
         renderUserCoupons(coupons);
-
-        // Load history
         const history = await loadPointsHistory(currentUser.uid);
         renderPointsHistory(history);
-
-        // Update redeem buttons state
         updateRedeemButtons(points.availablePoints);
     }
 
@@ -1084,8 +976,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Rewards modal controls
     const openRewardsBtn = document.getElementById('open-rewards-store');
     const closeRewardsBtn = document.getElementById('close-rewards-modal');
     const rewardsModal = document.getElementById('rewards-modal');
@@ -1101,8 +991,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (rewardsModal) rewardsModal.style.display = 'none';
         });
     }
-
-    // Close modal on outside click
     if (rewardsModal) {
         rewardsModal.addEventListener('click', (e) => {
             if (e.target === rewardsModal) {
@@ -1110,8 +998,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Redeem buttons
     document.querySelectorAll('.btn-redeem').forEach(btn => {
         btn.addEventListener('click', async () => {
             if (!currentUser) return;
@@ -1143,14 +1029,8 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = `${cost} <i class="fas fa-star" style="font-size: 0.75rem;"></i>`;
         });
     });
-
-    // Order Address Edit Modal controls
     setupOrderAddressModalListeners();
 });
-
-// ============================================
-// ORDER ADDRESS EDITING
-// ============================================
 
 const WEB3FORMS_KEY = "8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8";
 let currentEditingOrderId = null;
@@ -1202,8 +1082,6 @@ async function openEditOrderAddressModal(orderId) {
     const errorEl = document.getElementById('order-address-error');
 
     if (errorEl) errorEl.style.display = 'none';
-
-    // Check user rate limit (1 edit per week)
     try {
         const userRef = ref(db, `users/${currentUser.uid}/lastAddressEditDate`);
         const snapshot = await get(userRef);
@@ -1223,8 +1101,6 @@ async function openEditOrderAddressModal(orderId) {
     } catch (error) {
         console.error('Error checking rate limit:', error);
     }
-
-    // Load order data
     try {
         const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${orderId}`);
         const orderSnapshot = await get(orderRef);
@@ -1237,14 +1113,10 @@ async function openEditOrderAddressModal(orderId) {
         const order = orderSnapshot.val();
         currentEditingOrderId = orderId;
         currentEditingOrder = order;
-
-        // Check if already edited
         if (order.addressEditCount && order.addressEditCount >= 1) {
             alert('Este pedido ya ha sido editado anteriormente.');
             return;
         }
-
-        // Populate form with current address
         const addr = order.shippingAddress || order.shippingInfo || {};
         document.getElementById('order-address-order-id').value = orderId;
         document.getElementById('order-address-name').value = addr.name || addr.fullName || '';
@@ -1275,8 +1147,6 @@ async function handleOrderAddressSubmit(e) {
 
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
-
-    // Collect new address data
     const newAddress = {
         name: document.getElementById('order-address-name').value.trim(),
         street: document.getElementById('order-address-street').value.trim(),
@@ -1288,21 +1158,16 @@ async function handleOrderAddressSubmit(e) {
     };
 
     try {
-        // Update order in Firebase
         const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${currentEditingOrderId}`);
 
         await update(orderRef, {
             shippingAddress: newAddress,
-            shippingInfo: newAddress, // Update both for compatibility
+            shippingInfo: newAddress,
             addressEditCount: 1,
             addressEditedAt: new Date().toISOString()
         });
-
-        // Update user's last edit date
         const userEditRef = ref(db, `users/${currentUser.uid}/lastAddressEditDate`);
         await set(userEditRef, new Date().toISOString());
-
-        // Send updated confirmation email via Web3Forms
         const emailSent = await sendAddressUpdateEmail({
             ...currentEditingOrder,
             shippingAddress: newAddress,
@@ -1316,8 +1181,6 @@ async function handleOrderAddressSubmit(e) {
         }
 
         closeOrderAddressModal();
-
-        // Reload orders to update UI
         await loadOrders();
 
     } catch (error) {
@@ -1334,8 +1197,6 @@ async function handleOrderAddressSubmit(e) {
 
 async function sendAddressUpdateEmail(orderData) {
     const sa = orderData.shippingAddress || {};
-
-    // Build customer info like in checkout.js
     const customerInfo = `Contact Name: ${sa.name || ''}
 Address Line: ${sa.street || ''}
 City: ${sa.city || ''}
@@ -1344,8 +1205,6 @@ Country: España
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
 Instagram: @${(sa.instagram || '').replace('@', '')}`;
-
-    // Build products text
     let productsText = '';
     const items = orderData.items || orderData.products || [];
     items.forEach((item) => {
@@ -1355,8 +1214,6 @@ Instagram: @${(sa.instagram || '').replace('@', '')}`;
         const price = ((item.price || 0) * qty).toFixed(2);
         productsText += qty + 'x ' + (item.name || 'Producto') + ' · ' + size + ' · ' + version + ' — €' + price + '\n';
     });
-
-    // Build total info
     let totalInfo = `TOTAL: €${orderData.total ? Number(orderData.total).toFixed(2) : '0.00'}`;
 
     const formData = new FormData();

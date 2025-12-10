@@ -1,35 +1,7 @@
-/**
- * Google Analytics Enhanced Tracking
- * Custom events for e-commerce tracking
- * 
- * Events tracked:
- * - Page views (automatic)
- * - Product views
- * - Add to cart
- * - Remove from cart
- * - Begin checkout
- * - Purchase complete
- * - Search usage
- * - Filter usage
- * - Category clicks
- * - CTA button clicks
- * - Scroll depth
- * - Time on page
- * - External link clicks
- * - Form submissions
- */
-
-// Ensure gtag is available
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
 
-// ============================================
-// ECOMMERCE TRACKING
-// ============================================
 
-/**
- * Track when a product is viewed
- */
 function trackProductView(product) {
     if (!product) return;
 
@@ -48,9 +20,7 @@ function trackProductView(product) {
     console.log('📊 Analytics: Product viewed -', product.name);
 }
 
-/**
- * Track when item is added to cart
- */
+
 function trackAddToCart(product, quantity = 1, customizations = {}) {
     if (!product) return;
 
@@ -69,8 +39,6 @@ function trackAddToCart(product, quantity = 1, customizations = {}) {
             quantity: quantity
         }]
     });
-
-    // Track customizations separately
     if (customizations.name || customizations.number) {
         gtag('event', 'customize_product', {
             product_id: product.id,
@@ -84,9 +52,7 @@ function trackAddToCart(product, quantity = 1, customizations = {}) {
     console.log('📊 Analytics: Added to cart -', product.name, 'x', quantity);
 }
 
-/**
- * Track when item is removed from cart
- */
+
 function trackRemoveFromCart(product, quantity = 1) {
     if (!product) return;
 
@@ -104,9 +70,7 @@ function trackRemoveFromCart(product, quantity = 1) {
     console.log('📊 Analytics: Removed from cart -', product.name);
 }
 
-/**
- * Track when checkout begins
- */
+
 function trackBeginCheckout(cartItems, totalValue) {
     if (!cartItems || !cartItems.length) return;
 
@@ -127,9 +91,7 @@ function trackBeginCheckout(cartItems, totalValue) {
     console.log('📊 Analytics: Checkout started - Total:', totalValue);
 }
 
-/**
- * Track shipping info added
- */
+
 function trackAddShippingInfo(address) {
     gtag('event', 'add_shipping_info', {
         currency: 'EUR',
@@ -141,21 +103,17 @@ function trackAddShippingInfo(address) {
     console.log('📊 Analytics: Shipping info added');
 }
 
-/**
- * Track payment method selected
- */
+
 function trackAddPaymentInfo(paymentMethod) {
     gtag('event', 'add_payment_info', {
         currency: 'EUR',
-        payment_type: paymentMethod // 'paypal' or 'bizum'
+        payment_type: paymentMethod
     });
 
     console.log('📊 Analytics: Payment method selected -', paymentMethod);
 }
 
-/**
- * Track successful purchase
- */
+
 function trackPurchase(orderId, cartItems, totalValue, paymentMethod) {
     if (!orderId || !cartItems) return;
 
@@ -180,13 +138,7 @@ function trackPurchase(orderId, cartItems, totalValue, paymentMethod) {
     console.log('📊 Analytics: Purchase completed - Order:', orderId, 'Total:', totalValue);
 }
 
-// ============================================
-// SEARCH & FILTER TRACKING
-// ============================================
 
-/**
- * Track search usage
- */
 function trackSearch(searchTerm, resultsCount) {
     if (!searchTerm || searchTerm.length < 2) return;
 
@@ -198,38 +150,28 @@ function trackSearch(searchTerm, resultsCount) {
     console.log('📊 Analytics: Search -', searchTerm, '(' + resultsCount + ' results)');
 }
 
-/**
- * Track filter usage
- */
+
 function trackFilterUse(filterType, filterValue) {
     gtag('event', 'filter_use', {
-        filter_type: filterType, // 'league', 'team', 'kids', 'sort'
+        filter_type: filterType,
         filter_value: filterValue
     });
 
     console.log('📊 Analytics: Filter used -', filterType, ':', filterValue);
 }
 
-// ============================================
-// NAVIGATION & ENGAGEMENT TRACKING
-// ============================================
 
-/**
- * Track category/collection clicks
- */
 function trackCategoryClick(categoryName, source) {
     gtag('event', 'select_content', {
         content_type: 'category',
         content_id: categoryName,
-        source: source || 'unknown' // 'home_carousel', 'catalog_page', 'menu'
+        source: source || 'unknown'
     });
 
     console.log('📊 Analytics: Category clicked -', categoryName);
 }
 
-/**
- * Track CTA button clicks
- */
+
 function trackCTAClick(buttonName, location) {
     gtag('event', 'cta_click', {
         button_name: buttonName,
@@ -239,9 +181,7 @@ function trackCTAClick(buttonName, location) {
     console.log('📊 Analytics: CTA clicked -', buttonName);
 }
 
-/**
- * Track external link clicks
- */
+
 function trackExternalLink(url, linkText) {
     gtag('event', 'click', {
         link_url: url,
@@ -251,10 +191,6 @@ function trackExternalLink(url, linkText) {
 
     console.log('📊 Analytics: External link -', url);
 }
-
-// ============================================
-// SCROLL DEPTH TRACKING
-// ============================================
 
 let scrollMilestones = [25, 50, 75, 100];
 let scrollMilestonesReached = new Set();
@@ -291,12 +227,8 @@ function initScrollTracking() {
     }, { passive: true });
 }
 
-// ============================================
-// TIME ON PAGE TRACKING
-// ============================================
-
 let pageLoadTime = Date.now();
-let timeIntervals = [30, 60, 120, 300]; // seconds: 30s, 1m, 2m, 5m
+let timeIntervals = [30, 60, 120, 300];
 let timeIntervalsReached = new Set();
 
 function initTimeTracking() {
@@ -317,16 +249,10 @@ function initTimeTracking() {
                 console.log('📊 Analytics: Time on page -', interval + 's');
             }
         });
-    }, 5000); // Check every 5 seconds
+    }, 5000);
 }
 
-// ============================================
-// FORM TRACKING
-// ============================================
 
-/**
- * Track form submissions
- */
 function trackFormSubmit(formName, success = true) {
     gtag('event', 'form_submit', {
         form_name: formName,
@@ -336,12 +262,10 @@ function trackFormSubmit(formName, success = true) {
     console.log('📊 Analytics: Form submitted -', formName);
 }
 
-/**
- * Track login/signup
- */
+
 function trackLogin(method = 'email') {
     gtag('event', 'login', {
-        method: method // 'email', 'google'
+        method: method
     });
 
     console.log('📊 Analytics: Login -', method);
@@ -355,13 +279,7 @@ function trackSignUp(method = 'email') {
     console.log('📊 Analytics: Sign up -', method);
 }
 
-// ============================================
-// ERRORS TRACKING
-// ============================================
 
-/**
- * Track errors
- */
 function trackError(errorType, errorMessage, location) {
     gtag('event', 'exception', {
         description: errorMessage,
@@ -373,13 +291,7 @@ function trackError(errorType, errorMessage, location) {
     console.log('📊 Analytics: Error -', errorType, errorMessage);
 }
 
-// ============================================
-// PACK/PROMOTION TRACKING
-// ============================================
 
-/**
- * Track pack unlock (promotional)
- */
 function trackPackUnlock(packType, itemCount) {
     gtag('event', 'unlock_achievement', {
         achievement_id: packType,
@@ -394,9 +306,7 @@ function trackPackUnlock(packType, itemCount) {
     console.log('📊 Analytics: Pack unlocked -', packType, 'with', itemCount, 'items');
 }
 
-/**
- * Track coupon usage
- */
+
 function trackCouponUse(couponCode, discountAmount) {
     gtag('event', 'coupon_use', {
         coupon_code: couponCode,
@@ -406,18 +316,9 @@ function trackCouponUse(couponCode, discountAmount) {
     console.log('📊 Analytics: Coupon used -', couponCode);
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
-
 function initAnalytics() {
-    // Start scroll tracking
     initScrollTracking();
-
-    // Start time tracking
     initTimeTracking();
-
-    // Track external links automatically
     document.addEventListener('click', (e) => {
         const link = e.target.closest('a[href^="http"]');
         if (link && !link.href.includes(window.location.hostname)) {
@@ -427,17 +328,12 @@ function initAnalytics() {
 
     console.log('📊 Analytics: Enhanced tracking initialized');
 }
-
-// Auto-initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAnalytics);
 } else {
     initAnalytics();
 }
-
-// Export functions for use in other modules
 window.Analytics = {
-    // Ecommerce
     trackProductView,
     trackAddToCart,
     trackRemoveFromCart,
@@ -445,25 +341,15 @@ window.Analytics = {
     trackAddShippingInfo,
     trackAddPaymentInfo,
     trackPurchase,
-
-    // Search & Filters
     trackSearch,
     trackFilterUse,
-
-    // Navigation
     trackCategoryClick,
     trackCTAClick,
     trackExternalLink,
-
-    // Forms
     trackFormSubmit,
     trackLogin,
     trackSignUp,
-
-    // Errors
     trackError,
-
-    // Promotions
     trackPackUnlock,
     trackCouponUse
 };

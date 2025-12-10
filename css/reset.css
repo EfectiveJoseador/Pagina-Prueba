@@ -1,4 +1,4 @@
-/* Modern CSS Reset */
+
 *,
 *::before,
 *::after {
@@ -53,7 +53,7 @@ ol {
     list-style: none;
 }
 
-/* Utilities */
+
 .container {
     max-width: var(--container-width);
     margin: 0 auto;

@@ -44,16 +44,12 @@ self.addEventListener('fetch', (event) => {
   const url = event.request.url;
 
   if (event.request.method !== 'GET') return;
-
-  // ❌ FILTRO CRÍTICO (esto es lo que te estaba rompiendo la consola)
   if (
     url.startsWith('chrome-extension://') ||
     url.includes('.map')
   ) {
     return;
   }
-
-  // ✅ ANALYTICS: Always fetch from network, never cache (pero no bloquear!)
   if (
     url.includes('analytics.vercel.com') ||
     url.includes('www.googletagmanager.com') ||

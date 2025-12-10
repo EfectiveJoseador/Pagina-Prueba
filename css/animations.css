@@ -1,6 +1,6 @@
-/* Premium Animations & Effects */
 
-/* Keyframes */
+
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -85,7 +85,7 @@
     }
 }
 
-/* Utility Classes */
+
 
 .animate-fade-in {
     animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -103,7 +103,7 @@
     animation: scaleIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Stagger delays (useful for grids) */
+
 .delay-100 {
     animation-delay: 100ms;
 }
@@ -124,7 +124,7 @@
     animation-delay: 500ms;
 }
 
-/* Premium Hover Effects */
+
 .hover-lift {
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -146,7 +146,7 @@
     animation: glowPulse 1.5s infinite;
 }
 
-/* Glassmorphism */
+
 .glass-panel {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
@@ -154,7 +154,7 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Button Shimmer Effect (Add to any button) */
+
 .btn-premium {
     position: relative;
     overflow: hidden;
@@ -181,11 +181,9 @@
     box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
 }
 
-/* ==========================================
-   ULTRA PREMIUM ANIMATIONS - NEXT LEVEL
-   ========================================== */
 
-/* Levitation - Smooth floating effect */
+
+
 @keyframes levitate {
 
     0%,
@@ -198,7 +196,7 @@
     }
 }
 
-/* Shimmer Sweep - Light sweep across element */
+
 @keyframes shimmerSweep {
     0% {
         transform: translateX(-100%) skewX(-15deg);
@@ -209,7 +207,7 @@
     }
 }
 
-/* Glow Intensify - Progressive glow increase */
+
 @keyframes glowIntensify {
     0% {
         box-shadow: 0 0 5px rgba(99, 102, 241, 0.2);
@@ -224,7 +222,7 @@
     }
 }
 
-/* Bounce In - Elastic entrance */
+
 @keyframes bounceIn {
     0% {
         opacity: 0;
@@ -245,7 +243,7 @@
     }
 }
 
-/* Slide In With Blur - Premium entrance */
+
 @keyframes slideInWithBlur {
     0% {
         opacity: 0;
@@ -260,7 +258,7 @@
     }
 }
 
-/* Rotate Glow - Spinning glow effect */
+
 @keyframes rotateGlow {
     0% {
         box-shadow: 0 0 10px rgba(99, 102, 241, 0.5),
@@ -277,7 +275,7 @@
     }
 }
 
-/* Ripple Effect - Expanding rings */
+
 @keyframes rippleEffect {
     0% {
         box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7),
@@ -300,7 +298,7 @@
     }
 }
 
-/* Shake Subtle - Gentle shake */
+
 @keyframes shakeSubtle {
 
     0%,
@@ -324,7 +322,7 @@
     }
 }
 
-/* Swing - Pendulum motion */
+
 @keyframes swing {
 
     0%,
@@ -349,7 +347,7 @@
     }
 }
 
-/* Zoom In Rotate - 3D entrance */
+
 @keyframes zoomInRotate {
     0% {
         opacity: 0;
@@ -362,7 +360,7 @@
     }
 }
 
-/* Slide Underline - Animated underline */
+
 @keyframes slideUnderline {
     0% {
         width: 0;
@@ -375,7 +373,7 @@
     }
 }
 
-/* Pulse - Heartbeat effect */
+
 @keyframes pulse {
 
     0%,
@@ -388,7 +386,7 @@
     }
 }
 
-/* Gradient Shift - Animated background */
+
 @keyframes gradientShift {
 
     0%,
@@ -401,7 +399,7 @@
     }
 }
 
-/* Border Draw - Border animation */
+
 @keyframes borderDraw {
     0% {
         stroke-dashoffset: 1000;
@@ -412,7 +410,7 @@
     }
 }
 
-/* Flash - Quick highlight */
+
 @keyframes flash {
 
     0%,
@@ -427,7 +425,7 @@
     }
 }
 
-/* Flip In - 3D flip */
+
 @keyframes flipIn {
     0% {
         transform: perspective(400px) rotateY(90deg);
@@ -440,7 +438,7 @@
     }
 }
 
-/* Slide In Right - From right side */
+
 @keyframes slideInRight {
     0% {
         opacity: 0;
@@ -453,7 +451,7 @@
     }
 }
 
-/* Slide In Left - From left side */
+
 @keyframes slideInLeft {
     0% {
         opacity: 0;
@@ -466,7 +464,7 @@
     }
 }
 
-/* Blur In - Blur entrance */
+
 @keyframes blurIn {
     0% {
         opacity: 0;
@@ -479,7 +477,7 @@
     }
 }
 
-/* Glow Border - Rotating border glow */
+
 @keyframes glowBorder {
     0% {
         box-shadow: 0 0 5px rgba(99, 102, 241, 0.5),
@@ -497,11 +495,9 @@
     }
 }
 
-/* ==========================================
-   UTILITY CLASSES - NEXT LEVEL
-   ========================================== */
 
-/* Hover effects */
+
+
 .hover-lift-rotate:hover {
     transform: translateY(-8px) rotate(3deg);
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -535,7 +531,7 @@
     left: 200%;
 }
 
-/* Click effects */
+
 .click-pulse:active {
     animation: pulse 0.3s ease;
 }
@@ -544,7 +540,7 @@
     animation: rippleEffect 0.6s ease;
 }
 
-/* Continuous animations */
+
 .animate-levitate {
     animation: levitate 3s ease-in-out infinite;
 }
@@ -558,7 +554,7 @@
     animation: gradientShift 4s ease infinite;
 }
 
-/* Entrance animations */
+
 .animate-bounce-in {
     animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
@@ -579,7 +575,7 @@
     animation: slideInLeft 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Stagger delays - Extended */
+
 .delay-50 {
     animation-delay: 50ms;
 }

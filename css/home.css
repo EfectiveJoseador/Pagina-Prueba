@@ -1,12 +1,12 @@
-﻿/* Home Page Styles - GPU OPTIMIZED */
 
-/* Remove padding from main on home page */
+
+
 body:has(.hero-section) main {
     padding: 0;
     max-width: none;
 }
 
-/* GPU-optimized header animation */
+
 body:has(.hero-section) .main-header {
     will-change: opacity, transform;
     animation: headerSlideDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s backwards;
@@ -24,9 +24,9 @@ body:has(.hero-section) .main-header {
     }
 }
 
-/* ============================================ */
-/* SKIP ANIMATIONS ON REVISIT                  */
-/* ============================================ */
+
+
+
 body.animation-seen .main-header,
 body.animation-seen .hero-section,
 body.animation-seen .hero-section::before,
@@ -49,9 +49,9 @@ body.animation-seen .hero-content {
     transform: translate3d(0, -80px, 0) !important;
 }
 
-/* ============================================ */
-/* REDUCED MOTION (Accessibility + Low Power)  */
-/* ============================================ */
+
+
+
 @media (prefers-reduced-motion: reduce) {
 
     *,
@@ -63,7 +63,7 @@ body.animation-seen .hero-content {
     }
 }
 
-/* Low performance mode class (added by JS) */
+
 body.low-performance .hero-section::after,
 body.low-performance .text-gradient,
 body.low-performance .badge-sale {
@@ -74,7 +74,7 @@ body.low-performance * {
     transition-duration: 0.1s !important;
 }
 
-/* Hero Section - GPU OPTIMIZED */
+
 .hero-section {
     position: relative;
     display: flex;
@@ -88,22 +88,22 @@ body.low-performance * {
     background-position: center;
     background-repeat: no-repeat;
     overflow: hidden;
-    /* GPU acceleration hints */
+    
     will-change: opacity, transform;
     transform: translateZ(0);
     backface-visibility: hidden;
-    /* Optimized animation: only opacity + transform */
+    
     animation: heroReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* Remove fixed background on mobile - causes jank */
+
 @media (max-width: 768px) {
     .hero-section {
         background-attachment: scroll;
     }
 }
 
-/* Optimized keyframes - GPU only properties */
+
 @keyframes heroReveal {
     0% {
         opacity: 0;
@@ -116,7 +116,7 @@ body.low-performance * {
     }
 }
 
-/* Blur overlay effect using pseudo-element instead of filter */
+
 .hero-section::before {
     content: '';
     position: absolute;
@@ -142,7 +142,7 @@ body.low-performance * {
     }
 }
 
-/* Glow effect - reduced complexity */
+
 .hero-section::after {
     content: '';
     position: absolute;
@@ -182,7 +182,7 @@ body.low-performance * {
     transform: translate3d(0, -80px, 0);
 }
 
-/* GPU-OPTIMIZED TEXT ANIMATIONS */
+
 .hero-title {
     font-family: var(--font-heading);
     font-size: 5.5rem;
@@ -215,7 +215,7 @@ body.low-performance * {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    /* Brighter gradient colors */
+    
     background-size: 200% 200%;
     display: inline-block;
     animation: gradientShift 6s ease infinite;
@@ -245,7 +245,7 @@ body.low-performance * {
     animation: brandSlideIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s backwards;
 }
 
-/* Simplified neon effect - no animation to save GPU */
+
 .text-neon {
     color: #fff;
     text-shadow:
@@ -256,7 +256,7 @@ body.low-performance * {
     display: inline-block;
     font-weight: 900;
     letter-spacing: 3px;
-    /* Removed expensive neonPulse animation */
+    
 }
 
 @keyframes brandSlideIn {
@@ -374,7 +374,7 @@ body.low-performance * {
     transform: translateY(-4px) scale(1.05);
 }
 
-/* Collections Section */
+
 .collections-section {
     padding: 5rem 2rem;
     max-width: 1400px;
@@ -394,9 +394,9 @@ body.low-performance * {
     animation: fadeIn 1s ease;
 }
 
-/* ============================================ */
-/* CATALOGO GRID - Premium Compact Card System */
-/* ============================================ */
+
+
+
 .grid-catalogo {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -404,9 +404,9 @@ body.low-performance * {
     animation: fadeIn 0.8s ease;
 }
 
-/* ============================================ */
-/* PAGE CATALOGO - Fixed 3 Column Grid Layout  */
-/* ============================================ */
+
+
+
 .page-catalogo .grid-catalogo {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -422,7 +422,7 @@ body.low-performance * {
     padding: 0 2rem;
 }
 
-/* Responsive para página catálogo */
+
 @media (max-width: 900px) {
     .page-catalogo .grid-catalogo {
         grid-template-columns: repeat(2, 1fr);
@@ -465,7 +465,7 @@ body.low-performance * {
     border-color: rgba(99, 102, 241, 0.25);
 }
 
-/* Glow accent on hover */
+
 .catalogo-card::before {
     content: '';
     position: absolute;
@@ -483,14 +483,14 @@ body.low-performance * {
     opacity: 1;
 }
 
-/* Image Wrapper - More compact */
+
 .catalogo-img-wrap {
     position: relative;
     overflow: hidden;
     height: 130px;
 }
 
-/* Overlay gradient for depth */
+
 .catalogo-img-wrap::after {
     content: '';
     position: absolute;
@@ -519,7 +519,7 @@ body.low-performance * {
     transform: scale(1.08);
 }
 
-/* Info Section - Compact */
+
 .catalogo-info {
     padding: 1rem 1.1rem 1.1rem;
     display: flex;
@@ -547,7 +547,7 @@ body.low-performance * {
     opacity: 0.85;
 }
 
-/* Button Styles - Compact & Modern */
+
 .catalogo-btn {
     display: inline-flex;
     align-items: center;
@@ -570,7 +570,7 @@ body.low-performance * {
     text-transform: uppercase;
 }
 
-/* Shimmer effect for catalog buttons */
+
 .catalogo-btn::before {
     content: '';
     position: absolute;
@@ -586,7 +586,7 @@ body.low-performance * {
     left: 100%;
 }
 
-/* Style 1: Collection buttons (Ver colección) - Glow effect */
+
 a.catalogo-btn:hover,
 .catalogo-btn:hover {
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
@@ -606,7 +606,7 @@ a.catalogo-btn:hover,
     transform: translateX(3px);
 }
 
-/* Dropdown Button Arrow Animation */
+
 .dropdown-btn i.fa-chevron-down {
     transition: transform 0.3s ease;
 }
@@ -615,7 +615,7 @@ a.catalogo-btn:hover,
     transform: rotate(180deg);
 }
 
-/* Dropdown Menu - Compact */
+
 .dropdown-menu {
     display: none;
     flex-direction: column;
@@ -642,7 +642,7 @@ a.catalogo-btn:hover,
     }
 }
 
-/* Dropdown Menu Links - Compact style */
+
 .dropdown-menu a {
     display: flex;
     align-items: center;
@@ -678,7 +678,7 @@ a.catalogo-btn:hover,
     transform: translateX(2px);
 }
 
-/* Responsive - Compact across all sizes */
+
 @media (max-width: 768px) {
     .grid-catalogo {
         grid-template-columns: repeat(2, 1fr);
@@ -726,7 +726,7 @@ a.catalogo-btn:hover,
     }
 }
 
-/* Featured Section */
+
 .featured-section {
     padding: 5rem 2rem;
     max-width: 1400px;
@@ -762,7 +762,7 @@ a.catalogo-btn:hover,
     animation: fadeIn 1s ease 0.2s backwards;
 }
 
-/* Info Section */
+
 .info-section {
     padding: 4rem 2rem;
     max-width: 1400px;
@@ -807,7 +807,7 @@ a.catalogo-btn:hover,
     line-height: 1.7;
 }
 
-/* Product Cards */
+
 .product-card {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
@@ -857,7 +857,7 @@ a.catalogo-btn:hover,
     animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* Smart Badge System for Featured Products */
+
 .badge-smart {
     position: absolute;
     top: 1rem;
@@ -886,7 +886,7 @@ a.catalogo-btn:hover,
     }
 }
 
-/* Specific badge color variations (colors set inline via JS) */
+
 .badge-nuevo {
     background: #10b981;
 }
@@ -956,7 +956,7 @@ a.catalogo-btn:hover,
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .hero-title {
         font-size: 3.5rem;
@@ -983,7 +983,7 @@ a.catalogo-btn:hover,
         font-size: 2.2rem;
     }
 
-    /* Collections: 2 columns on mobile */
+    
     .collections-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
@@ -1001,7 +1001,7 @@ a.catalogo-btn:hover,
         font-size: 1.2rem;
     }
 
-    /* Products: 2 columns on mobile */
+    
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
@@ -1043,7 +1043,7 @@ a.catalogo-btn:hover,
         padding: 0.3rem 0.6rem;
     }
 
-    /* Info cards: stack on mobile */
+    
     .info-section {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -1059,9 +1059,9 @@ a.catalogo-btn:hover,
     }
 }
 
-/* ============================================ */
-/* CATALOGO CAROUSEL - Compact Premium Style   */
-/* ============================================ */
+
+
+
 .catalogo-carousel {
     position: relative;
     width: 100%;
@@ -1123,7 +1123,7 @@ a.catalogo-btn:hover,
     right: 0;
 }
 
-/* Cards dentro del carousel - tamaño compacto */
+
 .catalogo-carousel .catalogo-card {
     min-width: 220px;
     max-width: 220px;
@@ -1131,7 +1131,7 @@ a.catalogo-btn:hover,
     flex-shrink: 0;
 }
 
-/* Responsive para el carousel de catálogo */
+
 @media (max-width: 768px) {
     .catalogo-carousel .carousel-container {
         padding: 0 0.75rem;
@@ -1180,7 +1180,7 @@ a.catalogo-btn:hover,
     }
 }
 
-/* Section header fix para catalogo */
+
 .collections-section .section-header {
     margin-bottom: 2.5rem;
 }
@@ -1189,12 +1189,12 @@ a.catalogo-btn:hover,
     margin-bottom: 0;
 }
 
-/* ============================================ */
-/* ESCALADO 90% PARA PANTALLAS < 1800px        */
-/* ============================================ */
+
+
+
 @media (max-width: 1799px) {
 
-    /* Aplicar zoom 0.9 a las secciones principales del home */
+    
     .collections-section,
     .featured-section,
     .info-section {
@@ -1202,7 +1202,7 @@ a.catalogo-btn:hover,
     }
 }
 
-/* Restaurar zoom normal en móviles */
+
 @media (max-width: 900px) {
 
     .collections-section,

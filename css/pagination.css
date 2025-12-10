@@ -1,6 +1,6 @@
-/* ============================================ */
-/* PAGINATION STYLES                            */
-/* ============================================ */
+
+
+
 .pagination-container {
     display: flex;
     flex-direction: column;
@@ -69,9 +69,9 @@
     color: var(--text-muted);
 }
 
-/* ============================================ */
-/* LAZY LOADING IMAGE STYLES                    */
-/* ============================================ */
+
+
+
 .lazy-image {
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -86,7 +86,7 @@
     opacity: 0.5;
 }
 
-/* Prevent layout shift */
+
 .product-image {
     position: relative;
     aspect-ratio: 1 / 1;
@@ -103,7 +103,7 @@
     object-fit: cover;
 }
 
-/* Secondary image hover effect */
+
 .product-card .secondary-image {
     opacity: 0;
     z-index: 1;
@@ -117,9 +117,9 @@
     opacity: 0;
 }
 
-/* ============================================ */
-/* RESPONSIVE                                   */
-/* ============================================ */
+
+
+
 @media (max-width: 768px) {
     .pagination-btn {
         min-width: 36px;

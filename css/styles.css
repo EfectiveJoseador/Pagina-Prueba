@@ -27,7 +27,7 @@ main {
     z-index: 1000;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    /* Premium glassmorphism */
+    
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
 }
@@ -85,7 +85,7 @@ main {
     border-radius: 8px;
 }
 
-/* Animated underline */
+
 .nav-link::after {
     content: '';
     position: absolute;
@@ -108,7 +108,7 @@ main {
     width: 60%;
 }
 
-/* Active Navigation State */
+
 .nav-link.active {
     color: var(--text-main);
     font-weight: 600;
@@ -152,13 +152,13 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Pulsating effect */
+    
     animation: pulse 2s ease-in-out infinite;
     box-shadow: 0 0 10px rgba(236, 72, 153, 0.5),
         0 0 20px rgba(236, 72, 153, 0.3);
 }
 
-/* Footer Styles - Premium */
+
 .main-footer {
     background: var(--bg-card);
     border-top: 1px solid var(--border);
@@ -167,7 +167,7 @@ main {
     position: relative;
 }
 
-/* Gradient accent line on top */
+
 .main-footer::before {
     content: '';
     position: absolute;
@@ -231,7 +231,7 @@ main {
     background: linear-gradient(135deg, var(--accent) 0%, #ec4899 100%);
     color: white;
     transform: translateY(-5px) rotate(360deg) scale(1.15);
-    /* Epic glow */
+    
     box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4),
         0 0 30px rgba(236, 72, 153, 0.3);
 }
@@ -244,7 +244,7 @@ main {
     font-size: 0.9rem;
 }
 
-/* Mobile Menu */
+
 .mobile-menu-btn {
     display: none;
     font-size: 1.5rem;
@@ -253,7 +253,7 @@ main {
 @media (max-width: 768px) {
     .nav-menu {
         display: none;
-        /* Hidden by default on mobile, toggled via JS */
+        
         position: absolute;
         top: var(--header-height);
         left: 0;
@@ -274,11 +274,11 @@ main {
     }
 }
 
-/* ============================================ */
-/* PREMIUM GLOBAL STYLES                        */
-/* ============================================ */
 
-/* Legal Content Pages */
+
+
+
+
 .legal-content {
     max-width: 800px;
     margin: 0 auto;
@@ -346,7 +346,7 @@ main {
     color: var(--primary);
 }
 
-/* Premium Card Variant */
+
 .card-premium {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
@@ -379,7 +379,7 @@ main {
     opacity: 1;
 }
 
-/* Premium Button */
+
 .btn-premium {
     display: inline-flex;
     align-items: center;
@@ -419,7 +419,7 @@ main {
     left: 100%;
 }
 
-/* Text gradient utility */
+
 .text-gradient {
     background: var(--gradient-accent);
     -webkit-background-clip: text;
@@ -427,18 +427,18 @@ main {
     background-clip: text;
 }
 
-/* Smooth scrolling */
+
 html {
     scroll-behavior: smooth;
 }
 
-/* Focus states for accessibility */
+
 :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
 
-/* Selection styling */
+
 ::selection {
     background: rgba(99, 102, 241, 0.2);
     color: var(--text-main);

@@ -1,32 +1,19 @@
-Ôªøimport { auth, db } from './firebase-config.js';
+import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import Cart from './carrito.js';
 import products from './products-data.js';
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
-
-// ============================================
-// STATE MANAGEMENT
-// ============================================
 let currentUser = null;
 let selectedAddressId = null;
 let addresses = [];
 let selectedCoupon = null;
 let appliedDiscount = 0;
 let userCoupons = [];
-// Promo code state
 let appliedPromoCode = null;
 let promoDiscount = 0;
-
-// ============================================
-// CONFIGURATION
-// ============================================
-const WEB3FORMS_KEY = "8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8"; // Web3Forms API Key
-const PAYPAL_USERNAME = "camisetazo"; // Usuario de PayPal
-
-// ============================================
-// ADDRESS MANAGEMENT
-// ============================================
+const WEB3FORMS_KEY = "8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8";
+const PAYPAL_USERNAME = "camisetazo";
 
 async function loadUserAddresses() {
     if (!currentUser) {
@@ -48,7 +35,7 @@ async function loadUserAddresses() {
                 <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
                     <i class="fas fa-map-marker-alt" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
                     <p>No tienes direcciones guardadas.</p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Haz clic en "A√±adir Nueva" para crear una.</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Haz clic en "AÒadir Nueva" para crear una.</p>
                 </div>
             `;
         }
@@ -56,7 +43,7 @@ async function loadUserAddresses() {
         console.error('Error loading addresses:', error);
         addressList.innerHTML = `
             <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                <p>Error al cargar las direcciones. Int√©ntalo de nuevo.</p>
+                <p>Error al cargar las direcciones. IntÈntalo de nuevo.</p>
             </div>
         `;
     }
@@ -120,23 +107,15 @@ function selectAddress(addressId) {
     }
 
     initPaymentMethods();
-
-    // Track begin checkout when address is selected
     const calculations = Cart.calculateTotal();
     if (window.Analytics && Cart.items.length > 0) {
         window.Analytics.trackBeginCheckout(Cart.items, calculations.total);
-
-        // Also track shipping info
         const selectedAddr = addresses.find(a => a.id === addressId);
         if (selectedAddr) {
             window.Analytics.trackAddShippingInfo(selectedAddr);
         }
     }
 }
-
-// ============================================
-// NEW ADDRESS FORM
-// ============================================
 
 function showNewAddressForm() {
     const formContainer = document.getElementById('new-address-form-container');
@@ -198,13 +177,9 @@ async function saveNewAddress(e) {
         hideNewAddressForm();
     } catch (error) {
         console.error('Error saving address:', error);
-        alert('Error al guardar la direcci√≥n. Int√©ntalo de nuevo.');
+        alert('Error al guardar la direcciÛn. IntÈntalo de nuevo.');
     }
 }
-
-// ============================================
-// PAYMENT METHODS
-// ============================================
 
 function initPaymentMethods() {
     const paymentRadios = document.querySelectorAll('input[name="payment"]');
@@ -219,8 +194,6 @@ function initPaymentMethods() {
             } else {
                 if (bizumForm) bizumForm.style.display = 'none';
             }
-
-            // Track payment method selection
             if (window.Analytics) {
                 window.Analytics.trackAddPaymentInfo(e.target.value);
             }
@@ -228,14 +201,9 @@ function initPaymentMethods() {
     });
 }
 
-// ============================================
-// ORDER CONFIRMATION & WEB3FORMS
-// ============================================
-
 function confirmOrder() {
-    // Check if user is authenticated
     if (!currentUser) {
-        alert('Debes iniciar sesi√≥n para realizar un pedido.');
+        alert('Debes iniciar sesiÛn para realizar un pedido.');
         window.location.href = '/pages/login.html';
         return;
     }
@@ -247,7 +215,7 @@ function confirmOrder() {
 
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
     if (!selectedPayment) {
-        alert('Por favor, selecciona un m√©todo de pago');
+        alert('Por favor, selecciona un mÈtodo de pago');
         return;
     }
 
@@ -266,15 +234,11 @@ function confirmOrder() {
     const orderId = 'ORD-' + Date.now();
 
     if (!calculations || isNaN(calculations.total)) {
-        alert('Error al calcular el total del pedido. Actualiza la p√°gina e int√©ntalo de nuevo.');
+        alert('Error al calcular el total del pedido. Actualiza la p·gina e intÈntalo de nuevo.');
         return;
     }
-
-    // Calculate final total with all discounts (coupon + promo code)
     const totalDiscounts = appliedDiscount + promoDiscount;
     const finalTotal = Math.max(0, calculations.total - totalDiscounts);
-
-    // Calculate total shirt quantity for points
     const totalShirtQuantity = Cart.items.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
 
     const orderData = {
@@ -289,7 +253,6 @@ function confirmOrder() {
         status: 'pendiente',
         trackingNumber: null,
         items: Cart.items.map(item => {
-            // Find the product to get its image
             const product = products.find(p => p.id === item.id);
             return {
                 id: item.id,
@@ -323,8 +286,6 @@ function confirmOrder() {
 
     const confirmBtn = document.getElementById('confirm-order-btn');
     if (!confirmBtn) return;
-
-    // PAYPAL FLOW
     if (paymentMethod === 'paypal') {
         const paypalUrl = orderData.paypalLink;
 
@@ -341,42 +302,30 @@ function confirmOrder() {
 
         let elapsed = 0;
         const intervalMs = 500;
-        const timeoutMs = 120000; // 2 minutos de seguridad
+        const timeoutMs = 120000;
 
         const checkClosed = setInterval(() => {
             elapsed += intervalMs;
-
-            // Si el navegador ha destruido la referencia o la ventana se ha cerrado
             if (!paypalWindow || paypalWindow.closed) {
                 clearInterval(checkClosed);
 
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
-
-                // Guardar pedido PRIMERO y luego enviar email via Web3Forms
                 (async () => {
                     try {
                         await saveOrder(orderData);
                         await sendOrderViaWeb3Forms(orderData);
-
-                        // Add pending points
                         if (orderData.pointsToEarn > 0) {
                             await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
                         }
-
-                        // Mark coupon as used
                         if (selectedCoupon) {
                             await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
                         }
-
-                        // Limpiar carrito
                         localStorage.removeItem('cart');
                         localStorage.removeItem('appliedPacks');
-
-                        // Redirigir a p√°gina de √©xito
                         window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
                     } catch (error) {
                         console.error('Error procesando pedido:', error);
-                        alert('Error al procesar el pedido. Por favor, int√©ntalo de nuevo.');
+                        alert('Error al procesar el pedido. Por favor, intÈntalo de nuevo.');
                         confirmBtn.innerHTML = originalText;
                         confirmBtn.disabled = false;
                     }
@@ -384,8 +333,6 @@ function confirmOrder() {
 
                 return;
             }
-
-            // Failsafe: si pasa demasiado tiempo, damos por terminado
             if (elapsed >= timeoutMs) {
                 clearInterval(checkClosed);
                 alert('No se ha podido detectar el cierre de PayPal. Si has completado el pago, revisa tu correo.');
@@ -395,36 +342,25 @@ function confirmOrder() {
         }, intervalMs);
 
     } else {
-        // BIZUM FLOW (sin popup)
         const originalText = confirmBtn.innerHTML;
         confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
         confirmBtn.disabled = true;
-
-        // Guardar pedido PRIMERO y luego enviar email via Web3Forms
         (async () => {
             try {
                 await saveOrder(orderData);
                 await sendOrderViaWeb3Forms(orderData);
-
-                // Add pending points
                 if (orderData.pointsToEarn > 0) {
                     await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
                 }
-
-                // Mark coupon as used
                 if (selectedCoupon) {
                     await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
                 }
-
-                // Limpiar carrito
                 localStorage.removeItem('cart');
                 localStorage.removeItem('appliedPacks');
-
-                // Redirigir a p√°gina de √©xito
                 window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
             } catch (error) {
                 console.error('Error procesando pedido:', error);
-                alert('Error al procesar el pedido. Por favor, int√©ntalo de nuevo.');
+                alert('Error al procesar el pedido. Por favor, intÈntalo de nuevo.');
                 confirmBtn.innerHTML = originalText;
                 confirmBtn.disabled = false;
             }
@@ -433,44 +369,36 @@ function confirmOrder() {
 }
 
 async function sendOrderViaWeb3Forms(orderData) {
-    // === CAMPO 1: Customer Info (Plantilla) ===
     const sa = orderData.shippingAddress || {};
-    // Use bizumInstagram if available (for Bizum payments), otherwise use shipping address instagram
     const instagramUser = orderData.bizumInstagram || sa.instagram || '';
     const customerInfo = `Contact Name: ${sa.name || ''}
 Address Line: ${sa.street || ''}
 City: ${sa.city || ''}
 Province: ${sa.province || ''}
-Country: Espa√±a
+Country: EspaÒa
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
 Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Bizum)' : ''}`;
-
-    // === CAMPO 2: Purchased Products ===
     let productsText = '';
     orderData.items.forEach((item) => {
         const qty = item.quantity || 1;
         const size = item.size || 'M';
         const version = item.version || 'fan';
         const price = (item.price * qty).toFixed(2);
-        productsText += qty + 'x ' + item.name + ' ¬∑ ' + size + ' ¬∑ ' + version + ' ‚Äî ‚Ç¨' + price + '\n';
+        productsText += qty + 'x ' + item.name + ' ∑ ' + size + ' ∑ ' + version + ' ó Ä' + price + '\n';
     });
-
-    // === CAMPO 3: Total Info ===
-    let totalInfo = `Subtotal: ‚Ç¨${orderData.subtotal.toFixed(2)}\n`;
+    let totalInfo = `Subtotal: Ä${orderData.subtotal.toFixed(2)}\n`;
 
     if (orderData.promoCodeUsed) {
-        totalInfo += `C√≥digo promo (${orderData.promoCodeUsed}): -‚Ç¨${orderData.promoCodeDiscount.toFixed(2)}\n`;
+        totalInfo += `CÛdigo promo (${orderData.promoCodeUsed}): -Ä${orderData.promoCodeDiscount.toFixed(2)}\n`;
     }
     if (orderData.couponUsed) {
-        totalInfo += `Cup√≥n usado (${orderData.couponUsed}): -‚Ç¨${orderData.couponDiscount.toFixed(2)}\n`;
+        totalInfo += `CupÛn usado (${orderData.couponUsed}): -Ä${orderData.couponDiscount.toFixed(2)}\n`;
     }
     if (orderData.discount > 0) {
-        totalInfo += `Descuento total: -‚Ç¨${orderData.discount.toFixed(2)}\n`;
+        totalInfo += `Descuento total: -Ä${orderData.discount.toFixed(2)}\n`;
     }
-    totalInfo += `TOTAL A PAGAR: ‚Ç¨${orderData.total.toFixed(2)}`;
-
-    // Preparar FormData para Web3Forms
+    totalInfo += `TOTAL A PAGAR: Ä${orderData.total.toFixed(2)}`;
     const formData = new FormData();
     formData.append("access_key", WEB3FORMS_KEY);
     formData.append("subject", "Nuevo pedido con pago confirmado - " + orderData.orderId);
@@ -502,19 +430,15 @@ Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Biz
 
 async function saveOrder(orderData) {
     if (!currentUser) {
-        console.error('‚ùå Cannot save order: No user authenticated');
+        console.error('? Cannot save order: No user authenticated');
         return false;
     }
 
     try {
-        console.log('üì¶ Saving order to Firebase...');
+        console.log('?? Saving order to Firebase...');
         console.log('User UID:', currentUser.uid);
         console.log('Order ID:', orderData.orderId);
-
-        // Use ordersByUser path as per Firebase rules
         const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${orderData.orderId}`);
-
-        // Ensure all required fields are present
         const orderToSave = {
             ...orderData,
             userId: currentUser.uid,
@@ -525,25 +449,19 @@ async function saveOrder(orderData) {
         };
 
         await set(orderRef, orderToSave);
-        console.log('‚úÖ Order saved successfully to Firebase');
+        console.log('? Order saved successfully to Firebase');
         return true;
     } catch (error) {
-        console.error('‚ùå Error saving order to Firebase:', error);
+        console.error('? Error saving order to Firebase:', error);
         console.error('Error code:', error.code);
         console.error('Error message:', error.message);
-
-        // Check for common Firebase errors
         if (error.code === 'PERMISSION_DENIED') {
-            console.error('‚ö†Ô∏è Firebase permission denied. Check if email is verified or rules are too restrictive.');
+            console.error('?? Firebase permission denied. Check if email is verified or rules are too restrictive.');
         }
 
         return false;
     }
 }
-
-// ============================================
-// HELPERS
-// ============================================
 
 function showAddressWarning() {
     const warning = document.getElementById('address-warning');
@@ -554,7 +472,6 @@ function showAddressWarning() {
 }
 
 function showLoginPrompt() {
-    // Ocultar todo el contenido del checkout
     const checkoutLayout = document.querySelector('.checkout-layout');
     if (checkoutLayout) {
         checkoutLayout.innerHTML = `
@@ -571,13 +488,13 @@ function showLoginPrompt() {
                 border: 1px solid var(--border);
             ">
                 <i class="fas fa-user-lock" style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; opacity: 0.8;"></i>
-                <h2 style="color: var(--text-main); margin-bottom: 0.5rem; font-size: 1.5rem;">Inicia sesi√≥n para continuar</h2>
+                <h2 style="color: var(--text-main); margin-bottom: 0.5rem; font-size: 1.5rem;">Inicia sesiÛn para continuar</h2>
                 <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 400px;">
-                    Para realizar un pedido necesitas tener una cuenta. As√≠ podr√°s guardar tus direcciones y ver el historial de tus pedidos.
+                    Para realizar un pedido necesitas tener una cuenta. AsÌ podr·s guardar tus direcciones y ver el historial de tus pedidos.
                 </p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
                     <a href="/pages/login.html" class="btn-modal-primary" style="text-decoration: none;">
-                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesi√≥n
+                        <i class="fas fa-sign-in-alt"></i> Iniciar SesiÛn
                     </a>
                     <a href="/pages/login.html#register" class="btn-modal-secondary" style="text-decoration: none;">
                         <i class="fas fa-user-plus"></i> Crear Cuenta
@@ -587,10 +504,6 @@ function showLoginPrompt() {
         `;
     }
 }
-
-// ============================================
-// INITIALIZATION
-// ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
     const addNewAddressBtn = document.getElementById('add-new-address-btn');
@@ -630,32 +543,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalEl = document.getElementById('checkout-total');
 
     if (shippingEl) {
-        shippingEl.textContent = calculations.shipping === 0 ? 'Gratis' : `‚Ç¨${calculations.shipping.toFixed(2)}`;
+        shippingEl.textContent = calculations.shipping === 0 ? 'Gratis' : `Ä${calculations.shipping.toFixed(2)}`;
     }
     if (subtotalEl) {
-        subtotalEl.textContent = `‚Ç¨${calculations.subtotal.toFixed(2)}`;
+        subtotalEl.textContent = `Ä${calculations.subtotal.toFixed(2)}`;
     }
     if (totalEl) {
-        totalEl.textContent = `‚Ç¨${calculations.total.toFixed(2)}`;
+        totalEl.textContent = `Ä${calculations.total.toFixed(2)}`;
     }
-
-    // Coupon selector event listener
     const couponSelect = document.getElementById('apply-coupon');
     if (couponSelect) {
         couponSelect.addEventListener('change', applyCouponDiscount);
     }
 });
 
-// ============================================
-// COUPON MANAGEMENT
-// ============================================
-
 async function loadUserCoupons() {
     if (!currentUser) return;
 
-    console.log('üìã Loading coupons for user:', currentUser.uid);
+    console.log('?? Loading coupons for user:', currentUser.uid);
     userCoupons = await getUserCoupons(currentUser.uid);
-    console.log('üìã Coupons loaded:', userCoupons);
+    console.log('?? Coupons loaded:', userCoupons);
 
     const couponSection = document.getElementById('coupon-section');
     const couponSelect = document.getElementById('apply-coupon');
@@ -664,16 +571,14 @@ async function loadUserCoupons() {
         couponSection.style.display = 'block';
 
         if (userCoupons.length > 0 && couponSelect) {
-            // Populate select with coupons
-            couponSelect.innerHTML = '<option value="">Sin cup√≥n</option>';
+            couponSelect.innerHTML = '<option value="">Sin cupÛn</option>';
             userCoupons.forEach(coupon => {
                 const optionText = coupon.type === 'percentage'
                     ? `${coupon.value}% descuento`
-                    : `‚Ç¨${coupon.value.toFixed(2)} descuento`;
+                    : `Ä${coupon.value.toFixed(2)} descuento`;
                 couponSelect.innerHTML += `<option value="${coupon.id}">${optionText}</option>`;
             });
         } else {
-            // No coupons available - show message
             couponSection.innerHTML = `
                 <div style="text-align: center; padding: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">
                     <i class="fas fa-ticket-alt" style="opacity: 0.5;"></i>
@@ -691,13 +596,11 @@ function applyCouponDiscount() {
     const discountApplied = document.getElementById('discount-applied');
     const discountText = document.getElementById('discount-text');
     const totalEl = document.getElementById('checkout-total');
-
-    // Reset coupon (but keep promo code)
     selectedCoupon = null;
     appliedDiscount = 0;
 
     const calculations = Cart.calculateTotal();
-    let finalTotal = calculations.total - promoDiscount; // Apply promo discount first
+    let finalTotal = calculations.total - promoDiscount;
 
     if (couponId) {
         const coupon = userCoupons.find(c => c.id === couponId);
@@ -706,10 +609,10 @@ function applyCouponDiscount() {
 
             if (coupon.type === 'percentage') {
                 appliedDiscount = (calculations.subtotal * coupon.value) / 100;
-                if (discountText) discountText.textContent = `-${coupon.value}% = -‚Ç¨${appliedDiscount.toFixed(2)}`;
+                if (discountText) discountText.textContent = `-${coupon.value}% = -Ä${appliedDiscount.toFixed(2)}`;
             } else {
                 appliedDiscount = Math.min(coupon.value, calculations.subtotal);
-                if (discountText) discountText.textContent = `-‚Ç¨${appliedDiscount.toFixed(2)}`;
+                if (discountText) discountText.textContent = `-Ä${appliedDiscount.toFixed(2)}`;
             }
 
             finalTotal = Math.max(0, finalTotal - appliedDiscount);
@@ -721,13 +624,9 @@ function applyCouponDiscount() {
     }
 
     if (totalEl) {
-        totalEl.textContent = `‚Ç¨${finalTotal.toFixed(2)}`;
+        totalEl.textContent = `Ä${finalTotal.toFixed(2)}`;
     }
 }
-
-// ============================================
-// PROMO CODE MANAGEMENT
-// ============================================
 
 async function applyPromoCode() {
     const input = document.getElementById('promo-code-input');
@@ -737,17 +636,13 @@ async function applyPromoCode() {
     const code = input?.value.trim().toUpperCase();
 
     if (!code) {
-        showPromoResult('Por favor, introduce un c√≥digo', 'error');
+        showPromoResult('Por favor, introduce un cÛdigo', 'error');
         return;
     }
-
-    // Check if user is logged in
     if (!currentUser) {
-        showPromoResult('Debes iniciar sesi√≥n para usar c√≥digos', 'error');
+        showPromoResult('Debes iniciar sesiÛn para usar cÛdigos', 'error');
         return;
     }
-
-    // Disable button while validating
     const btn = document.getElementById('apply-promo-btn');
     if (btn) {
         btn.disabled = true;
@@ -755,88 +650,72 @@ async function applyPromoCode() {
     }
 
     try {
-        // Try to get the promo code from Firebase
         const promoRef = ref(db, `promoCodes/${code}`);
         const snapshot = await get(promoRef);
 
         if (!snapshot.exists()) {
-            showPromoResult('C√≥digo no v√°lido', 'error');
+            showPromoResult('CÛdigo no v·lido', 'error');
             resetPromoButton();
             return;
         }
 
         const promo = snapshot.val();
-
-        // Check if code is active
         if (!promo.active) {
-            showPromoResult('Este c√≥digo ya no est√° activo', 'error');
+            showPromoResult('Este cÛdigo ya no est· activo', 'error');
             resetPromoButton();
             return;
         }
-
-        // Check max uses
         if (promo.maxUses && promo.usageCount >= promo.maxUses) {
-            showPromoResult('Este c√≥digo ha alcanzado el l√≠mite de usos', 'error');
+            showPromoResult('Este cÛdigo ha alcanzado el lÌmite de usos', 'error');
             resetPromoButton();
             return;
         }
-
-        // Apply the discount based on type
         appliedPromoCode = { ...promo, id: code };
         const calculations = Cart.calculateTotal();
 
         if (promo.type === 'free_shipping') {
-            // Check if shipping is already free (more than 1 item)
             if (calculations.shipping === 0) {
-                showPromoResult('Ya tienes env√≠o gratis en este pedido', 'error');
+                showPromoResult('Ya tienes envÌo gratis en este pedido', 'error');
                 appliedPromoCode = null;
                 resetPromoButton();
                 return;
             }
             promoDiscount = calculations.shipping;
-            showPromoResult('¬°Env√≠o gratis aplicado!', 'success');
+            showPromoResult('°EnvÌo gratis aplicado!', 'success');
         } else if (promo.type === 'percentage') {
             promoDiscount = (calculations.subtotal * promo.value) / 100;
-            showPromoResult(`¬°${promo.value}% de descuento aplicado! (-‚Ç¨${promoDiscount.toFixed(2)})`, 'success');
+            showPromoResult(`°${promo.value}% de descuento aplicado! (-Ä${promoDiscount.toFixed(2)})`, 'success');
         } else {
             promoDiscount = Math.min(promo.value, calculations.subtotal);
-            showPromoResult(`¬°‚Ç¨${promo.value} de descuento aplicado!`, 'success');
+            showPromoResult(`°Ä${promo.value} de descuento aplicado!`, 'success');
         }
-
-        // Update total (considering both promo and coupon discounts)
         let finalTotal = calculations.total - promoDiscount - appliedDiscount;
         finalTotal = Math.max(0, finalTotal);
 
         if (totalEl) {
-            totalEl.textContent = `‚Ç¨${finalTotal.toFixed(2)}`;
+            totalEl.textContent = `Ä${finalTotal.toFixed(2)}`;
         }
-
-        // Increment usage count in Firebase
         try {
             const usageRef = ref(db, `promoCodes/${code}/usageCount`);
             const currentCount = promo.usageCount || 0;
             await set(usageRef, currentCount + 1);
-            console.log('üìä Promo code usage incremented:', code, currentCount + 1);
+            console.log('?? Promo code usage incremented:', code, currentCount + 1);
         } catch (err) {
             console.warn('Could not increment usage count:', err);
         }
-
-        // Change button to show it's applied
         if (btn) {
-            btn.textContent = '‚úì Aplicado';
+            btn.textContent = '? Aplicado';
             btn.style.background = '#10b981';
         }
-
-        // Disable input
         if (input) {
             input.disabled = true;
         }
 
-        console.log('üì¶ Promo code applied:', code, promoDiscount);
+        console.log('?? Promo code applied:', code, promoDiscount);
 
     } catch (error) {
         console.error('Error applying promo code:', error);
-        showPromoResult('Error al validar el c√≥digo', 'error');
+        showPromoResult('Error al validar el cÛdigo', 'error');
         resetPromoButton();
     }
 }
@@ -854,7 +733,7 @@ function resetPromoButton() {
     const btn = document.getElementById('apply-promo-btn');
     if (btn) {
         btn.disabled = false;
-        btn.textContent = 'Aplicar c√≥digo';
+        btn.textContent = 'Aplicar cÛdigo';
         btn.style.background = '#6366f1';
     }
 }
@@ -864,8 +743,6 @@ function setupPromoCodeListeners() {
     if (applyBtn) {
         applyBtn.addEventListener('click', applyPromoCode);
     }
-
-    // Allow Enter key in promo input
     const promoInput = document.getElementById('promo-code-input');
     if (promoInput) {
         promoInput.addEventListener('keypress', (e) => {
@@ -875,8 +752,6 @@ function setupPromoCodeListeners() {
             }
         });
     }
-
-    // Promo code accordion toggle
     const promoToggle = document.getElementById('promo-toggle');
     const promoContent = document.getElementById('promo-content');
     const promoChevron = document.getElementById('promo-chevron');
@@ -891,8 +766,6 @@ function setupPromoCodeListeners() {
             promoToggle.style.borderRadius = isOpen ? '10px' : '10px 10px 0 0';
         });
     }
-
-    // Coupon accordion toggle
     const couponToggle = document.getElementById('coupon-toggle');
     const couponContent = document.getElementById('coupon-content');
     const couponChevron = document.getElementById('coupon-chevron');
@@ -908,8 +781,6 @@ function setupPromoCodeListeners() {
         });
     }
 }
-
-// Initialize promo code listeners when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupPromoCodeListeners);
 } else {

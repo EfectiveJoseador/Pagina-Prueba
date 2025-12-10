@@ -1,4 +1,4 @@
-/* Product Page Styles */
+
 
 .product-container {
     padding-top: 1rem;
@@ -23,7 +23,7 @@
     margin-bottom: 4rem;
 }
 
-/* Gallery */
+
 .product-gallery {
     display: flex;
     flex-direction: column;
@@ -40,13 +40,13 @@
     border: 1px solid var(--border);
     aspect-ratio: 1;
     overflow: hidden;
-    /* Premium Entry Animation */
+    
     animation: scaleIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
     box-shadow: var(--shadow-md);
     cursor: zoom-in;
 }
 
-/* Gradient overlay on hover */
+
 .main-image::after {
     content: '';
     position: absolute;
@@ -69,11 +69,11 @@
 }
 
 .main-image:hover img {
-    /* Epic zoom with slight rotation */
+    
     transform: scale(1.15) rotate(2deg);
 }
 
-/* Gallery Navigation Arrows */
+
 .gallery-arrow {
     position: absolute;
     top: 50%;
@@ -102,7 +102,7 @@
 .gallery-arrow:hover {
     background: rgba(0, 0, 0, 0.9);
     transform: translateY(-50%) scale(1.15);
-    /* Premium glow effect */
+    
     box-shadow: 0 0 20px rgba(99, 102, 241, 0.5),
         0 0 40px rgba(99, 102, 241, 0.3);
 }
@@ -158,11 +158,11 @@
     display: block;
 }
 
-/* Details */
+
 .product-details {
     display: flex;
     flex-direction: column;
-    /* Premium Entry Animation */
+    
     animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s backwards;
 }
 
@@ -186,7 +186,7 @@
     vertical-align: middle;
 }
 
-/* Override para badge en product-details (no absolute) */
+
 .product-details .badge-sale {
     position: static !important;
     display: inline-block !important;
@@ -213,21 +213,21 @@
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-main);
-    /* Glow effect if it's a special price */
+    
     position: relative;
     display: inline-block;
 }
 
-/* Premium highlight for discounted prices */
+
 .price-block:has(.old-price) .current-price {
     color: var(--primary);
-    /* Sutil text-shadow pulsante en lugar de box-shadow rectangular */
+    
     text-shadow: 0 0 20px rgba(99, 102, 241, 0.3),
         0 0 40px rgba(99, 102, 241, 0.15);
     animation: priceGlow 2s ease-in-out infinite;
 }
 
-/* Animación sutil solo para el text-shadow */
+
 @keyframes priceGlow {
 
     0%,
@@ -294,7 +294,7 @@
     color: var(--bg-card);
     border-color: var(--primary);
     transform: scale(1.15);
-    /* Epic glow on selected size */
+    
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4),
         0 0 30px rgba(99, 102, 241, 0.3),
         inset 0 0 10px rgba(255, 255, 255, 0.2);
@@ -376,7 +376,7 @@
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
-/* Shimmer effect */
+
 .btn-add-cart-lg::before {
     content: '';
     position: absolute;
@@ -394,12 +394,12 @@
 
 .btn-add-cart-lg:hover {
     transform: scale(1.02);
-    /* Epic glow */
+    
     box-shadow: 0 10px 35px rgba(99, 102, 241, 0.6),
         0 0 50px rgba(99, 102, 241, 0.4);
 }
 
-/* Shake on click to confirm action */
+
 .btn-add-cart-lg:active {
     animation: pulse 0.2s ease,
         shakeSubtle 0.3s ease 0.1s;
@@ -429,7 +429,7 @@
     color: var(--accent);
 }
 
-/* Related Products Carousel */
+
 .related-products {
     position: relative;
     margin-top: 4rem;
@@ -506,7 +506,7 @@
     right: 0;
 }
 
-/* Mini Product Cards for Carousel - Fixed size and symmetric */
+
 .related-products .product-card {
     min-width: 220px;
     max-width: 220px;
@@ -514,10 +514,9 @@
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    /* Ensure they inherit the premium styles from catalogo.css if loaded, 
-       but we might need to reset some if they conflict with carousel layout */
+    
     animation: none;
-    /* Disable entrance animation inside carousel to avoid weirdness */
+    
 }
 
 .related-products .product-image {
@@ -528,7 +527,7 @@
     background: var(--bg-body);
 }
 
-/* Image container absolute positioning like tienda */
+
 .related-products .product-image a {
     position: absolute;
     top: 0;
@@ -546,7 +545,7 @@
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Hover zoom effect like tienda */
+
 .related-products .product-card:hover .product-image img {
     transform: scale(1.1);
 }
@@ -589,7 +588,7 @@
     font-size: 0.7rem;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .product-layout {
         grid-template-columns: 1fr;
@@ -604,7 +603,7 @@
         flex-direction: column;
     }
 
-    /* Quantity selector: - left, number center, + right */
+    
     .quantity-selector {
         width: 100%;
         justify-content: space-between;
@@ -625,7 +624,7 @@
         padding: 1rem;
     }
 
-    /* Carousel táctil en móvil - scroll nativo */
+    
     .carousel-container {
         padding: 0 1rem;
         overflow-x: auto;
@@ -634,17 +633,17 @@
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
-        /* Firefox */
+        
     }
 
     .carousel-container::-webkit-scrollbar {
         display: none;
-        /* Chrome, Safari */
+        
     }
 
     .carousel-track {
         transform: none !important;
-        /* Disable JS transform */
+        
         scroll-snap-align: start;
     }
 
@@ -652,7 +651,7 @@
         scroll-snap-align: start;
     }
 
-    /* Ocultar flechas en móvil - usar deslizamiento */
+    
     .carousel-arrow {
         display: none;
     }
@@ -663,21 +662,19 @@
         width: 180px;
     }
 
-    /* ========================================
-       MOBILE CAROUSEL HINT - Show more content
-       ======================================== */
+    
 
-    /* Container with gradient fade to hint more content */
+    
     .related-products {
         position: relative;
     }
 
-    /* Right fade gradient to indicate more content */
+    
     .related-products::after {
         content: '';
         position: absolute;
         top: 60px;
-        /* Below the h2 title */
+        
         right: 0;
         width: 40px;
         height: calc(100% - 60px);
@@ -686,7 +683,7 @@
         z-index: 5;
     }
 
-    /* Swipe indicator arrow */
+    
     .carousel-container::after {
         content: '';
         position: absolute;
@@ -700,14 +697,14 @@
         border-radius: 50%;
         z-index: 10;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        /* Arrow icon using borders */
+        
         display: flex;
         align-items: center;
         justify-content: center;
         animation: pulseHint 2s ease-in-out infinite;
     }
 
-    /* Pseudo arrow inside the circle */
+    
     .carousel-container::before {
         content: '›';
         position: absolute;
@@ -753,20 +750,20 @@
         }
     }
 
-    /* Hide hint after user has scrolled */
+    
     .carousel-container.scrolled::after,
     .carousel-container.scrolled::before {
         display: none;
     }
 
-    /* Adjust product card width to show partial 3rd product */
+    
     .related-products .carousel-container {
-        /* Show 2 full products + partial 3rd */
+        
         padding-right: 0;
     }
 
     .related-products .product-card {
-        /* Width that shows ~2.3 products on most mobile screens */
+        
         min-width: 42vw;
         max-width: 42vw;
         width: 42vw;
@@ -785,7 +782,7 @@
     }
 }
 
-/* Toast Notification */
+
 .toast-notification {
     position: fixed;
     bottom: -100px;
@@ -815,11 +812,11 @@
 
 .toast-notification i {
     color: #10b981;
-    /* Success Green */
+    
     font-size: 1.2rem;
 }
 
-/* Size Guide Link Button */
+
 .size-guide-link {
     background: transparent;
     border: none;
@@ -844,7 +841,7 @@
     font-size: 0.9rem;
 }
 
-/* Size Guide Modal */
+
 .size-guide-modal {
     position: fixed;
     top: 0;
@@ -936,9 +933,9 @@
     }
 }
 
-/* ============================================ */
-/* IMAGE LIGHTBOX - Amazon Style               */
-/* ============================================ */
+
+
+
 .image-lightbox {
     position: fixed;
     top: 0;
@@ -1054,12 +1051,12 @@
 #lightbox-image {
     max-width: 90vw;
     max-height: 80vh;
-    /* Increased for desktop to use available space */
+    
     object-fit: contain;
     border-radius: var(--radius-md);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     transform-origin: center center;
-    /* No transition - must be instant for drag */
+    
 }
 
 .lightbox-thumbnails {
@@ -1138,7 +1135,7 @@
     }
 }
 
-/* Zoom Control Slider */
+
 .zoom-control {
     position: absolute;
     right: 1.5rem;
@@ -1225,7 +1222,7 @@
     opacity: 0.8;
 }
 
-/* Lightbox Responsive */
+
 @media (max-width: 768px) {
     .lightbox-close {
         top: 1rem;
@@ -1252,7 +1249,7 @@
     #lightbox-image {
         max-width: 95vw;
         max-height: 70vh;
-        /* Increased for better mobile viewing */
+        
     }
 
     .lightbox-thumbnails {
@@ -1273,7 +1270,7 @@
         bottom: 5rem;
         transform: none;
         flex-direction: row-reverse;
-        /* - left, + right */
+        
         padding: 0.5rem;
     }
 

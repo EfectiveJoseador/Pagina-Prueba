@@ -1,11 +1,3 @@
-/**
- * UX Feedback System
- * Unified toast notifications and button state management
- */
-
-// ============================================
-// TOAST NOTIFICATION SYSTEM
-// ============================================
 const Toast = {
     container: null,
 
@@ -36,15 +28,11 @@ const Toast = {
             <span class="toast-content">${message}</span>
             <button class="toast-close" aria-label="Cerrar"><i class="fas fa-times"></i></button>
         `;
-
-        // Close button handler
         toast.querySelector('.toast-close').addEventListener('click', () => {
             this.hide(toast);
         });
 
         this.container.appendChild(toast);
-
-        // Auto dismiss
         if (duration > 0) {
             setTimeout(() => this.hide(toast), duration);
         }
@@ -58,8 +46,6 @@ const Toast = {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     },
-
-    // Convenience methods
     success(message, duration) {
         return this.show(message, 'success', duration);
     },
@@ -76,10 +62,6 @@ const Toast = {
         return this.show(message, 'info', duration);
     }
 };
-
-// ============================================
-// BUTTON STATE MANAGEMENT
-// ============================================
 const ButtonStates = {
     setLoading(button, loadingText = 'Cargando...') {
         if (!button) return;
@@ -130,21 +112,14 @@ const ButtonStates = {
         }
     }
 };
-
-// ============================================
-// CART BADGE ANIMATION
-// ============================================
 const CartBadge = {
     animate() {
         const badge = document.getElementById('cart-count');
         if (!badge) return;
 
         badge.classList.remove('animate');
-        // Trigger reflow
         void badge.offsetWidth;
         badge.classList.add('animate');
-
-        // Remove class after animation
         setTimeout(() => badge.classList.remove('animate'), 500);
     },
 
@@ -154,17 +129,11 @@ const CartBadge = {
 
         const oldCount = parseInt(badge.textContent) || 0;
         badge.textContent = count;
-
-        // Animate if count increased
         if (count > oldCount) {
             this.animate();
         }
     }
 };
-
-// ============================================
-// NAVIGATION ACTIVE STATE
-// ============================================
 const NavActiveState = {
     init() {
         const currentPath = window.location.pathname;
@@ -173,11 +142,7 @@ const NavActiveState = {
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
             if (!href) return;
-
-            // Normalize paths for comparison
             const linkPath = new URL(href, window.location.origin).pathname;
-            
-            // Check if current page matches link
             const isActive = this.isMatch(currentPath, linkPath);
             
             if (isActive) {
@@ -191,16 +156,11 @@ const NavActiveState = {
     },
 
     isMatch(currentPath, linkPath) {
-        // Exact match
         if (currentPath === linkPath) return true;
-        
-        // Handle index.html vs /
         if ((currentPath === '/' || currentPath === '/index.html') && 
             (linkPath === '/' || linkPath === '/index.html')) {
             return true;
         }
-
-        // Handle /pages/something.html matching
         if (currentPath.includes(linkPath) && linkPath !== '/' && linkPath !== '/index.html') {
             return true;
         }
@@ -208,10 +168,6 @@ const NavActiveState = {
         return false;
     }
 };
-
-// ============================================
-// FORM FEEDBACK
-// ============================================
 const FormFeedback = {
     showError(input, message) {
         this.clearError(input);
@@ -240,22 +196,12 @@ const FormFeedback = {
         });
     }
 };
-
-// ============================================
-// INITIALIZATION
-// ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize toast container
     Toast.init();
 });
-
-// Listen for components ready event (header loaded)
 window.addEventListener('components:ready', () => {
-    // Initialize navigation active state after header is injected
     NavActiveState.init();
 });
-
-// Export for use in other modules
 window.Toast = Toast;
 window.ButtonStates = ButtonStates;
 window.CartBadge = CartBadge;

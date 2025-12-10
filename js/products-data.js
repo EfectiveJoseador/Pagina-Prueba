@@ -1,10 +1,6 @@
-/**
- * Product Data
- * Generated from assets/productos structure
- */
+
 
 const products = [
-    // --- LA LIGA ---
     {
         id: 101,
         name: "Alavés 25/26 Local",
@@ -433,8 +429,6 @@ const products = [
         new: true,
         sale: false
     },
-
-    // --- PREMIER LEAGUE ---
     {
         id: 201,
         name: "Arsenal 25/26 Local",
@@ -526,8 +520,6 @@ const products = [
         sale: false,
         kids: true
     },
-
-    // --- SERIE A ---
     {
         id: 301,
         name: "Lazio 25/26 Visitante",
@@ -570,8 +562,6 @@ const products = [
         sale: false,
         kids: true
     },
-
-    // --- BUNDESLIGA ---
     {
         id: 401,
         name: "Bayern Munich 25/26 Local",
@@ -592,8 +582,6 @@ const products = [
         new: true,
         sale: false
     },
-
-    // --- LIGUE 1 ---
     {
         id: 501,
         name: "Marseille 25/26 Visitante (Kids)",
@@ -635,8 +623,6 @@ const products = [
         new: true,
         sale: false
     },
-
-    // --- INTERNACIONAL ---
     {
         id: 601,
         name: "España 08/09 Local Retro",
@@ -680,8 +666,6 @@ const products = [
         sale: false,
         retro: true
     },
-
-    // --- BRASILEIRÃO ---
     {
         id: 551,
         name: "Flamengo 25/26 Tercera",
@@ -692,8 +676,6 @@ const products = [
         new: true,
         sale: false
     },
-
-    // --- LIGA ARABE ---
     {
         id: 561,
         name: "Al-Nassr 25/26 Local",
@@ -704,8 +686,6 @@ const products = [
         new: true,
         sale: false
     },
-
-    // --- SAF (ARGENTINA) ---
     {
         id: 571,
         name: "Boca Juniors 01/02 Local Retro",
@@ -738,8 +718,6 @@ const products = [
         sale: false,
         kids: true
     },
-
-    // --- NBA ---
     {
         id: 701,
         name: "Lakers LeBron James Icon",

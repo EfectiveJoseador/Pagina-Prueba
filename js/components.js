@@ -1,7 +1,4 @@
-/**
- * Component Loader
- * Injects shared Header and Footer into pages.
- */
+
 
 const Components = {
     header: `
@@ -75,23 +72,18 @@ const Components = {
     `,
 
     load() {
-        // Insert Header
         const headerPlaceholder = document.getElementById('header-placeholder');
         if (headerPlaceholder) {
             headerPlaceholder.outerHTML = this.header;
         } else {
             document.body.insertAdjacentHTML('afterbegin', this.header);
         }
-
-        // Insert Footer
         const footerPlaceholder = document.getElementById('footer-placeholder');
         if (footerPlaceholder) {
             footerPlaceholder.outerHTML = this.footer;
         } else {
             document.body.insertAdjacentHTML('beforeend', this.footer);
         }
-
-        // Initialize Mobile Menu
         const menuBtn = document.getElementById('mobile-menu-toggle');
         const navMenu = document.getElementById('navMenu');
         if (menuBtn && navMenu) {
@@ -107,24 +99,15 @@ const Components = {
                 }
             });
         }
-
-        // Re-init theme toggle listener because the button was just injected
         if (window.ThemeManager) {
             window.ThemeManager.init();
         }
-
-        // Dispatch event to notify that components are loaded
         window.dispatchEvent(new CustomEvent('components:ready'));
-
-        // Initialize Cookie Consent
         CookieConsent.init();
     }
 };
 
-/**
- * Cookie Consent Banner
- * GDPR-compliant cookie consent management
- */
+
 const CookieConsent = {
     banner: `
         <div id="cookie-consent" class="cookie-consent" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-desc">
@@ -255,27 +238,16 @@ const CookieConsent = {
     `,
 
     init() {
-        // Check if consent was already given
         const consent = localStorage.getItem('cookieConsent');
-        if (consent) return; // User already made a choice
-
-        // Inject styles
+        if (consent) return;
         document.head.insertAdjacentHTML('beforeend', this.styles);
-
-        // Inject banner
         document.body.insertAdjacentHTML('beforeend', this.banner);
-
-        // Show banner with animation
         const banner = document.getElementById('cookie-consent');
         setTimeout(() => banner.classList.add('show'), 100);
-
-        // Handle accept
         document.getElementById('cookie-accept').addEventListener('click', () => {
             this.setConsent('accepted');
             this.hideBanner();
         });
-
-        // Handle reject
         document.getElementById('cookie-reject').addEventListener('click', () => {
             this.setConsent('rejected');
             this.hideBanner();

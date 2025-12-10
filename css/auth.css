@@ -1,36 +1,36 @@
-/* Auth Styles - Premium Redesign */
 
-/* Container & Layout */
+
+
 .auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 80vh;
-    /* More breathing room */
+    
     padding: 2rem;
     background-color: var(--bg-body);
-    /* Ensure contrast if needed */
+    
 }
 
 .auth-card {
     background: var(--bg-card);
     padding: 3rem 2.5rem;
-    /* More vertical padding */
+    
     border-radius: 16px;
-    /* Smooth large radius */
+    
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-    /* Soft, premium shadow */
+    
     width: 100%;
     max-width: 420px;
-    /* Consistent width */
+    
     border: 1px solid rgba(0, 0, 0, 0.05);
-    /* Very subtle border */
+    
     position: relative;
     overflow: hidden;
     animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
-/* Tabs */
+
 .auth-tabs {
     display: flex;
     margin-bottom: 2.5rem;
@@ -48,7 +48,7 @@
     border: none;
     border-bottom: 2px solid transparent;
     margin-bottom: -2px;
-    /* Overlap border */
+    
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -63,7 +63,7 @@
     border-bottom-color: var(--primary);
 }
 
-/* Forms */
+
 .auth-form {
     display: none;
     animation: fadeIn 0.4s ease-out;
@@ -73,7 +73,7 @@
     display: block;
 }
 
-/* Form Groups */
+
 .form-group {
     margin-bottom: 1.25rem;
 }
@@ -86,7 +86,7 @@
     color: var(--text-main);
 }
 
-/* Input Styling */
+
 .input-icon {
     position: relative;
 }
@@ -105,13 +105,13 @@
 .input-icon input {
     width: 100%;
     height: 48px;
-    /* Taller, premium feel */
+    
     padding: 0 1rem 0 2.75rem;
-    /* Space for icon */
+    
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--bg-input, #f9fafb);
-    /* Light background */
+    
     color: var(--text-main);
     font-size: 0.95rem;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -121,7 +121,7 @@
     border-color: var(--primary);
     background: #fff;
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-    /* Soft focus ring */
+    
     outline: none;
 }
 
@@ -129,7 +129,7 @@
     color: var(--primary);
 }
 
-/* Options (Remember Me / Forgot Password) */
+
 .form-options {
     display: flex;
     justify-content: space-between;
@@ -164,7 +164,7 @@
     text-decoration: underline;
 }
 
-/* Buttons */
+
 .auth-form button[type="submit"] {
     width: 100%;
     height: 50px;
@@ -181,7 +181,7 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin-top: 1rem;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
-    /* Colored shadow */
+    
 }
 
 .auth-form button[type="submit"]:hover {
@@ -200,7 +200,7 @@
     transform: none;
 }
 
-/* Error Messages */
+
 .error-message {
     background-color: #fef2f2;
     color: #ef4444;
@@ -210,11 +210,11 @@
     margin-bottom: 1.25rem;
     border: 1px solid #fecaca;
     display: none;
-    /* Hidden by default */
+    
     text-align: center;
 }
 
-/* Profile Styles (Preserved) */
+
 .profile-container {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -374,7 +374,7 @@
     text-align: right;
 }
 
-/* Animations */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -409,7 +409,7 @@
     }
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .profile-container {
         grid-template-columns: 1fr;
@@ -420,41 +420,41 @@
     }
 }
 
-/* Dark Mode Adjustments for Input Fields */
+
 [data-theme="dark"] .input-icon input {
     background: #1e293b;
-    /* Dark input background */
+    
     color: #f8fafc;
-    /* Light text */
+    
     border-color: #334155;
-    /* Darker border */
+    
 }
 
 [data-theme="dark"] .input-icon input::placeholder {
     color: #64748b;
-    /* Muted placeholder in dark mode */
+    
 }
 
 [data-theme="dark"] .input-icon input:focus {
     background: #2a3548;
-    /* Slightly lighter on focus */
+    
     border-color: #60a5fa;
-    /* Accent color border */
+    
     box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
-    /* Blue glow for dark mode */
+    
 }
 
 [data-theme="dark"] .input-icon i {
     color: #64748b;
-    /* Icon color in dark mode */
+    
 }
 
 [data-theme="dark"] .input-icon input:focus+i {
     color: #60a5fa;
-    /* Icon color on focus */
+    
 }
 
-/* Dark Mode Adjustments for Login Button */
+
 [data-theme="dark"] .auth-form button[type="submit"] {
     background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
     color: #f8fafc;
@@ -476,15 +476,15 @@
     background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
 }
 
-/* Dark Mode Adjustments for Error/Success Messages */
+
 [data-theme="dark"] .error-message {
     background-color: #1e293b;
-    /* Dark background for messages */
+    
     border-color: #334155;
-    /* Subtle border */
+    
 }
 
-/* Override inline styles for success messages in dark mode */
+
 [data-theme="dark"] #login-error,
 [data-theme="dark"] #register-error,
 [data-theme="dark"] #reset-error {
@@ -492,7 +492,7 @@
     border: 1px solid #334155 !important;
 }
 
-/* Modal Styles */
+
 .modal {
     position: fixed;
     top: 0;
@@ -509,7 +509,7 @@
     animation: scaleIn 0.3s ease-out;
 }
 
-/* Button Text Style */
+
 .btn-text {
     background: none;
     border: none;
@@ -526,7 +526,7 @@
     text-decoration: underline;
 }
 
-/* Dark Mode Adjustments for Modal Inputs */
+
 [data-theme="dark"] .modal input[type="text"],
 [data-theme="dark"] .modal input[type="tel"],
 [data-theme="dark"] .modal select {
@@ -542,7 +542,7 @@
     border-color: #60a5fa !important;
 }
 
-/* Dark Mode for Select (general) */
+
 [data-theme="dark"] select,
 [data-theme="dark"] .form-group select {
     background: #1e293b !important;
@@ -565,9 +565,9 @@
     color: var(--text-main);
 }
 
-/* ============================================ */
-/* MODAL BUTTONS - Premium Style               */
-/* ============================================ */
+
+
+
 
 .btn-modal-primary,
 .btn-modal-secondary {
@@ -585,7 +585,7 @@
     transition: all 0.3s ease;
 }
 
-/* Primary Button - Guardar */
+
 .btn-modal-primary {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
@@ -603,7 +603,7 @@
     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
-/* Secondary Button - Cancelar */
+
 .btn-modal-secondary {
     background: #f1f5f9;
     color: #475569;
@@ -620,7 +620,7 @@
     transform: translateY(0);
 }
 
-/* Dark Theme - Modal Buttons */
+
 [data-theme="dark"] .btn-modal-primary {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
@@ -642,14 +642,14 @@
     color: #f8fafc;
 }
 
-/* Settings Card Adjustments */
+
 .settings-card h3 {
     color: var(--text-main);
 }
 
-/* ============================================ */
-/* ADD ADDRESS BUTTON - Premium Style          */
-/* ============================================ */
+
+
+
 
 .btn-add-address {
     display: inline-flex;
@@ -678,7 +678,7 @@
     box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
-/* Dark Theme */
+
 [data-theme="dark"] .btn-add-address {
     background: linear-gradient(135deg, #10b981 0%, #047857 100%);
     box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
@@ -689,16 +689,16 @@
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
 }
 
-/* Address/Order List Styles */
+
 .address-list,
 .orders-list {
     display: grid;
     gap: 1rem;
 }
 
-/* ============================================ */
-/* SHOP NOW BUTTON - For Empty States          */
-/* ============================================ */
+
+
+
 
 .btn-shop-now {
     display: inline-flex;
@@ -727,7 +727,7 @@
     transform: translateY(0);
 }
 
-/* Dark Theme */
+
 [data-theme="dark"] .btn-shop-now {
     background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
     box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25);
@@ -738,9 +738,9 @@
     box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
 }
 
-/* ============================================ */
-/* ORDER STATUS BADGES                         */
-/* ============================================ */
+
+
+
 
 .order-status {
     display: inline-flex;
@@ -753,7 +753,7 @@
     letter-spacing: 0.5px;
 }
 
-/* Pendiente de Confirmación - Naranja */
+
 .order-status.pendiente_de_confirmacion {
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     color: #92400e;
@@ -766,7 +766,7 @@
     border: 1px solid #d97706;
 }
 
-/* Confirmado - Azul */
+
 .order-status.confirmado {
     background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
     color: #1e40af;
@@ -779,7 +779,7 @@
     border: 1px solid #3b82f6;
 }
 
-/* Enviado - Verde */
+
 .order-status.enviado {
     background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
     color: #065f46;
@@ -792,7 +792,7 @@
     border: 1px solid #10b981;
 }
 
-/* Fallback estados antiguos */
+
 .order-status.processing {
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     color: #92400e;
@@ -805,9 +805,9 @@
     border: 1px solid #10b981;
 }
 
-/* ============================================ */
-/* ORDER TRACKING NUMBER                       */
-/* ============================================ */
+
+
+
 
 .order-tracking {
     display: flex;
@@ -841,9 +841,9 @@
     color: #34d399;
 }
 
-/* ============================================ */
-/* ORDER CARD STYLES                           */
-/* ============================================ */
+
+
+
 
 .order-card {
     background: var(--bg-card, #fff);
@@ -904,9 +904,9 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-/* ============================================ */
-/* ORDER ITEM ROWS                             */
-/* ============================================ */
+
+
+
 
 .order-item-row {
     display: flex;
@@ -933,9 +933,9 @@
     color: var(--text-muted);
 }
 
-/* ============================================ */
-/* COPY TRACKING BUTTON                        */
-/* ============================================ */
+
+
+
 
 .copy-tracking-btn {
     background: none;
@@ -971,9 +971,9 @@
     background: rgba(52, 211, 153, 0.15);
 }
 
-/* ============================================ */
-/* CUSTOM CHECKBOX - Mobile Friendly           */
-/* ============================================ */
+
+
+
 
 .custom-checkbox-label {
     display: flex;
@@ -1048,7 +1048,7 @@
     line-height: 1.4;
 }
 
-/* Dark Mode */
+
 [data-theme="dark"] .checkbox-box {
     background: #1e293b;
     border-color: #334155;
@@ -1060,7 +1060,7 @@
     box-shadow: 0 2px 8px rgba(96, 165, 250, 0.4);
 }
 
-/* Mobile optimizations */
+
 @media (max-width: 768px) {
     .checkbox-box {
         width: 28px;
@@ -1079,9 +1079,9 @@
     }
 }
 
-/* ============================================ */
-/* CHANGE PASSWORD BUTTON - Premium Style      */
-/* ============================================ */
+
+
+
 
 .btn-change-password {
     display: inline-flex;
@@ -1110,7 +1110,7 @@
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
 }
 
-/* Dark Theme */
+
 [data-theme="dark"] .btn-change-password {
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
     box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
@@ -1121,9 +1121,9 @@
     box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
 }
 
-/* ============================================ */
-/* SAVE PREFERENCES BUTTON - Premium Style     */
-/* ============================================ */
+
+
+
 
 .btn-save-preferences {
     display: inline-flex;
@@ -1152,7 +1152,7 @@
     box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
-/* Dark Theme */
+
 [data-theme="dark"] .btn-save-preferences {
     background: linear-gradient(135deg, #10b981 0%, #047857 100%);
     box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);

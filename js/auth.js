@@ -12,13 +12,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, set, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { sanitizeInput, isValidEmail, checkRateLimit, getRemainingAttempts } from './security.js';
-
-// Rate limit key for login attempts
 const LOGIN_RATE_LIMIT_KEY = 'login_attempts';
 const MAX_LOGIN_ATTEMPTS = 5;
-const RATE_LIMIT_WINDOW_MS = 300000; // 5 minutes
-
-// Helper: Map Firebase Error Codes to Spanish (sanitized to prevent user enumeration)
+const RATE_LIMIT_WINDOW_MS = 300000;
 function mapAuthError(code) {
     switch (code) {
         case 'auth/email-already-in-use': return 'Este email ya está registrado.';
@@ -26,7 +22,6 @@ function mapAuthError(code) {
         case 'auth/operation-not-allowed': return 'Operación no permitida. Contacta soporte.';
         case 'auth/weak-password': return 'La contraseña es muy débil (mínimo 6 caracteres).';
         case 'auth/user-disabled': return 'Esta cuenta ha sido deshabilitada.';
-        // Avoid user enumeration - use generic message
         case 'auth/user-not-found':
         case 'auth/wrong-password':
         case 'auth/invalid-credential':
@@ -36,20 +31,16 @@ function mapAuthError(code) {
         default: return 'Ocurrió un error. Inténtalo de nuevo.';
     }
 }
-
-// Helper: Show Error
 function showError(elementId, message, isSuccess = false) {
     const el = document.getElementById(elementId);
     if (el) {
         el.textContent = message;
         el.style.display = 'block';
-        el.style.color = isSuccess ? '#22c55e' : '#ef4444'; // Green for success, Red for error
+        el.style.color = isSuccess ? '#22c55e' : '#ef4444';
     } else {
-        alert(message); // Fallback
+        alert(message);
     }
 }
-
-// Helper: Clear Error
 function clearError(elementId) {
     const el = document.getElementById(elementId);
     if (el) {
@@ -57,14 +48,10 @@ function clearError(elementId) {
         el.style.display = 'none';
     }
 }
-
-// Redirect authenticated users away from login page
 onAuthStateChanged(auth, async (user) => {
-    // Only run on login page
     if (!window.location.pathname.includes('login.html')) return;
 
     if (user && user.emailVerified) {
-        // Check if admin
         try {
             const idTokenResult = await user.getIdTokenResult(true);
             if (idTokenResult.claims.admin === true) {
@@ -80,7 +67,6 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Recaptcha
     let recaptchaVerifier;
     const recaptchaContainer = document.getElementById('recaptcha-container');
 
@@ -89,10 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
                 'size': 'normal',
                 'callback': (response) => {
-                    // reCAPTCHA solved, allow signIn.
                 },
                 'expired-callback': () => {
-                    // Response expired. Ask user to solve reCAPTCHA again.
                 }
             });
             recaptchaVerifier.render();
@@ -100,8 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Recaptcha init error:", e);
         }
     }
-
-    // Tab Switching
     const tabs = document.querySelectorAll('.auth-tab');
     const forms = document.querySelectorAll('.auth-form');
 
@@ -113,23 +95,17 @@ document.addEventListener('DOMContentLoaded', () => {
             tab.classList.add('active');
             const target = document.getElementById(tab.dataset.target);
             if (target) target.classList.add('active');
-
-            // Clear errors when switching tabs
             clearError('login-error');
             clearError('register-error');
             clearError('reset-error');
         });
     });
-
-    // Check URL hash for #register to auto-switch to register tab
     if (window.location.hash === '#register') {
         const registerTab = document.querySelector('.auth-tab[data-target="register-form"]');
         if (registerTab) {
             registerTab.click();
         }
     }
-
-    // Login
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -139,14 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = sanitizeInput(loginForm.querySelector('input[type="email"]').value, 255);
             const password = loginForm.querySelector('input[type="password"]').value;
             const btn = loginForm.querySelector('button');
-
-            // Validate email format
             if (!isValidEmail(email)) {
                 showError('login-error', 'Por favor, introduce un email válido.');
                 return;
             }
-
-            // Check rate limit before attempting login
             if (!checkRateLimit(LOGIN_RATE_LIMIT_KEY, MAX_LOGIN_ATTEMPTS, RATE_LIMIT_WINDOW_MS)) {
                 const remaining = getRemainingAttempts(LOGIN_RATE_LIMIT_KEY, MAX_LOGIN_ATTEMPTS);
                 showError('login-error', `Demasiados intentos. Espera 5 minutos antes de volver a intentarlo.`);
@@ -159,10 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-
-                // Check if email is verified
                 if (!user.emailVerified) {
-                    // Check expiration (1 minute for testing)
                     const creationTime = new Date(user.metadata.creationTime).getTime();
                     const now = new Date().getTime();
                     const diffInMinutes = (now - creationTime) / 1000 / 60;
@@ -171,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         await user.delete();
                         showError('login-error', 'El tiempo de verificación (1 min) ha expirado. Tu cuenta ha sido eliminada. Por favor, regístrate de nuevo.');
                     } else {
-                        await signOut(auth); // Log out immediately
+                        await signOut(auth);
                         showError('login-error', 'Debes verificar tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada (y spam).');
                     }
 
@@ -179,13 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.disabled = false;
                     return;
                 }
-
-                // Check if user exists in DB (Lazy Creation)
                 const userRef = ref(db, 'users/' + user.uid);
                 const snapshot = await get(userRef);
 
                 if (!snapshot.exists()) {
-                    // Create DB entry now that they are verified
                     await set(userRef, {
                         username: user.displayName || 'Usuario',
                         email: user.email,
@@ -193,8 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         verifiedAt: new Date().toISOString()
                     });
                 }
-
-                // Check if user is admin and redirect accordingly
                 const idTokenResult = await user.getIdTokenResult(true);
                 if (idTokenResult.claims.admin === true) {
                     console.log('✅ Usuario es admin - redirigiendo a panel de administración');
@@ -210,8 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Register
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
@@ -222,8 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = registerForm.querySelector('input[type="email"]').value;
             const password = registerForm.querySelector('input[type="password"]').value;
             const btn = registerForm.querySelector('button');
-
-            // Verify Captcha
             if (recaptchaVerifier) {
                 const recaptchaResponse = grecaptcha.getResponse(recaptchaVerifier.widgetId);
                 if (!recaptchaResponse) {
@@ -237,19 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = true;
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-
-                // Store display name in Auth Profile
                 await updateProfile(user, {
                     displayName: name
                 });
-
-                // Send Verification Email
                 await sendEmailVerification(user);
-
-                // Sign out immediately
                 await signOut(auth);
-
-                // Reset Captcha
                 if (recaptchaVerifier) grecaptcha.reset(recaptchaVerifier.widgetId);
 
                 showError('register-error', '¡Cuenta creada! Hemos enviado un enlace de verificación a tu correo. Por favor verifícalo para iniciar sesión.', true);
@@ -268,8 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Password Reset
     const resetForm = document.getElementById('reset-form');
     if (resetForm) {
         resetForm.addEventListener('submit', async (e) => {
@@ -295,40 +245,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Forgot Password Link
     const forgotPasswordLink = document.querySelector('.forgot-password');
     if (forgotPasswordLink) {
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
-
-            // Desactivar todas las tabs y forms
             tabs.forEach(t => t.classList.remove('active'));
             forms.forEach(f => f.classList.remove('active'));
-
-            // Activar el form de reset directamente
             const resetForm = document.getElementById('reset-form');
             if (resetForm) {
                 resetForm.classList.add('active');
             }
-
-            // Limpiar errores
             clearError('login-error');
             clearError('register-error');
             clearError('reset-error');
         });
     }
-
-    // Back to Login Button (from reset form)
     const backToLoginBtn = document.getElementById('back-to-login');
     if (backToLoginBtn) {
         backToLoginBtn.addEventListener('click', (e) => {
             e.preventDefault();
-
-            // Desactivar todas las forms
             forms.forEach(f => f.classList.remove('active'));
-
-            // Activar el tab y form de login
             tabs.forEach(t => t.classList.remove('active'));
             const loginTab = document.querySelector('.auth-tab[data-target="login-form"]');
             if (loginTab) {
@@ -339,15 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (loginForm) {
                 loginForm.classList.add('active');
             }
-
-            // Limpiar errores
             clearError('login-error');
             clearError('register-error');
             clearError('reset-error');
         });
     }
-
-    // Profile Logic - Logout Button Only
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async (e) => {

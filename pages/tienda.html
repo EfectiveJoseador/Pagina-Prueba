@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda - Camisetazo</title>
 
-    <!-- Google tag (gtag.js) -->
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,7 +15,7 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
-    <!-- Fonts & Icons -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,7 +23,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Styles -->
+    
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="/css/pagination.css">
     <link rel="stylesheet" href="/css/ux-feedback.css">
     <style>
-        /* Modal Styles - Tamaño aumentado */
+        
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -171,7 +171,7 @@
             transform: translateY(-2px);
         }
 
-        /* Mobile Modal Improvements */
+        
         @media (max-width: 768px) {
             .modal-content {
                 padding: 1.5rem;
@@ -189,7 +189,7 @@
             .form-group input {
                 padding: 0.875rem;
                 font-size: 16px;
-                /* Prevents iOS zoom on focus */
+                
             }
 
             .btn-submit {
@@ -206,14 +206,14 @@
 
 <body class="page-tienda">
 
-    <!-- Header injected by JS -->
+    
     <div id="header-placeholder"></div>
 
     <main class="catalog-container">
-        <!-- Backdrop overlay for offcanvas -->
+        
         <div class="filters-backdrop"></div>
 
-        <!-- Sidebar Filters (Offcanvas) -->
+        
         <aside class="filters-sidebar">
             <div class="filters-header">
                 <h3>Filtrar por</h3>
@@ -222,34 +222,34 @@
                 </button>
             </div>
 
-            <!-- Cascading Filter: League -> Team -->
+            
             <div class="cascading-filter-container">
 
-                <!-- Step 1: League -->
+                
                 <div class="filter-step">
                     <label class="filter-label">1. Selecciona Liga</label>
                     <div class="custom-select-wrapper">
                         <select id="filter-league" class="custom-select">
                             <option value="">Todas las Ligas</option>
-                            <!-- Populated by JS -->
+                            
                         </select>
                         <i class="fas fa-chevron-down select-arrow"></i>
                     </div>
                 </div>
 
-                <!-- Step 2: Team (Hidden initially) -->
+                
                 <div class="filter-step hidden" id="team-step">
                     <label class="filter-label">2. Selecciona Equipo</label>
                     <div class="custom-select-wrapper">
                         <select id="filter-team" class="custom-select">
                             <option value="">Todos los Equipos</option>
-                            <!-- Populated by JS -->
+                            
                         </select>
                         <i class="fas fa-chevron-down select-arrow"></i>
                     </div>
                 </div>
 
-                <!-- Step 3: Kids Filter -->
+                
                 <div class="filter-step">
                     <label class="filter-label">Equipaciones Niños</label>
                     <div class="custom-select-wrapper">
@@ -267,16 +267,16 @@
             <button id="clear-filters" class="btn-text">Limpiar Filtros</button>
         </aside>
 
-        <!-- Product Grid Section -->
+        
         <section class="catalog-content">
             <div class="catalog-toolbar">
-                <!-- Toggle Filters Button (visible when sidebar is closed) -->
+                
                 <button id="show-filters" class="btn-show-filters" title="Mostrar filtros">
                     <i class="fas fa-filter"></i>
                     <span>Filtros</span>
                 </button>
 
-                <!-- Expanded Search Bar -->
+                
                 <div class="search-bar expanded">
                     <i class="fas fa-search"></i>
                     <input type="text" id="search-input" placeholder="Buscar productos...">
@@ -290,10 +290,10 @@
             </div>
 
             <div id="product-grid" class="product-grid">
-                <!-- Products injected by JS -->
+                
             </div>
 
-            <!-- Pagination -->
+            
             <div id="pagination-container" class="pagination-container"></div>
 
             <div id="no-results" class="no-results hidden">
@@ -303,7 +303,7 @@
         </section>
     </main>
 
-    <!-- Customization Modal -->
+    
     <div class="modal-overlay" id="customization-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -355,10 +355,10 @@
         </div>
     </div>
 
-    <!-- Footer injected by JS -->
+    
     <div id="footer-placeholder"></div>
 
-    <!-- Scripts -->
+    
     <script src="/js/theme.js"></script>
     <script src="/js/components.js"></script>
     <script src="/js/ux-feedback.js"></script>

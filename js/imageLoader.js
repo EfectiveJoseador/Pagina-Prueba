@@ -1,43 +1,21 @@
-/**
- * Image Loader Module - Row-based Parallel Loading
- * 
- * For each product card, loads BOTH 1_mini.webp and 2_mini.webp in parallel
- * Processing order: Row 1 complete → Row 2 complete → Row 3, etc.
- * 
- * @module imageLoader
- */
-
-// ============================================
-// CONFIGURATION
-// ============================================
 const CONFIG = {
-    MAX_CONCURRENT_CARDS: 4,      // Max cards loading simultaneously (each card = 2 images)
-    LOAD_DELAY_MS: 30,            // Delay between card batches
-    ROOT_MARGIN: '200px',         // Start loading before cards enter viewport
+    MAX_CONCURRENT_CARDS: 4,
+    LOAD_DELAY_MS: 30,
+    ROOT_MARGIN: '200px',
     GRID_SELECTOR: '#product-grid',
     PRODUCT_CARD_SELECTOR: '.product-card',
     PRIMARY_IMAGE_SELECTOR: '.primary-image[data-src]',
     SECONDARY_IMAGE_SELECTOR: '.secondary-image[data-src]'
 };
-
-// ============================================
-// STATE
-// ============================================
 const state = {
-    cardQueue: [],              // Queue of cards waiting to load
-    activeCardLoads: 0,         // Current cards being processed
+    cardQueue: [],
+    activeCardLoads: 0,
     isProcessing: false,
     observer: null,
     isMobile: false
 };
 
-// ============================================
-// INITIALIZATION
-// ============================================
 
-/**
- * Initialize the image loading system
- */
 export function init() {
     state.isMobile = !window.matchMedia('(hover: hover)').matches;
 
@@ -52,9 +30,7 @@ export function init() {
     console.log('[ImageLoader] Initialized - parallel card loading');
 }
 
-/**
- * Observe newly rendered product cards
- */
+
 export function observeNewImages() {
     if (!state.observer) {
         fallbackLoadAll();
@@ -62,13 +38,9 @@ export function observeNewImages() {
     }
 
     const columnsPerRow = getColumnsPerRow();
-
-    // Observe each product card with row-based priority
     document.querySelectorAll(CONFIG.PRODUCT_CARD_SELECTOR).forEach((card, index) => {
         const row = Math.floor(index / columnsPerRow);
         const col = index % columnsPerRow;
-
-        // Store priority data on the card
         card.dataset.loadRow = row;
         card.dataset.loadCol = col;
         card.dataset.loadIndex = index;
@@ -77,9 +49,7 @@ export function observeNewImages() {
     });
 }
 
-/**
- * Clean up
- */
+
 export function destroy() {
     if (state.observer) {
         state.observer.disconnect();
@@ -87,10 +57,6 @@ export function destroy() {
     }
     resetState();
 }
-
-// ============================================
-// INTERNAL FUNCTIONS
-// ============================================
 
 function resetState() {
     state.cardQueue = [];
@@ -121,10 +87,6 @@ function getColumnsPerRow() {
     return columns || 4;
 }
 
-// ============================================
-// QUEUE MANAGEMENT
-// ============================================
-
 function enqueueCard(card) {
     const row = parseInt(card.dataset.loadRow) || 0;
     const col = parseInt(card.dataset.loadCol) || 0;
@@ -136,8 +98,6 @@ function enqueueCard(card) {
         col,
         index
     });
-
-    // Sort by row first, then by column within row
     state.cardQueue.sort((a, b) => {
         if (a.row !== b.row) return a.row - b.row;
         return a.col - b.col;
@@ -151,7 +111,6 @@ function processQueue() {
     state.isProcessing = true;
 
     const processNext = () => {
-        // Check concurrent limit
         if (state.activeCardLoads >= CONFIG.MAX_CONCURRENT_CARDS) {
             state.isProcessing = false;
             return;
@@ -165,14 +124,10 @@ function processQueue() {
         }
 
         state.activeCardLoads++;
-
-        // Load both images for this card in parallel
         loadCardImages(item.card, () => {
             state.activeCardLoads--;
             setTimeout(processNext, CONFIG.LOAD_DELAY_MS);
         });
-
-        // Continue if we have capacity
         if (state.activeCardLoads < CONFIG.MAX_CONCURRENT_CARDS) {
             setTimeout(processNext, CONFIG.LOAD_DELAY_MS);
         }
@@ -181,27 +136,17 @@ function processQueue() {
     processNext();
 }
 
-// ============================================
-// IMAGE LOADING (PARALLEL PER CARD)
-// ============================================
-
 function loadCardImages(card, callback) {
     const primaryImg = card.querySelector(CONFIG.PRIMARY_IMAGE_SELECTOR);
     const secondaryImg = card.querySelector(CONFIG.SECONDARY_IMAGE_SELECTOR);
 
     const promises = [];
-
-    // Load primary image
     if (primaryImg && primaryImg.dataset.src) {
         promises.push(loadSingleImage(primaryImg));
     }
-
-    // Load secondary image in parallel
     if (secondaryImg && secondaryImg.dataset.src) {
         promises.push(loadSingleImage(secondaryImg));
     }
-
-    // Wait for both to complete (or fail)
     Promise.all(promises).then(() => {
         card.classList.add('images-loaded');
         callback();
@@ -229,16 +174,12 @@ function loadSingleImage(img) {
 
         tempImg.onerror = () => {
             img.classList.add('load-error');
-            resolve(); // Resolve anyway to not block other images
+            resolve();
         };
 
         tempImg.src = src;
     });
 }
-
-// ============================================
-// FALLBACK
-// ============================================
 
 function fallbackLoadAll() {
     console.log('[ImageLoader] Fallback - loading all images');
@@ -247,10 +188,6 @@ function fallbackLoadAll() {
         img.removeAttribute('data-src');
     });
 }
-
-// ============================================
-// EXPORTS
-// ============================================
 
 export default {
     init,

@@ -1,11 +1,6 @@
-/**
- * Admin Panel Styles
- * Dark professional dashboard design
- */
 
-/* ============================================
-   BASE STYLES
-   ============================================ */
+
+
 * {
     margin: 0;
     padding: 0;
@@ -23,9 +18,7 @@ body {
     display: none !important;
 }
 
-/* ============================================
-   HEADER
-   ============================================ */
+
 .admin-header {
     background: #12121f;
     border-bottom: 1px solid rgba(99, 102, 241, 0.2);
@@ -97,18 +90,14 @@ body {
     background: rgba(239, 68, 68, 0.25);
 }
 
-/* ============================================
-   MAIN CONTENT
-   ============================================ */
+
 .admin-main {
     max-width: 1600px;
     margin: 0 auto;
     padding: 2rem;
 }
 
-/* ============================================
-   STATS GRID
-   ============================================ */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -165,9 +154,7 @@ body {
     color: #666;
 }
 
-/* ============================================
-   FILTERS BAR
-   ============================================ */
+
 .filters-bar {
     display: flex;
     flex-wrap: wrap;
@@ -253,9 +240,7 @@ body {
     background: #5558e3;
 }
 
-/* ============================================
-   ORDERS TABLE
-   ============================================ */
+
 .orders-section {
     background: #12121f;
     border-radius: 1rem;
@@ -327,7 +312,7 @@ body {
     color: #10b981;
 }
 
-/* Payment */
+
 .order-payment {
     display: flex;
     flex-direction: column;
@@ -380,7 +365,7 @@ body {
     background: rgba(16, 185, 129, 0.25);
 }
 
-/* Status Select */
+
 .status-select {
     padding: 0.4rem 0.75rem;
     border-radius: 0.5rem;
@@ -420,7 +405,7 @@ body {
     color: #c026d3;
 }
 
-/* Tracking Input */
+
 .tracking-input input {
     background: #1a1a2e;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -436,7 +421,7 @@ body {
     border-color: #6366f1;
 }
 
-/* Action buttons */
+
 .order-actions {
     display: flex;
     gap: 0.5rem;
@@ -471,7 +456,7 @@ body {
     background: rgba(239, 68, 68, 0.25);
 }
 
-/* Empty & Loading States */
+
 .empty-state,
 .loading-orders {
     padding: 4rem 2rem;
@@ -512,9 +497,7 @@ body {
     margin-right: 0.5rem;
 }
 
-/* ============================================
-   MODAL
-   ============================================ */
+
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -652,7 +635,7 @@ body {
     color: #c026d3;
 }
 
-/* Items Table */
+
 .items-table {
     width: 100%;
     border-collapse: collapse;
@@ -701,9 +684,7 @@ body {
     color: #10b981;
 }
 
-/* ============================================
-   TOAST
-   ============================================ */
+
 .admin-toast {
     position: fixed;
     bottom: 2rem;
@@ -733,9 +714,7 @@ body {
     color: #10b981;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+
 @media (max-width: 768px) {
     .admin-header {
         flex-direction: column;
@@ -772,9 +751,7 @@ body {
     }
 }
 
-/* ============================================
-   PROMO CODES SECTION
-   ============================================ */
+
 .promo-codes-section {
     margin-top: 2rem;
     background: #12121f;
@@ -796,7 +773,7 @@ body {
     color: #6366f1;
 }
 
-/* Create Form */
+
 .promo-create-form {
     background: rgba(99, 102, 241, 0.1);
     border: 1px solid rgba(99, 102, 241, 0.2);
@@ -869,7 +846,7 @@ body {
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
-/* Promo Codes Table */
+
 .promo-table-container {
     overflow-x: auto;
 }
@@ -970,12 +947,12 @@ body {
     background: rgba(239, 68, 68, 0.2);
 }
 
-/* Promo empty state */
+
 .promo-codes-section .empty-state {
     padding: 2rem;
 }
 
-/* Mobile responsive for promo codes */
+
 @media (max-width: 768px) {
     .promo-create-form .form-row {
         flex-direction: column;
@@ -991,9 +968,7 @@ body {
     }
 }
 
-/* ============================================
-   USERS MANAGEMENT SECTION
-   ============================================ */
+
 .users-section {
     background: var(--bg-card);
     border-radius: 16px;
@@ -1121,7 +1096,7 @@ body {
     color: white;
 }
 
-/* User Modal Styles */
+
 .user-detail-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

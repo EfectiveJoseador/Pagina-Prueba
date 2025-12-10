@@ -1,4 +1,4 @@
-/* Cart & Checkout Styles */
+
 
 .cart-container,
 .checkout-container {
@@ -22,7 +22,7 @@
     gap: 3rem;
 }
 
-/* Cart Items */
+
 .cart-items-list {
     display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@
 }
 
 .cart-item:hover {
-    /* Premium floating effect */
+    
     transform: translateX(8px) translateY(-3px);
     border-color: rgba(99, 102, 241, 0.4);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12),
@@ -52,10 +52,10 @@
     width: 80px;
     height: 80px;
     object-fit: cover;
-    /* Cambiado de contain a cover para rellenar */
+    
     background: var(--bg-body);
     border-radius: var(--radius-sm);
-    /* Sin padding para que rellene todo el espacio */
+    
 }
 
 .cart-item-info {
@@ -97,13 +97,13 @@
 
 .btn-remove:hover {
     color: #dc2626;
-    /* Shake effect to indicate danger */
+    
     animation: shakeSubtle 0.4s ease;
     text-decoration: underline;
     font-weight: 700;
 }
 
-/* Quantity Selector Styling for Cart */
+
 .quantity-selector {
     display: flex;
     align-items: center;
@@ -128,7 +128,7 @@
 
 .quantity-selector button:hover {
     color: var(--primary);
-    /* Sin animación - completamente quieto */
+    
 }
 
 .quantity-selector input {
@@ -149,7 +149,7 @@
     margin: 0;
 }
 
-/* Summary Box */
+
 .cart-summary {
     background: var(--bg-card);
     padding: 2rem;
@@ -159,15 +159,15 @@
     position: sticky;
     top: calc(var(--header-height) + 2rem);
     animation: fadeIn 0.8s ease 0.3s backwards;
-    /* Premium effects */
+    
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    /* IMPORTANT: Create stacking context for absolute children */
+    
     z-index: 1;
 }
 
 .cart-summary:hover {
-    /* Glow intensifies on hover */
+    
     border-color: rgba(99, 102, 241, 0.4);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12),
         0 0 40px rgba(99, 102, 241, 0.15),
@@ -203,16 +203,16 @@
     width: 100%;
     text-align: center;
     padding: 0.9rem 2rem;
-    /* Mejor padding para más presencia */
+    
     font-size: 1.05rem;
-    /* Texto más grande */
+    
     font-weight: 700;
     border-radius: var(--radius-md);
     margin-top: 1.5rem;
     position: relative;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    /* Epic gradient background */
+    
     background: #6366f1;
     color: #ffffff;
     border: none;
@@ -220,7 +220,7 @@
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
-/* Shimmer effect for checkout button */
+
 .btn-block::before {
     content: '';
     position: absolute;
@@ -238,7 +238,7 @@
 
 .btn-block:hover {
     transform: translateY(-4px) scale(1.02);
-    /* Epic glow and gradient shift */
+    
     box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5),
         0 0 40px rgba(99, 102, 241, 0.3);
     animation: gradientShift 2s ease infinite;
@@ -255,7 +255,7 @@
     gap: 0.5rem;
 }
 
-/* Empty Cart */
+
 .empty-cart-msg {
     text-align: center;
     padding: 4rem 0;
@@ -266,7 +266,7 @@
     font-size: 4rem;
     color: var(--border);
     margin-bottom: 1.5rem;
-    /* Swing animation */
+    
     animation: swing 2s ease-in-out infinite;
     display: inline-block;
     transform-origin: top center;
@@ -278,7 +278,7 @@
     font-size: 1.05rem;
 }
 
-/* Shop Now Button for Empty Cart */
+
 .btn-shop-now {
     display: inline-flex;
     align-items: center;
@@ -307,7 +307,7 @@
     transform: translateY(0);
 }
 
-/* Checkout Specific */
+
 .checkout-header {
     background: var(--bg-card);
     border-bottom: 1px solid var(--border);
@@ -440,7 +440,7 @@
     margin-top: 2rem;
 }
 
-/* Responsive */
+
 @media (max-width: 900px) {
 
     .cart-layout,
@@ -453,52 +453,50 @@
         position: static;
     }
 
-    /* Add spacing between cart items and summary for better mobile layout */
+    
     .cart-items-section {
         margin-bottom: 0;
     }
 }
 
-/* ================================================
-   PACK INDICATORS - PREMIUM DESIGN
-   ================================================ */
+
 
 .pack-indicator-container {
-    /* Positioned ABOVE the summary card */
+    
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
 
-    /* Animation setup: Start hidden behind the card */
+    
     z-index: -1;
     transform: translateY(20%);
     opacity: 0;
 
     transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    /* Bouncy pop effect */
+    
     pointer-events: none;
 }
 
 .pack-indicator-container.visible {
     opacity: 1;
-    /* Move UP to reveal above the card */
+    
     transform: translateY(-110%);
     z-index: 100;
     pointer-events: auto;
 }
 
 .pack-badge {
-    /* Full width */
+    
     width: 100%;
     padding: 1rem 1.25rem;
 
-    /* Visual styling */
+    
     background: var(--bg-card);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
 
-    /* Typography */
+    
     font-family: var(--font-heading);
     font-weight: 800;
     font-size: 1.05rem;
@@ -506,40 +504,40 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 
-    /* Flex */
+    
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
 
-    /* Inner depth */
+    
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
 
-    /* Text Shadow for readability */
+    
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Pack Popular - Orange Theme */
+
 .pack-badge.pack-popular {
     background: linear-gradient(135deg, #ff8c00 0%, #ff4500 100%);
     border-color: rgba(255, 140, 0, 0.5);
     color: white;
 }
 
-/* Pack Mega - Emerald Theme */
+
 .pack-badge.pack-mega {
     background: linear-gradient(135deg, #10b981 0%, #047857 100%);
     border-color: rgba(16, 185, 129, 0.5);
     color: white;
 }
 
-/* Progressive Glow Effects - Popular */
+
 .pack-popular.glow-x1 {
     box-shadow:
         inset 0 0 15px rgba(255, 255, 255, 0.2),
-        /* Inner highlight */
+        
         0 0 20px rgba(255, 69, 0, 0.4);
-    /* Outer glow */
+    
 }
 
 .pack-popular.glow-x2 {
@@ -547,7 +545,7 @@
         inset 0 0 20px rgba(255, 255, 255, 0.25),
         0 0 30px rgba(255, 69, 0, 0.5),
         0 0 10px rgba(255, 140, 0, 0.3);
-    /* Layered glow */
+    
 }
 
 .pack-popular.glow-x3 {
@@ -564,7 +562,7 @@
         0 0 20px rgba(255, 140, 0, 0.5);
 }
 
-/* Progressive Glow Effects - Mega */
+
 .pack-mega.glow-x1 {
     box-shadow:
         inset 0 0 15px rgba(255, 255, 255, 0.2),
@@ -592,10 +590,10 @@
         0 0 20px rgba(52, 211, 153, 0.5);
 }
 
-/* MOBILE FIX: Pack indicator needs proper positioning on mobile */
+
 @media (max-width: 900px) {
     .pack-indicator-container {
-        /* Switch to static positioning in mobile layout */
+        
         position: static !important;
         z-index: 10;
         margin-bottom: 0;
@@ -608,13 +606,13 @@
         animation: packSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
-    /* Reduce spacing between cart items and pack popup */
+    
     .cart-items-section {
         margin-bottom: 0.5rem;
     }
 }
 
-/* Keyframe animation for pack popup entrance */
+
 @keyframes packSlideIn {
     from {
         opacity: 0;
@@ -627,7 +625,7 @@
     }
 }
 
-/* Responsive adjustments for badge */
+
 @media (max-width: 768px) {
     .pack-badge {
         font-size: 1rem;
@@ -635,9 +633,7 @@
     }
 }
 
-/* ================================================
-   ADDRESS SELECTION STYLES
-   ================================================ */
+
 
 .saved-addresses-list {
     display: flex;
@@ -728,7 +724,7 @@
     margin: 1rem 0;
 }
 
-/* Dark Mode Adjustments */
+
 [data-theme="dark"] .address-option {
     background: #1e293b;
     border-color: #334155;
@@ -758,7 +754,7 @@
     border-color: #334155 !important;
 }
 
-/* Dark Mode for Select in Checkout */
+
 [data-theme="dark"] .checkout-section select,
 [data-theme="dark"] #new-address-form select {
     background: #1e293b !important;

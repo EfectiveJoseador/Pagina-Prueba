@@ -1,11 +1,6 @@
-/* ============================================
-   UX FEEDBACK SYSTEM - Unified Styles
-   Toast notifications, button states, animations
-   ============================================ */
 
-/* ============================================
-   TOAST NOTIFICATIONS
-   ============================================ */
+
+
 .toast-container {
     position: fixed;
     bottom: 2rem;
@@ -35,7 +30,7 @@
     min-width: 280px;
     max-width: 400px;
 
-    /* Animation */
+    
     opacity: 0;
     transform: translateY(20px) scale(0.95);
     animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -59,7 +54,7 @@
     }
 }
 
-/* Toast Icons */
+
 .toast-icon {
     width: 24px;
     height: 24px;
@@ -71,7 +66,7 @@
     font-size: 0.85rem;
 }
 
-/* Toast Types */
+
 .toast.toast-success .toast-icon {
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
@@ -92,7 +87,7 @@
     color: white;
 }
 
-/* Toast content */
+
 .toast-content {
     flex: 1;
     line-height: 1.4;
@@ -113,11 +108,9 @@
     opacity: 1;
 }
 
-/* ============================================
-   BUTTON HIERARCHY SYSTEM
-   ============================================ */
 
-/* Primary CTA - Main action buttons */
+
+
 .btn-cta-primary {
     display: inline-flex;
     align-items: center;
@@ -163,7 +156,7 @@
     transform: translateY(-1px) scale(0.98);
 }
 
-/* Secondary Button */
+
 .btn-cta-secondary {
     display: inline-flex;
     align-items: center;
@@ -188,7 +181,7 @@
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
 }
 
-/* Tertiary Button - Text only */
+
 .btn-cta-tertiary {
     display: inline-flex;
     align-items: center;
@@ -209,9 +202,7 @@
     text-decoration: underline;
 }
 
-/* ============================================
-   BUTTON LOADING STATES
-   ============================================ */
+
 .btn-loading {
     position: relative;
     pointer-events: none;
@@ -238,21 +229,19 @@
     }
 }
 
-/* Button Success State */
+
 .btn-success-state {
     background: linear-gradient(135deg, #10b981, #059669) !important;
     box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35) !important;
 }
 
-/* Button Error State */
+
 .btn-error-state {
     background: linear-gradient(135deg, #ef4444, #dc2626) !important;
     box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35) !important;
 }
 
-/* ============================================
-   CART BADGE ANIMATION
-   ============================================ */
+
 @keyframes cartBounce {
 
     0%,
@@ -277,9 +266,7 @@
     animation: cartBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ============================================
-   FOCUS STATES (Accessibility)
-   ============================================ */
+
 *:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
@@ -295,14 +282,12 @@ textarea:focus-visible {
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
 }
 
-/* Remove default focus for mouse users */
+
 *:focus:not(:focus-visible) {
     outline: none;
 }
 
-/* ============================================
-   SKELETON LOADERS
-   ============================================ */
+
 .skeleton {
     background: linear-gradient(90deg,
             var(--bg-body) 0%,
@@ -344,16 +329,14 @@ textarea:focus-visible {
     width: 100%;
 }
 
-/* ============================================
-   MICRO-ANIMATIONS
-   ============================================ */
 
-/* Press effect for buttons */
+
+
 .press-effect:active {
     transform: scale(0.97);
 }
 
-/* Subtle float on hover */
+
 .float-hover {
     transition: transform 0.3s ease;
 }
@@ -362,7 +345,7 @@ textarea:focus-visible {
     transform: translateY(-4px);
 }
 
-/* Glow on hover */
+
 .glow-hover {
     transition: box-shadow 0.3s ease;
 }
@@ -371,9 +354,7 @@ textarea:focus-visible {
     box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
-/* ============================================
-   DARK MODE ADJUSTMENTS
-   ============================================ */
+
 [data-theme="dark"] .toast {
     background: #1e293b;
     border: 1px solid #334155;
@@ -389,9 +370,7 @@ textarea:focus-visible {
     background-size: 200% 100%;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+
 @media (max-width: 600px) {
     .toast-container {
         bottom: 1rem;

@@ -14,8 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.filters-sidebar');
 
     let currentProducts = [...products];
-
-    // Render Products
     function renderProducts(items) {
         grid.innerHTML = '';
 
@@ -50,14 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             grid.appendChild(card);
         });
-
-        // Re-attach event listeners for "Add to Cart"
         document.querySelectorAll('.btn-add-cart').forEach(btn => {
             btn.addEventListener('click', handleAddToCart);
         });
     }
-
-    // Filter Logic
     function filterProducts() {
         const searchTerm = searchInput.value.toLowerCase();
         const maxPrice = parseFloat(priceRange.value);
@@ -79,8 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sortProducts();
     }
-
-    // Sort Logic
     function sortProducts() {
         const sortValue = sortSelect.value;
 
@@ -89,14 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (sortValue === 'price-desc') {
             currentProducts.sort((a, b) => b.price - a.price);
         } else {
-            // Default: by ID or original order
             currentProducts.sort((a, b) => a.id - b.id);
         }
 
         renderProducts(currentProducts);
     }
-
-    // Add to Cart Handler (Mock)
     function handleAddToCart(e) {
         const btn = e.target;
         const originalText = btn.textContent;
@@ -104,8 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = '¡Añadido!';
         btn.style.background = 'var(--accent)';
         btn.style.color = 'white';
-
-        // Update cart count in header
         const cartCount = document.getElementById('cart-count');
         if (cartCount) {
             let count = parseInt(cartCount.textContent);
@@ -118,8 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.style.color = '';
         }, 1500);
     }
-
-    // Event Listeners
     searchInput.addEventListener('input', filterProducts);
     sortSelect.addEventListener('change', sortProducts);
 
@@ -146,7 +131,5 @@ document.addEventListener('DOMContentLoaded', () => {
             sidebar.classList.toggle('open');
         });
     }
-
-    // Initial Render
     renderProducts(products);
 });

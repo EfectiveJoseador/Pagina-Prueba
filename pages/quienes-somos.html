@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -8,7 +8,7 @@
     <meta name="description"
         content="Conoce a Camisetazo - Tu tienda de confianza para camisetas deportivas premium desde 2020.">
 
-    <!-- Google tag (gtag.js) -->
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -17,14 +17,14 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
-    <!-- Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
 
-    <!-- Icons & Styles -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
@@ -32,9 +32,9 @@
     <link rel="stylesheet" href="/css/producto.css">
 
     <style>
-        /* ============================================ */
-        /* ABOUT HERO SECTION                          */
-        /* ============================================ */
+        
+        
+        
         .about-hero {
             text-align: center;
             padding: 5rem 2rem;
@@ -74,9 +74,9 @@
             line-height: 1.8;
         }
 
-        /* ============================================ */
-        /* STATS SECTION                               */
-        /* ============================================ */
+        
+        
+        
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -117,9 +117,9 @@
             font-size: 0.95rem;
         }
 
-        /* ============================================ */
-        /* GALLERY SECTION                             */
-        /* ============================================ */
+        
+        
+        
         .gallery-section {
             margin-top: 4rem;
         }
@@ -142,9 +142,9 @@
             font-size: 1.1rem;
         }
 
-        /* ============================================ */
-        /* CAROUSEL - Same style as producto.html      */
-        /* ============================================ */
+        
+        
+        
         .clients-carousel {
             position: relative;
             margin-top: 2rem;
@@ -212,7 +212,7 @@
             right: 0;
         }
 
-        /* Client Cards - Same structure as product cards */
+        
         .client-card {
             min-width: 220px;
             max-width: 220px;
@@ -256,7 +256,7 @@
             transform: scale(1.1);
         }
 
-        /* Watermark - Impact font, no background */
+        
         .watermark {
             position: absolute;
             bottom: 12px;
@@ -281,12 +281,12 @@
                 -1px 1px 2px rgba(0, 0, 0, 0.7);
         }
 
-        /* ============================================ */
-        /* RESPONSIVE - Same as producto.html          */
-        /* ============================================ */
+        
+        
+        
         @media (max-width: 768px) {
 
-            /* Carousel táctil en móvil - scroll nativo */
+            
             .carousel-container {
                 padding: 0 1rem;
                 overflow-x: auto;
@@ -310,7 +310,7 @@
                 scroll-snap-align: start;
             }
 
-            /* Ocultar flechas en móvil - usar deslizamiento */
+            
             .carousel-arrow {
                 display: none;
             }
@@ -321,7 +321,7 @@
                 width: 180px;
             }
 
-            /* Mobile carousel hint */
+            
             .clients-carousel {
                 position: relative;
             }
@@ -338,7 +338,7 @@
                 z-index: 5;
             }
 
-            /* Swipe indicator */
+            
             .carousel-container::after {
                 content: '';
                 position: absolute;
@@ -428,8 +428,8 @@
             }
         }
 
-        /* Lightbox watermark - Professional diagonal repeating pattern */
-        /* Positioned absolute within lightbox-image-wrapper to move with image */
+        
+        
         .lightbox-watermark-overlay {
             position: absolute;
             top: 0;
@@ -441,16 +441,16 @@
             overflow: visible;
             border-radius: var(--radius-md);
             transform-origin: center center;
-            /* Same as image for synced scaling */
-            /* SVG pattern with diagonal repeating text - higher opacity (0.25) */
+            
+            
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='120'%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='16' font-weight='bold' fill='rgba(255,255,255,0.25)' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30, 140, 60)'%3E@CAMISETAZO.__%3C/text%3E%3C/svg%3E");
             background-repeat: repeat;
             background-size: 280px 120px;
         }
 
-        /* ============================================ */
-        /* RESPONSIVE                                  */
-        /* ============================================ */
+        
+        
+        
         @media (max-width: 768px) {
             .about-hero {
                 padding: 3rem 1.5rem;
@@ -476,7 +476,7 @@
 
     <main class="container" style="padding: 4rem 2rem; max-width: 1400px; margin: 0 auto;">
 
-        <!-- Hero Section -->
+        
         <section class="about-hero">
             <h1>Quiénes Somos</h1>
             <p>
@@ -490,7 +490,7 @@
             </p>
         </section>
 
-        <!-- Stats Section -->
+        
         <section class="stats-grid">
             <div class="stat-card">
                 <i class="fas fa-users"></i>
@@ -514,7 +514,7 @@
             </div>
         </section>
 
-        <!-- Customer Gallery Carousel - Same structure as producto.html -->
+        
         <section class="gallery-section clients-carousel">
             <h2>Nuestros Clientes</h2>
             <p class="gallery-subtitle">Fotos reales de nuestros proveedores</p>
@@ -525,7 +525,7 @@
                 </button>
                 <div class="carousel-container">
                     <div class="carousel-track" id="carousel-track">
-                        <!-- Slides injected by JS -->
+                        
                     </div>
                 </div>
                 <button class="carousel-arrow carousel-arrow-right" id="clients-next">
@@ -536,7 +536,7 @@
 
     </main>
 
-    <!-- Image Lightbox Modal (same as producto.html) -->
+    
     <div class="image-lightbox" id="image-lightbox">
         <div class="lightbox-overlay" id="lightbox-overlay"></div>
         <button class="lightbox-close" id="lightbox-close">&times;</button>
@@ -546,7 +546,7 @@
         <div class="lightbox-content">
             <div class="lightbox-image-wrapper" id="lightbox-wrapper">
                 <img id="lightbox-image" src="" alt="Imagen ampliada">
-                <!-- Watermark overlay - INSIDE wrapper to move with image on zoom/pan -->
+                
                 <div class="lightbox-watermark-overlay" id="lightbox-watermark-overlay"></div>
             </div>
         </div>
@@ -554,7 +554,7 @@
             <i class="fas fa-chevron-right"></i>
         </button>
 
-        <!-- Zoom Slider Control -->
+        
         <div class="zoom-control" id="zoom-control">
             <button class="zoom-btn zoom-in" id="zoom-in-btn">
                 <i class="fas fa-plus"></i>
@@ -570,13 +570,13 @@
         </div>
 
         <div class="lightbox-thumbnails" id="lightbox-thumbnails">
-            <!-- Thumbnails injected by JS -->
+            
         </div>
     </div>
 
     <div id="footer-placeholder"></div>
 
-    <!-- Scripts -->
+    
     <script src="/js/theme.js"></script>
     <script src="/js/components.js"></script>
     <script type="module" src="/js/firebase-global.js"></script>

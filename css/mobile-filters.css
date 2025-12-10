@@ -1,16 +1,10 @@
-/**
- * Mobile Filters CSS
- * Estilos exclusivos para el panel de filtros móviles
- * Solo visible en resoluciones móviles (< 769px)
- */
 
-/* ============================================
-   BOTÓN FLOTANTE DE FILTROS (MOBILE ONLY)
-   ============================================ */
+
+
 
 .mobile-filter-btn {
     display: none;
-    /* Oculto por defecto en desktop */
+    
     position: fixed;
     bottom: 24px;
     right: 24px;
@@ -54,20 +48,18 @@
     transform: translateY(0);
 }
 
-/* Solo visible en móvil */
+
 @media (max-width: 768px) {
     .mobile-filter-btn {
         display: flex;
     }
 }
 
-/* ============================================
-   PANEL MÓVIL DE FILTROS
-   ============================================ */
+
 
 .mobile-filter-panel {
     display: none;
-    /* Oculto por defecto */
+    
     position: fixed;
     top: 0;
     left: 0;
@@ -82,7 +74,7 @@
     pointer-events: all;
 }
 
-/* Overlay oscuro */
+
 .mobile-filter-overlay {
     position: absolute;
     top: 0;
@@ -98,7 +90,7 @@
     opacity: 1;
 }
 
-/* Contenido del panel */
+
 .mobile-filter-content {
     position: absolute;
     bottom: 0;
@@ -124,9 +116,7 @@
     transform: translateY(0);
 }
 
-/* ============================================
-   HEADER DEL PANEL
-   ============================================ */
+
 
 .mobile-filter-header {
     padding: 20px 24px;
@@ -169,22 +159,18 @@
     color: var(--text-main);
 }
 
-/* ============================================
-   BODY DEL PANEL (SCROLLABLE)
-   ============================================ */
+
 
 .mobile-filter-body {
     padding: 24px;
     overflow-y: auto;
     flex: 1;
 
-    /* Smooth scrolling */
+    
     -webkit-overflow-scrolling: touch;
 }
 
-/* ============================================
-   FILTRO STEPS
-   ============================================ */
+
 
 .mobile-filter-step {
     margin-bottom: 24px;
@@ -236,9 +222,7 @@
     box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
 }
 
-/* ============================================
-   FOOTER DEL PANEL
-   ============================================ */
+
 
 .mobile-filter-footer {
     padding: 20px 24px;
@@ -266,7 +250,7 @@
     transition: all 0.2s ease;
 }
 
-/* Botón secundario (Limpiar) */
+
 .mobile-filter-footer .btn-secondary {
     background: var(--bg-body);
     color: var(--text-main);
@@ -281,7 +265,7 @@
     transform: scale(0.98);
 }
 
-/* Botón primario (Aplicar) */
+
 .mobile-filter-footer .btn-primary {
     background: linear-gradient(135deg, #1a1a2e 0%, #6b46c1 100%);
     color: white;
@@ -297,9 +281,7 @@
     transform: translateY(0);
 }
 
-/* ============================================
-   OCULTAR EN DESKTOP
-   ============================================ */
+
 
 @media (min-width: 769px) {
 
@@ -309,9 +291,7 @@
     }
 }
 
-/* ============================================
-   ANIMACIÓN DE ENTRADA
-   ============================================ */
+
 
 @keyframes slideUpIn {
     from {

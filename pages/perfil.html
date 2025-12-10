@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil - Camisetazo</title>
 
-    <!-- Google tag (gtag.js) -->
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,7 +15,7 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
-    <!-- Fonts & Icons -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,7 +23,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Styles -->
+    
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -32,7 +32,7 @@
 
 <body>
 
-    <!-- Header injected by JS -->
+    
     <div id="header-placeholder"></div>
 
     <main class="profile-container">
@@ -62,20 +62,20 @@
         </aside>
 
         <section class="profile-content">
-            <!-- Orders Section -->
+            
             <div id="orders" class="content-section active">
                 <h2>Historial de Pedidos</h2>
                 <div id="orders-list" class="orders-list">
-                    <!-- Los pedidos se cargarán dinámicamente -->
+                    
                     <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Cargando pedidos...</p>
                 </div>
             </div>
 
-            <!-- Points Section -->
+            
             <div id="points" class="content-section">
                 <h2>Mis Puntos</h2>
 
-                <!-- Points Summary Cards -->
+                
                 <div class="points-summary"
                     style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
                     <div class="points-card"
@@ -94,7 +94,7 @@
                     </div>
                 </div>
 
-                <!-- Info -->
+                
                 <div
                     style="background: var(--bg-card); padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
                     <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
@@ -104,7 +104,7 @@
                     </p>
                 </div>
 
-                <!-- Rewards Store Button -->
+                
                 <button id="open-rewards-store" style="
                     width: 100%;
                     margin-bottom: 2rem;
@@ -158,7 +158,7 @@
                     }
                 </style>
 
-                <!-- My Coupons -->
+                
                 <div style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
                     <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">
                         <i class="fas fa-ticket-alt" style="color: #c026d3;"></i> Mis Cupones
@@ -169,7 +169,7 @@
                     </div>
                 </div>
 
-                <!-- Transaction History -->
+                
                 <div style="margin-top: 1rem;">
                     <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Historial de Transacciones</h3>
                     <div id="points-history" style="max-height: 300px; overflow-y: auto;">
@@ -179,7 +179,7 @@
                 </div>
             </div>
 
-            <!-- Address Section -->
+            
             <div id="address" class="content-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <h2 style="margin: 0;">Mis Direcciones</h2>
@@ -188,16 +188,16 @@
                     </button>
                 </div>
                 <div id="address-list" class="address-list">
-                    <!-- Las direcciones se cargarán dinámicamente -->
+                    
                     <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Cargando direcciones...</p>
                 </div>
             </div>
 
-            <!-- Settings Section -->
+            
             <div id="settings" class="content-section">
                 <h2>Configuración</h2>
 
-                <!-- Cambiar Contraseña -->
+                
                 <div class="settings-card"
                     style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
                     <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Seguridad</h3>
@@ -209,7 +209,7 @@
                     </p>
                 </div>
 
-                <!-- Preferencias -->
+                
                 <div class="settings-card"
                     style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
                     <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Preferencias</h3>
@@ -231,7 +231,7 @@
         </section>
     </main>
 
-    <!-- Modal para Añadir/Editar Dirección -->
+    
     <div id="address-modal" class="modal" style="display: none;">
         <div class="modal-content"
             style="background: var(--bg-card); padding: 2rem; border-radius: 16px; max-width: 500px; margin: 2rem auto; position: relative;">
@@ -340,7 +340,7 @@
         </div>
     </div>
 
-    <!-- Rewards Store Modal -->
+    
     <div id="rewards-modal" class="modal" style="display: none;">
         <div class="modal-content"
             style="background: var(--bg-card); padding: 2rem; border-radius: 16px; max-width: 600px; margin: 2rem auto; position: relative; max-height: 90vh; overflow-y: auto;">
@@ -353,7 +353,7 @@
             <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Canjea tus puntos por descuentos exclusivos</p>
 
             <div id="rewards-list" style="display: grid; gap: 1rem;">
-                <!-- Reward Cards -->
+                
                 <div class="reward-card" data-reward="discount_10"
                     style="background: var(--bg-body); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s;">
                     <div>
@@ -411,7 +411,7 @@
         </div>
     </div>
 
-    <!-- Modal para Editar Dirección de Pedido -->
+    
     <div id="order-address-modal" class="modal" style="display: none;">
         <div class="modal-content"
             style="background: var(--bg-card); padding: 2rem; border-radius: 16px; max-width: 500px; margin: 2rem auto; position: relative;">
@@ -532,10 +532,10 @@
         </div>
     </div>
 
-    <!-- Footer injected by JS -->
+    
     <div id="footer-placeholder"></div>
 
-    <!-- Scripts -->
+    
     <script src="/js/theme.js"></script>
     <script src="/js/components.js"></script>
     <script type="module" src="/js/auth.js"></script>

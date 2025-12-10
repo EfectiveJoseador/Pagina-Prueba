@@ -1,16 +1,9 @@
-/**
- * Admin Panel JavaScript
- * Secure admin panel with Firebase Auth custom claims verification
- */
+
 
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, onValue, update, get, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { convertToAvailable } from './points.js';
-
-// ============================================
-// SECURITY: Admin verification
-// ============================================
 let isAdmin = false;
 let allOrders = [];
 let currentFilters = {
@@ -18,37 +11,25 @@ let currentFilters = {
     payment: 'all',
     search: ''
 };
-
-// DOM Elements
 const authLoading = document.getElementById('auth-loading');
 const adminPanel = document.getElementById('admin-panel');
-
-// ============================================
-// AUTHENTICATION & AUTHORIZATION
-// ============================================
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        // Not logged in - redirect to login
         console.log('❌ No user - redirecting to login');
         redirectToHome('No has iniciado sesión');
         return;
     }
-
-    // CRITICAL: Get ID token with claims
     try {
-        const idTokenResult = await user.getIdTokenResult(true); // Force refresh
+        const idTokenResult = await user.getIdTokenResult(true);
         const claims = idTokenResult.claims;
 
         console.log('🔍 Checking admin claim:', claims.admin);
 
         if (claims.admin !== true) {
-            // NOT an admin - redirect immediately
             console.log('❌ User is not admin - redirecting');
             redirectToHome('No tienes permisos de administrador');
             return;
         }
-
-        // ✅ User IS admin - show panel
         isAdmin = true;
         showAdminPanel(user);
 
@@ -60,7 +41,6 @@ onAuthStateChanged(auth, async (user) => {
 
 function redirectToHome(reason) {
     console.log('Redirecting to home:', reason);
-    // Small delay to show message
     authLoading.innerHTML = `
         <div style="text-align: center;">
             <i class="fas fa-shield-alt" style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;"></i>
@@ -74,51 +54,30 @@ function redirectToHome(reason) {
 }
 
 function showAdminPanel(user) {
-    // Hide loading, show panel
     authLoading.classList.add('hidden');
     adminPanel.classList.remove('hidden');
-
-    // Update header with admin info
     document.getElementById('admin-email').textContent = user.email;
-
-    // Initialize panel
     initPanel();
 }
-
-// ============================================
-// PANEL INITIALIZATION
-// ============================================
 function initPanel() {
-    // Set up event listeners
     setupEventListeners();
-
-    // Load all orders
     loadAllOrders();
-
-    // Load promo codes
     setupPromoCodeListeners();
     loadPromoCodes();
-
-    // Load users
     setupUsersListeners();
     loadAllUsers();
 }
 
 function setupEventListeners() {
-    // Logout button
     document.getElementById('btn-logout').addEventListener('click', async () => {
         if (confirm('¿Cerrar sesión de administrador?')) {
             await signOut(auth);
             window.location.href = '/index.html';
         }
     });
-
-    // Refresh button
     document.getElementById('btn-refresh').addEventListener('click', () => {
         loadAllOrders();
     });
-
-    // Filters
     document.getElementById('filter-status').addEventListener('change', (e) => {
         currentFilters.status = e.target.value;
         renderOrders();
@@ -133,17 +92,11 @@ function setupEventListeners() {
         currentFilters.search = e.target.value.toLowerCase();
         renderOrders();
     });
-
-    // Modal close
     document.getElementById('modal-close').addEventListener('click', closeModal);
     document.getElementById('order-modal').addEventListener('click', (e) => {
         if (e.target.id === 'order-modal') closeModal();
     });
 }
-
-// ============================================
-// LOAD ALL ORDERS FROM ALL USERS
-// ============================================
 function loadAllOrders() {
     const loadingEl = document.getElementById('loading-orders');
     const emptyEl = document.getElementById('empty-state');
@@ -160,12 +113,8 @@ function loadAllOrders() {
 
         if (snapshot.exists()) {
             const usersData = snapshot.val();
-
-            // Iterate through all users
             Object.keys(usersData).forEach(uid => {
                 const userOrders = usersData[uid];
-
-                // Iterate through all orders of this user
                 Object.keys(userOrders).forEach(orderId => {
                     const order = userOrders[orderId];
                     allOrders.push({
@@ -176,8 +125,6 @@ function loadAllOrders() {
                     });
                 });
             });
-
-            // Sort by date (newest first)
             allOrders.sort((a, b) => {
                 const dateA = a.createdAt || new Date(a.date).getTime();
                 const dateB = b.createdAt || new Date(b.date).getTime();
@@ -205,10 +152,6 @@ function loadAllOrders() {
         }
     });
 }
-
-// ============================================
-// UPDATE STATS
-// ============================================
 function updateStats() {
     const total = allOrders.length;
     const pending = allOrders.filter(o => o.status === 'pendiente' || o.status === 'confirmado').length;
@@ -220,29 +163,18 @@ function updateStats() {
     document.getElementById('stat-shipped').textContent = shipped;
     document.getElementById('stat-delivered').textContent = delivered;
 }
-
-// ============================================
-// RENDER ORDERS TABLE
-// ============================================
 function renderOrders() {
     const tableBody = document.getElementById('orders-table-body');
     const emptyEl = document.getElementById('empty-state');
-
-    // Apply filters
     let filtered = allOrders.filter(order => {
-        // Status filter
         if (currentFilters.status !== 'all' && order.status !== currentFilters.status) {
             return false;
         }
-
-        // Payment filter
         if (currentFilters.payment !== 'all') {
             const isPaid = order.payment?.paid === true;
             if (currentFilters.payment === 'paid' && !isPaid) return false;
             if (currentFilters.payment === 'unpaid' && isPaid) return false;
         }
-
-        // Search filter
         if (currentFilters.search) {
             const searchStr = currentFilters.search;
             const matchId = order.orderId?.toLowerCase().includes(searchStr);
@@ -323,12 +255,6 @@ function renderOrders() {
         `;
     }).join('');
 }
-
-// ============================================
-// ORDER OPERATIONS
-// ============================================
-
-// Update order status
 window.updateOrderStatus = async function (path, newStatus, uid, orderId) {
     if (!isAdmin) {
         alert('No tienes permisos');
@@ -348,8 +274,6 @@ window.updateOrderStatus = async function (path, newStatus, uid, orderId) {
             lastUpdated: new Date().toISOString(),
             updatedBy: auth.currentUser.email
         });
-
-        // If status is 'imagenes_cliente', convert pending points to available
         if (newStatus === 'imagenes_cliente' && uid && orderId) {
             const converted = await convertToAvailable(uid, orderId);
             if (converted) {
@@ -365,8 +289,6 @@ window.updateOrderStatus = async function (path, newStatus, uid, orderId) {
         alert('Error al actualizar estado: ' + error.message);
     }
 };
-
-// Update tracking number
 window.updateTracking = async function (path, trackingNumber) {
     if (!isAdmin) {
         alert('No tienes permisos');
@@ -387,8 +309,6 @@ window.updateTracking = async function (path, trackingNumber) {
         alert('Error al actualizar tracking: ' + error.message);
     }
 };
-
-// Confirm payment (for Bizum and PayPal)
 window.confirmPayment = async function (path) {
     if (!isAdmin) {
         alert('No tienes permisos');
@@ -416,20 +336,14 @@ window.confirmPayment = async function (path) {
         alert('Error al confirmar pago: ' + error.message);
     }
 };
-
-// Delete order (with double confirmation)
 window.deleteOrder = async function (path, orderId) {
     if (!isAdmin) {
         alert('No tienes permisos');
         return;
     }
-
-    // Primera confirmación
     if (!confirm(`¿Estás seguro de que quieres eliminar el pedido ${orderId}?`)) {
         return;
     }
-
-    // Segunda confirmación (más explícita)
     const confirmText = prompt(`Para confirmar la eliminación, escribe "ELIMINAR":`);
     if (confirmText !== 'ELIMINAR') {
         alert('Eliminación cancelada. Debes escribir exactamente "ELIMINAR" para confirmar.');
@@ -446,8 +360,6 @@ window.deleteOrder = async function (path, orderId) {
         alert('Error al eliminar pedido: ' + error.message);
     }
 };
-
-// View order details
 window.viewOrderDetails = async function (path) {
     const order = allOrders.find(o => o.path === path);
     if (!order) return;
@@ -539,12 +451,7 @@ window.viewOrderDetails = async function (path) {
 function closeModal() {
     document.getElementById('order-modal').classList.remove('active');
 }
-
-// ============================================
-// TOAST NOTIFICATIONS
-// ============================================
 function showToast(message) {
-    // Remove existing toast
     const existing = document.querySelector('.admin-toast');
     if (existing) existing.remove();
 
@@ -559,19 +466,11 @@ function showToast(message) {
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
-
-// ============================================
-// KEYBOARD SHORTCUTS
-// ============================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeModal();
     }
 });
-
-// ============================================
-// PROMO CODES MANAGEMENT
-// ============================================
 let allPromoCodes = [];
 
 function loadPromoCodes() {
@@ -588,8 +487,6 @@ function loadPromoCodes() {
                     id: codeId
                 });
             });
-
-            // Sort by creation date (newest first)
             allPromoCodes.sort((a, b) => {
                 return new Date(b.createdAt) - new Date(a.createdAt);
             });
@@ -673,13 +570,9 @@ window.createPromoCode = async function () {
     const type = typeSelect.value;
     let value = parseFloat(valueInput.value) || 0;
     const maxUses = maxUsesInput.value ? parseInt(maxUsesInput.value) : null;
-
-    // For free_shipping, set value to 0 automatically
     if (type === 'free_shipping') {
         value = 0;
     }
-
-    // Validation
     if (!code || code.length < 3) {
         alert('El código debe tener al menos 3 caracteres');
         return;
@@ -689,8 +582,6 @@ window.createPromoCode = async function () {
         alert('El código solo puede contener letras y números');
         return;
     }
-
-    // Only validate value for non-free_shipping types
     if (type !== 'free_shipping' && (!value || value <= 0)) {
         alert('El valor debe ser mayor que 0');
         return;
@@ -700,8 +591,6 @@ window.createPromoCode = async function () {
         alert('El porcentaje no puede ser mayor que 100');
         return;
     }
-
-    // Check if code already exists
     const existingCode = allPromoCodes.find(c => c.code === code);
     if (existingCode) {
         alert('Este código ya existe');
@@ -720,8 +609,6 @@ window.createPromoCode = async function () {
             createdAt: new Date().toISOString(),
             createdBy: auth.currentUser.email
         });
-
-        // Clear form
         codeInput.value = '';
         valueInput.value = '';
         maxUsesInput.value = '';
@@ -772,15 +659,11 @@ window.deletePromoCode = async function (codeId, codeName) {
         alert('Error al eliminar código: ' + error.message);
     }
 };
-
-// Add promo codes event listeners
 function setupPromoCodeListeners() {
     const createBtn = document.getElementById('btn-create-promo');
     if (createBtn) {
         createBtn.addEventListener('click', createPromoCode);
     }
-
-    // Allow Enter key in form
     const promoCodeInput = document.getElementById('promo-code');
     if (promoCodeInput) {
         promoCodeInput.addEventListener('keypress', (e) => {
@@ -789,8 +672,6 @@ function setupPromoCodeListeners() {
             }
         });
     }
-
-    // Disable value field when free_shipping is selected
     const typeSelect = document.getElementById('promo-type');
     const valueInput = document.getElementById('promo-value');
 
@@ -807,10 +688,6 @@ function setupPromoCodeListeners() {
         });
     }
 }
-
-// ============================================
-// USER MANAGEMENT
-// ============================================
 let allUsers = [];
 let usersSearchFilter = '';
 
@@ -834,7 +711,6 @@ function loadAllUsers() {
             const usersData = snapshot.val();
 
             for (const [uid, userData] of Object.entries(usersData)) {
-                // Count user orders and get email from first order if needed
                 const ordersSnapshot = await get(ref(db, `ordersByUser/${uid}`));
                 let orderCount = 0;
                 let emailFromOrder = '';
@@ -844,19 +720,15 @@ function loadAllUsers() {
                 if (ordersSnapshot.exists()) {
                     const orders = ordersSnapshot.val();
                     orderCount = Object.keys(orders).length;
-
-                    // Get email/name/date from first order if not in profile
                     const firstOrder = Object.values(orders)[0];
                     if (firstOrder) {
                         emailFromOrder = firstOrder.customerEmail || firstOrder.userEmail || '';
                         nameFromOrder = firstOrder.customerName || '';
                     }
-
-                    // Get oldest order date as registration approximation
                     const orderDates = Object.values(orders).map(o => o.date || o.createdAt).filter(d => d);
                     if (orderDates.length > 0) {
                         orderDates.sort((a, b) => new Date(a) - new Date(b));
-                        dateFromOrder = orderDates[0]; // oldest order
+                        dateFromOrder = orderDates[0];
                     }
                 }
 
@@ -870,8 +742,6 @@ function loadAllUsers() {
                     orderCount: orderCount
                 });
             }
-
-            // Sort by creation date (newest first)
             allUsers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         }
 
@@ -897,8 +767,6 @@ function renderUsers() {
     const emptyEl = document.getElementById('users-empty-state');
 
     if (!tableBody) return;
-
-    // Filter users
     let filtered = allUsers;
     if (usersSearchFilter) {
         const search = usersSearchFilter.toLowerCase();
@@ -954,8 +822,6 @@ window.viewUserDetails = async function (uid) {
     const modalBody = document.getElementById('user-modal-body');
 
     if (!modal || !modalBody) return;
-
-    // Load user orders
     let ordersHtml = '<p>Cargando pedidos...</p>';
     try {
         const ordersSnapshot = await get(ref(db, `ordersByUser/${uid}`));
@@ -1056,8 +922,6 @@ async function modifyUserPoints(uid, newValue, type = 'available') {
         const field = type === 'available' ? 'availablePoints' : 'pendingPoints';
         const userRef = ref(db, `users/${uid}/${field}`);
         await set(userRef, newValue);
-
-        // Log the modification
         const historyRef = ref(db, `users/${uid}/pointsHistory`);
         await push(historyRef, {
             type: 'admin_modification',
@@ -1068,8 +932,6 @@ async function modifyUserPoints(uid, newValue, type = 'available') {
         });
 
         showToast('Puntos actualizados correctamente');
-
-        // Refresh user in modal if open
         const modal = document.getElementById('user-modal');
         if (modal && modal.classList.contains('active')) {
             viewUserDetails(uid);
@@ -1081,7 +943,6 @@ async function modifyUserPoints(uid, newValue, type = 'available') {
 }
 
 function setupUsersListeners() {
-    // Search input
     const searchInput = document.getElementById('search-users');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
@@ -1089,14 +950,10 @@ function setupUsersListeners() {
             renderUsers();
         });
     }
-
-    // Refresh button
     const refreshBtn = document.getElementById('btn-refresh-users');
     if (refreshBtn) {
         refreshBtn.addEventListener('click', loadAllUsers);
     }
-
-    // User modal close
     const userModalClose = document.getElementById('user-modal-close');
     const userModal = document.getElementById('user-modal');
 
