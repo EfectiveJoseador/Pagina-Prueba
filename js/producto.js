@@ -376,7 +376,7 @@ function addToCart() {
 
     // Calculate total price
     let totalPrice = product.price;
-    if (customization.version === 'jugador') totalPrice += 15;
+    if (customization.version === 'jugador') totalPrice += 5;
     if (customization.patch && customization.patch !== 'none') {
         totalPrice += patchPrices[customization.patch] || 0;
     }

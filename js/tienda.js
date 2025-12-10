@@ -671,6 +671,10 @@ function updatePreview() {
     if (customization.patch && customization.patch !== 'none') {
         totalPrice += patchPrices[customization.patch] || 0;
     }
+    // Add personalization cost (+€2 if name and number)
+    if (customization.name && customization.number) {
+        totalPrice += 2;
+    }
 
     // Create cart item
     const cartItem = {
