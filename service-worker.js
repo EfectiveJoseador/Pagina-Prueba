@@ -1,4 +1,4 @@
-const CACHE_NAME = 'camisetazo-cache-v1';
+const CACHE_NAME = 'camisetazo-cache-v2';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -53,11 +53,17 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // ✅ ANALYTICS: Always fetch from network, never cache (pero no bloquear!)
   if (
     url.includes('analytics.vercel.com') ||
     url.includes('www.googletagmanager.com') ||
+    url.includes('google-analytics.com') ||
+    url.includes('analytics.google.com') ||
+    url.includes('plausible.io') ||
+    url.includes('contentsquare.net') ||
     url.includes('api.web3forms.com')
   ) {
+    event.respondWith(fetch(event.request));
     return;
   }
 
