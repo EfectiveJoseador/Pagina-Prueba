@@ -428,29 +428,24 @@
             }
         }
 
-        /* Lightbox watermark - Fixed position, stays during zoom */
-        .lightbox-watermark {
-            position: fixed;
-            bottom: 130px;
+        /* Lightbox watermark - Professional diagonal repeating pattern */
+        /* Positioned absolute within lightbox-image-wrapper to move with image */
+        .lightbox-watermark-overlay {
+            position: absolute;
+            top: 0;
             left: 0;
             right: 0;
-            text-align: center;
+            bottom: 0;
             pointer-events: none;
-            z-index: 10001;
-        }
-
-        .lightbox-watermark span {
-            font-family: 'Bebas Neue', 'Impact', 'Arial Black', sans-serif;
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 2rem;
-            font-weight: 400;
-            letter-spacing: -0.5px;
-            text-transform: uppercase;
-            text-shadow:
-                2px 2px 4px rgba(0, 0, 0, 0.9),
-                -1px -1px 2px rgba(0, 0, 0, 0.7),
-                1px -1px 2px rgba(0, 0, 0, 0.7),
-                -1px 1px 2px rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            overflow: visible;
+            border-radius: var(--radius-md);
+            transform-origin: center center;
+            /* Same as image for synced scaling */
+            /* SVG pattern with diagonal repeating text - higher opacity (0.25) */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='120'%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='16' font-weight='bold' fill='rgba(255,255,255,0.25)' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30, 140, 60)'%3E@CAMISETAZO.__%3C/text%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 280px 120px;
         }
 
         /* ============================================ */
@@ -551,11 +546,9 @@
         <div class="lightbox-content">
             <div class="lightbox-image-wrapper" id="lightbox-wrapper">
                 <img id="lightbox-image" src="" alt="Imagen ampliada">
+                <!-- Watermark overlay - INSIDE wrapper to move with image on zoom/pan -->
+                <div class="lightbox-watermark-overlay" id="lightbox-watermark-overlay"></div>
             </div>
-        </div>
-        <!-- Watermark outside wrapper so it stays fixed during zoom -->
-        <div class="lightbox-watermark">
-            <span>@CAMISETAZO._</span>
         </div>
         <button class="lightbox-nav lightbox-next" id="lightbox-next">
             <i class="fas fa-chevron-right"></i>
@@ -933,9 +926,15 @@
 
         function applyTransform() {
             const image = document.getElementById('lightbox-image');
+            const watermark = document.getElementById('lightbox-watermark-overlay');
             if (image) {
                 const factor = 1 + (zoomLevel - 1) * 0.5;
-                image.style.transform = `scale(${zoomLevel}) translate(${translateX / factor}px, ${translateY / factor}px)`;
+                const transformValue = `scale(${zoomLevel}) translate(${translateX / factor}px, ${translateY / factor}px)`;
+                image.style.transform = transformValue;
+                // Apply same transform to watermark so it scales and moves with the image
+                if (watermark) {
+                    watermark.style.transform = transformValue;
+                }
             }
         }
 
