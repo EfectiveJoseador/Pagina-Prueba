@@ -294,7 +294,7 @@ function renderOrders(orders) {
                     font-weight: 600;
                 ">
                     <i class="fas fa-tshirt" style="color: var(--primary);"></i>
-                    Productos <span style="background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.25rem; font-weight: 700;">${Array.isArray(products) ? products.length : 0}</span>
+                    Productos <span style="background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.25rem; font-weight: 700;">${Array.isArray(products) ? products.reduce((sum, p) => sum + (p.quantity || p.qty || 1), 0) : 0}</span>
                 </h4>
                 
                 ${Array.isArray(products) && products.length > 0 ? products.map(p => `
