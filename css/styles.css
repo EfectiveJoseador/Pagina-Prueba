@@ -10,6 +10,40 @@ body {
     overflow-x: hidden;
 }
 
+/* Iluminación decorativa lateral en tema oscuro */
+[data-theme="dark"] body {
+    position: relative;
+}
+
+[data-theme="dark"] body::before,
+[data-theme="dark"] body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Luz izquierda - morado/violeta */
+[data-theme="dark"] body::before {
+    left: 0;
+    background:
+        radial-gradient(ellipse at 0% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 0% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+        radial-gradient(ellipse at 0% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 45%);
+}
+
+/* Luz derecha - azul/morado */
+[data-theme="dark"] body::after {
+    right: 0;
+    background:
+        radial-gradient(ellipse at 100% 30%, rgba(99, 102, 241, 0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
+        radial-gradient(ellipse at 100% 90%, rgba(99, 102, 241, 0.06) 0%, transparent 45%);
+}
+
 main {
     flex: 1;
     width: 100%;
@@ -585,5 +619,124 @@ html {
 [data-theme="dark"] .tooltip,
 [data-theme="dark"] .popover {
     border: 2px solid rgba(255, 255, 255, 0.2);
-    background: #000000;
+    background: #111116;
+}
+
+/* ==========================================
+   TEMA OSCURO - Iluminación sutil azul/morado
+   ========================================== */
+
+/* Iluminación sutil en tarjetas */
+[data-theme="dark"] .card-premium,
+[data-theme="dark"] .product-card,
+[data-theme="dark"] .catalogo-card,
+[data-theme="dark"] .client-card,
+[data-theme="dark"] .info-card,
+[data-theme="dark"] .stat-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(18, 18, 28, 1) 100%);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(99, 102, 241, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    position: relative;
+}
+
+[data-theme="dark"] .card-premium::after,
+[data-theme="dark"] .product-card::after,
+[data-theme="dark"] .info-card::after,
+[data-theme="dark"] .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.06) 0%, transparent 60%);
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 0;
+}
+
+[data-theme="dark"] .card-premium:hover,
+[data-theme="dark"] .product-card:hover,
+[data-theme="dark"] .catalogo-card:hover,
+[data-theme="dark"] .client-card:hover,
+[data-theme="dark"] .info-card:hover,
+[data-theme="dark"] .stat-card:hover {
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(99, 102, 241, 0.08),
+        0 0 30px rgba(139, 92, 246, 0.05);
+}
+
+/* Iluminación en secciones principales */
+[data-theme="dark"] .info-section,
+[data-theme="dark"] .featured-section,
+[data-theme="dark"] .collections-section {
+    position: relative;
+}
+
+[data-theme="dark"] .info-section::before,
+[data-theme="dark"] .featured-section::before,
+[data-theme="dark"] .collections-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(99, 102, 241, 0.25) 30%,
+            rgba(139, 92, 246, 0.3) 50%,
+            rgba(99, 102, 241, 0.25) 70%,
+            transparent 100%);
+    pointer-events: none;
+}
+
+/* Mejora del footer en tema oscuro */
+[data-theme="dark"] .main-footer {
+    background: linear-gradient(180deg, var(--bg-card) 0%, rgba(10, 10, 18, 1) 100%);
+}
+
+[data-theme="dark"] .main-footer::before {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(99, 102, 241, 0.5) 25%,
+            rgba(139, 92, 246, 0.5) 75%,
+            transparent 100%);
+    opacity: 0.8;
+}
+
+/* Mejora de inputs y formularios en tema oscuro */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background: #111116;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus {
+    box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.15),
+        0 0 20px rgba(99, 102, 241, 0.05);
+}
+
+/* Iluminación sutil en modales y popups */
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .popup-content {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(18, 18, 28, 1) 100%);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 80px rgba(99, 102, 241, 0.05);
+}
+
+/* Iluminación en dropdowns */
+[data-theme="dark"] .dropdown-menu {
+    background: linear-gradient(180deg, var(--bg-card) 0%, rgba(16, 16, 24, 1) 100%);
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(99, 102, 241, 0.04);
 }

@@ -766,3 +766,38 @@
         font-size: 0.85rem;
     }
 }
+
+/* ==========================================
+   TEMA OSCURO - Iluminación específica Catálogo
+   ========================================== */
+
+/* Product cards con iluminación sutil */
+[data-theme="dark"] .product-card {
+    background: linear-gradient(145deg, var(--bg-card) 0%, rgba(18, 18, 26, 1) 100%);
+}
+
+[data-theme="dark"] .product-card .product-info {
+    background: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+/* Filtros sidebar con iluminación */
+[data-theme="dark"] .filters-sidebar {
+    background: linear-gradient(180deg, var(--bg-card) 0%, rgba(16, 16, 24, 1) 100%);
+    box-shadow:
+        4px 0 30px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(99, 102, 241, 0.03);
+}
+
+/* Barra de búsqueda con glow sutil */
+[data-theme="dark"] .search-bar.expanded input {
+    background: #111116;
+}
+
+[data-theme="dark"] .search-bar.expanded input:focus {
+    box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.15),
+        0 0 30px rgba(99, 102, 241, 0.08),
+        inset 0 0 15px rgba(99, 102, 241, 0.02);
+}
