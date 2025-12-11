@@ -5,7 +5,7 @@ const Components = {
         <header class="main-header">
             <div class="container header-container">
                 <a href="/index.html" class="logo-link">
-                    <img src="/assets/logo/logo.jpg" alt="Camisetazo" class="logo-img">
+                    <img src="/assets/logo/logo.png" alt="Camisetazo" class="logo-img">
                     <span>CAMISETAZO</span>
                 </a>
 
