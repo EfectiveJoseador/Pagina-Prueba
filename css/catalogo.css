@@ -271,11 +271,20 @@
     padding: 0.875rem 2.5rem 0.875rem 1.25rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    background: var(--bg-card);
-    color: var(--text-main);
+    background: #000;
+    /* Explicit black background */
+    color: #fff;
+    /* Explicit white text */
     cursor: pointer;
     font-size: 1rem;
     min-width: 200px;
+}
+
+/* Explicit style for sort options */
+#sort-select option {
+    background: #000;
+    color: #fff;
+    padding: 10px;
 }
 
 .no-results {
