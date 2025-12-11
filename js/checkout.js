@@ -1,4 +1,4 @@
-import { auth, db } from './firebase-config.js';
+ï»¿import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import Cart from './carrito.js';
@@ -35,7 +35,7 @@ async function loadUserAddresses() {
                 <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
                     <i class="fas fa-map-marker-alt" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
                     <p>No tienes direcciones guardadas.</p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Haz clic en "Añadir Nueva" para crear una.</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Haz clic en "AÃ±adir Nueva" para crear una.</p>
                 </div>
             `;
         }
@@ -43,7 +43,7 @@ async function loadUserAddresses() {
         console.error('Error loading addresses:', error);
         addressList.innerHTML = `
             <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                <p>Error al cargar las direcciones. Inténtalo de nuevo.</p>
+                <p>Error al cargar las direcciones. IntÃ©ntalo de nuevo.</p>
             </div>
         `;
     }
@@ -177,7 +177,7 @@ async function saveNewAddress(e) {
         hideNewAddressForm();
     } catch (error) {
         console.error('Error saving address:', error);
-        alert('Error al guardar la dirección. Inténtalo de nuevo.');
+        alert('Error al guardar la direcciÃ³n. IntÃ©ntalo de nuevo.');
     }
 }
 
@@ -203,7 +203,7 @@ function initPaymentMethods() {
 
 function confirmOrder() {
     if (!currentUser) {
-        alert('Debes iniciar sesión para realizar un pedido.');
+        alert('Debes iniciar sesiÃ³n para realizar un pedido.');
         window.location.href = '/pages/login.html';
         return;
     }
@@ -215,7 +215,7 @@ function confirmOrder() {
 
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
     if (!selectedPayment) {
-        alert('Por favor, selecciona un método de pago');
+        alert('Por favor, selecciona un mÃ©todo de pago');
         return;
     }
 
@@ -234,7 +234,7 @@ function confirmOrder() {
     const orderId = 'ORD-' + Date.now();
 
     if (!calculations || isNaN(calculations.total)) {
-        alert('Error al calcular el total del pedido. Actualiza la página e inténtalo de nuevo.');
+        alert('Error al calcular el total del pedido. Actualiza la pÃ¡gina e intÃ©ntalo de nuevo.');
         return;
     }
     const totalDiscounts = appliedDiscount + promoDiscount;
@@ -325,7 +325,7 @@ function confirmOrder() {
                         window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
                     } catch (error) {
                         console.error('Error procesando pedido:', error);
-                        alert('Error al procesar el pedido. Por favor, inténtalo de nuevo.');
+                        alert('Error al procesar el pedido. Por favor, intÃ©ntalo de nuevo.');
                         confirmBtn.innerHTML = originalText;
                         confirmBtn.disabled = false;
                     }
@@ -360,7 +360,7 @@ function confirmOrder() {
                 window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
             } catch (error) {
                 console.error('Error procesando pedido:', error);
-                alert('Error al procesar el pedido. Por favor, inténtalo de nuevo.');
+                alert('Error al procesar el pedido. Por favor, intÃ©ntalo de nuevo.');
                 confirmBtn.innerHTML = originalText;
                 confirmBtn.disabled = false;
             }
@@ -375,7 +375,7 @@ async function sendOrderViaWeb3Forms(orderData) {
 Address Line: ${sa.street || ''}
 City: ${sa.city || ''}
 Province: ${sa.province || ''}
-Country: España
+Country: EspaÃ±a
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
 Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Bizum)' : ''}`;
@@ -385,20 +385,20 @@ Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Biz
         const size = item.size || 'M';
         const version = item.version || 'fan';
         const price = (item.price * qty).toFixed(2);
-        productsText += qty + 'x ' + item.name + ' · ' + size + ' · ' + version + ' — €' + price + '\n';
+        productsText += qty + 'x ' + item.name + ' Ã‚Â· ' + size + ' Ã‚Â· ' + version + ' Ã‚Â— â‚¬' + price + '\n';
     });
-    let totalInfo = `Subtotal: €${orderData.subtotal.toFixed(2)}\n`;
+    let totalInfo = `Subtotal: â‚¬${orderData.subtotal.toFixed(2)}\n`;
 
     if (orderData.promoCodeUsed) {
-        totalInfo += `Código promo (${orderData.promoCodeUsed}): -€${orderData.promoCodeDiscount.toFixed(2)}\n`;
+        totalInfo += `CÃ³digo promo (${orderData.promoCodeUsed}): -â‚¬${orderData.promoCodeDiscount.toFixed(2)}\n`;
     }
     if (orderData.couponUsed) {
-        totalInfo += `Cupón usado (${orderData.couponUsed}): -€${orderData.couponDiscount.toFixed(2)}\n`;
+        totalInfo += `CupÃ³n usado (${orderData.couponUsed}): -â‚¬${orderData.couponDiscount.toFixed(2)}\n`;
     }
     if (orderData.discount > 0) {
-        totalInfo += `Descuento total: -€${orderData.discount.toFixed(2)}\n`;
+        totalInfo += `Descuento total: -â‚¬${orderData.discount.toFixed(2)}\n`;
     }
-    totalInfo += `TOTAL A PAGAR: €${orderData.total.toFixed(2)}`;
+    totalInfo += `TOTAL A PAGAR: â‚¬${orderData.total.toFixed(2)}`;
     const formData = new FormData();
     formData.append("access_key", WEB3FORMS_KEY);
     formData.append("subject", "Nuevo pedido con pago confirmado - " + orderData.orderId);
@@ -488,13 +488,13 @@ function showLoginPrompt() {
                 border: 1px solid var(--border);
             ">
                 <i class="fas fa-user-lock" style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; opacity: 0.8;"></i>
-                <h2 style="color: var(--text-main); margin-bottom: 0.5rem; font-size: 1.5rem;">Inicia sesión para continuar</h2>
+                <h2 style="color: var(--text-main); margin-bottom: 0.5rem; font-size: 1.5rem;">Inicia sesiÃ³n para continuar</h2>
                 <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 400px;">
-                    Para realizar un pedido necesitas tener una cuenta. Así podrás guardar tus direcciones y ver el historial de tus pedidos.
+                    Para realizar un pedido necesitas tener una cuenta. AsÃ­ podrÃ¡s guardar tus direcciones y ver el historial de tus pedidos.
                 </p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
                     <a href="/pages/login.html" class="btn-modal-primary" style="text-decoration: none;">
-                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        <i class="fas fa-sign-in-alt"></i> Iniciar SesiÃ³n
                     </a>
                     <a href="/pages/login.html#register" class="btn-modal-secondary" style="text-decoration: none;">
                         <i class="fas fa-user-plus"></i> Crear Cuenta
@@ -543,13 +543,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalEl = document.getElementById('checkout-total');
 
     if (shippingEl) {
-        shippingEl.textContent = calculations.shipping === 0 ? 'Gratis' : `€${calculations.shipping.toFixed(2)}`;
+        shippingEl.textContent = calculations.shipping === 0 ? 'Gratis' : `â‚¬${calculations.shipping.toFixed(2)}`;
     }
     if (subtotalEl) {
-        subtotalEl.textContent = `€${calculations.subtotal.toFixed(2)}`;
+        subtotalEl.textContent = `â‚¬${calculations.subtotal.toFixed(2)}`;
     }
     if (totalEl) {
-        totalEl.textContent = `€${calculations.total.toFixed(2)}`;
+        totalEl.textContent = `â‚¬${calculations.total.toFixed(2)}`;
     }
     const couponSelect = document.getElementById('apply-coupon');
     if (couponSelect) {
@@ -571,11 +571,11 @@ async function loadUserCoupons() {
         couponSection.style.display = 'block';
 
         if (userCoupons.length > 0 && couponSelect) {
-            couponSelect.innerHTML = '<option value="">Sin cupón</option>';
+            couponSelect.innerHTML = '<option value="">Sin cupÃ³n</option>';
             userCoupons.forEach(coupon => {
                 const optionText = coupon.type === 'percentage'
                     ? `${coupon.value}% descuento`
-                    : `€${coupon.value.toFixed(2)} descuento`;
+                    : `â‚¬${coupon.value.toFixed(2)} descuento`;
                 couponSelect.innerHTML += `<option value="${coupon.id}">${optionText}</option>`;
             });
         } else {
@@ -609,10 +609,10 @@ function applyCouponDiscount() {
 
             if (coupon.type === 'percentage') {
                 appliedDiscount = (calculations.subtotal * coupon.value) / 100;
-                if (discountText) discountText.textContent = `-${coupon.value}% = -€${appliedDiscount.toFixed(2)}`;
+                if (discountText) discountText.textContent = `-${coupon.value}% = -â‚¬${appliedDiscount.toFixed(2)}`;
             } else {
                 appliedDiscount = Math.min(coupon.value, calculations.subtotal);
-                if (discountText) discountText.textContent = `-€${appliedDiscount.toFixed(2)}`;
+                if (discountText) discountText.textContent = `-â‚¬${appliedDiscount.toFixed(2)}`;
             }
 
             finalTotal = Math.max(0, finalTotal - appliedDiscount);
@@ -624,7 +624,7 @@ function applyCouponDiscount() {
     }
 
     if (totalEl) {
-        totalEl.textContent = `€${finalTotal.toFixed(2)}`;
+        totalEl.textContent = `â‚¬${finalTotal.toFixed(2)}`;
     }
 }
 
@@ -636,11 +636,11 @@ async function applyPromoCode() {
     const code = input?.value.trim().toUpperCase();
 
     if (!code) {
-        showPromoResult('Por favor, introduce un código', 'error');
+        showPromoResult('Por favor, introduce un cÃ³digo', 'error');
         return;
     }
     if (!currentUser) {
-        showPromoResult('Debes iniciar sesión para usar códigos', 'error');
+        showPromoResult('Debes iniciar sesiÃ³n para usar cÃ³digos', 'error');
         return;
     }
     const btn = document.getElementById('apply-promo-btn');
@@ -654,19 +654,19 @@ async function applyPromoCode() {
         const snapshot = await get(promoRef);
 
         if (!snapshot.exists()) {
-            showPromoResult('Código no válido', 'error');
+            showPromoResult('CÃ³digo no vÃ¡lido', 'error');
             resetPromoButton();
             return;
         }
 
         const promo = snapshot.val();
         if (!promo.active) {
-            showPromoResult('Este código ya no está activo', 'error');
+            showPromoResult('Este cÃ³digo ya no estÃ¡ activo', 'error');
             resetPromoButton();
             return;
         }
         if (promo.maxUses && promo.usageCount >= promo.maxUses) {
-            showPromoResult('Este código ha alcanzado el límite de usos', 'error');
+            showPromoResult('Este cÃ³digo ha alcanzado el lÃ­mite de usos', 'error');
             resetPromoButton();
             return;
         }
@@ -675,25 +675,25 @@ async function applyPromoCode() {
 
         if (promo.type === 'free_shipping') {
             if (calculations.shipping === 0) {
-                showPromoResult('Ya tienes envío gratis en este pedido', 'error');
+                showPromoResult('Ya tienes envÃ­o gratis en este pedido', 'error');
                 appliedPromoCode = null;
                 resetPromoButton();
                 return;
             }
             promoDiscount = calculations.shipping;
-            showPromoResult('¡Envío gratis aplicado!', 'success');
+            showPromoResult('Ã‚Â¡EnvÃ­o gratis aplicado!', 'success');
         } else if (promo.type === 'percentage') {
             promoDiscount = (calculations.subtotal * promo.value) / 100;
-            showPromoResult(`¡${promo.value}% de descuento aplicado! (-€${promoDiscount.toFixed(2)})`, 'success');
+            showPromoResult(`Ã‚Â¡${promo.value}% de descuento aplicado! (-â‚¬${promoDiscount.toFixed(2)})`, 'success');
         } else {
             promoDiscount = Math.min(promo.value, calculations.subtotal);
-            showPromoResult(`¡€${promo.value} de descuento aplicado!`, 'success');
+            showPromoResult(`Ã‚Â¡â‚¬${promo.value} de descuento aplicado!`, 'success');
         }
         let finalTotal = calculations.total - promoDiscount - appliedDiscount;
         finalTotal = Math.max(0, finalTotal);
 
         if (totalEl) {
-            totalEl.textContent = `€${finalTotal.toFixed(2)}`;
+            totalEl.textContent = `â‚¬${finalTotal.toFixed(2)}`;
         }
         try {
             const usageRef = ref(db, `promoCodes/${code}/usageCount`);
@@ -715,7 +715,7 @@ async function applyPromoCode() {
 
     } catch (error) {
         console.error('Error applying promo code:', error);
-        showPromoResult('Error al validar el código', 'error');
+        showPromoResult('Error al validar el cÃ³digo', 'error');
         resetPromoButton();
     }
 }
@@ -733,7 +733,7 @@ function resetPromoButton() {
     const btn = document.getElementById('apply-promo-btn');
     if (btn) {
         btn.disabled = false;
-        btn.textContent = 'Aplicar código';
+        btn.textContent = 'Aplicar cÃ³digo';
         btn.style.background = '#6366f1';
     }
 }

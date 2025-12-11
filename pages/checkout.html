@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - Camisetazo</title>
 
-    
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,7 +15,7 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,7 +23,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    
+
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -34,45 +34,45 @@
 
 <body>
 
-    
+
     <div id="header-placeholder"></div>
 
-    
-    
-    
+
+
+
 
     <form id="pedidoForm" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
-        
+
         <input type="hidden" name="access_key" value="8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8">
         <input type="hidden" name="subject" value="Nuevo pedido con pago confirmado">
         <input type="hidden" name="redirect" id="_next_redirect">
         <input type="checkbox" name="botcheck" style="display:none;">
 
-        
+
         <input type="hidden" name="cliente" id="customerInfo">
         <input type="hidden" name="productos" id="productsInfo">
         <input type="hidden" name="total" id="totalPaid">
     </form>
 
-    
-    
-    
+
+
+
 
     <main class="checkout-container">
         <div class="checkout-layout">
 
-            
-            
-            
+
+
+
             <section class="checkout-form-section">
 
-                
+
                 <div class="checkout-section">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h2 style="margin: 0;">Direcci�n de Env�o</h2>
+                        <h2 style="margin: 0;">Dirección de Envío</h2>
                         <button type="button" id="add-new-address-btn" class="btn-text">
-                            <i class="fas fa-plus"></i> A�adir Nueva
+                            <i class="fas fa-plus"></i> Añadir Nueva
                         </button>
                     </div>
 
@@ -84,23 +84,23 @@
 
                     <div id="address-warning"
                         style="display: none; background: #fef2f2; color: #ef4444; padding: 0.75rem; border-radius: 8px; margin-top: 1rem; border: 1px solid #fecaca;">
-                        <i class="fas fa-exclamation-triangle"></i> Por favor, selecciona una direcci�n de env�o
+                        <i class="fas fa-exclamation-triangle"></i> Por favor, selecciona una dirección de envío
                     </div>
                 </div>
 
-                
+
                 <div id="new-address-form-container" style="display: none;" class="checkout-section">
-                    <h3 style="margin-bottom: 1rem;">Nueva Direcci�n</h3>
+                    <h3 style="margin-bottom: 1rem;">Nueva Dirección</h3>
 
                     <form id="new-address-form">
                         <div class="form-group">
                             <label>Nombre Completo</label>
-                            <input type="text" id="new-address-name" required placeholder="Juan P�rez">
+                            <input type="text" id="new-address-name" required placeholder="Juan Pérez">
                         </div>
 
                         <div class="form-group">
-                            <label>Direcci�n</label>
-                            <input type="text" id="new-address-street" required placeholder="Calle Principal 123, 4�A">
+                            <label>Dirección</label>
+                            <input type="text" id="new-address-street" required placeholder="Calle Principal 123, 4ºA">
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -109,7 +109,7 @@
                                 <input type="text" id="new-address-city" required placeholder="Madrid">
                             </div>
                             <div class="form-group">
-                                <label>C�digo Postal</label>
+                                <label>Código Postal</label>
                                 <input type="text" id="new-address-zip" required placeholder="28001">
                             </div>
                         </div>
@@ -119,39 +119,39 @@
                             <select id="new-address-province" required
                                 style="width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-body); color: var(--text-main); font-size: 1rem;">
                                 <option value="">Selecciona una provincia</option>
-                                <option value="A Coru�a">A Coru�a</option>
-                                <option value="�lava">�lava</option>
+                                <option value="A Coruña">A Coruña</option>
+                                <option value="Álava">Álava</option>
                                 <option value="Albacete">Albacete</option>
                                 <option value="Alicante">Alicante</option>
-                                <option value="Almer�a">Almer�a</option>
+                                <option value="Almería">Almería</option>
                                 <option value="Asturias">Asturias</option>
-                                <option value="�vila">�vila</option>
+                                <option value="Ávila">Ávila</option>
                                 <option value="Badajoz">Badajoz</option>
                                 <option value="Barcelona">Barcelona</option>
                                 <option value="Burgos">Burgos</option>
-                                <option value="C�ceres">C�ceres</option>
-                                <option value="C�diz">C�diz</option>
+                                <option value="Cáceres">Cáceres</option>
+                                <option value="Cádiz">Cádiz</option>
                                 <option value="Cantabria">Cantabria</option>
-                                <option value="Castell�n">Castell�n</option>
+                                <option value="Castellón">Castellón</option>
                                 <option value="Ceuta">Ceuta</option>
                                 <option value="Ciudad Real">Ciudad Real</option>
-                                <option value="C�rdoba">C�rdoba</option>
+                                <option value="Córdoba">Córdoba</option>
                                 <option value="Cuenca">Cuenca</option>
                                 <option value="Girona">Girona</option>
                                 <option value="Granada">Granada</option>
                                 <option value="Guadalajara">Guadalajara</option>
-                                <option value="Guip�zcoa">Guip�zcoa</option>
+                                <option value="Guipúzcoa">Guipúzcoa</option>
                                 <option value="Huelva">Huelva</option>
                                 <option value="Huesca">Huesca</option>
                                 <option value="Illes Balears">Illes Balears</option>
-                                <option value="Ja�n">Ja�n</option>
+                                <option value="Jaén">Jaén</option>
                                 <option value="La Rioja">La Rioja</option>
                                 <option value="Las Palmas">Las Palmas</option>
-                                <option value="Le�n">Le�n</option>
+                                <option value="León">León</option>
                                 <option value="Lleida">Lleida</option>
                                 <option value="Lugo">Lugo</option>
                                 <option value="Madrid">Madrid</option>
-                                <option value="M�laga">M�laga</option>
+                                <option value="Málaga">Málaga</option>
                                 <option value="Melilla">Melilla</option>
                                 <option value="Murcia">Murcia</option>
                                 <option value="Navarra">Navarra</option>
@@ -175,7 +175,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Tel�fono</label>
+                            <label>Teléfono</label>
                             <input type="tel" id="new-address-phone" required placeholder="+34 600 000 000">
                         </div>
 
@@ -196,9 +196,9 @@
                     </form>
                 </div>
 
-                
+
                 <div id="payment-section" class="checkout-section" style="display: none;">
-                    <h2>M�todo de Pago</h2>
+                    <h2>Método de Pago</h2>
 
                     <div class="payment-methods">
                         <label class="payment-option">
@@ -214,13 +214,13 @@
                         </label>
                     </div>
 
-                    
+
                     <div id="bizum-form" style="display:none; margin-top:1.5rem;">
                         <div
                             style="background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(0, 191, 165, 0.05)); border: 1px solid rgba(0, 191, 165, 0.3); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
                             <p style="color: var(--text-main); margin: 0 0 0.75rem 0; font-size: 0.9rem;">
                                 <i class="fas fa-info-circle" style="color: #00bfa5;"></i>
-                                Te contactaremos por Instagram para enviarte el n�mero de Bizum y confirmar el pago.
+                                Te contactaremos por Instagram para enviarte el número de Bizum y confirmar el pago.
                             </p>
                         </div>
                         <div class="form-group">
@@ -232,7 +232,7 @@
                         </div>
                     </div>
 
-                    
+
                     <button type="button" id="confirm-order-btn" class="btn btn-block btn-primary"
                         style="margin-top: 1.5rem;">
                         <i class="fas fa-check-circle"></i> Confirmar Pedido
@@ -240,15 +240,15 @@
                 </div>
             </section>
 
-            
-            
-            
+
+
+
 
             <aside class="cart-summary checkout-summary">
                 <h3>Tu Pedido</h3>
 
                 <div id="checkout-items" class="checkout-items-list">
-                    
+
                 </div>
 
                 <div class="summary-divider"></div>
@@ -259,7 +259,7 @@
                 </div>
 
                 <div class="summary-row">
-                    <span>Env�o</span>
+                    <span>Envío</span>
                     <span id="checkout-shipping">Gratis</span>
                 </div>
 
@@ -268,7 +268,7 @@
                     <span id="checkout-total">€0.00</span>
                 </div>
 
-                
+
                 <div class="discount-accordion" style="margin-top: 1rem;">
                     <button type="button" id="promo-toggle" class="discount-toggle"
                         style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;">
@@ -289,7 +289,7 @@
                     </div>
                 </div>
 
-                
+
                 <div class="discount-accordion" id="coupon-section" style="margin-top: 0.5rem; display: none;">
                     <button type="button" id="coupon-toggle" class="discount-toggle"
                         style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;">
@@ -318,7 +318,7 @@
         </div>
     </main>
 
-    
+
     <script src="/js/theme.js"></script>
     <script src="/js/components.js"></script>
     <script src="/js/ux-feedback.js"></script>
