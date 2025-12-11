@@ -615,7 +615,49 @@ function initRelatedCarousel() {
     startAutoPlay();
 
     const carouselContainer = grid?.querySelector('.carousel-container');
-    if (carouselContainer) {
+
+    // En móvil: implementar scroll infinito con clones dinámicos
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile && carouselContainer) {
+        // Listener para añadir clones dinámicamente cuando se acerca al final
+        carouselContainer.addEventListener('scroll', () => {
+            const scrollLeft = carouselContainer.scrollLeft;
+            const scrollWidth = carouselContainer.scrollWidth;
+            const clientWidth = carouselContainer.clientWidth;
+
+            // Si está cerca del final (a menos de 2 tarjetas del borde)
+            if (scrollLeft + clientWidth >= scrollWidth - 400) {
+                // Añadir una copia de todas las tarjetas originales al final
+                originalCards.forEach(card => {
+                    const clone = card.cloneNode(true);
+                    clone.classList.add('carousel-clone');
+                    track.appendChild(clone);
+                });
+            }
+
+            // Si está cerca del inicio (a menos de 2 tarjetas del borde)
+            if (scrollLeft <= 400) {
+                // Añadir una copia de todas las tarjetas originales al principio
+                const currentScrollLeft = carouselContainer.scrollLeft;
+                const cardsToAdd = [...originalCards].reverse();
+                let addedWidth = 0;
+
+                cardsToAdd.forEach(card => {
+                    const clone = card.cloneNode(true);
+                    clone.classList.add('carousel-clone');
+                    track.insertBefore(clone, track.firstChild);
+                    addedWidth += clone.offsetWidth + 16; // width + gap
+                });
+
+                // Mantener la posición visual
+                carouselContainer.scrollLeft = currentScrollLeft + addedWidth;
+            }
+
+            // Ocultar indicador visual
+            carouselContainer.classList.add('scrolled');
+        }, { passive: true });
+    } else if (carouselContainer) {
+        // Desktop: ocultar indicador al scrollear
         carouselContainer.addEventListener('scroll', () => {
             carouselContainer.classList.add('scrolled');
             handleUserInteraction();
