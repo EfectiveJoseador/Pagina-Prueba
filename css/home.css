@@ -1168,6 +1168,7 @@ a.catalogo-btn:hover,
 /* Mobile: Scroll horizontal nativo con indicador visual */
 @media (max-width: 768px) {
     .catalogo-carousel .carousel-container {
+        position: relative;
         padding: 0 1rem;
         overflow-x: auto;
         overflow-y: hidden;
