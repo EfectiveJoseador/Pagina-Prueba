@@ -534,15 +534,37 @@
 
 .product-price {
     font-weight: 700;
-    color: var(--primary);
     font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.product-price .price {
+    color: #a855f7;
+    font-weight: 800;
+    font-size: 1.15rem;
+    animation: priceGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes priceGlow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 5px rgba(168, 85, 247, 0.2);
+    }
+
+    50% {
+        text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+    }
 }
 
 .price-old {
     text-decoration: line-through;
     color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-right: 0.5rem;
+    font-size: 0.85rem;
+    opacity: 0.7;
 }
 
 
