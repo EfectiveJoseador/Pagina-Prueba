@@ -1,5 +1,3 @@
-
-
 .product-container {
     padding-top: 1rem;
 }
@@ -40,7 +38,7 @@
     border: 1px solid var(--border);
     aspect-ratio: 1;
     overflow: hidden;
-    
+
     animation: scaleIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
     box-shadow: var(--shadow-md);
     cursor: zoom-in;
@@ -69,7 +67,7 @@
 }
 
 .main-image:hover img {
-    
+
     transform: scale(1.15) rotate(2deg);
 }
 
@@ -102,7 +100,7 @@
 .gallery-arrow:hover {
     background: rgba(0, 0, 0, 0.9);
     transform: translateY(-50%) scale(1.15);
-    
+
     box-shadow: 0 0 20px rgba(99, 102, 241, 0.5),
         0 0 40px rgba(99, 102, 241, 0.3);
 }
@@ -162,7 +160,7 @@
 .product-details {
     display: flex;
     flex-direction: column;
-    
+
     animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s backwards;
 }
 
@@ -213,7 +211,7 @@
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-main);
-    
+
     position: relative;
     display: inline-block;
 }
@@ -221,7 +219,7 @@
 
 .price-block:has(.old-price) .current-price {
     color: var(--primary);
-    
+
     text-shadow: 0 0 20px rgba(99, 102, 241, 0.3),
         0 0 40px rgba(99, 102, 241, 0.15);
     animation: priceGlow 2s ease-in-out infinite;
@@ -294,7 +292,7 @@
     color: var(--bg-card);
     border-color: var(--primary);
     transform: scale(1.15);
-    
+
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4),
         0 0 30px rgba(99, 102, 241, 0.3),
         inset 0 0 10px rgba(255, 255, 255, 0.2);
@@ -394,7 +392,7 @@
 
 .btn-add-cart-lg:hover {
     transform: scale(1.02);
-    
+
     box-shadow: 0 10px 35px rgba(99, 102, 241, 0.6),
         0 0 50px rgba(99, 102, 241, 0.4);
 }
@@ -460,7 +458,7 @@
 .carousel-track {
     display: flex;
     gap: 1.5rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.15s ease-out;
 }
 
 .carousel-arrow {
@@ -514,9 +512,9 @@
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    
+
     animation: none;
-    
+
 }
 
 .related-products .product-image {
@@ -603,7 +601,7 @@
         flex-direction: column;
     }
 
-    
+
     .quantity-selector {
         width: 100%;
         justify-content: space-between;
@@ -624,7 +622,7 @@
         padding: 1rem;
     }
 
-    
+
     .carousel-container {
         padding: 0 1rem;
         overflow-x: auto;
@@ -633,17 +631,17 @@
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
-        
+
     }
 
     .carousel-container::-webkit-scrollbar {
         display: none;
-        
+
     }
 
     .carousel-track {
         transform: none !important;
-        
+
         scroll-snap-align: start;
     }
 
@@ -651,7 +649,7 @@
         scroll-snap-align: start;
     }
 
-    
+
     .carousel-arrow {
         display: none;
     }
@@ -662,19 +660,19 @@
         width: 180px;
     }
 
-    
 
-    
+
+
     .related-products {
         position: relative;
     }
 
-    
+
     .related-products::after {
         content: '';
         position: absolute;
         top: 60px;
-        
+
         right: 0;
         width: 40px;
         height: calc(100% - 60px);
@@ -683,7 +681,7 @@
         z-index: 5;
     }
 
-    
+
     .carousel-container::after {
         content: '';
         position: absolute;
@@ -697,14 +695,14 @@
         border-radius: 50%;
         z-index: 10;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        
+
         display: flex;
         align-items: center;
         justify-content: center;
         animation: pulseHint 2s ease-in-out infinite;
     }
 
-    
+
     .carousel-container::before {
         content: '›';
         position: absolute;
@@ -750,20 +748,20 @@
         }
     }
 
-    
+
     .carousel-container.scrolled::after,
     .carousel-container.scrolled::before {
         display: none;
     }
 
-    
+
     .related-products .carousel-container {
-        
+
         padding-right: 0;
     }
 
     .related-products .product-card {
-        
+
         min-width: 42vw;
         max-width: 42vw;
         width: 42vw;
@@ -812,7 +810,7 @@
 
 .toast-notification i {
     color: #10b981;
-    
+
     font-size: 1.2rem;
 }
 
@@ -1051,12 +1049,12 @@
 #lightbox-image {
     max-width: 90vw;
     max-height: 80vh;
-    
+
     object-fit: contain;
     border-radius: var(--radius-md);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     transform-origin: center center;
-    
+
 }
 
 .lightbox-thumbnails {
@@ -1249,7 +1247,7 @@
     #lightbox-image {
         max-width: 95vw;
         max-height: 70vh;
-        
+
     }
 
     .lightbox-thumbnails {
@@ -1270,7 +1268,7 @@
         bottom: 5rem;
         transform: none;
         flex-direction: row-reverse;
-        
+
         padding: 0.5rem;
     }
 

@@ -1,6 +1,3 @@
-
-
-
 body:has(.hero-section) main {
     padding: 0;
     max-width: none;
@@ -88,11 +85,11 @@ body.low-performance * {
     background-position: center;
     background-repeat: no-repeat;
     overflow: hidden;
-    
+
     will-change: opacity, transform;
     transform: translateZ(0);
     backface-visibility: hidden;
-    
+
     animation: heroReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
@@ -215,7 +212,7 @@ body.low-performance * {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    
+
     background-size: 200% 200%;
     display: inline-block;
     animation: gradientShift 6s ease infinite;
@@ -256,7 +253,7 @@ body.low-performance * {
     display: inline-block;
     font-weight: 900;
     letter-spacing: 3px;
-    
+
 }
 
 @keyframes brandSlideIn {
@@ -983,7 +980,7 @@ a.catalogo-btn:hover,
         font-size: 2.2rem;
     }
 
-    
+
     .collections-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
@@ -1001,7 +998,7 @@ a.catalogo-btn:hover,
         font-size: 1.2rem;
     }
 
-    
+
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
@@ -1043,7 +1040,7 @@ a.catalogo-btn:hover,
         padding: 0.3rem 0.6rem;
     }
 
-    
+
     .info-section {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -1072,24 +1069,25 @@ a.catalogo-btn:hover,
 .catalogo-carousel .carousel-container {
     position: relative;
     overflow: hidden;
-    padding: 0 3rem;
+    padding: 0 3.5rem;
     width: 100%;
 }
 
 .catalogo-carousel .carousel-track {
     display: flex;
-    gap: 1.25rem;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    gap: 1.5rem;
+    transition: transform 0.15s ease-out;
 }
 
+/* Flechas estilo producto.html */
 .catalogo-carousel .carousel-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     background: var(--bg-card);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    width: 40px;
-    height: 40px;
+    border: 2px solid var(--border);
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1098,19 +1096,19 @@ a.catalogo-btn:hover,
     z-index: 10;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     color: var(--text-main);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-sm);
 }
 
 .catalogo-carousel .carousel-arrow:hover {
-    background: var(--primary);
-    color: white;
+    background: var(--bg-body);
+    color: var(--primary);
     border-color: var(--primary);
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 6px 25px rgba(99, 102, 241, 0.35);
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(99, 102, 241, 0.15);
 }
 
 .catalogo-carousel .carousel-arrow.disabled {
-    opacity: 0.25;
+    opacity: 0.3;
     cursor: not-allowed;
     pointer-events: none;
 }
@@ -1131,10 +1129,10 @@ a.catalogo-btn:hover,
     flex-shrink: 0;
 }
 
-
+/* Mobile: Scroll horizontal nativo con indicador visual */
 @media (max-width: 768px) {
     .catalogo-carousel .carousel-container {
-        padding: 0 0.75rem;
+        padding: 0 1rem;
         overflow-x: auto;
         overflow-y: hidden;
         scroll-behavior: smooth;
@@ -1162,11 +1160,100 @@ a.catalogo-btn:hover,
     .catalogo-carousel .carousel-arrow {
         display: none;
     }
+
+    /* Indicador de scroll (gradiente derecho) */
+    .catalogo-carousel::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 100%;
+        background: linear-gradient(to left, var(--bg-body) 0%, transparent 100%);
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    /* Indicador visual de deslizar - circulo */
+    .catalogo-carousel .carousel-container::after {
+        content: '';
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulseHintCatalogo 2s ease-in-out infinite;
+    }
+
+    /* Indicador visual de deslizar - flecha */
+    .catalogo-carousel .carousel-container::before {
+        content: '›';
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        z-index: 11;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: var(--primary);
+        animation: slideHintCatalogo 1.5s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @keyframes pulseHintCatalogo {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+
+        50% {
+            opacity: 0.8;
+            transform: translateY(-50%) scale(0.95);
+        }
+    }
+
+    @keyframes slideHintCatalogo {
+
+        0%,
+        100% {
+            transform: translateY(-50%) translateX(0);
+        }
+
+        50% {
+            transform: translateY(-50%) translateX(3px);
+        }
+    }
+
+    /* Ocultar indicador después del primer scroll */
+    .catalogo-carousel .carousel-container.scrolled::after,
+    .catalogo-carousel .carousel-container.scrolled::before {
+        display: none;
+    }
+
+    .catalogo-carousel.scrolled::after {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
     .catalogo-carousel .carousel-container {
-        padding: 0 0.5rem;
+        padding: 0 0.75rem;
     }
 
     .catalogo-carousel .carousel-track {
@@ -1194,7 +1281,7 @@ a.catalogo-btn:hover,
 
 @media (max-width: 1799px) {
 
-    
+
     .collections-section,
     .featured-section,
     .info-section {

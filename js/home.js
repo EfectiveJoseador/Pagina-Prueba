@@ -70,14 +70,17 @@ function initCatalogoCarousel() {
     const track = carousel.querySelector('.carousel-track');
     const prevBtn = document.getElementById('catalogo-prev');
     const nextBtn = document.getElementById('catalogo-next');
+    const carouselContainer = carousel.querySelector('.carousel-container');
 
     if (!track || !prevBtn || !nextBtn) return;
 
     const originalCards = Array.from(track.querySelectorAll('.catalogo-card'));
     if (originalCards.length === 0) return;
 
-    const cardWidth = 280 + 24;
+    const cardWidth = 220 + 24; // width + gap (coincide con CSS)
     const totalCards = originalCards.length;
+
+    // Clonar tarjetas para el loop infinito
     originalCards.forEach(card => {
         const cloneEnd = card.cloneNode(true);
         const cloneStart = card.cloneNode(true);
@@ -86,53 +89,131 @@ function initCatalogoCarousel() {
         track.appendChild(cloneEnd);
         track.insertBefore(cloneStart, track.firstChild);
     });
-    let currentIndex = totalCards;
-    let isTransitioning = false;
 
-    function updateCarousel(animate = true) {
-        if (!animate) {
-            track.style.transition = 'none';
+    let currentIndex = totalCards;
+    let isJumping = false;
+    let autoPlayInterval = null;
+    let isPaused = false;
+
+    // Configuración de auto-play
+    const AUTO_PLAY_DELAY = 4000; // 4 segundos entre movimientos
+    const TRANSITION_DURATION = 600; // Transición más lenta para auto-play (0.6s)
+
+    function setPosition(index, animate = true, slow = false) {
+        if (animate) {
+            // Transición más lenta para auto-play, rápida para clicks
+            const duration = slow ? TRANSITION_DURATION : 150;
+            track.style.transition = `transform ${duration}ms ease-out`;
         } else {
-            track.style.transition = 'transform 0.3s ease';
+            track.style.transition = 'none';
         }
-        const translateX = -(currentIndex * cardWidth);
-        track.style.transform = `translateX(${translateX}px)`;
+        track.style.transform = `translateX(${-(index * cardWidth)}px)`;
     }
 
     function handleTransitionEnd() {
-        isTransitioning = false;
+        if (isJumping) return;
+
+        // Verificar si necesitamos hacer el salto silencioso
         if (currentIndex >= totalCards * 2) {
+            isJumping = true;
             currentIndex = totalCards;
-            updateCarousel(false);
-        }
-        if (currentIndex < totalCards) {
-            currentIndex = totalCards + (currentIndex);
-            updateCarousel(false);
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setPosition(currentIndex, false);
+                    isJumping = false;
+                });
+            });
+        } else if (currentIndex < totalCards) {
+            isJumping = true;
+            currentIndex = totalCards + currentIndex;
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setPosition(currentIndex, false);
+                    isJumping = false;
+                });
+            });
         }
     }
 
     track.addEventListener('transitionend', handleTransitionEnd);
 
+    // Función de auto-play
+    function autoAdvance() {
+        if (isJumping || isPaused) return;
+        currentIndex++;
+        setPosition(currentIndex, true, true); // slow = true para transición suave
+    }
+
+    function startAutoPlay() {
+        if (autoPlayInterval) return;
+        autoPlayInterval = setInterval(autoAdvance, AUTO_PLAY_DELAY);
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+        }
+    }
+
+    function pauseAutoPlay() {
+        isPaused = true;
+        stopAutoPlay();
+    }
+
+    function resumeAutoPlay() {
+        isPaused = false;
+        startAutoPlay();
+    }
+
+    // Pausar al interactuar, reanudar después de 5 segundos
+    let resumeTimeout = null;
+    function handleUserInteraction() {
+        pauseAutoPlay();
+        if (resumeTimeout) clearTimeout(resumeTimeout);
+        resumeTimeout = setTimeout(resumeAutoPlay, 5000);
+    }
+
     prevBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (isTransitioning) return;
-        isTransitioning = true;
+        if (isJumping) return;
+        handleUserInteraction();
         currentIndex--;
-        updateCarousel();
+        setPosition(currentIndex, true, false); // fast
     });
 
     nextBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (isTransitioning) return;
-        isTransitioning = true;
+        if (isJumping) return;
+        handleUserInteraction();
         currentIndex++;
-        updateCarousel();
+        setPosition(currentIndex, true, false); // fast
     });
-    updateCarousel(false);
+
+    // Pausar al hacer hover
+    carousel.addEventListener('mouseenter', pauseAutoPlay);
+    carousel.addEventListener('mouseleave', () => {
+        if (resumeTimeout) clearTimeout(resumeTimeout);
+        resumeAutoPlay();
+    });
+
+    // Posición inicial sin animación
+    setPosition(currentIndex, false);
     track.offsetHeight;
-    track.style.transition = 'transform 0.3s ease';
+
+    // Iniciar auto-play
+    startAutoPlay();
+
+    // Ocultar indicador de scroll en móvil después del primer desplazamiento
+    if (carouselContainer) {
+        carouselContainer.addEventListener('scroll', () => {
+            carouselContainer.classList.add('scrolled');
+            carousel.classList.add('scrolled');
+            handleUserInteraction();
+        }, { passive: true });
+    }
 }
 let catalogoCardsInitialized = false;
 
