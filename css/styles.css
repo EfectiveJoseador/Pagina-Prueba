@@ -20,7 +20,7 @@ body {
     content: '';
     position: fixed;
     top: 0;
-    width: 300px;
+    width: 400px;
     height: 100%;
     pointer-events: none;
     z-index: 0;
@@ -30,18 +30,52 @@ body {
 [data-theme="dark"] body::before {
     left: 0;
     background:
-        radial-gradient(ellipse at 0% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 0% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
-        radial-gradient(ellipse at 0% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 45%);
+        radial-gradient(ellipse at 0% 15%, rgba(139, 92, 246, 0.09) 0%, transparent 45%),
+        radial-gradient(ellipse at 0% 45%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+        radial-gradient(ellipse at 0% 75%, rgba(139, 92, 246, 0.07) 0%, transparent 45%);
 }
 
 /* Luz derecha - azul/morado */
 [data-theme="dark"] body::after {
     right: 0;
     background:
-        radial-gradient(ellipse at 100% 30%, rgba(99, 102, 241, 0.07) 0%, transparent 50%),
-        radial-gradient(ellipse at 100% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
-        radial-gradient(ellipse at 100% 90%, rgba(99, 102, 241, 0.06) 0%, transparent 45%);
+        radial-gradient(ellipse at 100% 25%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
+        radial-gradient(ellipse at 100% 55%, rgba(139, 92, 246, 0.06) 0%, transparent 40%),
+        radial-gradient(ellipse at 100% 85%, rgba(99, 102, 241, 0.07) 0%, transparent 45%);
+}
+
+/* Iluminación decorativa lateral en tema claro */
+[data-theme="light"] body {
+    position: relative;
+}
+
+[data-theme="light"] body::before,
+[data-theme="light"] body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    width: 400px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Luz izquierda - morado/violeta (tema claro) */
+[data-theme="light"] body::before {
+    left: 0;
+    background:
+        radial-gradient(ellipse at 0% 15%, rgba(139, 92, 246, 0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at 0% 45%, rgba(99, 102, 241, 0.04) 0%, transparent 40%),
+        radial-gradient(ellipse at 0% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 45%);
+}
+
+/* Luz derecha - azul/morado (tema claro) */
+[data-theme="light"] body::after {
+    right: 0;
+    background:
+        radial-gradient(ellipse at 100% 25%, rgba(99, 102, 241, 0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at 100% 55%, rgba(139, 92, 246, 0.04) 0%, transparent 40%),
+        radial-gradient(ellipse at 100% 85%, rgba(99, 102, 241, 0.05) 0%, transparent 45%);
 }
 
 main {
