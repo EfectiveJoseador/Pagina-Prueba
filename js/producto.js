@@ -2,13 +2,30 @@ import products from './products-data.js';
 const patchPrices = {
     none: 0,
     liga: 1,
-    champions: 1,
-    europa: 1,
     premier: 1,
     seriea: 1,
-    mundial: 1,
+    bundesliga: 1,
+    ligue1: 1,
+    champions: 1,
+    europa: 1,
+    mundial_clubes: 1, // Renamed from mundial
     copamundo: 1,
-    conmemorativo: 1
+    eurocopa: 1, // New
+    copa_america: 1 // New
+};
+
+const PATCH_DEFINITIONS = {
+    liga: "La Liga",
+    premier: "Premier League",
+    seriea: "Serie A",
+    bundesliga: "Bundesliga",
+    ligue1: "Ligue 1",
+    champions: "Champions League",
+    europa: "Europa League",
+    mundial_clubes: "Mundial de Clubes",
+    copamundo: "Copa del Mundo",
+    eurocopa: "Eurocopa",
+    copa_america: "Copa América"
 };
 
 let product = null;
@@ -119,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('patch-select').addEventListener('change', updatePreview);
     document.getElementById('add-to-cart-btn').addEventListener('click', addToCart);
     loadRelatedProducts();
+    renderPatchOptions(); // Initialize dynamic patches
     applyProductRestrictions();
     updatePreview();
     if (window.Analytics) {
@@ -167,6 +185,73 @@ function isRestrictedCategory() {
         isKids: isKids,
         isRetro: isRetro
     };
+}
+
+function getAllowedPatches(product) {
+    if (!product) return [];
+
+    const allowed = [];
+    const league = product.league;
+
+    // Selecciones (National Teams)
+    if (league === 'selecciones' || product.category === 'selecciones') { // Robust check
+        allowed.push('copamundo');
+        allowed.push('eurocopa');
+        allowed.push('copa_america');
+        return allowed;
+    }
+
+    // Clubs - Standard options
+    allowed.push('champions');
+    allowed.push('europa');
+    allowed.push('mundial_clubes');
+
+    // Clubs - League specific
+    switch (league) {
+        case 'laliga':
+            allowed.push('liga');
+            break;
+        case 'premier':
+            allowed.push('premier');
+            break;
+        case 'seriea':
+            allowed.push('seriea');
+            break;
+        case 'bundesliga':
+            allowed.push('bundesliga');
+            break;
+        case 'ligue1':
+            allowed.push('ligue1');
+            break;
+        // Add other leagues if needed
+    }
+
+    return allowed;
+}
+
+function renderPatchOptions() {
+    const patchSelect = document.getElementById('patch-select');
+    if (!patchSelect || !product) return;
+
+    // Clear existing options
+    patchSelect.innerHTML = '';
+
+    // Add "Sin parches" option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = 'none';
+    defaultOption.textContent = 'Sin parches';
+    patchSelect.appendChild(defaultOption);
+
+    const allowedPatches = getAllowedPatches(product);
+
+    allowedPatches.forEach(patchKey => {
+        if (PATCH_DEFINITIONS[patchKey]) {
+            const option = document.createElement('option');
+            option.value = patchKey;
+            option.textContent = PATCH_DEFINITIONS[patchKey];
+            patchSelect.appendChild(option);
+        }
+    });
 }
 
 function applyProductRestrictions() {

@@ -166,7 +166,7 @@
 
 .category-tag {
     text-transform: uppercase;
-    color: var(--accent);
+    color: #a855f7;
     font-weight: 600;
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
@@ -211,6 +211,9 @@
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-main);
+    /* Default color, overwritten if sale/old price exists or manually set */
+    color: #a855f7;
+    /* Force purple as requested for matching catalog style */
 
     position: relative;
     display: inline-block;
@@ -218,10 +221,10 @@
 
 
 .price-block:has(.old-price) .current-price {
-    color: var(--primary);
+    color: #a855f7;
 
-    text-shadow: 0 0 20px rgba(99, 102, 241, 0.3),
-        0 0 40px rgba(99, 102, 241, 0.15);
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.3),
+        0 0 40px rgba(168, 85, 247, 0.15);
     animation: priceGlow 2s ease-in-out infinite;
 }
 
@@ -230,13 +233,13 @@
 
     0%,
     100% {
-        text-shadow: 0 0 15px rgba(99, 102, 241, 0.25),
-            0 0 30px rgba(99, 102, 241, 0.12);
+        text-shadow: 0 0 15px rgba(168, 85, 247, 0.25),
+            0 0 30px rgba(168, 85, 247, 0.12);
     }
 
     50% {
-        text-shadow: 0 0 25px rgba(99, 102, 241, 0.4),
-            0 0 50px rgba(99, 102, 241, 0.2);
+        text-shadow: 0 0 25px rgba(168, 85, 247, 0.4),
+            0 0 50px rgba(168, 85, 247, 0.2);
     }
 }
 
@@ -424,7 +427,7 @@
 }
 
 .features-list i {
-    color: var(--accent);
+    color: #a855f7;
 }
 
 
