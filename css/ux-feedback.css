@@ -356,17 +356,17 @@ textarea:focus-visible {
 
 
 [data-theme="dark"] .toast {
-    background: #1e293b;
-    border: 1px solid #334155;
+    background: #0a0a0a;
+    border: 1px solid #27272a;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
         0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 [data-theme="dark"] .skeleton {
     background: linear-gradient(90deg,
-            #1e293b 0%,
-            #334155 50%,
-            #1e293b 100%);
+            #0a0a0a 0%,
+            #27272a 50%,
+            #0a0a0a 100%);
     background-size: 200% 100%;
 }
 

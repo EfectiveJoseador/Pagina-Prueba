@@ -726,8 +726,8 @@
 
 
 [data-theme="dark"] .address-option {
-    background: #1e293b;
-    border-color: #334155;
+    background: #0a0a0a;
+    border-color: #27272a;
 }
 
 [data-theme="dark"] .address-option:hover {
@@ -745,21 +745,21 @@
 }
 
 [data-theme="dark"] .checkout-section {
-    background: #1e293b;
-    border-color: #334155;
+    background: #0a0a0a;
+    border-color: #27272a;
 }
 
 [data-theme="dark"] #address-warning {
-    background: #1e293b !important;
-    border-color: #334155 !important;
+    background: #0a0a0a !important;
+    border-color: #27272a !important;
 }
 
 
 [data-theme="dark"] .checkout-section select,
 [data-theme="dark"] #new-address-form select {
-    background: #1e293b !important;
+    background: #0a0a0a !important;
     color: #f8fafc !important;
-    border-color: #334155 !important;
+    border-color: #27272a !important;
 }
 
 [data-theme="dark"] .checkout-section select:focus,
@@ -770,6 +770,6 @@
 
 [data-theme="dark"] .checkout-section select option,
 [data-theme="dark"] #new-address-form select option {
-    background: #1e293b;
+    background: #0a0a0a;
     color: #f8fafc;
 }
