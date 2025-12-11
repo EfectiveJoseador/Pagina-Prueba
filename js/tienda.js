@@ -304,6 +304,69 @@ function formatLeagueName(league) {
 function applyURLFilters() {
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category');
+    const team = params.get('team');
+    const league = params.get('league');
+
+    // Map URL slugs to filter values
+    const teamMappings = {
+        'brasil': 'brasil',
+        'alemania': 'alemania',
+        'espana': 'españa',
+        'argentina': 'argentina',
+        'francia': 'francia',
+        'italia': 'italia',
+        'portugal': 'portugal',
+        'real-madrid': 'real madrid',
+        'barcelona': 'barcelona',
+        'atletico': 'atlético',
+        'psg': 'psg',
+        'man-city': 'man city',
+        'man-united': 'man united',
+        'bayern': 'bayern'
+    };
+
+    const leagueMappings = {
+        'laliga': 'laliga',
+        'bundesliga': 'bundesliga',
+        'seriea': 'serie a',
+        'ligue1': 'ligue 1',
+        'retro': 'retro'
+    };
+
+    // Apply category filter if present
+    if (category) {
+        const categorySelect = document.querySelector('#category-filter');
+        if (categorySelect) {
+            categorySelect.value = category;
+        }
+    }
+
+    // Apply team filter if present (from /seleccion/brasil or ?team=brasil)
+    if (team) {
+        const mappedTeam = teamMappings[team.toLowerCase()] || team;
+        // Filter products by team name
+        filteredProducts = allProducts.filter(p =>
+            p.nombre.toLowerCase().includes(mappedTeam.toLowerCase()) ||
+            (p.equipo && p.equipo.toLowerCase().includes(mappedTeam.toLowerCase()))
+        );
+        currentPage = 1;
+        renderProducts();
+        renderPagination();
+
+        // Update page title for SEO
+        const teamName = mappedTeam.charAt(0).toUpperCase() + mappedTeam.slice(1);
+        document.title = `Camisetas de ${teamName} | Camisetazo`;
+    }
+
+    // Apply league filter if present (from /liga/la-liga or ?league=laliga)
+    if (league) {
+        const mappedLeague = leagueMappings[league.toLowerCase()] || league;
+        const leagueSelect = document.querySelector('#league-filter');
+        if (leagueSelect) {
+            leagueSelect.value = mappedLeague;
+            leagueSelect.dispatchEvent(new Event('change'));
+        }
+    }
 }
 function attachEventListeners() {
     document.getElementById('search-input').addEventListener('input', (e) => {

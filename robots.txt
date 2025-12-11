@@ -1,0 +1,31 @@
+# Robots.txt for Camisetazo - Tienda de Camisetas de Fútbol
+# https://camisetazo.com
+
+User-agent: *
+Allow: /
+
+# Bloquear áreas de administración y páginas privadas
+Disallow: /admin-scripts/
+Disallow: /functions/
+Disallow: /pages/admin.html
+Disallow: /pages/orden-exitosa.html
+Disallow: /pages/checkout.html
+Disallow: /pages/carrito.html
+Disallow: /pages/perfil.html
+Disallow: /pages/login.html
+
+# Bloquear archivos de desarrollo
+Disallow: /.firebase/
+Disallow: /.git/
+Disallow: /.vscode/
+Disallow: /scripts/
+Disallow: /*.json$
+
+# Ubicación del Sitemap
+Sitemap: https://camisetazo.com/sitemap.xml
+
+# Delay de rastreo para un crawling educado
+Crawl-delay: 1
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

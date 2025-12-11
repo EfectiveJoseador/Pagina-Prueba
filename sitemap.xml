@@ -7,334 +7,168 @@
     <!-- Página principal -->
     <url>
         <loc>https://camisetazo.com/</loc>
-        <lastmod>2024-01-15</lastmod>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
 
-    <!-- Catálogo principal -->
+    <!-- Páginas principales (URLs amigables) -->
     <url>
-        <loc>https://camisetazo.com/catalogo</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://camisetazo.com/tienda</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
 
-    <!-- Categorías de productos -->
     <url>
-        <loc>https://camisetazo.com/categoria/futbol</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://camisetazo.com/catalogo</loc>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://camisetazo.com/retro</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/categoria/nba</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://camisetazo.com/sobre-nosotros</loc>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://camisetazo.com/contacto</loc>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+    <!-- Selecciones Nacionales -->
+    <url>
+        <loc>https://camisetazo.com/seleccion/brasil</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/categoria/nfl</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://camisetazo.com/seleccion/alemania</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/categoria/nhl</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://camisetazo.com/seleccion/espana</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/categoria/mlb</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://camisetazo.com/seleccion/argentina</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/categoria/f1</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://camisetazo.com/seleccion/francia</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
-    <!-- Ligas de fútbol específicas -->
     <url>
-        <loc>https://camisetazo.com/liga/premier-league</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://camisetazo.com/seleccion/italia</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
+        <priority>0.8</priority>
     </url>
 
+    <url>
+        <loc>https://camisetazo.com/seleccion/portugal</loc>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Equipos de Club -->
+    <url>
+        <loc>https://camisetazo.com/equipo/real-madrid</loc>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://camisetazo.com/equipo/barcelona</loc>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://camisetazo.com/equipo/atletico-madrid</loc>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Ligas -->
     <url>
         <loc>https://camisetazo.com/liga/la-liga</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/liga/serie-a</loc>
-        <lastmod>2024-01-15</lastmod>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
 
     <url>
         <loc>https://camisetazo.com/liga/bundesliga</loc>
-        <lastmod>2024-01-15</lastmod>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://camisetazo.com/liga/serie-a</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
 
     <url>
         <loc>https://camisetazo.com/liga/ligue-1</loc>
-        <lastmod>2024-01-15</lastmod>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/liga/brasileirao</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/liga/saf-argentina</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/liga/liga-arabe</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/liga/internacional</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <!-- Productos individuales (ejemplos) -->
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-real-madrid-2024</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-barcelona-2024</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-manchester-united-2024</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-liverpool-2024</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-psg-2024</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-juventus-2024</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-bayern-munich-2024</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <!-- Productos NBA -->
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-lakers-lebron-james</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-warriors-stephen-curry</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/producto/camiseta-bulls-michael-jordan</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <!-- Páginas informativas -->
-    <url>
-        <loc>https://camisetazo.com/sobre-nosotros</loc>
-        <lastmod>2024-01-10</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/contacto</loc>
-        <lastmod>2024-01-10</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/envios</loc>
-        <lastmod>2024-01-10</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/devoluciones</loc>
-        <lastmod>2024-01-10</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/guia-tallas</loc>
-        <lastmod>2024-01-10</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/preguntas-frecuentes</loc>
-        <lastmod>2024-01-10</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
     </url>
 
     <!-- Páginas legales -->
     <url>
-        <loc>https://camisetazo.com/politica-privacidad.html</loc>
-        <lastmod>2024-01-05</lastmod>
+        <loc>https://camisetazo.com/privacidad</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/politica-cookies.html</loc>
-        <lastmod>2024-01-05</lastmod>
+        <loc>https://camisetazo.com/cookies</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/terminos-condiciones</loc>
-        <lastmod>2024-01-05</lastmod>
+        <loc>https://camisetazo.com/terminos</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
-    </url>
-
-    <!-- Blog/Noticias (si existe) -->
-    <url>
-        <loc>https://camisetazo.com/blog</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/blog/nuevas-camisetas-temporada-2024</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.4</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/blog/guia-cuidado-camisetas-deportivas</loc>
-        <lastmod>2024-01-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.4</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/blog/historia-camisetas-futbol</loc>
-        <lastmod>2024-01-10</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.4</priority>
-    </url>
-
-    <!-- Ofertas y promociones -->
-    <url>
-        <loc>https://camisetazo.com/ofertas</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/rebajas</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/novedades</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <!-- Páginas de búsqueda populares -->
-    <url>
-        <loc>https://camisetazo.com/buscar/camisetas-retro</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/buscar/camisetas-personalizadas</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/buscar/camisetas-ninos</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
     </url>
 
 </urlset>

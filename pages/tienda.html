@@ -4,9 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda - Camisetazo</title>
 
-    
+    <!-- SEO Meta Tags -->
+    <title>Comprar Camisetas de Fútbol | Tienda Camisetazo</title>
+    <meta name="description"
+        content="🛒 Comprar camisetas de fútbol en Camisetazo. Equipaciones del Real Madrid, Barcelona, Atlético y más equipos. Temporada 2024-2025, retro y personalizadas. ¡Envío rápido!">
+    <meta name="keywords"
+        content="comprar camisetas de fútbol, tienda camisetas fútbol, camisetazo, camisetas fútbol buen precio, equipaciones fútbol">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://camisetazo.com/tienda">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://camisetazo.com/tienda-camisetas-futbol">
+    <meta property="og:title" content="Comprar Camisetas de Fútbol | Tienda Camisetazo">
+    <meta property="og:description"
+        content="Tienda de camisetas de fútbol. Real Madrid, Barcelona, Atlético y más equipos. Temporada 2024-2025 y personalizadas.">
+    <meta property="og:image" content="https://camisetazo.com/assets/og-tienda.jpg">
+    <meta property="og:locale" content="es_ES">
+
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,7 +32,7 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
-    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,7 +40,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -31,8 +48,26 @@
     <link rel="stylesheet" href="/css/badges.css">
     <link rel="stylesheet" href="/css/pagination.css">
     <link rel="stylesheet" href="/css/ux-feedback.css">
+
+    <!-- Schema.org BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://camisetazo.com/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Tienda de Camisetas de Fútbol",
+            "item": "https://camisetazo.com/tienda"
+        }]
+    }
+    </script>
     <style>
-        
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -171,7 +206,7 @@
             transform: translateY(-2px);
         }
 
-        
+
         @media (max-width: 768px) {
             .modal-content {
                 padding: 1.5rem;
@@ -189,7 +224,7 @@
             .form-group input {
                 padding: 0.875rem;
                 font-size: 16px;
-                
+
             }
 
             .btn-submit {
@@ -206,14 +241,30 @@
 
 <body class="page-tienda">
 
-    
+    <!-- Header -->
     <div id="header-placeholder"></div>
 
+    <!-- SEO Intro Section -->
+    <section class="store-intro"
+        style="background: var(--bg-card); padding: 2.5rem 2rem 2rem; text-align: center; border-bottom: 1px solid var(--border);">
+        <div style="max-width: 900px; margin: 0 auto;">
+            <h1 style="font-family: var(--font-heading); font-size: 2.2rem; margin-bottom: 0.75rem;">Tienda de Camisetas
+                de Fútbol</h1>
+            <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6;">
+                Explora nuestra colección de <strong>camisetas de fútbol a buen precio</strong>.
+                Encuentra equipaciones del Real Madrid, Barcelona, Atlético, Sevilla, Valencia y más equipos de La Liga,
+                Bundesliga y Serie A.
+                Todas las camisetas disponibles en versión aficionado y jugador con <strong>personalización
+                    incluida</strong>.
+            </p>
+        </div>
+    </section>
+
     <main class="catalog-container">
-        
+
         <div class="filters-backdrop"></div>
 
-        
+
         <aside class="filters-sidebar">
             <div class="filters-header">
                 <h3>Filtrar por</h3>
@@ -222,34 +273,34 @@
                 </button>
             </div>
 
-            
+
             <div class="cascading-filter-container">
 
-                
+
                 <div class="filter-step">
                     <label class="filter-label">1. Selecciona Liga</label>
                     <div class="custom-select-wrapper">
                         <select id="filter-league" class="custom-select">
                             <option value="">Todas las Ligas</option>
-                            
+
                         </select>
                         <i class="fas fa-chevron-down select-arrow"></i>
                     </div>
                 </div>
 
-                
+
                 <div class="filter-step hidden" id="team-step">
                     <label class="filter-label">2. Selecciona Equipo</label>
                     <div class="custom-select-wrapper">
                         <select id="filter-team" class="custom-select">
                             <option value="">Todos los Equipos</option>
-                            
+
                         </select>
                         <i class="fas fa-chevron-down select-arrow"></i>
                     </div>
                 </div>
 
-                
+
                 <div class="filter-step">
                     <label class="filter-label">Equipaciones Niños</label>
                     <div class="custom-select-wrapper">
@@ -267,16 +318,16 @@
             <button id="clear-filters" class="btn-text">Limpiar Filtros</button>
         </aside>
 
-        
+
         <section class="catalog-content">
             <div class="catalog-toolbar">
-                
+
                 <button id="show-filters" class="btn-show-filters" title="Mostrar filtros">
                     <i class="fas fa-filter"></i>
                     <span>Filtros</span>
                 </button>
 
-                
+
                 <div class="search-bar expanded">
                     <i class="fas fa-search"></i>
                     <input type="text" id="search-input" placeholder="Buscar productos...">
@@ -290,10 +341,10 @@
             </div>
 
             <div id="product-grid" class="product-grid">
-                
+
             </div>
 
-            
+
             <div id="pagination-container" class="pagination-container"></div>
 
             <div id="no-results" class="no-results hidden">
@@ -303,7 +354,7 @@
         </section>
     </main>
 
-    
+
     <div class="modal-overlay" id="customization-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -355,10 +406,10 @@
         </div>
     </div>
 
-    
+
     <div id="footer-placeholder"></div>
 
-    
+
     <script src="/js/theme.js"></script>
     <script src="/js/components.js"></script>
     <script src="/js/ux-feedback.js"></script>

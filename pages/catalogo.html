@@ -4,9 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Camisetazo</title>
 
-    
+    <!-- SEO Meta Tags -->
+    <title>Catálogo de Camisetas de Fútbol | Camisetazo</title>
+    <meta name="description"
+        content="📚 Catálogo de camisetas de fútbol en Camisetazo. Camisetas retro clásicas, equipaciones temporada 2024-2025, NBA y más. ¡Encuentra tu camiseta favorita!">
+    <meta name="keywords"
+        content="catálogo camisetas fútbol, camisetas retro fútbol, camisetas clásicas fútbol, camisetazo, equipaciones fútbol">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://camisetazo.com/catalogo">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://camisetazo.com/catalogo-camisetas">
+    <meta property="og:title" content="Catálogo de Camisetas de Fútbol | Camisetazo">
+    <meta property="og:description"
+        content="Catálogo completo: camisetas retro de fútbol, equipaciones actuales y NBA. Encuentra tu estilo en Camisetazo.">
+    <meta property="og:image" content="https://camisetazo.com/assets/og-catalogo.jpg">
+    <meta property="og:locale" content="es_ES">
+
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,6 +32,7 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -22,12 +40,32 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="/css/badges.css">
     <link rel="stylesheet" href="/css/ux-feedback.css">
+
+    <!-- Schema.org BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://camisetazo.com/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Catálogo de Camisetas de Fútbol",
+            "item": "https://camisetazo.com/catalogo"
+        }]
+    }
+    </script>
 </head>
 
 <body class="page-catalogo">
@@ -35,112 +73,132 @@
     <div id="header-placeholder"></div>
 
     <main>
-        <div class="hero-small" style="background: var(--bg-card); padding: 4rem 2rem; text-align: center;">
-            <h1 style="font-family: var(--font-heading); font-size: 3rem; margin-bottom: 1rem;">Catálogo Completo
-            </h1>
-            <p style="color: var(--text-muted); font-size: 1.2rem;">Explora todas nuestras categorías y encuentra tu
-                estilo.</p>
-        </div>
+        <section class="hero-small" style="background: var(--bg-card); padding: 3rem 2rem; text-align: center;">
+            <h1 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 0.75rem;">Catálogo de
+                Camisetas de Fútbol</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto; line-height: 1.6;">
+                Navega por nuestro catálogo de <strong>camisetas de fútbol</strong>: equipaciones actuales del Real
+                Madrid, Barcelona, Atlético,
+                <strong>camisetas retro de fútbol</strong> clásicas y colecciones de NBA.
+                Todas a buen precio con garantía de calidad Camisetazo.
+            </p>
+        </section>
 
-        <h2 class="section-title"></h2>
-        <div class="grid-catalogo">
+        <section class="catalog-grid-section" style="padding: 2rem;">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Camisetas de Fútbol por Categoría
+            </h2>
+            <div class="grid-catalogo">
 
-            
-            <div class="catalogo-card catalogo-card-clickable has-dropdown"
-                data-link="/pages/tienda.html?category=futbol">
-                <div class="catalogo-img-wrap">
-                    <img src="/assets/colecciones/futbol.png" alt="Camisetas Fútbol" class="catalogo-img"
-                        loading="lazy">
+
+                <div class="catalogo-card catalogo-card-clickable has-dropdown"
+                    data-link="/pages/tienda.html?category=futbol">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/futbol.png"
+                            alt="Camisetas de fútbol Real Madrid Barcelona Atlético temporada 2024-2025"
+                            class="catalogo-img" loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Camisetas Fútbol Temporada Actual</h3>
+                        <p>La Liga, Serie A, Bundesliga y más</p>
+                        <button class="catalogo-btn dropdown-btn">
+                            Ver opciones <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="https://2020soccer.x.yupoo.com/albums">General <i
+                                    class="fas fa-arrow-right"></i></a>
+                            <a href="https://classic-football-fhirts052.x.yupoo.com/"
+                                title="Camisetas retro fútbol clásicas">Camisetas Retro <i
+                                    class="fas fa-arrow-right"></i></a>
+                            <a href="https://yongfa1688.x.yupoo.com/">Nueva Temporada <i
+                                    class="fas fa-arrow-right"></i></a>
+                            <a href="https://aosendi.x.yupoo.com/albums">Conjuntos 1 <i
+                                    class="fas fa-arrow-right"></i></a>
+                            <a href="https://dongshanstore.x.yupoo.com/">Conjuntos 2 <i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
                 </div>
-                <div class="catalogo-info">
-                    <h3>Camisetas Fútbol</h3>
-                    <p>La Liga, Premier, Serie A, Bundesliga y más</p>
-                    <button class="catalogo-btn dropdown-btn">
-                        Ver opciones <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a href="https://2020soccer.x.yupoo.com/albums">General <i class="fas fa-arrow-right"></i></a>
-                        <a href="https://classic-football-fhirts052.x.yupoo.com/">Retro <i
-                                class="fas fa-arrow-right"></i></a>
-                        <a href="https://yongfa1688.x.yupoo.com/">Nueva Temporada <i class="fas fa-arrow-right"></i></a>
-                        <a href="https://aosendi.x.yupoo.com/albums">Conjuntos 1 <i class="fas fa-arrow-right"></i></a>
-                        <a href="https://dongshanstore.x.yupoo.com/">Conjuntos 2 <i class="fas fa-arrow-right"></i></a>
+
+
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nba">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/nba.png"
+                            alt="Camisetas NBA baloncesto Lakers Bulls Warriors Celtics" class="catalogo-img"
+                            loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NBA</h3>
+                        <p>Camisetas oficiales de todos los equipos</p>
+                        <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=zapatillas">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/zapas.png"
+                            alt="Zapatillas deportivas Nike Adidas Jordan calidad premium" class="catalogo-img"
+                            loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Zapatillas</h3>
+                        <p>Las mejores marcas al mejor precio</p>
+                        <a href="/pages/tienda.html?category=zapatillas" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nfl">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/nfl.png" alt="Camisetas NFL football americano equipos oficiales"
+                            class="catalogo-img" loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NFL</h3>
+                        <p>Football americano oficial</p>
+                        <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn"
+                            onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=f1">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/f1.png"
+                            alt="Ropa Fórmula 1 equipos Ferrari Red Bull Mercedes McLaren" class="catalogo-img"
+                            loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>F1</h3>
+                        <p>Equipos y pilotos de Fórmula 1</p>
+                        <a href="/pages/tienda.html?category=f1" class="catalogo-btn" onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=f1">
+                    <div class="catalogo-img-wrap">
+                        <img src="/assets/colecciones/mando.png" alt="Mandos PS4 DualShock 4 calidad premium gaming"
+                            class="catalogo-img" loading="lazy">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Mandos PS4</h3>
+                        <p>Dualshock 4 calidad 1.1</p>
+                        <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?tab=t.0"
+                            class="catalogo-btn" onclick="event.stopPropagation()">
+                            Ver colección <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-
-            
-            <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nba">
-                <div class="catalogo-img-wrap">
-                    <img src="/assets/colecciones/nba.png" alt="NBA" class="catalogo-img" loading="lazy">
-                </div>
-                <div class="catalogo-info">
-                    <h3>NBA</h3>
-                    <p>Camisetas oficiales de todos los equipos</p>
-                    <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn"
-                        onclick="event.stopPropagation()">
-                        Ver colección <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            
-            <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=zapatillas">
-                <div class="catalogo-img-wrap">
-                    <img src="/assets/colecciones/zapas.png" alt="Zapatillas" class="catalogo-img"
-                        loading="lazy">
-                </div>
-                <div class="catalogo-info">
-                    <h3>Zapatillas</h3>
-                    <p>Las mejores marcas al mejor precio</p>
-                    <a href="/pages/tienda.html?category=zapatillas" class="catalogo-btn"
-                        onclick="event.stopPropagation()">
-                        Ver colección <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            
-            <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nfl">
-                <div class="catalogo-img-wrap">
-                    <img src="/assets/colecciones/nfl.png" alt="NFL" class="catalogo-img" loading="lazy">
-                </div>
-                <div class="catalogo-info">
-                    <h3>NFL</h3>
-                    <p>Football americano oficial</p>
-                    <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn" onclick="event.stopPropagation()">
-                        Ver colección <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            
-            <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=f1">
-                <div class="catalogo-img-wrap">
-                    <img src="/assets/colecciones/f1.png" alt="F1" class="catalogo-img" loading="lazy">
-                </div>
-                <div class="catalogo-info">
-                    <h3>F1</h3>
-                    <p>Equipos y pilotos de Fórmula 1</p>
-                    <a href="/pages/tienda.html?category=f1" class="catalogo-btn" onclick="event.stopPropagation()">
-                        Ver colección <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=f1">
-                <div class="catalogo-img-wrap">
-                    <img src="/assets/colecciones/mando.png" alt="F1" class="catalogo-img" loading="lazy">
-                </div>
-                <div class="catalogo-info">
-                    <h3>Mandos PS4</h3>
-                    <p>Dualshock 4 calidad 1.1</p>
-                    <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?tab=t.0"
-                        class="catalogo-btn" onclick="event.stopPropagation()">
-                        Ver colección <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
         </section>
     </main>
 
@@ -152,7 +210,7 @@
     <script type="module" src="/js/firebase-global.js"></script>
     <script type="module" src="/js/carrito.js"></script>
 
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Handle dropdown buttons

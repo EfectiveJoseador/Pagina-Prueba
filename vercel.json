@@ -1,4 +1,118 @@
 {
+  "rewrites": [
+    {
+      "source": "/tienda",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/catalogo",
+      "destination": "/pages/catalogo.html"
+    },
+    {
+      "source": "/retro",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/sobre-nosotros",
+      "destination": "/pages/quienes-somos.html"
+    },
+    {
+      "source": "/contacto",
+      "destination": "/pages/contacto.html"
+    },
+    {
+      "source": "/carrito",
+      "destination": "/pages/carrito.html"
+    },
+    {
+      "source": "/pago",
+      "destination": "/pages/checkout.html"
+    },
+    {
+      "source": "/mi-cuenta",
+      "destination": "/pages/perfil.html"
+    },
+    {
+      "source": "/iniciar-sesion",
+      "destination": "/pages/login.html"
+    },
+    {
+      "source": "/soporte",
+      "destination": "/pages/soporte.html"
+    },
+    {
+      "source": "/privacidad",
+      "destination": "/pages/privacidad.html"
+    },
+    {
+      "source": "/cookies",
+      "destination": "/pages/cookies.html"
+    },
+    {
+      "source": "/terminos",
+      "destination": "/pages/terminos.html"
+    },
+    {
+      "source": "/seleccion/brasil",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/alemania",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/espana",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/argentina",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/francia",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/italia",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/portugal",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/equipo/real-madrid",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/equipo/barcelona",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/equipo/atletico-madrid",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/liga/la-liga",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/liga/bundesliga",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/liga/serie-a",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/liga/ligue-1",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/camiseta/:path*",
+      "destination": "/pages/producto.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

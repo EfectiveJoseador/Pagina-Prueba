@@ -61,6 +61,134 @@
         ],
         "rewrites": [
             {
+                "source": "/tienda",
+                "destination": "/pages/tienda.html"
+            },
+            {
+                "source": "/catalogo",
+                "destination": "/pages/catalogo.html"
+            },
+            {
+                "source": "/retro",
+                "destination": "/pages/tienda.html?category=retro"
+            },
+            {
+                "source": "/sobre-nosotros",
+                "destination": "/pages/quienes-somos.html"
+            },
+            {
+                "source": "/contacto",
+                "destination": "/pages/contacto.html"
+            },
+            {
+                "source": "/carrito",
+                "destination": "/pages/carrito.html"
+            },
+            {
+                "source": "/pago",
+                "destination": "/pages/checkout.html"
+            },
+            {
+                "source": "/mi-cuenta",
+                "destination": "/pages/perfil.html"
+            },
+            {
+                "source": "/iniciar-sesion",
+                "destination": "/pages/login.html"
+            },
+            {
+                "source": "/soporte",
+                "destination": "/pages/soporte.html"
+            },
+            {
+                "source": "/privacidad",
+                "destination": "/pages/privacidad.html"
+            },
+            {
+                "source": "/cookies",
+                "destination": "/pages/cookies.html"
+            },
+            {
+                "source": "/terminos",
+                "destination": "/pages/terminos.html"
+            },
+            {
+                "source": "/seleccion/brasil",
+                "destination": "/pages/tienda.html?team=brasil"
+            },
+            {
+                "source": "/seleccion/alemania",
+                "destination": "/pages/tienda.html?team=alemania"
+            },
+            {
+                "source": "/seleccion/espana",
+                "destination": "/pages/tienda.html?team=espana"
+            },
+            {
+                "source": "/seleccion/argentina",
+                "destination": "/pages/tienda.html?team=argentina"
+            },
+            {
+                "source": "/seleccion/francia",
+                "destination": "/pages/tienda.html?team=francia"
+            },
+            {
+                "source": "/seleccion/italia",
+                "destination": "/pages/tienda.html?team=italia"
+            },
+            {
+                "source": "/seleccion/portugal",
+                "destination": "/pages/tienda.html?team=portugal"
+            },
+            {
+                "source": "/equipo/real-madrid",
+                "destination": "/pages/tienda.html?team=real-madrid"
+            },
+            {
+                "source": "/equipo/barcelona",
+                "destination": "/pages/tienda.html?team=barcelona"
+            },
+            {
+                "source": "/equipo/atletico-madrid",
+                "destination": "/pages/tienda.html?team=atletico"
+            },
+            {
+                "source": "/equipo/psg",
+                "destination": "/pages/tienda.html?team=psg"
+            },
+            {
+                "source": "/equipo/manchester-city",
+                "destination": "/pages/tienda.html?team=man-city"
+            },
+            {
+                "source": "/equipo/manchester-united",
+                "destination": "/pages/tienda.html?team=man-united"
+            },
+            {
+                "source": "/equipo/bayern-munich",
+                "destination": "/pages/tienda.html?team=bayern"
+            },
+            {
+                "source": "/liga/la-liga",
+                "destination": "/pages/tienda.html?league=laliga"
+            },
+            {
+                "source": "/liga/bundesliga",
+                "destination": "/pages/tienda.html?league=bundesliga"
+            },
+            {
+                "source": "/liga/serie-a",
+                "destination": "/pages/tienda.html?league=seriea"
+            },
+            {
+                "source": "/liga/ligue-1",
+                "destination": "/pages/tienda.html?league=ligue1"
+            },
+            {
+                "source": "/camiseta/**",
+                "destination": "/pages/producto.html"
+            },
+            {
                 "source": "**",
                 "destination": "/index.html"
             }
