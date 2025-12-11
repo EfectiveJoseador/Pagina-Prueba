@@ -20,21 +20,26 @@ main {
 
 
 .main-header {
-    background: var(--bg-card);
+    background: rgba(var(--bg-card-rgb, 255, 255, 255), 0.85);
     border-bottom: 1px solid rgba(99, 102, 241, 0.15);
     position: sticky;
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 .main-header:hover {
     box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12),
         0 0 40px rgba(99, 102, 241, 0.1);
+}
+
+/* Header translúcido en tema oscuro */
+[data-theme="dark"] .main-header {
+    background: rgba(0, 0, 0, 0.75);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .header-container {
@@ -152,7 +157,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     animation: pulse 2s ease-in-out infinite;
     box-shadow: 0 0 10px rgba(236, 72, 153, 0.5),
         0 0 20px rgba(236, 72, 153, 0.3);
@@ -231,7 +236,7 @@ main {
     background: linear-gradient(135deg, var(--accent) 0%, #ec4899 100%);
     color: white;
     transform: translateY(-5px) rotate(360deg) scale(1.15);
-    
+
     box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4),
         0 0 30px rgba(236, 72, 153, 0.3);
 }
@@ -253,7 +258,7 @@ main {
 @media (max-width: 768px) {
     .nav-menu {
         display: none;
-        
+
         position: absolute;
         top: var(--header-height);
         left: 0;
@@ -442,4 +447,143 @@ html {
 ::selection {
     background: rgba(99, 102, 241, 0.2);
     color: var(--text-main);
+}
+
+
+/* ==========================================
+   TEMA OSCURO - Bordes blancos finos
+   (sin modificar el cabezal)
+   ========================================== */
+
+[data-theme="dark"] .main-footer {
+    border-top: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Tarjetas de productos y catálogo */
+[data-theme="dark"] .card-premium,
+[data-theme="dark"] .product-card,
+[data-theme="dark"] .catalogo-card,
+[data-theme="dark"] .client-card {
+    border: 2px solid rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="dark"] .card-premium:hover,
+[data-theme="dark"] .product-card:hover,
+[data-theme="dark"] .catalogo-card:hover,
+[data-theme="dark"] .client-card:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Tarjetas informativas y estadísticas */
+[data-theme="dark"] .info-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .about-hero,
+[data-theme="dark"] .gallery-section,
+[data-theme="dark"] .legal-content {
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-lg);
+}
+
+/* Secciones y contenedores */
+[data-theme="dark"] .section,
+[data-theme="dark"] .collections-section,
+[data-theme="dark"] .featured-section {
+    border: none;
+}
+
+/* Filtros y paneles laterales */
+[data-theme="dark"] .filters-sidebar,
+[data-theme="dark"] .filter-group,
+[data-theme="dark"] .filter-section {
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Modales y popups */
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .popup-content,
+[data-theme="dark"] .dropdown-menu,
+[data-theme="dark"] .customization-group {
+    border: 2px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Botones */
+[data-theme="dark"] .btn,
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn-outline {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .btn-outline {
+    border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+[data-theme="dark"] .btn-outline:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Enlaces sociales */
+[data-theme="dark"] .social-link {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Flechas del carrusel */
+[data-theme="dark"] .carousel-arrow {
+    border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="dark"] .carousel-arrow:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Inputs y formularios */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: #000000;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Tabs y navegación secundaria */
+[data-theme="dark"] .tab-btn,
+[data-theme="dark"] .size-btn,
+[data-theme="dark"] .badge {
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Carrito y checkout */
+[data-theme="dark"] .cart-item,
+[data-theme="dark"] .cart-summary,
+[data-theme="dark"] .checkout-section {
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Acordeones y expansibles */
+[data-theme="dark"] .accordion-item,
+[data-theme="dark"] .faq-item {
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Galería de imágenes */
+[data-theme="dark"] .gallery-item,
+[data-theme="dark"] .thumbnail {
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Separadores y divisores */
+[data-theme="dark"] hr,
+[data-theme="dark"] .divider {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Tooltips y popovers */
+[data-theme="dark"] .tooltip,
+[data-theme="dark"] .popover {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: #000000;
 }

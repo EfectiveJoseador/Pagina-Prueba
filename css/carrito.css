@@ -726,8 +726,8 @@
 
 
 [data-theme="dark"] .address-option {
-    background: #0a0a0a;
-    border-color: #27272a;
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme="dark"] .address-option:hover {
@@ -745,21 +745,21 @@
 }
 
 [data-theme="dark"] .checkout-section {
-    background: #0a0a0a;
-    border-color: #27272a;
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme="dark"] #address-warning {
-    background: #0a0a0a !important;
-    border-color: #27272a !important;
+    background: #000000 !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
 
 [data-theme="dark"] .checkout-section select,
 [data-theme="dark"] #new-address-form select {
-    background: #0a0a0a !important;
+    background: #000000 !important;
     color: #f8fafc !important;
-    border-color: #27272a !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
 [data-theme="dark"] .checkout-section select:focus,
@@ -770,6 +770,6 @@
 
 [data-theme="dark"] .checkout-section select option,
 [data-theme="dark"] #new-address-form select option {
-    background: #0a0a0a;
+    background: #000000;
     color: #f8fafc;
 }

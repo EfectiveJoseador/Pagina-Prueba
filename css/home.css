@@ -431,7 +431,7 @@ body.low-performance * {
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(99, 102, 241, 0.08);
+    border: 1px solid var(--border);
 }
 
 .catalogo-card-clickable {
@@ -762,6 +762,7 @@ a.catalogo-btn:hover,
     border-radius: var(--radius-lg);
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
 }
 
 .info-card:hover {
@@ -797,6 +798,7 @@ a.catalogo-btn:hover,
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: var(--shadow-sm);
     position: relative;
+    border: 1px solid var(--border);
 }
 
 .product-card:hover {

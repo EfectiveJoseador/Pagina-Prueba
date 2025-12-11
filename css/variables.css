@@ -19,7 +19,7 @@
     --bg-card-dark: #0a0a0a;
     --text-main-dark: #f8fafc;
     --text-muted-dark: #a1a1aa;
-    --border-dark: #27272a;
+    --border-dark: rgba(255, 255, 255, 0.2);
     --primary-dark: #ffffff;
     --accent-dark: #60a5fa;
 
