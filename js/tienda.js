@@ -204,10 +204,12 @@ function init() {
     initLazyLoading();
 
     populateLeagueFilter();
-    renderProducts();
     attachEventListeners();
     setupModal();
+
+    // Apply URL filters BEFORE rendering, then apply filters to get filtered results
     applyURLFilters();
+    applyFilters(false);  // This will filter and render
 }
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -303,70 +305,86 @@ function formatLeagueName(league) {
 }
 function applyURLFilters() {
     const params = new URLSearchParams(window.location.search);
-    const category = params.get('category');
-    const team = params.get('team');
+    const search = params.get('search');
     const league = params.get('league');
+    const team = params.get('team');
+    const kids = params.get('kids');
+    const sort = params.get('sort');
 
-    // Map URL slugs to filter values
-    const teamMappings = {
-        'brasil': 'brasil',
-        'alemania': 'alemania',
-        'espana': 'españa',
-        'argentina': 'argentina',
-        'francia': 'francia',
-        'italia': 'italia',
-        'portugal': 'portugal',
-        'real-madrid': 'real madrid',
-        'barcelona': 'barcelona',
-        'atletico': 'atlético',
-        'psg': 'psg',
-        'man-city': 'man city',
-        'man-united': 'man united',
-        'bayern': 'bayern'
-    };
-
-    const leagueMappings = {
-        'laliga': 'laliga',
-        'bundesliga': 'bundesliga',
-        'seriea': 'serie a',
-        'ligue1': 'ligue 1',
-        'retro': 'retro'
-    };
-
-    // Apply category filter if present
-    if (category) {
-        const categorySelect = document.querySelector('#category-filter');
-        if (categorySelect) {
-            categorySelect.value = category;
+    // Apply search filter
+    if (search) {
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.value = decodeURIComponent(search);
         }
     }
 
-    // Apply team filter if present (from /seleccion/brasil or ?team=brasil)
-    if (team) {
-        const mappedTeam = teamMappings[team.toLowerCase()] || team;
-        // Filter products by team name
-        filteredProducts = allProducts.filter(p =>
-            p.nombre.toLowerCase().includes(mappedTeam.toLowerCase()) ||
-            (p.equipo && p.equipo.toLowerCase().includes(mappedTeam.toLowerCase()))
-        );
-        currentPage = 1;
-        renderProducts();
-        renderPagination();
-
-        // Update page title for SEO
-        const teamName = mappedTeam.charAt(0).toUpperCase() + mappedTeam.slice(1);
-        document.title = `Camisetas de ${teamName} | Camisetazo`;
-    }
-
-    // Apply league filter if present (from /liga/la-liga or ?league=laliga)
+    // Apply league filter
     if (league) {
-        const mappedLeague = leagueMappings[league.toLowerCase()] || league;
-        const leagueSelect = document.querySelector('#league-filter');
+        selectedLeague = league;
+        const leagueSelect = document.getElementById('filter-league');
         if (leagueSelect) {
-            leagueSelect.value = mappedLeague;
-            leagueSelect.dispatchEvent(new Event('change'));
+            leagueSelect.value = league;
+            populateTeamFilter(league);
         }
     }
+
+    // Apply team filter
+    if (team) {
+        // Decode the team name from URL (handles + and %20)
+        const decodedTeam = decodeURIComponent(team.replace(/\+/g, ' '));
+        selectedTeam = decodedTeam;
+
+        // If we have a team select dropdown, set its value
+        const teamSelect = document.getElementById('filter-team');
+        if (teamSelect) {
+            teamSelect.value = decodedTeam;
+        }
+    }
+
+    // Apply kids filter
+    if (kids) {
+        selectedKids = kids;
+        const kidsSelect = document.getElementById('filter-kids');
+        if (kidsSelect) {
+            kidsSelect.value = kids;
+        }
+    }
+
+    // Apply sort
+    if (sort) {
+        const sortSelect = document.getElementById('sort-select');
+        if (sortSelect) {
+            sortSelect.value = sort;
+        }
+    }
+}
+
+// Function to update URL with current filters
+function updateURLWithFilters(searchTerm, sortBy) {
+    const params = new URLSearchParams();
+
+    if (searchTerm) {
+        params.set('search', searchTerm);
+    }
+    if (selectedLeague) {
+        params.set('league', selectedLeague);
+    }
+    if (selectedTeam) {
+        params.set('team', selectedTeam);
+    }
+    if (selectedKids) {
+        params.set('kids', selectedKids);
+    }
+    if (sortBy && sortBy !== 'default') {
+        params.set('sort', sortBy);
+    }
+
+    const newURL = params.toString()
+        ? `${window.location.pathname}?${params.toString()}`
+        : window.location.pathname;
+
+    history.pushState({}, '', newURL);
 }
 function attachEventListeners() {
     document.getElementById('search-input').addEventListener('input', (e) => {
@@ -418,7 +436,7 @@ function attachEventListeners() {
         applyFilters();
     });
 }
-function applyFilters() {
+function applyFilters(updateURL = true) {
     const searchTerm = document.getElementById('search-input').value.toLowerCase();
     const sortBy = document.getElementById('sort-select').value;
     currentPage = 1;
@@ -427,7 +445,7 @@ function applyFilters() {
         const matchesLeague = selectedLeague === '' || product.league === selectedLeague;
         let matchesTeam = true;
         if (selectedTeam !== '') {
-            matchesTeam = product.name.includes(selectedTeam);
+            matchesTeam = product.name.toLowerCase().includes(selectedTeam.toLowerCase());
         }
         let matchesKids = true;
         const nameLower = product.name.toLowerCase();
@@ -475,12 +493,20 @@ function applyFilters() {
         }
     }
 
+    // Update URL with current filters
+    if (updateURL) {
+        updateURLWithFilters(searchTerm, sortBy);
+    }
+
     renderProducts();
 }
 function setupModal() {
     const modal = document.getElementById('customization-modal');
     const closeButtons = document.querySelectorAll('.close-modal');
     const form = document.getElementById('customization-form');
+
+    if (!modal || !form) return; // Exit if modal elements don't exist
+
     closeButtons.forEach(btn => {
         btn.addEventListener('click', closeModal);
     });
