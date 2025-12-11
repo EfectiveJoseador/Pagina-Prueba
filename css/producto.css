@@ -461,10 +461,25 @@
     transition: transform 0.15s ease-out;
 }
 
+
+/* Contenedor de flechas debajo del carrusel (nuevo) */
+/* Contenedor de flechas debajo del carrusel (nuevo) */
+.carousel-arrows {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
 .carousel-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative;
+    /* Cambiado de absolute */
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    transform: none;
     background: var(--bg-card);
     border: 2px solid var(--border);
     width: 45px;
@@ -484,7 +499,8 @@
     background: var(--bg-body);
     color: var(--primary);
     border-color: var(--primary);
-    transform: translateY(-50%) scale(1.15);
+    transform: scale(1.15);
+    /* Efecto scale igual que home */
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(99, 102, 241, 0.15);
 }
 
@@ -494,14 +510,11 @@
     pointer-events: none;
 }
 
-
-
-.carousel-arrow-left {
-    left: 0;
-}
-
+/* Eliminamos estilos antiguos de posicionamiento absoluto */
+.carousel-arrow-left,
 .carousel-arrow-right {
-    right: 0;
+    position: static;
+    transform: none;
 }
 
 

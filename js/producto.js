@@ -462,17 +462,19 @@ function loadRelatedProducts() {
     `).join('');
 
     grid.innerHTML = `
-        <button class="carousel-arrow carousel-arrow-left" id="related-prev">
-            <i class="fas fa-chevron-left"></i>
-        </button>
         <div class="carousel-container">
             <div class="carousel-track">
                 ${cardsHtml}
             </div>
         </div>
-        <button class="carousel-arrow carousel-arrow-right" id="related-next">
-            <i class="fas fa-chevron-right"></i>
-        </button>
+        <div class="carousel-arrows">
+            <button class="carousel-arrow carousel-arrow-left" id="related-prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-arrow carousel-arrow-right" id="related-next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
     `;
     initRelatedCarousel();
 }

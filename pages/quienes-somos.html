@@ -209,46 +209,9 @@
             transition: transform 0.15s ease-out;
         }
 
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--bg-card);
-            border: 2px solid var(--border);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            color: var(--text-main);
-            box-shadow: var(--shadow-sm);
-        }
 
-        .carousel-arrow:hover {
-            background: var(--bg-body);
-            color: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-50%) scale(1.15);
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(99, 102, 241, 0.15);
-        }
+        /* Las flechas usan los estilos de producto.css */
 
-        .carousel-arrow.disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .carousel-arrow-left {
-            left: 0;
-        }
-
-        .carousel-arrow-right {
-            right: 0;
-        }
 
 
         .client-card {
@@ -559,17 +522,19 @@
             <p class="gallery-subtitle">Fotos reales de nuestros proveedores</p>
 
             <div id="clients-grid">
-                <button class="carousel-arrow carousel-arrow-left" id="clients-prev">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
                 <div class="carousel-container">
                     <div class="carousel-track" id="carousel-track">
 
                     </div>
                 </div>
-                <button class="carousel-arrow carousel-arrow-right" id="clients-next">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+                <div class="carousel-arrows">
+                    <button class="carousel-arrow carousel-arrow-left" id="clients-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-arrow carousel-arrow-right" id="clients-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </section>
 
