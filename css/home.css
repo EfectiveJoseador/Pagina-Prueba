@@ -1107,7 +1107,7 @@ a.catalogo-btn:hover,
 .catalogo-carousel .carousel-container {
     position: relative;
     overflow: visible;
-    padding: 0 3.5rem;
+    padding: 0 1rem;
     width: 100%;
 }
 
@@ -1117,11 +1117,21 @@ a.catalogo-btn:hover,
     transition: transform 0.15s ease-out;
 }
 
-/* Flechas estilo producto.html */
+/* Contenedor de flechas debajo del carrusel */
+.catalogo-carousel .carousel-arrows {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Flechas debajo del carrusel */
 .catalogo-carousel .carousel-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
     background: var(--bg-card);
     border: 2px solid var(--border);
     width: 45px;
@@ -1141,7 +1151,7 @@ a.catalogo-btn:hover,
     background: var(--bg-body);
     color: var(--primary);
     border-color: var(--primary);
-    transform: translateY(-50%) scale(1.15);
+    transform: scale(1.15);
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(99, 102, 241, 0.15);
 }
 
@@ -1149,14 +1159,6 @@ a.catalogo-btn:hover,
     opacity: 0.3;
     cursor: not-allowed;
     pointer-events: none;
-}
-
-.catalogo-carousel .carousel-arrow-left {
-    left: 0;
-}
-
-.catalogo-carousel .carousel-arrow-right {
-    right: 0;
 }
 
 
