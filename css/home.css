@@ -6,7 +6,7 @@ body:has(.hero-section) main {
 
 body:has(.hero-section) .main-header {
     will-change: opacity, transform;
-    animation: headerSlideDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s backwards;
+    animation: headerSlideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.6s backwards;
 }
 
 @keyframes headerSlideDown {
@@ -90,7 +90,7 @@ body.low-performance * {
     transform: translateZ(0);
     backface-visibility: hidden;
 
-    animation: heroReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: heroReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 
@@ -104,7 +104,7 @@ body.low-performance * {
 @keyframes heroReveal {
     0% {
         opacity: 0;
-        transform: translate3d(0, 0, 0) scale(1.05);
+        transform: translate3d(0, 0, 0) scale(1.02);
     }
 
     100% {
@@ -152,21 +152,21 @@ body.low-performance * {
     z-index: 1;
     pointer-events: none;
     will-change: opacity;
-    animation: glowPulse 4s ease-in-out infinite;
-    animation-delay: 2s;
+    animation: glowPulse 6s ease-in-out infinite;
+    animation-delay: 1.5s;
 }
 
 @keyframes glowPulse {
 
     0%,
     100% {
-        opacity: 0.3;
-        transform: translate3d(-50%, -50%, 0) scale(0.9);
+        opacity: 0.25;
+        transform: translate3d(-50%, -50%, 0);
     }
 
     50% {
-        opacity: 0.7;
-        transform: translate3d(-50%, -50%, 0) scale(1.05);
+        opacity: 0.5;
+        transform: translate3d(-50%, -50%, 0);
     }
 }
 
@@ -192,13 +192,13 @@ body.low-performance * {
         0 5px 25px rgba(0, 0, 0, 0.4);
     letter-spacing: -0.03em;
     will-change: opacity, transform;
-    animation: titleEntry 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s backwards;
+    animation: titleEntry 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
 }
 
 @keyframes titleEntry {
     0% {
         opacity: 0;
-        transform: translate3d(0, 40px, 0);
+        transform: translate3d(0, 25px, 0);
     }
 
     100% {
@@ -224,7 +224,7 @@ body.low-performance * {
     margin-bottom: 2rem;
     letter-spacing: 0.5px;
     will-change: opacity, transform;
-    animation: brandSlideIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s backwards;
+    animation: brandSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.35s backwards;
 }
 
 
@@ -244,14 +244,12 @@ body.low-performance * {
 @keyframes brandSlideIn {
     0% {
         opacity: 0;
-        transform: translateX(-50px) scale(0.9);
-        filter: blur(10px);
+        transform: translateY(15px);
     }
 
     100% {
         opacity: 1;
-        transform: translateX(0) scale(1);
-        filter: blur(0);
+        transform: translateY(0);
     }
 }
 
@@ -265,20 +263,18 @@ body.low-performance * {
     line-height: 1.7;
     text-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
     font-weight: 400;
-    animation: subtitleSlideIn 1.3s cubic-bezier(0.22, 1, 0.36, 1) 1.2s backwards;
+    animation: subtitleSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s backwards;
 }
 
 @keyframes subtitleSlideIn {
     0% {
         opacity: 0;
-        transform: translateY(40px);
-        filter: blur(5px);
+        transform: translateY(20px);
     }
 
     100% {
         opacity: 1;
         transform: translateY(0);
-        filter: blur(0);
     }
 }
 
@@ -286,18 +282,18 @@ body.low-performance * {
     display: flex;
     gap: 1.5rem;
     justify-content: center;
-    animation: buttonsPop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.6s backwards;
+    animation: buttonsPop 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.7s backwards;
 }
 
 @keyframes buttonsPop {
     0% {
         opacity: 0;
-        transform: scale(0.8) translateY(30px);
+        transform: translateY(15px);
     }
 
     100% {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: translateY(0);
     }
 }
 
@@ -797,7 +793,7 @@ a.catalogo-btn:hover,
     color: var(--primary);
     margin-bottom: 1.5rem;
     display: block;
-    animation: pulse 2s ease-in-out infinite;
+    animation: pulse 3s ease-in-out infinite;
 }
 
 .info-card h3 {
@@ -826,8 +822,8 @@ a.catalogo-btn:hover,
 }
 
 .product-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(-8px);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.18);
 }
 
 .product-image {
@@ -947,18 +943,18 @@ a.catalogo-btn:hover,
 .product-price .price {
     color: #a855f7;
     font-weight: 800;
-    animation: priceGlow 2.5s ease-in-out infinite;
+    animation: priceGlow 3.5s ease-in-out infinite;
 }
 
 @keyframes priceGlow {
 
     0%,
     100% {
-        text-shadow: 0 0 5px rgba(168, 85, 247, 0.2);
+        text-shadow: 0 0 3px rgba(168, 85, 247, 0.15);
     }
 
     50% {
-        text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+        text-shadow: 0 0 8px rgba(168, 85, 247, 0.35);
     }
 }
 
