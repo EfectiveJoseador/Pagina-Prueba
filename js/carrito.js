@@ -270,9 +270,13 @@ const Cart = {
             const el = document.createElement('div');
             el.className = 'cart-item';
             el.innerHTML = `
-                <img src="${product.image}" alt="${product.name}" class="cart-item-img">
+                <a href="/pages/producto.html?id=${product.id}" class="cart-item-link">
+                    <img src="${product.image}" alt="${product.name}" class="cart-item-img">
+                </a>
                 <div class="cart-item-info">
-                    <h3 class="cart-item-title">${product.name}</h3>
+                    <a href="/pages/producto.html?id=${product.id}" class="cart-item-title-link">
+                        <h3 class="cart-item-title">${product.name}</h3>
+                    </a>
                     <div class="cart-item-meta">
                         ${customDetails}
                     </div>
