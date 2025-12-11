@@ -142,16 +142,26 @@
 .custom-select {
     width: 100%;
     padding: 0.875rem 1rem;
-    background: var(--bg-body);
+    background: #000;
+    /* Explicit black background as requested */
+    color: #fff;
+    /* Explicit white text */
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    color: var(--text-main);
     font-size: 1rem;
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
+    /* Ensure options also inherit this style explicitly */
+}
+
+/* Explicit style for options to prevent white-on-white bug */
+.custom-select option {
+    background: #000;
+    color: #fff;
+    padding: 10px;
 }
 
 .custom-select:hover {
