@@ -336,7 +336,8 @@ async function renderBestSellers() {
             <article class="product-card">
                 <div class="product-image">
                     <a href="/pages/producto.html?id=${product.id}">
-                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        <img src="${product.image}" alt="${product.name}" class="primary-image" loading="lazy">
+                        ${product.images && product.images.length > 0 ? `<img src="${product.images[0]}" alt="${product.name} - Vista 2" class="secondary-image" loading="lazy">` : ''}
                     </a>
                     <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
                 </div>
@@ -359,7 +360,8 @@ async function renderBestSellers() {
             <article class="product-card">
                 <div class="product-image">
                     <a href="/pages/producto.html?id=${product.id}">
-                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        <img src="${product.image}" alt="${product.name}" class="primary-image" loading="lazy">
+                        ${product.images && product.images.length > 0 ? `<img src="${product.images[0]}" alt="${product.name} - Vista 2" class="secondary-image" loading="lazy">` : ''}
                     </a>
                     <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
                 </div>

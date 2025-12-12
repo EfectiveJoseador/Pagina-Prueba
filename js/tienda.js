@@ -153,22 +153,22 @@ function renderProducts() {
                 <a href="/pages/producto.html?id=${product.id}">
                     <img 
                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%23e5e7eb' width='1' height='1'/%3E%3C/svg%3E"
-                        data-src="${product.image.replace('/1.webp', '/1_mini.webp')}"
+                        data-src="${product.image}"
                         alt="${product.name}"
                         class="primary-image lazy-image"
                         width="300"
                         height="300"
                         loading="lazy"
                     >
-                    <img 
+                    ${product.images && product.images.length > 0 ? `<img 
                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%23e5e7eb' width='1' height='1'/%3E%3C/svg%3E"
-                        data-src="${product.image.replace('/1.webp', '/2_mini.webp')}"
-                        alt="${product.name}"
+                        data-src="${product.images[0]}"
+                        alt="${product.name} - Vista 2"
                         class="secondary-image lazy-image"
                         width="300"
                         height="300"
                         loading="lazy"
-                    >
+                    >` : ''}
                 </a>
                 <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
             </div>
