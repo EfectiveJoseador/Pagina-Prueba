@@ -12,6 +12,7 @@ let currentProduct = null;
 let selectedLeague = '';
 let selectedTeam = '';
 let selectedKids = '';
+let selectedRetro = false;
 let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
@@ -488,6 +489,14 @@ function attachEventListeners() {
         selectedKids = e.target.value;
         applyFilters();
     });
+    // Event listener para filtro Retro
+    const retroCheckbox = document.getElementById('filter-retro');
+    if (retroCheckbox) {
+        retroCheckbox.addEventListener('change', (e) => {
+            selectedRetro = e.target.checked;
+            applyFilters();
+        });
+    }
     document.getElementById('sort-select').addEventListener('change', applyFilters);
     document.getElementById('close-filters').addEventListener('click', () => {
         const container = document.querySelector('.catalog-container');
@@ -512,8 +521,12 @@ function attachEventListeners() {
         selectedLeague = '';
         selectedTeam = '';
         selectedKids = '';
+        selectedRetro = false;
         document.getElementById('team-step').classList.add('hidden');
         document.getElementById('filter-kids').value = '';
+        // Reset retro checkbox
+        const retroCb = document.getElementById('filter-retro');
+        if (retroCb) retroCb.checked = false;
 
         document.getElementById('search-input').value = '';
         document.getElementById('sort-select').value = 'default';
@@ -570,7 +583,13 @@ function applyFilters(updateURL = true) {
             matchesKids = !isKidsProduct;
         }
 
-        return matchesSearch && matchesLeague && matchesTeam && matchesKids;
+        // Filtro retro
+        let matchesRetro = true;
+        if (selectedRetro) {
+            matchesRetro = nameLower.includes('retro');
+        }
+
+        return matchesSearch && matchesLeague && matchesTeam && matchesKids && matchesRetro;
     });
     function getProductTypeOrder(name) {
         const nameLower = name.toLowerCase();

@@ -180,6 +180,66 @@
     font-size: 0.8rem;
 }
 
+/* Checkbox personalizado para filtro retro */
+.filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    transition: all 0.25s ease;
+}
+
+.filter-checkbox:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.filter-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.checkbox-custom::after {
+    content: '✓';
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.2s ease;
+}
+
+.filter-checkbox input[type="checkbox"]:checked+.checkbox-custom {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.filter-checkbox input[type="checkbox"]:checked+.checkbox-custom::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.checkbox-label {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
 
 .filter-group {
     margin-bottom: 1.5rem;

@@ -35,7 +35,7 @@ const products = [
         id: 104,
         name: "Athletic Club 01/03 Visitante Retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 89.99,
         image: "/assets/productos/La Liga/Athletic0103FR/1.webp",
         new: false,
@@ -56,7 +56,7 @@ const products = [
         id: 106,
         name: "Atlético Madrid 02/03 Local Retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 89.99,
         image: "/assets/productos/La Liga/Atletico0203LR/1.webp",
         new: false,
@@ -87,7 +87,7 @@ const products = [
         id: 109,
         name: "Atlético Madrid 95/96 Tercera Retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 89.99,
         image: "/assets/productos/La Liga/Atletico9596TR/1.webp",
         new: false,
@@ -140,7 +140,7 @@ const products = [
         id: 114,
         name: "FC Barcelona 96/97 Local Retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 94.99,
         image: "/assets/productos/La Liga/Barcelona9697LR/1.webp",
         new: false,
@@ -191,7 +191,7 @@ const products = [
         id: 119,
         name: "Espanyol 99/00 Local Retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 89.99,
         image: "/assets/productos/La Liga/Espanyol9920LR/1.webp",
         new: false,
@@ -536,7 +536,7 @@ const products = [
         id: 302,
         name: "AC Milan 97/98 Local Retro",
         category: "futbol",
-        league: "retro",
+        league: "seriea",
         price: 94.99,
         image: "/assets/productos/Serie A/Milan9798LR/1.webp",
         new: false,
@@ -631,7 +631,7 @@ const products = [
         id: 601,
         name: "España 08/09 Local Retro",
         category: "futbol",
-        league: "retro",
+        league: "selecciones",
         price: 99.99,
         image: "/assets/productos/Internacional/España0809LR/1.webp",
         new: false,
@@ -652,7 +652,7 @@ const products = [
         id: 603,
         name: "Francia 98/99 Local Retro",
         category: "futbol",
-        league: "retro",
+        league: "selecciones",
         price: 99.99,
         image: "/assets/productos/Internacional/Francia9899LR/1.webp",
         new: false,
@@ -663,7 +663,7 @@ const products = [
         id: 604,
         name: "Holanda 98/99 Local Retro",
         category: "futbol",
-        league: "retro",
+        league: "selecciones",
         price: 99.99,
         image: "/assets/productos/Internacional/Holanda9899LR/1.webp",
         new: false,
@@ -694,7 +694,7 @@ const products = [
         id: 571,
         name: "Boca Juniors 01/02 Local Retro",
         category: "futbol",
-        league: "retro",
+        league: "saf",
         price: 89.99,
         image: "/assets/productos/SAF (Argentina)/Boca0102LR/1.webp",
         new: false,
@@ -1089,7 +1089,7 @@ const products = [
         name: "Real Madrid Local Retro",
         slug: "real-madrid-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/201351646/1.jpg",
         images: [
@@ -1178,7 +1178,7 @@ const products = [
         name: "Zaragoza Local Retro",
         slug: "zaragoza-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/199217731/1.jpg",
         images: [
@@ -1235,7 +1235,7 @@ const products = [
         name: "Zaragoza 97/98 Local Retro",
         slug: "zaragoza-9798-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/197575643/1.jpg",
         images: [
@@ -1265,7 +1265,7 @@ const products = [
         name: "Getafe 09/10 Local Retro",
         slug: "getafe-0910-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/192258362/1.jpg",
         images: [
@@ -1295,7 +1295,7 @@ const products = [
         name: "Málaga CF Stadium Local Retro",
         slug: "malaga-cf-stadium-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/187757557/1.jpg",
         images: [
@@ -1906,7 +1906,7 @@ const products = [
         name: "PSG 00/01 Local Retro",
         slug: "psg-0001-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "ligue1",
         price: 0,
         image: "/assets/productos/Yupoo/211235324/1.jpg",
         images: [
@@ -1934,7 +1934,7 @@ const products = [
         name: "Alemania 2008 Local Retro",
         slug: "alemania-2008-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "selecciones",
         price: 0,
         image: "/assets/productos/Yupoo/211517757/1.jpg",
         images: [
@@ -1962,7 +1962,7 @@ const products = [
         name: "Holanda 2004 Local Retro",
         slug: "holanda-2004-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "selecciones",
         price: 0,
         image: "/assets/productos/Yupoo/211235265/1.jpg",
         images: [
@@ -1990,7 +1990,7 @@ const products = [
         name: "Holanda 2004 Visitante Retro",
         slug: "holanda-2004-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "selecciones",
         price: 0,
         image: "/assets/productos/Yupoo/211235213/1.jpg",
         images: [
@@ -2530,7 +2530,7 @@ const products = [
         name: "Celta Tercera Retro",
         slug: "celta-tercera-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/207564422/1.jpg",
         images: [
@@ -2559,7 +2559,7 @@ const products = [
         name: "Real Oviedo 90/91 Local Retro",
         slug: "real-oviedo-9091-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/207564621/1.jpg",
         images: [
@@ -2589,7 +2589,7 @@ const products = [
         name: "Atletico Madrid 02/03 Visitante Retro",
         slug: "atletico-madrid-0203-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/207563853/1.jpg",
         images: [
@@ -2619,7 +2619,7 @@ const products = [
         name: "Atletico Madrid 10/11 Visitante Retro",
         slug: "atletico-madrid-1011-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/207564138/1.jpg",
         images: [
@@ -2763,7 +2763,7 @@ const products = [
         name: "Rayo Vallecano 97/98 Visitante Retro",
         slug: "rayo-vallecano-9798-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/207451208/1.jpg",
         images: [
@@ -2793,7 +2793,7 @@ const products = [
         name: "Rayo Vallecano 97/98 Local Retro",
         slug: "rayo-vallecano-9798-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/207451307/1.jpg",
         images: [
@@ -3267,7 +3267,7 @@ const products = [
         name: "Bayern Munich 17/18 Local Retro",
         slug: "bayern-munich-1718-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "bundesliga",
         price: 0,
         image: "/assets/productos/Yupoo/202776893/1.jpg",
         images: [
@@ -3292,7 +3292,7 @@ const products = [
         name: "Man City 19/20 Local Retro",
         slug: "man-city-1920-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "premier",
         price: 0,
         image: "/assets/productos/Yupoo/202656896/1.jpg",
         images: [
@@ -3318,7 +3318,7 @@ const products = [
         name: "Man Utd 19/20 Visitante Retro",
         slug: "man-utd-1920-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "premier",
         price: 0,
         image: "/assets/productos/Yupoo/202657093/1.jpg",
         images: [
@@ -3468,7 +3468,7 @@ const products = [
         name: "Porto 99/00 Local Retro",
         slug: "porto-9900-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/200365393/1.jpg",
         images: [
@@ -3543,7 +3543,7 @@ const products = [
         name: "Real Madrid 14/15 Local Retro",
         slug: "real-madrid-1415-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/197575196/1.jpeg",
         images: [
@@ -3641,7 +3641,7 @@ const products = [
         name: "Manchester City 13/14 Local Retro",
         slug: "manchester-city-1314-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "premier",
         price: 0,
         image: "/assets/productos/Yupoo/193883573/1.jpg",
         images: [
@@ -3763,7 +3763,7 @@ const products = [
         name: "Roma 00/01 Local Retro",
         slug: "roma-0001-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "seriea",
         price: 0,
         image: "/assets/productos/Yupoo/192257942/1.jpg",
         images: [
@@ -3789,7 +3789,7 @@ const products = [
         name: "Roma Local Retro",
         slug: "roma-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "seriea",
         price: 0,
         image: "/assets/productos/Yupoo/192257870/1.jpg",
         images: [
@@ -3814,7 +3814,7 @@ const products = [
         name: "Roma 95/96 Local Retro",
         slug: "roma-9596-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "seriea",
         price: 0,
         image: "/assets/productos/Yupoo/192257826/1.jpg",
         images: [
@@ -3840,7 +3840,7 @@ const products = [
         name: "River Plate 13/14 Local Retro",
         slug: "river-plate-1314-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "saf",
         price: 0,
         image: "/assets/productos/Yupoo/192252827/1.jpg",
         images: [
@@ -3866,7 +3866,7 @@ const products = [
         name: "Real Madrid Visitante Retro",
         slug: "real-madrid-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/189209051/1.jpg",
         images: [
@@ -3890,7 +3890,7 @@ const products = [
         name: "Real Madrid Tercera Retro",
         slug: "real-madrid-tercera-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/167010565/1.jpg",
         images: [
@@ -3915,7 +3915,7 @@ const products = [
         name: "Real Madrid 17/18 Local Retro",
         slug: "real-madrid-1718-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/117031712/1.jpg",
         images: [
@@ -3941,7 +3941,7 @@ const products = [
         name: "Real Madrid 2000 Local Retro",
         slug: "real-madrid-2000-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/114619503/1.jpg",
         images: [
@@ -3967,7 +3967,7 @@ const products = [
         name: "Real Madrid Local Retro",
         slug: "real-madrid-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/169073222/1.jpg",
         images: [
@@ -3991,7 +3991,7 @@ const products = [
         name: "Barcelona 2007 Retro",
         slug: "barcelona-2007-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/69556791/1.jpg",
         images: [
@@ -4014,7 +4014,7 @@ const products = [
         name: "Barcelona 16/17 Visitante Retro",
         slug: "barcelona-1617-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/138944331/1.jpeg",
         images: [
@@ -4040,7 +4040,7 @@ const products = [
         name: "Barcelona 17/18 Tercera Retro",
         slug: "barcelona-1718-tercera-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/192251388/1.jpg",
         images: [
@@ -4066,7 +4066,7 @@ const products = [
         name: "Barcelona 09/10 Local Retro",
         slug: "barcelona-0910-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/138944262/1.jpeg",
         images: [
@@ -4091,7 +4091,7 @@ const products = [
         name: "Barcelona 13/14 Local Retro",
         slug: "barcelona-1314-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/146962779/1.jpeg",
         images: [
@@ -4116,7 +4116,7 @@ const products = [
         name: "Barcelona UEFA Champions League 08/09 Local Retro",
         slug: "barcelona-uefa-champions-league-0809-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/134230348/1.jpeg",
         images: [
@@ -4141,7 +4141,7 @@ const products = [
         name: "Malaga 12/13 Local Retro",
         slug: "malaga-1213-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/215727648/1.jpg",
         images: [
@@ -4211,7 +4211,7 @@ const products = [
         name: "Real Betis 88/89 Local Retro",
         slug: "real-betis-8889-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/213865644/1.jpg",
         images: [
@@ -4235,7 +4235,7 @@ const products = [
         name: "Athletic Bilbao 86/87 Local Retro",
         slug: "athletic-bilbao-8687-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/214131342/1.jpg",
         images: [
@@ -4259,7 +4259,7 @@ const products = [
         name: "Athletic Bilbao Visitante Retro",
         slug: "athletic-bilbao-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/214136150/1.jpg",
         images: [
@@ -4282,7 +4282,7 @@ const products = [
         name: "Real Madrid 12/13 Visitante Retro",
         slug: "real-madrid-1213-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212822016/1.jpg",
         images: [
@@ -4306,7 +4306,7 @@ const products = [
         name: "Atletico Madrid 16/17 Local Retro",
         slug: "atletico-madrid-1617-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/214403910/1.jpg",
         images: [
@@ -4330,7 +4330,7 @@ const products = [
         name: "Atletico Madrid 82/83 Local Retro",
         slug: "atletico-madrid-8283-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/214401832/1.jpg",
         images: [
@@ -4375,7 +4375,7 @@ const products = [
         name: "Barcelona 14/15 Local Retro",
         slug: "barcelona-1415-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212822675/1.jpg",
         images: [
@@ -4399,7 +4399,7 @@ const products = [
         name: "Real Madrid 14/15 Local Retro",
         slug: "real-madrid-1415-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212822679/1.jpg",
         images: [
@@ -4423,7 +4423,7 @@ const products = [
         name: "Real Madrid 17/18 Visitante Retro",
         slug: "real-madrid-1718-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212821987/1.jpg",
         images: [
@@ -4447,7 +4447,7 @@ const products = [
         name: "Real Madrid 13/14 Visitante Retro",
         slug: "real-madrid-1314-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212822009/1.jpg",
         images: [
@@ -4471,7 +4471,7 @@ const products = [
         name: "Real Madrid 11/12 Visitante Retro",
         slug: "real-madrid-1112-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212821912/1.jpg",
         images: [
@@ -4495,7 +4495,7 @@ const products = [
         name: "Zaragoza Second 95/96 Visitante Retro",
         slug: "zaragoza-second-9596-visitante-retro",
         category: "futbol",
-        league: "retro",
+        league: "otros",
         price: 0,
         image: "/assets/productos/Yupoo/212487006/1.jpg",
         images: [
@@ -4519,7 +4519,7 @@ const products = [
         name: "Barcelona 17/18 Local Retro",
         slug: "barcelona-1718-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212389897/1.jpg",
         images: [
@@ -4543,7 +4543,7 @@ const products = [
         name: "Barcelona 12/13 Local Retro",
         slug: "barcelona-1213-local-retro",
         category: "futbol",
-        league: "retro",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212390713/1.jpg",
         images: [
