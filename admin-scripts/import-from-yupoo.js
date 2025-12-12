@@ -358,27 +358,36 @@ async function main() {
             console.log('');
 
             // Usar readline para input interactivo
-            const readline = require('readline');
-            const rl = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout
-            });
-
-            const userInput = await new Promise(resolve => {
-                rl.question(`${COLORS.cyan}Índices (ej: 7,8): ${COLORS.reset}`, answer => {
-                    rl.close();
-                    resolve(answer.trim());
+            // Si hay exactamente 2 imágenes, seleccionarlas automáticamente (1=Main, 0=Sec)
+            let userInput;
+            if (bigImages.length === 2) {
+                console.log(`${COLORS.green}✓ Detectadas exactamente 2 imágenes.${COLORS.reset}`);
+                console.log(`${COLORS.cyan}Auto-seleccionando: 1 (Principal), 0 (Secundaria)${COLORS.reset}`);
+                userInput = "1,0";
+            } else {
+                const readline = require('readline');
+                const rl = readline.createInterface({
+                    input: process.stdin,
+                    output: process.stdout
                 });
-            });
 
-            if (!userInput) {
-                console.log('');
-                warn('No se seleccionaron imágenes. Abortando.');
-                process.exit(0);
+                userInput = await new Promise(resolve => {
+                    rl.question(`${COLORS.cyan}Índices (ej: 7,8) [Enter para 1,0]: ${COLORS.reset}`, answer => {
+                        rl.close();
+                        resolve(answer.trim());
+                    });
+                });
+            }
+
+            let finalInput = userInput;
+
+            if (!finalInput) {
+                console.log(`${COLORS.yellow}⚠ Input vacío. Usando defecto: 1,0 (Imagen 1 Principal, Imagen 0 Secundaria)${COLORS.reset}`);
+                finalInput = "1,0";
             }
 
             // Parsear índices del input - soporta "all" para todas las demás
-            const inputParts = userInput.split(',').map(s => s.trim().toLowerCase());
+            const inputParts = finalInput.split(',').map(s => s.trim().toLowerCase());
             const hasAll = inputParts.includes('all');
             const selectedIndices = inputParts
                 .filter(s => s !== 'all')

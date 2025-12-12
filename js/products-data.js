@@ -1728,6 +1728,459 @@ const products = [
         temporada: "25/26",
         tipo: "tercera",
         tallas: "S-4XL"
+    },
+    {
+        id: 968048,
+        name: "Chelsea 25/26 Tercera",
+        slug: "chelsea-2526-tercera",
+        category: "futbol",
+        league: "premier",
+        price: 0,
+        image: "/assets/productos/Yupoo/216420668/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216420668/2.jpg"
+        ],
+        imageAlt: "Chelsea 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216420668?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216420668"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 407027,
+        name: "Atletico Mineiro 25/26",
+        slug: "atletico-mineiro-2526",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/213836929/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/213836929/2.jpg"
+        ],
+        imageAlt: "Atletico Mineiro 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/213836929?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "213836929"
+        },
+        temporada: "25/26",
+        tallas: "S-4XL"
+    },
+    {
+        id: 851556,
+        name: "Santos 25/26 Visitante",
+        slug: "santos-2526-visitante",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/213836761/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/213836761/2.jpg"
+        ],
+        imageAlt: "Santos 25/26 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/213836761?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "213836761"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        tallas: "S-4XL"
+    },
+    {
+        id: 382182,
+        name: "Santa Cruz 25/26 Visitante",
+        slug: "santa-cruz-2526-visitante",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/213836701/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/213836701/2.jpg"
+        ],
+        imageAlt: "Santa Cruz 25/26 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/213836701?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "213836701"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        tallas: "S-4XL"
+    },
+    {
+        id: 162492,
+        name: "Inter Milan 25/26 Local",
+        slug: "inter-milan-2526-local",
+        category: "futbol",
+        league: "seriea",
+        price: 0,
+        image: "/assets/productos/Yupoo/212532108/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/212532108/2.jpg"
+        ],
+        imageAlt: "Inter Milan 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/212532108?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "212532108"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 637422,
+        name: "West Ham United 25/26 Tercera",
+        slug: "west-ham-united-2526-tercera",
+        category: "futbol",
+        league: "premier",
+        price: 0,
+        image: "/assets/productos/Yupoo/211519379/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211519379/2.jpg",
+            "/assets/productos/Yupoo/211519379/3.jpg",
+            "/assets/productos/Yupoo/211519379/4.jpg",
+            "/assets/productos/Yupoo/211519379/5.jpg",
+            "/assets/productos/Yupoo/211519379/6.jpg",
+            "/assets/productos/Yupoo/211519379/7.jpg",
+            "/assets/productos/Yupoo/211519379/8.jpg"
+        ],
+        imageAlt: "West Ham United 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211519379?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "211519379"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 580856,
+        name: "Wolves 25/26 Local",
+        slug: "wolves-2526-local",
+        category: "futbol",
+        league: "premier",
+        price: 0,
+        image: "/assets/productos/Yupoo/211519500/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211519500/2.jpg",
+            "/assets/productos/Yupoo/211519500/3.jpg",
+            "/assets/productos/Yupoo/211519500/4.jpg",
+            "/assets/productos/Yupoo/211519500/5.jpg",
+            "/assets/productos/Yupoo/211519500/6.jpg",
+            "/assets/productos/Yupoo/211519500/7.jpg",
+            "/assets/productos/Yupoo/211519500/8.jpg"
+        ],
+        imageAlt: "Wolves 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211519500?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "211519500"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 638151,
+        name: "PSG 00/01 Local Retro",
+        slug: "psg-0001-local-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/211235324/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211235324/2.jpg",
+            "/assets/productos/Yupoo/211235324/3.jpg",
+            "/assets/productos/Yupoo/211235324/4.jpg",
+            "/assets/productos/Yupoo/211235324/5.jpg",
+            "/assets/productos/Yupoo/211235324/6.jpg"
+        ],
+        imageAlt: "PSG 00/01 Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211235324?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "211235324"
+        },
+        temporada: "00/01",
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 829143,
+        name: "Alemania 2008 Local Retro",
+        slug: "alemania-2008-local-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/211517757/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211517757/2.jpg",
+            "/assets/productos/Yupoo/211517757/3.jpg",
+            "/assets/productos/Yupoo/211517757/4.jpg",
+            "/assets/productos/Yupoo/211517757/5.jpg",
+            "/assets/productos/Yupoo/211517757/6.jpg"
+        ],
+        imageAlt: "Alemania 2008 Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211517757?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "211517757"
+        },
+        temporada: "2008",
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 861810,
+        name: "Holanda 2004 Local Retro",
+        slug: "holanda-2004-local-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/211235265/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211235265/2.jpg",
+            "/assets/productos/Yupoo/211235265/3.jpg",
+            "/assets/productos/Yupoo/211235265/4.jpg",
+            "/assets/productos/Yupoo/211235265/5.jpg",
+            "/assets/productos/Yupoo/211235265/6.jpg"
+        ],
+        imageAlt: "Holanda 2004 Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211235265?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "211235265"
+        },
+        temporada: "2004",
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 740108,
+        name: "Holanda 2004 Visitante Retro",
+        slug: "holanda-2004-visitante-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/211235213/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211235213/2.jpg",
+            "/assets/productos/Yupoo/211235213/3.jpg",
+            "/assets/productos/Yupoo/211235213/4.jpg",
+            "/assets/productos/Yupoo/211235213/5.jpg",
+            "/assets/productos/Yupoo/211235213/6.jpg",
+            "/assets/productos/Yupoo/211235213/7.jpg"
+        ],
+        imageAlt: "Holanda 2004 Visitante Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211235213?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "211235213"
+        },
+        temporada: "2004",
+        tipo: "visitante",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 431236,
+        name: "Sao Paulo 25/26 Tercera",
+        slug: "sao-paulo-2526-tercera",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/211234781/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211234781/2.jpg",
+            "/assets/productos/Yupoo/211234781/3.jpg",
+            "/assets/productos/Yupoo/211234781/4.jpg",
+            "/assets/productos/Yupoo/211234781/5.jpg",
+            "/assets/productos/Yupoo/211234781/6.jpg",
+            "/assets/productos/Yupoo/211234781/7.jpg",
+            "/assets/productos/Yupoo/211234781/8.jpg"
+        ],
+        imageAlt: "Sao Paulo 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211234781?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "211234781"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 549694,
+        name: "Sporting Lisbon 25/26",
+        slug: "sporting-lisbon-2526",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/208905010/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/208905010/2.jpg",
+            "/assets/productos/Yupoo/208905010/3.jpg",
+            "/assets/productos/Yupoo/208905010/4.jpg",
+            "/assets/productos/Yupoo/208905010/5.jpg",
+            "/assets/productos/Yupoo/208905010/6.jpg",
+            "/assets/productos/Yupoo/208905010/7.jpg"
+        ],
+        imageAlt: "Sporting Lisbon 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/208905010?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "208905010"
+        },
+        temporada: "25/26",
+        tallas: "S-4XL"
+    },
+    {
+        id: 535164,
+        name: "Sporting Lisbon Green 25/26",
+        slug: "sporting-lisbon-green-2526",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/216420441/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216420441/2.jpg"
+        ],
+        imageAlt: "Sporting Lisbon Green 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216420441?uid=1",
+            albumId: "216420441"
+        },
+        temporada: "25/26",
+        tallas: "S-4XL"
+    },
+    {
+        id: 351327,
+        name: "Sporting Lisbon cyan 25/26",
+        slug: "sporting-lisbon-cyan-2526",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/216420176/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216420176/2.jpg"
+        ],
+        imageAlt: "Sporting Lisbon cyan 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216420176?uid=1",
+            albumId: "216420176"
+        },
+        temporada: "25/26",
+        tallas: "S-4XL"
+    },
+    {
+        id: 316255,
+        name: "Sporting Lisbon Commemorative Edition 25/26",
+        slug: "sporting-lisbon-commemorative-edition-2526",
+        category: "futbol",
+        league: "ligue1",
+        price: 0,
+        image: "/assets/productos/Yupoo/216420592/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216420592/2.jpg"
+        ],
+        imageAlt: "Sporting Lisbon Commemorative Edition 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216420592?uid=1",
+            albumId: "216420592"
+        },
+        temporada: "25/26",
+        tallas: "S-4XL"
+    },
+    {
+        id: 755900,
+        name: "Columbia 2026 Visitante",
+        slug: "columbia-2026-visitante",
+        category: "futbol",
+        league: "ligue1",
+        price: 0,
+        image: "/assets/productos/Yupoo/219490648/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/219490648/2.jpg"
+        ],
+        imageAlt: "Columbia 2026 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/219490648?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "219490648"
+        },
+        temporada: "2026",
+        tipo: "visitante",
+        tallas: "S-4XL"
+    },
+    {
+        id: 475090,
+        name: "Bélgica 2026 Local",
+        slug: "belgica-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/219490303/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/219490303/2.jpg"
+        ],
+        imageAlt: "Bélgica 2026 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/219490303?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "219490303"
+        },
+        temporada: "2026",
+        tipo: "local",
+        tallas: "S-4XL"
     }
 ];
 
