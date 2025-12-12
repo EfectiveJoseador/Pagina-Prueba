@@ -791,29 +791,6 @@ const products = [
         temporada: "25/26",
         tipo: "visitante",
         tallas: "S-4XL"
-    },
-    {
-        id: 492794,
-        name: "Palmeiras 25/26 Tercera",
-        slug: "palmeiras-2526-tercera",
-        category: "futbol",
-        league: "brasileirao",
-        price: 0,
-        image: "/assets/productos/Yupoo/211518994/1.jpg",
-        images: [
-            "/assets/productos/Yupoo/211518994/2.jpg"
-        ],
-        imageAlt: "Palmeiras 25/26 Tercera - Vista principal",
-        new: true,
-        sale: false,
-        source: {
-            provider: "yupoo",
-            url: "https://pandasportjersey.x.yupoo.com/albums/211518994?uid=1",
-            albumId: "211518994"
-        },
-        temporada: "25/26",
-        tipo: "tercera",
-        tallas: "S-4XL"
     }
 ];
 
