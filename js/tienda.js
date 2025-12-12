@@ -440,16 +440,23 @@ function attachEventListeners() {
         applyFilters();
     });
 }
+// Helper para normalizar strings (quitar tildes y lowerCase)
+function normalizeString(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
 function applyFilters(updateURL = true) {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const searchInput = document.getElementById('search-input');
+    const searchTerm = searchInput ? normalizeString(searchInput.value) : '';
     const sortBy = document.getElementById('sort-select').value;
     currentPage = 1;
     filteredProducts = allProducts.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+        const productName = normalizeString(product.name);
+        const matchesSearch = productName.includes(searchTerm);
         const matchesLeague = selectedLeague === '' || product.league === selectedLeague;
         let matchesTeam = true;
         if (selectedTeam !== '') {
-            matchesTeam = product.name.toLowerCase().includes(selectedTeam.toLowerCase());
+            matchesTeam = normalizeString(product.name).includes(normalizeString(selectedTeam));
         }
         let matchesKids = true;
         const nameLower = product.name.toLowerCase();
