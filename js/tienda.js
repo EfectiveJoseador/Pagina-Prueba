@@ -267,43 +267,82 @@ function populateTeamFilter(league) {
 
     const leagueProducts = allProducts.filter(p => p.league === league);
 
-    // Lista de variantes a limpiar
+    // Lista de variantes a limpiar (más completa)
     const variants = [
         'Local', 'Visitante', 'Tercera', 'Cuarta', 'Fourth', 'Home', 'Away', 'Third',
         'Portero', 'Goalkeeper', 'GK',
         'Retro', 'Icon', 'Classic', 'Vintage',
-        'Especial', 'Special', 'Edici[oó]n.*', 'Limited',
-        'Black', 'Gold', 'White', 'Pink', 'Blue',
+        'Especial', 'Special', 'Edici[oó]n.*', 'Limited', 'Commemorative', 'Conmemorativ[ao]',
+        'Black', 'Gold', 'Golden', 'White', 'Pink', 'Blue', 'Red', 'Green', 'Golde', 'cyan',
         'Training', 'Entrenamiento', 'Pre-match', 'Warm-up',
         'Anniversary', 'Aniversario', 'Centemary', 'Centenario',
-        'Player', 'Fan', 'Vapor', 'Authentic'
+        'Player', 'Fan', 'Vapor', 'Authentic',
+        'Stadium', 'Women', 'Edition'
     ];
     const variantRegex = new RegExp(`\\b(${variants.join('|')})\\b`, 'gi');
+
+    // Patrón para eliminar tallas como "S-XXL", "S-4XL", etc.
+    const sizePattern = /\bS-[X\d]+L?\b/gi;
+
+    // Mapeo de nombres canónicos (clave normalizada -> nombre correcto a mostrar)
+    // Y mapeo de alias a clave canónica para unificar variantes
+    const canonicalNames = {
+        'mexico': 'México',
+        'newcastle': 'Newcastle United',
+        'newcastle united': 'Newcastle United',
+        'barcelona': 'FC Barcelona',
+        'fc barcelona': 'FC Barcelona',
+        'sporting lisboa': 'Sporting de Lisboa',
+        'sporting de lisboa': 'Sporting de Lisboa',
+        'sporting lisbon': 'Sporting de Lisboa',
+        'boca juniors': 'Boca Juniors',
+        'flamengo': 'Flamengo',
+        'inter miami': 'Inter Miami',
+        'miami': 'Inter Miami',
+        'man utd': 'Manchester United',
+        'man united': 'Manchester United',
+        'manchester united': 'Manchester United'
+    };
+
+    // Mapeo de alias a clave canónica (para agrupar variantes en la misma entrada)
+    const canonicalKeys = {
+        'barcelona': 'fc barcelona',
+        'newcastle': 'newcastle united',
+        'sporting lisboa': 'sporting de lisboa',
+        'sporting lisbon': 'sporting de lisboa',
+        'miami': 'inter miami',
+        'mexico': 'mexico',
+        'man utd': 'manchester united',
+        'man united': 'manchester united'  // México -> mexico sin tilde
+    };
 
     // Usar Map para deduplicar normalizando claves
     const teamMap = new Map();
 
     leagueProducts.forEach(p => {
         let name = p.name;
+        // Limpiar entidades HTML escapadas
+        name = name.replace(/&amp;/g, '&').replace(/&[a-z]+;/gi, ' ');
         name = name.replace(/\d{2}\/\d{2}/, '');
         name = name.replace(/\b20\d{2}\b/, ''); // Eliminar años
         name = name.replace(/\(.*\)/g, ''); // Eliminar paréntesis completos
         name = name.replace(variantRegex, '');
+        name = name.replace(sizePattern, ''); // Eliminar tallas
         name = name.replace(/\s+/g, ' ').trim();
 
         if (name) {
             // Clave normalizada (sin tildes, minúsculas)
-            const key = normalizeString(name);
+            let key = normalizeString(name);
 
-            // Si no existe, guardar. Si existe, preferir la versión con tildes/formato correcto.
+            // Usar clave canónica si existe (para agrupar variantes)
+            key = canonicalKeys[key] || key;
+
+            // Buscar nombre canónico para mostrar
+            const displayName = canonicalNames[key] || canonicalNames[normalizeString(name)] || name;
+
+            // Si no existe, guardar. Siempre preferir el nombre canónico.
             if (!teamMap.has(key)) {
-                teamMap.set(key, name);
-            } else {
-                const current = teamMap.get(key);
-                // Si el nuevo tiene caracteres no-ASCII (tildes) y el guardado no, usamos el nuevo
-                if (/[^\u0000-\u007f]/.test(name) && !/[^\u0000-\u007f]/.test(current)) {
-                    teamMap.set(key, name);
-                }
+                teamMap.set(key, displayName);
             }
         }
     });
@@ -472,13 +511,28 @@ function applyFilters(updateURL = true) {
     const searchTerm = searchInput ? normalizeString(searchInput.value) : '';
     const sortBy = document.getElementById('sort-select').value;
     currentPage = 1;
+
+    // Mapeo de nombres canónicos a patrones de búsqueda alternativos
+    const teamSearchAliases = {
+        'sporting de lisboa': ['sporting lisboa', 'sporting lisbon', 'sporting de lisboa'],
+        'fc barcelona': ['fc barcelona', 'barcelona'],
+        'newcastle united': ['newcastle united', 'newcastle'],
+        'méxico': ['mexico', 'méxico'],
+        'inter miami': ['inter miami', 'miami'],
+        'boca juniors': ['boca juniors', 'boca'],
+        'manchester united': ['manchester united', 'man utd', 'man united']
+    };
+
     filteredProducts = allProducts.filter(product => {
         const productName = normalizeString(product.name);
         const matchesSearch = productName.includes(searchTerm);
         const matchesLeague = selectedLeague === '' || product.league === selectedLeague;
         let matchesTeam = true;
         if (selectedTeam !== '') {
-            matchesTeam = normalizeString(product.name).includes(normalizeString(selectedTeam));
+            const teamKey = normalizeString(selectedTeam);
+            const aliases = teamSearchAliases[teamKey] || [teamKey];
+            // Verificar si el producto coincide con alguno de los alias
+            matchesTeam = aliases.some(alias => productName.includes(normalizeString(alias)));
         }
         let matchesKids = true;
         const nameLower = product.name.toLowerCase();
