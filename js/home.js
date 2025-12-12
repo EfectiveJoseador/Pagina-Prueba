@@ -77,10 +77,10 @@ function initCatalogoCarousel() {
     const originalCards = Array.from(track.querySelectorAll('.catalogo-card'));
     if (originalCards.length === 0) return;
 
-    const cardWidth = 220 + 24; // width + gap (coincide con CSS)
+    const cardWidth = 220 + 24;
     const totalCards = originalCards.length;
 
-    // Clonar tarjetas para el loop infinito
+
     originalCards.forEach(card => {
         const cloneEnd = card.cloneNode(true);
         const cloneStart = card.cloneNode(true);
@@ -95,13 +95,11 @@ function initCatalogoCarousel() {
     let autoPlayInterval = null;
     let isPaused = false;
 
-    // Configuración de auto-play
-    const AUTO_PLAY_DELAY = 4000; // 4 segundos entre movimientos
-    const TRANSITION_DURATION = 600; // Transición más lenta para auto-play (0.6s)
+    const AUTO_PLAY_DELAY = 4000;
+    const TRANSITION_DURATION = 600;
 
     function setPosition(index, animate = true, slow = false) {
         if (animate) {
-            // Transición más lenta para auto-play, rápida para clicks
             const duration = slow ? TRANSITION_DURATION : 150;
             track.style.transition = `transform ${duration}ms ease-out`;
         } else {
@@ -113,7 +111,7 @@ function initCatalogoCarousel() {
     function handleTransitionEnd() {
         if (isJumping) return;
 
-        // Verificar si necesitamos hacer el salto silencioso
+        if (isJumping) return;
         if (currentIndex >= totalCards * 2) {
             isJumping = true;
             currentIndex = totalCards;
@@ -137,11 +135,11 @@ function initCatalogoCarousel() {
 
     track.addEventListener('transitionend', handleTransitionEnd);
 
-    // Función de auto-play
+    track.addEventListener('transitionend', handleTransitionEnd);
     function autoAdvance() {
         if (isJumping || isPaused) return;
         currentIndex++;
-        setPosition(currentIndex, true, true); // slow = true para transición suave
+        setPosition(currentIndex, true, true);
     }
 
     function startAutoPlay() {
@@ -166,7 +164,7 @@ function initCatalogoCarousel() {
         startAutoPlay();
     }
 
-    // Pausar al interactuar, reanudar después de 5 segundos
+
     let resumeTimeout = null;
     function handleUserInteraction() {
         pauseAutoPlay();
@@ -180,7 +178,7 @@ function initCatalogoCarousel() {
         if (isJumping) return;
         handleUserInteraction();
         currentIndex--;
-        setPosition(currentIndex, true, false); // fast
+        setPosition(currentIndex, true, false);
     });
 
     nextBtn.addEventListener('click', (e) => {
@@ -189,45 +187,39 @@ function initCatalogoCarousel() {
         if (isJumping) return;
         handleUserInteraction();
         currentIndex++;
-        setPosition(currentIndex, true, false); // fast
+        setPosition(currentIndex, true, false);
     });
 
-    // Pausar al hacer hover
+
     carousel.addEventListener('mouseenter', pauseAutoPlay);
     carousel.addEventListener('mouseleave', () => {
         if (resumeTimeout) clearTimeout(resumeTimeout);
         resumeAutoPlay();
     });
 
-    // Posición inicial sin animación
+
     setPosition(currentIndex, false);
     track.offsetHeight;
 
-    // Iniciar auto-play
+    track.offsetHeight;
     startAutoPlay();
 
-    // En móvil: implementar scroll infinito con clones dinámicos
     const isMobile = window.innerWidth <= 768;
     if (isMobile && carouselContainer) {
-        // Listener para añadir clones dinámicamente cuando se acerca al final
         carouselContainer.addEventListener('scroll', () => {
             const scrollLeft = carouselContainer.scrollLeft;
             const scrollWidth = carouselContainer.scrollWidth;
             const clientWidth = carouselContainer.clientWidth;
 
-            // Si está cerca del final (a menos de 2 tarjetas del borde)
+
             if (scrollLeft + clientWidth >= scrollWidth - 400) {
-                // Añadir una copia de todas las tarjetas originales al final
                 originalCards.forEach(card => {
                     const clone = card.cloneNode(true);
                     clone.classList.add('carousel-clone');
                     track.appendChild(clone);
                 });
             }
-
-            // Si está cerca del inicio (a menos de 2 tarjetas del borde)
             if (scrollLeft <= 400) {
-                // Añadir una copia de todas las tarjetas originales al principio
                 const currentScrollLeft = carouselContainer.scrollLeft;
                 const cardsToAdd = [...originalCards].reverse();
                 let addedWidth = 0;
@@ -236,19 +228,16 @@ function initCatalogoCarousel() {
                     const clone = card.cloneNode(true);
                     clone.classList.add('carousel-clone');
                     track.insertBefore(clone, track.firstChild);
-                    addedWidth += clone.offsetWidth + 16; // width + gap
+                    addedWidth += clone.offsetWidth + 16;
                 });
 
-                // Mantener la posición visual
+
                 carouselContainer.scrollLeft = currentScrollLeft + addedWidth;
             }
-
-            // Ocultar indicador visual
             carouselContainer.classList.add('scrolled');
             carousel.classList.add('scrolled');
         }, { passive: true });
     } else {
-        // Desktop: ocultar indicador al scrollear
         if (carouselContainer) {
             carouselContainer.addEventListener('scroll', () => {
                 carouselContainer.classList.add('scrolled');

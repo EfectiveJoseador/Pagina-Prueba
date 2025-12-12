@@ -459,11 +459,8 @@
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
     border: none;
     border-radius: 12px;
-    /* More rounded */
     margin-top: 1rem;
-    /* Reduced margin */
     padding: 0.75rem 1.5rem;
-    /* Reduced padding */
     font-weight: 600;
     letter-spacing: 0.5px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

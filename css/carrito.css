@@ -65,7 +65,6 @@
     margin-bottom: 0.25rem;
 }
 
-/* Enlaces clickables en items del carrito */
 .cart-item-link {
     flex-shrink: 0;
     transition: transform 0.3s ease, opacity 0.3s;

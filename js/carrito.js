@@ -195,7 +195,6 @@ const Cart = {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 container.classList.add('visible');
-                console.log('📦 Pack popup shown:', packType, 'x', multiplier.toString());
             });
         });
     },

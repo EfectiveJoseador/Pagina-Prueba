@@ -4,26 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
 
-    <!-- SEO Meta Tags -->
+
     <title>Sobre Camisetazo | Tu Tienda de Camisetas de Fútbol</title>
     <meta name="description"
         content="🏆 Conoce Camisetazo: tu tienda de camisetas de fútbol desde 2020. +300 clientes satisfechos, envíos rápidos y calidad garantizada. ¡Descubre nuestra historia!">
     <meta name="keywords"
         content="camisetazo, tienda camisetas fútbol, quiénes somos camisetazo, camisetas fútbol confianza">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://camisetazo.com/sobre-nosotros">
+    <link rel="canonical" href="https://camisetazo.shop/sobre-nosotros">
 
-    <!-- Open Graph -->
+
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://camisetazo.com/sobre-nosotros">
+    <meta property="og:url" content="https://camisetazo.shop/sobre-nosotros">
     <meta property="og:title" content="Sobre Camisetazo | Tu Tienda de Camisetas de Fútbol">
     <meta property="og:description"
         content="Conoce Camisetazo: +300 clientes satisfechos, envíos rápidos, calidad garantizada. Tu tienda de camisetas de fútbol desde 2020.">
-    <meta property="og:image" content="https://camisetazo.com/assets/og-about.jpg">
+    <meta property="og:image" content="https://camisetazo.shop/assets/logo/logo.png">
     <meta property="og:locale" content="es_ES">
 
-    <!-- Google Analytics -->
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -32,29 +33,29 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
-    <!-- Fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
 
-    <!-- Icons & Stylesheets -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/producto.css">
 
-    <!-- Schema.org -->
+
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "Store",
         "name": "Camisetazo",
         "description": "Tienda de camisetas de fútbol baratas a buen precio. Calidad garantizada desde 2020.",
-        "url": "https://camisetazo.com",
-        "logo": "https://camisetazo.com/assets/logo.png",
+        "url": "https://camisetazo.shop",
+        "logo": "https://camisetazo.shop/assets/logo.png",
         "foundingDate": "2020",
         "priceRange": "€€",
         "aggregateRating": {
@@ -210,7 +211,7 @@
         }
 
 
-        /* Las flechas usan los estilos de producto.css */
+
 
 
 
@@ -588,34 +589,24 @@
     <script src="/js/image-protection.js"></script>
 
     <script>
-        // ============================================
-        // CONFIGURATION
-        // ============================================
-        // Las imágenes se cargan dinámicamente desde clientes.json
-        // Para actualizar: ejecutar "node scripts/update-clients.js"
+
+
         let CLIENT_IMAGES = [];
         const WATERMARK_TEXT = '@camisetazo._';
 
-        // ============================================
-        // CAROUSEL STATE - Same as producto.js
-        // ============================================
+
         let lightboxImages = [];
         let currentLightboxIndex = 0;
 
-        // ============================================
-        // LIGHTBOX STATE (same as producto.js)
-        // ============================================
+
         let zoomLevel = 1;
         let isDragging = false;
         let startX = 0, startY = 0;
         let translateX = 0, translateY = 0;
         let lastTouchDistance = 0;
 
-        // ============================================
-        // INITIALIZATION - Load images from JSON
-        // ============================================
+
         document.addEventListener('DOMContentLoaded', async () => {
-            // Cargar imágenes desde el JSON generado por el script
             try {
                 const response = await fetch('/assets/clientes/clientes.json');
                 const data = await response.json();
@@ -623,7 +614,6 @@
                 console.log(`✅ Cargadas ${CLIENT_IMAGES.length} imágenes de clientes`);
             } catch (error) {
                 console.warn('⚠️ No se pudo cargar clientes.json, usando fallback');
-                // Fallback: intentar cargar imágenes numeradas
                 CLIENT_IMAGES = Array.from({ length: 50 }, (_, i) => `cliente${i + 1}.webp`);
             }
 
@@ -632,17 +622,14 @@
             initLightbox();
         });
 
-        // ============================================
-        // CAROUSEL RENDERING - Same structure as producto.js
-        // ============================================
+
         function renderCarousel() {
             const track = document.getElementById('carousel-track');
 
-            // Shuffle images
             const shuffled = [...CLIENT_IMAGES].sort(() => Math.random() - 0.5);
             lightboxImages = shuffled.map(img => `/assets/clientes/${img}`);
 
-            // Render slides - Same card structure as producto.html related products
+
             track.innerHTML = shuffled.map((img, index) => `
                 <article class="client-card" data-index="${index}">
                     <div class="client-image">
@@ -658,7 +645,7 @@
                 </article>
             `).join('');
 
-            // Add click handlers to cards for lightbox
+
             document.querySelectorAll('.client-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const index = parseInt(card.dataset.index);
@@ -667,9 +654,7 @@
             });
         }
 
-        // ============================================
-        // CAROUSEL CONTROLS - Same as producto.js (initRelatedCarousel)
-        // ============================================
+
         function initClientsCarousel() {
             const grid = document.getElementById('clients-grid');
             const track = grid?.querySelector('.carousel-track');
@@ -681,10 +666,10 @@
             const originalCards = Array.from(track.querySelectorAll('.client-card'));
             if (originalCards.length === 0) return;
 
-            const cardWidth = 220 + 24; // card width (220px) + gap (1.5rem = 24px)
+            const cardWidth = 220 + 24;
             const totalCards = originalCards.length;
 
-            // Clone all cards and append/prepend for seamless loop
+
             originalCards.forEach(card => {
                 const cloneEnd = card.cloneNode(true);
                 const cloneStart = card.cloneNode(true);
@@ -694,7 +679,7 @@
                 track.insertBefore(cloneStart, track.firstChild);
             });
 
-            // Re-attach click handlers to cloned cards
+
             track.querySelectorAll('.client-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const index = parseInt(card.dataset.index);
@@ -702,13 +687,13 @@
                 });
             });
 
-            // Start at the first "real" card (after the prepended clones)
+
             let currentIndex = totalCards;
             let isJumping = false;
             let autoPlayInterval = null;
             let isPaused = false;
 
-            // Configuración de auto-play
+
             const AUTO_PLAY_DELAY = 4000;
             const TRANSITION_DURATION = 600;
 
@@ -748,7 +733,7 @@
 
             track.addEventListener('transitionend', handleTransitionEnd);
 
-            // Función de auto-play
+
             function autoAdvance() {
                 if (isJumping || isPaused) return;
                 currentIndex++;

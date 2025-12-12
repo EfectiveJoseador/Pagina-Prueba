@@ -1,5 +1,5 @@
 # Robots.txt for Camisetazo - Tienda de Camisetas de Fútbol
-# https://camisetazo.com
+# https://camisetazo.shop
 
 User-agent: *
 Allow: /
@@ -22,7 +22,7 @@ Disallow: /scripts/
 Disallow: /*.json$
 
 # Ubicación del Sitemap
-Sitemap: https://camisetazo.com/sitemap.xml
+Sitemap: https://camisetazo.shop/sitemap.xml
 
 # Delay de rastreo para un crawling educado
 Crawl-delay: 1

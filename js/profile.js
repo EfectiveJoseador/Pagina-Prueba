@@ -141,15 +141,10 @@ function loadOrders() {
 
 function renderOrders(orders) {
     const ordersList = document.getElementById('orders-list');
-    console.log('📦 Raw orders from Firebase:', orders);
+
 
     const ordersArray = Object.entries(orders).map(([id, order]) => ({ id, ...order }));
     ordersArray.forEach((order, i) => {
-        console.log(`📋 Order ${i + 1}:`, order);
-        console.log('  - Products:', order.products || order.items);
-        console.log('  - Shipping Info:', order.shippingInfo || order.shippingAddress);
-        console.log('  - Total:', order.total);
-        console.log('  - Status:', order.status);
     });
     ordersArray.sort((a, b) => {
         const dateA = a.createdAt || new Date(a.date).getTime();
@@ -554,7 +549,6 @@ async function initOrderStatusConfig() {
                 "2": "enviado",
                 "3": "entregado"
             });
-            console.log('✅ Order status config initialized in Firebase');
         }
     } catch (error) {
         console.warn('Could not initialize order status config:', error);

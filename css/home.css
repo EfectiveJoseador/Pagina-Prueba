@@ -597,7 +597,6 @@ a.catalogo-btn:hover,
     transform: rotate(180deg);
 }
 
-/* Hacer que la tarjeta tenga posición relativa y permita overflow cuando dropdown está abierto */
 .catalogo-card {
     position: relative;
 }
@@ -616,8 +615,6 @@ a.catalogo-btn:hover,
     border: 1px solid var(--border);
     border-radius: 8px;
     animation: slideDown 0.3s ease;
-
-    /* Posición absoluta para superponerse */
     position: absolute;
     top: 100%;
     left: 0;
@@ -1113,7 +1110,6 @@ a.catalogo-btn:hover,
     transition: transform 0.15s ease-out;
 }
 
-/* Contenedor de flechas debajo del carrusel */
 .catalogo-carousel .carousel-arrows {
     display: flex;
     justify-content: center;
@@ -1121,7 +1117,6 @@ a.catalogo-btn:hover,
     margin-top: 1.5rem;
 }
 
-/* Flechas debajo del carrusel */
 .catalogo-carousel .carousel-arrow {
     position: relative;
     top: auto;
@@ -1165,7 +1160,6 @@ a.catalogo-btn:hover,
     flex-shrink: 0;
 }
 
-/* Mobile: Scroll horizontal nativo con indicador visual */
 @media (max-width: 768px) {
     .catalogo-carousel .carousel-container {
         position: relative;
@@ -1198,7 +1192,6 @@ a.catalogo-btn:hover,
         display: none;
     }
 
-    /* Indicador de scroll (gradiente derecho) */
     .catalogo-carousel::after {
         content: '';
         position: absolute;
@@ -1211,7 +1204,6 @@ a.catalogo-btn:hover,
         z-index: 5;
     }
 
-    /* Indicador visual de deslizar - circulo */
     .catalogo-carousel .carousel-container::after {
         content: '';
         position: absolute;
@@ -1231,7 +1223,6 @@ a.catalogo-btn:hover,
         animation: pulseHintCatalogo 2s ease-in-out infinite;
     }
 
-    /* Indicador visual de deslizar - flecha */
     .catalogo-carousel .carousel-container::before {
         content: '›';
         position: absolute;
@@ -1277,7 +1268,6 @@ a.catalogo-btn:hover,
         }
     }
 
-    /* Ocultar indicador después del primer scroll */
     .catalogo-carousel .carousel-container.scrolled::after,
     .catalogo-carousel .carousel-container.scrolled::before {
         display: none;
@@ -1336,11 +1326,6 @@ a.catalogo-btn:hover,
     }
 }
 
-/* ==========================================
-   TEMA OSCURO - Iluminación específica Home
-   ========================================== */
-
-/* Iluminación en tarjetas de catálogo */
 [data-theme="dark"] .catalogo-card {
     background: linear-gradient(145deg, var(--bg-card) 0%, rgba(18, 18, 26, 1) 100%);
 }
@@ -1363,7 +1348,6 @@ a.catalogo-btn:hover,
     background: transparent;
 }
 
-/* Iluminación en product cards del home */
 [data-theme="dark"] .product-card {
     background: linear-gradient(145deg, var(--bg-card) 0%, rgba(18, 18, 26, 1) 100%);
 }
@@ -1374,8 +1358,151 @@ a.catalogo-btn:hover,
     background: transparent;
 }
 
-/* Iluminación en info cards */
 [data-theme="dark"] .info-card {
     background: linear-gradient(135deg, var(--bg-card) 0%, rgba(18, 18, 26, 1) 100%);
     overflow: hidden;
+}
+
+.equipos-section {
+    padding: 4rem 2rem;
+}
+
+.equipos-description {
+    text-align: center;
+    color: var(--text-muted);
+    margin-top: 0;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.equipos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 180px);
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.equipo-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1.5rem;
+    background: linear-gradient(145deg, rgba(30, 30, 40, 0.9), rgba(20, 20, 30, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.equipo-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(138, 43, 226, 0.3);
+    border-color: rgba(138, 43, 226, 0.5);
+}
+
+.equipo-card img {
+    width: 100px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.equipo-card span {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .section-header .section-title {
+        text-align: center;
+        width: 100%;
+    }
+
+    .link-arrow {
+        background: linear-gradient(135deg, #6b21a8 0%, #4c1d95 100%);
+        color: rgba(255, 255, 255, 0.9) !important;
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 15px rgba(107, 33, 168, 0.4);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .link-arrow:hover {
+        gap: 0.75rem;
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+    }
+
+    .equipos-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+        padding: 0 1rem;
+        max-width: 100% !important;
+    }
+
+    .equipo-card {
+        padding: 1.25rem 1rem !important;
+    }
+
+    .equipo-card img {
+        width: 70px !important;
+        height: 85px !important;
+    }
+
+    .equipo-card span {
+        font-size: 0.85rem !important;
+    }
+
+    .equipos-section {
+        padding: 2.5rem 1rem !important;
+    }
+
+    .equipos-section p {
+        padding: 0 0.5rem;
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .equipos-grid {
+        gap: 0.75rem !important;
+    }
+
+    .equipo-card {
+        padding: 1rem 0.75rem !important;
+    }
+
+    .equipo-card img {
+        width: 60px !important;
+        height: 70px !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .equipo-card span {
+        font-size: 0.8rem !important;
+    }
+
+    .link-arrow {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.85rem;
+    }
 }

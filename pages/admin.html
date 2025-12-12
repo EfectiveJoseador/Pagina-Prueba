@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
     <meta name="robots" content="noindex, nofollow">
     <title>Panel de Administración - Camisetazo</title>
 
-    
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -16,7 +17,7 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -24,13 +25,12 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    
+
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/admin.css">
 
     <style>
-        
         .auth-loading {
             position: fixed;
             inset: 0;
@@ -70,19 +70,19 @@
 </head>
 
 <body>
-    
+
     <div class="auth-loading" id="auth-loading">
         <div class="spinner"></div>
         <p>Verificando permisos de administrador...</p>
     </div>
 
-    
+
     <div class="admin-panel hidden" id="admin-panel">
-        
+
         <header class="admin-header">
             <div class="header-left">
                 <a href="/index.html" class="logo">
-                    <img src="/assets/logo/logo.jpg" alt="Camisetazo" class="logo-img">
+                    <img src="/assets/logo/logo.png" alt="Camisetazo" class="logo-img">
                     <span>CAMISETAZO</span>
                 </a>
                 <span class="admin-badge">ADMIN</span>
@@ -95,9 +95,9 @@
             </div>
         </header>
 
-        
+
         <main class="admin-main">
-            
+
             <section class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
@@ -129,7 +129,7 @@
                 </div>
             </section>
 
-            
+
             <section class="filters-bar">
                 <div class="filter-group">
                     <label for="filter-status">Estado:</label>
@@ -159,7 +159,7 @@
                 </button>
             </section>
 
-            
+
             <section class="orders-section">
                 <div class="table-container">
                     <table class="orders-table">
@@ -177,29 +177,29 @@
                             </tr>
                         </thead>
                         <tbody id="orders-table-body">
-                            
+
                         </tbody>
                     </table>
                 </div>
 
-                
+
                 <div class="empty-state hidden" id="empty-state">
                     <i class="fas fa-inbox"></i>
                     <p>No hay pedidos que mostrar</p>
                 </div>
 
-                
+
                 <div class="loading-orders" id="loading-orders">
                     <div class="spinner"></div>
                     <p>Cargando pedidos...</p>
                 </div>
             </section>
 
-            
+
             <section class="promo-codes-section">
                 <h2 class="section-title"><i class="fas fa-tags"></i> Códigos Promocionales</h2>
 
-                
+
                 <div class="promo-create-form">
                     <h3>Crear Nuevo Código</h3>
                     <div class="form-row">
@@ -229,7 +229,7 @@
                     </div>
                 </div>
 
-                
+
                 <div class="promo-table-container">
                     <table class="promo-codes-table">
                         <thead>
@@ -243,7 +243,7 @@
                             </tr>
                         </thead>
                         <tbody id="promo-codes-body">
-                            
+
                         </tbody>
                     </table>
                     <div class="empty-state hidden" id="promo-empty-state">
@@ -253,11 +253,11 @@
                 </div>
             </section>
 
-            
+
             <section class="users-section">
                 <h2 class="section-title"><i class="fas fa-users"></i> Gestión de Usuarios</h2>
 
-                
+
                 <div class="users-search-bar">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
@@ -268,7 +268,7 @@
                     </button>
                 </div>
 
-                
+
                 <div class="users-table-container">
                     <table class="users-table">
                         <thead>
@@ -282,7 +282,7 @@
                             </tr>
                         </thead>
                         <tbody id="users-table-body">
-                            
+
                         </tbody>
                     </table>
                     <div class="loading-orders" id="loading-users">
@@ -298,7 +298,7 @@
         </main>
     </div>
 
-    
+
     <div class="modal-overlay" id="order-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -306,12 +306,12 @@
                 <button class="modal-close" id="modal-close">&times;</button>
             </div>
             <div class="modal-body" id="modal-body">
-                
+
             </div>
         </div>
     </div>
 
-    
+
     <div class="modal-overlay" id="user-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -319,12 +319,12 @@
                 <button class="modal-close" id="user-modal-close">&times;</button>
             </div>
             <div class="modal-body" id="user-modal-body">
-                
+
             </div>
         </div>
     </div>
 
-    
+
     <script type="module" src="/js/admin.js"></script>
 </body>
 

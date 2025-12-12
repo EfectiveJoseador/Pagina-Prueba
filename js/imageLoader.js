@@ -27,7 +27,6 @@ export function init() {
     resetState();
     createObserver();
 
-    console.log('[ImageLoader] Initialized - parallel card loading');
 }
 
 
@@ -182,7 +181,6 @@ function loadSingleImage(img) {
 }
 
 function fallbackLoadAll() {
-    console.log('[ImageLoader] Fallback - loading all images');
     document.querySelectorAll('img[data-src]').forEach(img => {
         img.src = img.dataset.src;
         img.removeAttribute('data-src');

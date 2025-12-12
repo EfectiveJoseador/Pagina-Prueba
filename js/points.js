@@ -71,7 +71,6 @@ export async function addPendingPoints(uid, orderId, shirtQuantity) {
         const existingSnapshot = await get(orderPointsRef);
 
         if (existingSnapshot.exists()) {
-            console.log('Points already added for this order');
             return false;
         }
         const userRef = ref(db, `users/${uid}`);
@@ -95,7 +94,6 @@ export async function addPendingPoints(uid, orderId, shirtQuantity) {
         };
 
         await update(ref(db), updates);
-        console.log(`✅ Added ${pointsToAdd} pending points for order ${orderId}`);
         return true;
 
     } catch (error) {
@@ -113,14 +111,12 @@ export async function convertToAvailable(uid, orderId) {
         const orderSnapshot = await get(orderPointsRef);
 
         if (!orderSnapshot.exists()) {
-            console.log('No points record found for this order');
             return false;
         }
 
         const orderPoints = orderSnapshot.val();
 
         if (orderPoints.status === 'available') {
-            console.log('Points already converted for this order');
             return false;
         }
 
@@ -146,7 +142,6 @@ export async function convertToAvailable(uid, orderId) {
         };
 
         await update(ref(db), updates);
-        console.log(`✅ Converted ${pointsToConvert} points to available for order ${orderId}`);
         return true;
 
     } catch (error) {
@@ -198,7 +193,6 @@ export async function redeemCoupon(uid, rewardId) {
         };
 
         await update(ref(db), updates);
-        console.log(`✅ Coupon ${couponId} created for ${reward.name}`);
         return { id: couponId, ...coupon };
 
     } catch (error) {
@@ -253,8 +247,6 @@ export async function useCoupon(uid, couponId, orderId) {
             usedAt: new Date().toISOString(),
             usedInOrder: orderId
         });
-
-        console.log(`✅ Coupon ${couponId} marked as used in order ${orderId}`);
         return true;
 
     } catch (error) {

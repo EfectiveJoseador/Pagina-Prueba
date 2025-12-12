@@ -407,7 +407,6 @@ Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Biz
     formData.append("total", totalInfo);
 
     try {
-        console.log('Enviando a Web3Forms...');
         const response = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             body: formData
@@ -416,7 +415,6 @@ Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Biz
         const data = await response.json();
 
         if (response.ok && data.success) {
-            console.log('Web3Forms: Email enviado correctamente');
             return true;
         } else {
             console.error('Web3Forms error:', data.message);
@@ -435,9 +433,6 @@ async function saveOrder(orderData) {
     }
 
     try {
-        console.log('?? Saving order to Firebase...');
-        console.log('User UID:', currentUser.uid);
-        console.log('Order ID:', orderData.orderId);
         const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${orderData.orderId}`);
         const orderToSave = {
             ...orderData,
@@ -449,7 +444,6 @@ async function saveOrder(orderData) {
         };
 
         await set(orderRef, orderToSave);
-        console.log('? Order saved successfully to Firebase');
         return true;
     } catch (error) {
         console.error('? Error saving order to Firebase:', error);
@@ -560,9 +554,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadUserCoupons() {
     if (!currentUser) return;
 
-    console.log('?? Loading coupons for user:', currentUser.uid);
     userCoupons = await getUserCoupons(currentUser.uid);
-    console.log('?? Coupons loaded:', userCoupons);
 
     const couponSection = document.getElementById('coupon-section');
     const couponSelect = document.getElementById('apply-coupon');
@@ -699,7 +691,6 @@ async function applyPromoCode() {
             const usageRef = ref(db, `promoCodes/${code}/usageCount`);
             const currentCount = promo.usageCount || 0;
             await set(usageRef, currentCount + 1);
-            console.log('?? Promo code usage incremented:', code, currentCount + 1);
         } catch (err) {
             console.warn('Could not increment usage count:', err);
         }
@@ -711,7 +702,7 @@ async function applyPromoCode() {
             input.disabled = true;
         }
 
-        console.log('?? Promo code applied:', code, promoDiscount);
+
 
     } catch (error) {
         console.error('Error applying promo code:', error);

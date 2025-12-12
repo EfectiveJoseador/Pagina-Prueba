@@ -1,5 +1,3 @@
-
-
 const products = [
     {
         id: 101,
@@ -723,18 +721,18 @@ const products = [
         name: "Lakers LeBron James Icon",
         category: "nba",
         league: "nba",
-        price: 95.00,
+        price: 95,
         image: "/assets/productos/NBA/Lakers1/1.webp",
         new: false,
         sale: true,
-        oldPrice: 110.00
+        oldPrice: 110
     },
     {
         id: 702,
         name: "Oklahoma City Thunder",
         category: "nba",
         league: "nba",
-        price: 95.00,
+        price: 95,
         image: "/assets/productos/NBA/Oklahoma/1.webp",
         new: true,
         sale: false
@@ -744,12 +742,79 @@ const products = [
         name: "Philadelphia 76ers",
         category: "nba",
         league: "nba",
-        price: 95.00,
+        price: 95,
         image: "/assets/productos/NBA/Phila1/1.webp",
         new: false,
         sale: false
+    },
+    {
+        id: 937715,
+        name: "Japan Local",
+        slug: "japan-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/219491642/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/219491642/2.jpg"
+        ],
+        imageAlt: "Japan Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/219491642?uid=1",
+            albumId: "219491642"
+        },
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 978161,
+        name: "Palmeiras 25/26 Visitante",
+        slug: "palmeiras-2526-visitante",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/210081096/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/210081096/2.jpg"
+        ],
+        imageAlt: "Palmeiras 25/26 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://minkang.x.yupoo.com/albums/210081096?uid=1",
+            albumId: "210081096"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        tallas: "S-4XL"
+    },
+    {
+        id: 492794,
+        name: "Palmeiras 25/26 Tercera",
+        slug: "palmeiras-2526-tercera",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/211518994/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211518994/2.jpg"
+        ],
+        imageAlt: "Palmeiras 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211518994?uid=1",
+            albumId: "211518994"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
     }
 ];
 
 export default products;
-

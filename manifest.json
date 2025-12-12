@@ -9,19 +9,23 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "assets/logos/logo.jpg",
+      "src": "assets/logos/logo.png",
       "sizes": "192x192",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/logos/logo.jpg",
+      "src": "assets/logos/logo.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "categories": ["shopping", "sports", "lifestyle"],
+  "categories": [
+    "shopping",
+    "sports",
+    "lifestyle"
+  ],
   "lang": "es",
   "dir": "ltr",
   "prefer_related_applications": false,
@@ -32,14 +36,24 @@
       "short_name": "Carrito",
       "description": "Ver carrito de compras",
       "url": "./index.html#carrito",
-      "icons": [{ "src": "assets/logos/logo.jpg", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "assets/logos/logo.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Catálogo",
       "short_name": "Catálogo",
       "description": "Ver catálogo de productos",
       "url": "./index.html#tienda",
-      "icons": [{ "src": "assets/logos/logo.jpg", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "assets/logos/logo.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ]
 }

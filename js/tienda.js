@@ -207,9 +207,8 @@ function init() {
     attachEventListeners();
     setupModal();
 
-    // Apply URL filters BEFORE rendering, then apply filters to get filtered results
     applyURLFilters();
-    applyFilters(false);  // This will filter and render
+    applyFilters(false);
 }
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -311,7 +310,6 @@ function applyURLFilters() {
     const kids = params.get('kids');
     const sort = params.get('sort');
 
-    // Apply search filter
     if (search) {
         const searchInput = document.getElementById('search-input');
         if (searchInput) {
@@ -319,7 +317,6 @@ function applyURLFilters() {
         }
     }
 
-    // Apply league filter
     if (league) {
         selectedLeague = league;
         const leagueSelect = document.getElementById('filter-league');
@@ -329,20 +326,16 @@ function applyURLFilters() {
         }
     }
 
-    // Apply team filter
     if (team) {
-        // Decode the team name from URL (handles + and %20)
         const decodedTeam = decodeURIComponent(team.replace(/\+/g, ' '));
         selectedTeam = decodedTeam;
 
-        // If we have a team select dropdown, set its value
         const teamSelect = document.getElementById('filter-team');
         if (teamSelect) {
             teamSelect.value = decodedTeam;
         }
     }
 
-    // Apply kids filter
     if (kids) {
         selectedKids = kids;
         const kidsSelect = document.getElementById('filter-kids');
@@ -351,7 +344,6 @@ function applyURLFilters() {
         }
     }
 
-    // Apply sort
     if (sort) {
         const sortSelect = document.getElementById('sort-select');
         if (sortSelect) {
@@ -360,7 +352,6 @@ function applyURLFilters() {
     }
 }
 
-// Function to update URL with current filters
 function updateURLWithFilters(searchTerm, sortBy) {
     const params = new URLSearchParams();
 
@@ -465,7 +456,7 @@ function applyFilters(updateURL = true) {
 
         if (isKids) return 4;
         if (nameLower.includes('tercera')) return 3;
-        if (nameLower.includes('visitante') || name.includes(' F')) return 2; // F = Fuera/Away
+        if (nameLower.includes('visitante') || name.includes(' F')) return 2;
         if (nameLower.includes('local') || name.includes(' L')) return 1;
         return 5;
     }
@@ -493,7 +484,6 @@ function applyFilters(updateURL = true) {
         }
     }
 
-    // Update URL with current filters
     if (updateURL) {
         updateURLWithFilters(searchTerm, sortBy);
     }
@@ -505,7 +495,7 @@ function setupModal() {
     const closeButtons = document.querySelectorAll('.close-modal');
     const form = document.getElementById('customization-form');
 
-    if (!modal || !form) return; // Exit if modal elements don't exist
+    if (!modal || !form) return;
 
     closeButtons.forEach(btn => {
         btn.addEventListener('click', closeModal);

@@ -170,6 +170,6 @@
         clearBtn.addEventListener('click', clearFilters);
         mobileLeagueSelect.addEventListener('change', handleMobileLeagueChange);
 
-        console.log('Mobile filters initialized successfully');
+
     }
 })();

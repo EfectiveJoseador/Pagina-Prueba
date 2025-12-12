@@ -6,167 +6,166 @@
 
     <!-- Página principal -->
     <url>
-        <loc>https://camisetazo.com/</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
 
-    <!-- Páginas principales (URLs amigables) -->
+    <!-- Páginas principales -->
     <url>
-        <loc>https://camisetazo.com/tienda</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/catalogo</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/catalogo.html</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/retro</loc>
-        <lastmod>2025-12-11</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/sobre-nosotros</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/quienes-somos.html</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/contacto</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/contacto.html</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
 
-    <!-- Selecciones Nacionales -->
+    <!-- Ligas (filtros de tienda) -->
     <url>
-        <loc>https://camisetazo.com/seleccion/brasil</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=laliga</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/seleccion/alemania</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=premier</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/seleccion/espana</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=seriea</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/seleccion/argentina</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=bundesliga</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/seleccion/francia</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=ligue1</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/seleccion/italia</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=retro</loc>
+        <lastmod>2025-12-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Equipos populares (filtros de tienda) -->
+    <url>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=laliga&amp;team=FC+Barcelona</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/seleccion/portugal</loc>
-        <lastmod>2025-12-11</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <!-- Equipos de Club -->
-    <url>
-        <loc>https://camisetazo.com/equipo/real-madrid</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=laliga&amp;team=Real+Madrid</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/equipo/barcelona</loc>
-        <lastmod>2025-12-11</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://camisetazo.com/equipo/atletico-madrid</loc>
-        <lastmod>2025-12-11</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <!-- Ligas -->
-    <url>
-        <loc>https://camisetazo.com/liga/la-liga</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=laliga&amp;team=Atletico+de+Madrid</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/liga/bundesliga</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=premier&amp;team=Man+City</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/liga/serie-a</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=premier&amp;team=Liverpool</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/liga/ligue-1</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=ligue1&amp;team=PSG</loc>
+        <lastmod>2025-12-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=seriea&amp;team=Juventus</loc>
+        <lastmod>2025-12-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=seriea&amp;team=AC+Milan</loc>
+        <lastmod>2025-12-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.camisetazo.shop/pages/tienda.html?league=bundesliga&amp;team=Bayern+Munich</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
 
     <!-- Páginas legales -->
     <url>
-        <loc>https://camisetazo.com/privacidad</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/cookies.html</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/cookies</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/privacidad.html</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://camisetazo.com/terminos</loc>
-        <lastmod>2025-12-11</lastmod>
+        <loc>https://www.camisetazo.shop/pages/terminos.html</loc>
+        <lastmod>2025-12-12</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>

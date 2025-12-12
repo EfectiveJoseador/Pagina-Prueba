@@ -1,37 +1,13 @@
-/**
- * Script para asignar custom claim admin: true
- * Ejecutar UNA SOLA VEZ localmente
- * 
- * INSTRUCCIONES:
- * 
- * 1. Descarga la clave privada de Firebase:
- *    - Ve a: https://console.firebase.google.com/project/camisetazo-puntos/settings/serviceaccounts/adminsdk
- *    - Click en "Generar nueva clave privada"
- *    - Guarda el archivo JSON en esta carpeta como "serviceAccountKey.json"
- * 
- * 2. Instala la dependencia:
- *    cd admin-scripts
- *    npm install firebase-admin
- * 
- * 3. Ejecuta el script:
- *    node set-admin.js
- * 
- * 4. Cierra sesión en la web y vuelve a iniciar sesión
- *    (para que el token se refresque con el nuevo claim)
- */
+
 
 const admin = require('firebase-admin');
 
-// ============================================
-// CONFIGURACIÓN - Cambia estos valores
-// ============================================
-const ADMIN_EMAIL = 'camisetazocontacto@gmail.com';
-// O usa el UID directamente:
-// const ADMIN_UID = '0pcTin0px9Yfutyl8rEnLZcl70P2';
 
-// ============================================
-// INICIALIZAR FIREBASE ADMIN
-// ============================================
+const ADMIN_EMAIL = 'camisetazocontacto@gmail.com';
+
+
+
+
 const serviceAccount = require('./camisetazo-puntos-firebase-adminsdk-fbsvc-2639cc9473.json');
 
 admin.initializeApp({
@@ -39,14 +15,12 @@ admin.initializeApp({
     databaseURL: 'https://camisetazo-puntos-default-rtdb.europe-west1.firebasedatabase.app'
 });
 
-// ============================================
-// FUNCIÓN PRINCIPAL
-// ============================================
+
 async function setAdminClaim() {
     try {
         console.log('🔍 Buscando usuario:', ADMIN_EMAIL);
 
-        // Buscar usuario por email
+
         const user = await admin.auth().getUserByEmail(ADMIN_EMAIL);
 
         console.log('✅ Usuario encontrado:');
@@ -54,11 +28,11 @@ async function setAdminClaim() {
         console.log('   Email:', user.email);
         console.log('   Nombre:', user.displayName || 'N/A');
 
-        // Verificar claims actuales
+
         const currentClaims = user.customClaims || {};
         console.log('📋 Claims actuales:', JSON.stringify(currentClaims));
 
-        // Asignar claim admin
+
         await admin.auth().setCustomUserClaims(user.uid, {
             ...currentClaims,
             admin: true
@@ -73,7 +47,7 @@ async function setAdminClaim() {
         console.log('   3. Accede a /pages/admin.html');
         console.log('');
 
-        // Verificar que se aplicó
+
         const updatedUser = await admin.auth().getUser(user.uid);
         console.log('✅ Verificación - Claims actualizados:', JSON.stringify(updatedUser.customClaims));
 
@@ -95,5 +69,5 @@ async function setAdminClaim() {
     process.exit(0);
 }
 
-// Ejecutar
+
 setAdminClaim();

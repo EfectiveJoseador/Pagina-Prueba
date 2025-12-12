@@ -68,7 +68,7 @@ exports.setAdminByEmail = functions.https.onCall(async (data, context) => {
         // Asignar custom claim
         await admin.auth().setCustomUserClaims(user.uid, { admin: true });
 
-        console.log(`✅ Admin claim asignado a: ${email} (UID: ${user.uid})`);
+
 
         return {
             success: true,
@@ -110,7 +110,7 @@ exports.setAdminByUID = functions.https.onCall(async (data, context) => {
         // Asignar custom claim
         await admin.auth().setCustomUserClaims(uid, { admin: true });
 
-        console.log(`✅ Admin claim asignado a UID: ${uid} (${user.email})`);
+
 
         return {
             success: true,
@@ -164,7 +164,7 @@ exports.removeAdmin = functions.https.onCall(async (data, context) => {
         // Quitar custom claim (establecer a null o vacío)
         await admin.auth().setCustomUserClaims(targetUser.uid, { admin: false });
 
-        console.log(`❌ Admin claim removido de: ${targetUser.email} (UID: ${targetUser.uid})`);
+
 
         return {
             success: true,

@@ -41,7 +41,7 @@
         protectImages();
         injectProtectionCSS();
 
-        console.log('🛡️ Image Protection System Active');
+
     }
     function handleContextMenu(e) {
         const target = e.target;

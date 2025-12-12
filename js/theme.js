@@ -9,7 +9,7 @@
             registrations.forEach(function (registration) {
                 registration.unregister().then(function (success) {
                     if (success) {
-                        console.log('🧹 Service Worker desregistrado para actualización');
+
                     }
                 });
             });
@@ -18,18 +18,15 @@
             caches.keys().then(function (names) {
                 names.forEach(function (name) {
                     caches.delete(name);
-                    console.log('🧹 Cache eliminado:', name);
                 });
             });
         }
         localStorage.setItem(CLEANUP_KEY, Date.now().toString());
         navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
-            console.log('✅ Nuevo Service Worker registrado');
             if (registration.waiting) {
                 registration.waiting.postMessage({ type: 'SKIP_WAITING' });
             }
         }).catch(function (error) {
-            console.log('Service Worker registration failed:', error);
         });
     }
 })();

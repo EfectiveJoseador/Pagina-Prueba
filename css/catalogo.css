@@ -143,9 +143,7 @@
     width: 100%;
     padding: 0.875rem 1rem;
     background: #000;
-    /* Explicit black background as requested */
     color: #fff;
-    /* Explicit white text */
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     font-size: 1rem;
@@ -154,10 +152,8 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
-    /* Ensure options also inherit this style explicitly */
 }
 
-/* Explicit style for options to prevent white-on-white bug */
 .custom-select option {
     background: #000;
     color: #fff;
@@ -272,15 +268,12 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     background: #000;
-    /* Explicit black background */
     color: #fff;
-    /* Explicit white text */
     cursor: pointer;
     font-size: 1rem;
     min-width: 200px;
 }
 
-/* Explicit style for sort options */
 #sort-select option {
     background: #000;
     color: #fff;
@@ -786,11 +779,6 @@
     }
 }
 
-/* ==========================================
-   TEMA OSCURO - Iluminación específica Catálogo
-   ========================================== */
-
-/* Product cards con iluminación sutil */
 [data-theme="dark"] .product-card {
     background: linear-gradient(145deg, var(--bg-card) 0%, rgba(18, 18, 26, 1) 100%);
 }
@@ -801,7 +789,6 @@
     z-index: 1;
 }
 
-/* Filtros sidebar con iluminación */
 [data-theme="dark"] .filters-sidebar {
     background: linear-gradient(180deg, var(--bg-card) 0%, rgba(16, 16, 24, 1) 100%);
     box-shadow:
@@ -809,7 +796,6 @@
         0 0 40px rgba(99, 102, 241, 0.03);
 }
 
-/* Barra de búsqueda con glow sutil */
 [data-theme="dark"] .search-bar.expanded input {
     background: #111116;
 }
@@ -821,14 +807,11 @@
         inset 0 0 15px rgba(99, 102, 241, 0.02);
 }
 
-/* Fix botón filtros y selects hover en modo oscuro */
 [data-theme="dark"] .btn-show-filters:hover,
 [data-theme="dark"] #sort-select:hover,
 [data-theme="dark"] .custom-select:hover {
     background: rgba(255, 255, 255, 0.08);
-    /* Fondo sutil translúcido */
     border-color: #818cf8;
-    /* Borde violeta claro */
     color: #ffffff;
     box-shadow: 0 0 25px rgba(99, 102, 241, 0.5), inset 0 0 10px rgba(99, 102, 241, 0.1);
     transform: translateY(-2px);

@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
     <title>Iniciar Sesión - Camisetazo</title>
 
-    
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,7 +16,7 @@
         gtag('config', 'G-GS53GWE2Z0');
     </script>
 
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,7 +24,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    
+
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -32,7 +33,7 @@
 
 <body>
 
-    
+
     <div id="header-placeholder"></div>
 
     <main class="auth-container">
@@ -42,7 +43,7 @@
                 <button class="auth-tab" data-target="register-form">Registrarse</button>
             </div>
 
-            
+
             <form id="login-form" class="auth-form active">
                 <div class="form-group">
                     <label>Email</label>
@@ -59,9 +60,7 @@
                     </div>
                 </div>
                 <div class="form-options">
-                    <label class="checkbox-label">
-                        <input type="checkbox"> Recordarme
-                    </label>
+
                     <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
                 </div>
                 <div id="login-error" class="error-message"
@@ -69,7 +68,7 @@
                 <button type="submit" class="btn btn-block btn-primary">Entrar</button>
             </form>
 
-            
+
             <form id="register-form" class="auth-form">
                 <div class="form-group">
                     <label>Nombre Completo</label>
@@ -93,7 +92,7 @@
                     </div>
                 </div>
 
-                
+
                 <div id="recaptcha-container" style="margin-bottom: 1rem;"></div>
 
                 <div id="register-error" class="error-message"
@@ -101,7 +100,7 @@
                 <button type="submit" class="btn btn-block btn-primary">Crear Cuenta</button>
             </form>
 
-            
+
             <form id="reset-form" class="auth-form">
                 <div style="margin-bottom: 1.5rem;">
                     <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">
@@ -129,10 +128,10 @@
         </div>
     </main>
 
-    
+
     <div id="footer-placeholder"></div>
 
-    
+
     <script src="/js/theme.js"></script>
     <script src="/js/components.js"></script>
     <script type="module" src="/js/firebase-global.js"></script>

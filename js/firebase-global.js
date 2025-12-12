@@ -12,7 +12,7 @@ onAuthStateChanged(auth, (user) => {
             userIcon.title = 'Mi Perfil';
         }
 
-        console.log('🔐 User authenticated:', user.uid, 'Email verified:', user.emailVerified);
+
     } else {
         if (userIcon) {
             userIcon.href = '/pages/login.html';

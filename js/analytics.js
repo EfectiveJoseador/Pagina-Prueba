@@ -17,7 +17,6 @@ function trackProductView(product) {
         }]
     });
 
-    console.log('📊 Analytics: Product viewed -', product.name);
 }
 
 
@@ -49,7 +48,6 @@ function trackAddToCart(product, quantity = 1, customizations = {}) {
         });
     }
 
-    console.log('📊 Analytics: Added to cart -', product.name, 'x', quantity);
 }
 
 
@@ -67,7 +65,6 @@ function trackRemoveFromCart(product, quantity = 1) {
         }]
     });
 
-    console.log('📊 Analytics: Removed from cart -', product.name);
 }
 
 
@@ -88,7 +85,6 @@ function trackBeginCheckout(cartItems, totalValue) {
         items: items
     });
 
-    console.log('📊 Analytics: Checkout started - Total:', totalValue);
 }
 
 
@@ -100,7 +96,6 @@ function trackAddShippingInfo(address) {
         address_province: address?.province || 'Unknown'
     });
 
-    console.log('📊 Analytics: Shipping info added');
 }
 
 
@@ -110,7 +105,6 @@ function trackAddPaymentInfo(paymentMethod) {
         payment_type: paymentMethod
     });
 
-    console.log('📊 Analytics: Payment method selected -', paymentMethod);
 }
 
 
@@ -135,7 +129,6 @@ function trackPurchase(orderId, cartItems, totalValue, paymentMethod) {
         items: items
     });
 
-    console.log('📊 Analytics: Purchase completed - Order:', orderId, 'Total:', totalValue);
 }
 
 
@@ -147,7 +140,6 @@ function trackSearch(searchTerm, resultsCount) {
         results_count: resultsCount || 0
     });
 
-    console.log('📊 Analytics: Search -', searchTerm, '(' + resultsCount + ' results)');
 }
 
 
@@ -157,7 +149,6 @@ function trackFilterUse(filterType, filterValue) {
         filter_value: filterValue
     });
 
-    console.log('📊 Analytics: Filter used -', filterType, ':', filterValue);
 }
 
 
@@ -168,7 +159,6 @@ function trackCategoryClick(categoryName, source) {
         source: source || 'unknown'
     });
 
-    console.log('📊 Analytics: Category clicked -', categoryName);
 }
 
 
@@ -178,7 +168,6 @@ function trackCTAClick(buttonName, location) {
         page_location: location || window.location.pathname
     });
 
-    console.log('📊 Analytics: CTA clicked -', buttonName);
 }
 
 
@@ -189,7 +178,6 @@ function trackExternalLink(url, linkText) {
         outbound: true
     });
 
-    console.log('📊 Analytics: External link -', url);
 }
 
 let scrollMilestones = [25, 50, 75, 100];
@@ -216,7 +204,6 @@ function initScrollTracking() {
                             page_path: window.location.pathname
                         });
 
-                        console.log('📊 Analytics: Scroll depth -', milestone + '%');
                     }
                 });
 
@@ -246,7 +233,6 @@ function initTimeTracking() {
                     page_path: window.location.pathname
                 });
 
-                console.log('📊 Analytics: Time on page -', interval + 's');
             }
         });
     }, 5000);
@@ -259,7 +245,6 @@ function trackFormSubmit(formName, success = true) {
         success: success
     });
 
-    console.log('📊 Analytics: Form submitted -', formName);
 }
 
 
@@ -268,7 +253,6 @@ function trackLogin(method = 'email') {
         method: method
     });
 
-    console.log('📊 Analytics: Login -', method);
 }
 
 function trackSignUp(method = 'email') {
@@ -276,7 +260,6 @@ function trackSignUp(method = 'email') {
         method: method
     });
 
-    console.log('📊 Analytics: Sign up -', method);
 }
 
 
@@ -288,7 +271,6 @@ function trackError(errorType, errorMessage, location) {
         page_location: location || window.location.pathname
     });
 
-    console.log('📊 Analytics: Error -', errorType, errorMessage);
 }
 
 
@@ -303,7 +285,6 @@ function trackPackUnlock(packType, itemCount) {
         items_count: itemCount
     });
 
-    console.log('📊 Analytics: Pack unlocked -', packType, 'with', itemCount, 'items');
 }
 
 
@@ -313,7 +294,6 @@ function trackCouponUse(couponCode, discountAmount) {
         discount_amount: discountAmount
     });
 
-    console.log('📊 Analytics: Coupon used -', couponCode);
 }
 
 function initAnalytics() {
@@ -326,7 +306,6 @@ function initAnalytics() {
         }
     });
 
-    console.log('📊 Analytics: Enhanced tracking initialized');
 }
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAnalytics);

@@ -10,23 +10,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Iluminación decorativa lateral en tema oscuro */
-[data-theme="dark"] body {
-    position: relative;
-}
-
-[data-theme="dark"] body::before,
-[data-theme="dark"] body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    width: 400px;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* Luz izquierda - morado/violeta */
 [data-theme="dark"] body::before {
     left: 0;
     background:
@@ -35,7 +18,6 @@ body {
         radial-gradient(ellipse at 0% 75%, rgba(139, 92, 246, 0.07) 0%, transparent 45%);
 }
 
-/* Luz derecha - azul/morado */
 [data-theme="dark"] body::after {
     right: 0;
     background:
@@ -44,23 +26,6 @@ body {
         radial-gradient(ellipse at 100% 85%, rgba(99, 102, 241, 0.07) 0%, transparent 45%);
 }
 
-/* Iluminación decorativa lateral en tema claro */
-[data-theme="light"] body {
-    position: relative;
-}
-
-[data-theme="light"] body::before,
-[data-theme="light"] body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    width: 400px;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* Luz izquierda - morado/violeta (tema claro - igual que oscuro) */
 [data-theme="light"] body::before {
     left: 0;
     background:
@@ -69,7 +34,6 @@ body {
         radial-gradient(ellipse at 0% 75%, rgba(139, 92, 246, 0.07) 0%, transparent 45%);
 }
 
-/* Luz derecha - azul/morado (tema claro - igual que oscuro) */
 [data-theme="light"] body::after {
     right: 0;
     background:
@@ -104,7 +68,6 @@ main {
         0 0 40px rgba(99, 102, 241, 0.1);
 }
 
-/* Header translúcido en tema oscuro */
 [data-theme="dark"] .main-header {
     background: rgba(0, 0, 0, 0.75);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -518,19 +481,10 @@ html {
 }
 
 
-/* ==========================================
-   TEMA OSCURO - Bordes blancos finos
-   (sin modificar el cabezal)
-   ========================================== */
-
 [data-theme="dark"] .main-footer {
     border-top: 2px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Tarjetas de productos y catálogo */
-[data-theme="dark"] .card-premium,
-[data-theme="dark"] .product-card,
-[data-theme="dark"] .catalogo-card,
 [data-theme="dark"] .client-card {
     border: 2px solid rgba(255, 255, 255, 0.18);
 }
@@ -542,41 +496,23 @@ html {
     border-color: rgba(255, 255, 255, 0.35);
 }
 
-/* Tarjetas informativas y estadísticas */
-[data-theme="dark"] .info-card,
-[data-theme="dark"] .stat-card,
-[data-theme="dark"] .about-hero,
-[data-theme="dark"] .gallery-section,
 [data-theme="dark"] .legal-content {
     border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-lg);
 }
 
-/* Secciones y contenedores */
-[data-theme="dark"] .section,
-[data-theme="dark"] .collections-section,
 [data-theme="dark"] .featured-section {
     border: none;
 }
 
-/* Filtros y paneles laterales */
-[data-theme="dark"] .filters-sidebar,
-[data-theme="dark"] .filter-group,
 [data-theme="dark"] .filter-section {
     border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Modales y popups */
-[data-theme="dark"] .modal-content,
-[data-theme="dark"] .popup-content,
-[data-theme="dark"] .dropdown-menu,
 [data-theme="dark"] .customization-group {
     border: 2px solid rgba(255, 255, 255, 0.18);
 }
 
-/* Botones */
-[data-theme="dark"] .btn,
-[data-theme="dark"] .btn-primary,
 [data-theme="dark"] .btn-outline {
     border: 2px solid rgba(255, 255, 255, 0.2);
 }
@@ -589,12 +525,10 @@ html {
     border-color: rgba(255, 255, 255, 0.6);
 }
 
-/* Enlaces sociales */
 [data-theme="dark"] .social-link {
     border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Flechas del carrusel */
 [data-theme="dark"] .carousel-arrow {
     border: 2px solid rgba(255, 255, 255, 0.25);
 }
@@ -603,9 +537,6 @@ html {
     border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Inputs y formularios */
-[data-theme="dark"] input,
-[data-theme="dark"] select,
 [data-theme="dark"] textarea {
     border: 2px solid rgba(255, 255, 255, 0.2);
     background: #000000;
@@ -617,55 +548,33 @@ html {
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Tabs y navegación secundaria */
-[data-theme="dark"] .tab-btn,
-[data-theme="dark"] .size-btn,
 [data-theme="dark"] .badge {
     border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Carrito y checkout */
-[data-theme="dark"] .cart-item,
-[data-theme="dark"] .cart-summary,
 [data-theme="dark"] .checkout-section {
     border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Acordeones y expansibles */
-[data-theme="dark"] .accordion-item,
 [data-theme="dark"] .faq-item {
     border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Galería de imágenes */
-[data-theme="dark"] .gallery-item,
 [data-theme="dark"] .thumbnail {
     border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Separadores y divisores */
-[data-theme="dark"] hr,
 [data-theme="dark"] .divider {
     border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Tooltips y popovers */
-[data-theme="dark"] .tooltip,
 [data-theme="dark"] .popover {
     border: 2px solid rgba(255, 255, 255, 0.2);
     background: #111116;
 }
 
-/* ==========================================
-   TEMA OSCURO - Iluminación sutil azul/morado
-   ========================================== */
 
-/* Iluminación sutil en tarjetas */
-[data-theme="dark"] .card-premium,
-[data-theme="dark"] .product-card,
-[data-theme="dark"] .catalogo-card,
-[data-theme="dark"] .client-card,
-[data-theme="dark"] .info-card,
+
 [data-theme="dark"] .stat-card {
     background: linear-gradient(135deg, var(--bg-card) 0%, rgba(18, 18, 28, 1) 100%);
     box-shadow:
@@ -703,9 +612,6 @@ html {
         0 0 30px rgba(139, 92, 246, 0.05);
 }
 
-/* Iluminación en secciones principales */
-[data-theme="dark"] .info-section,
-[data-theme="dark"] .featured-section,
 [data-theme="dark"] .collections-section {
     position: relative;
 }
@@ -729,7 +635,6 @@ html {
     pointer-events: none;
 }
 
-/* Mejora del footer en tema oscuro */
 [data-theme="dark"] .main-footer {
     background: linear-gradient(180deg, var(--bg-card) 0%, rgba(10, 10, 18, 1) 100%);
 }
@@ -743,9 +648,6 @@ html {
     opacity: 0.8;
 }
 
-/* Mejora de inputs y formularios en tema oscuro */
-[data-theme="dark"] input,
-[data-theme="dark"] select,
 [data-theme="dark"] textarea {
     background: #111116;
 }
@@ -758,8 +660,6 @@ html {
         0 0 20px rgba(99, 102, 241, 0.05);
 }
 
-/* Iluminación sutil en modales y popups */
-[data-theme="dark"] .modal-content,
 [data-theme="dark"] .popup-content {
     background: linear-gradient(135deg, var(--bg-card) 0%, rgba(18, 18, 28, 1) 100%);
     box-shadow:
@@ -767,7 +667,6 @@ html {
         0 0 80px rgba(99, 102, 241, 0.05);
 }
 
-/* Iluminación en dropdowns */
 [data-theme="dark"] .dropdown-menu {
     background: linear-gradient(180deg, var(--bg-card) 0%, rgba(16, 16, 24, 1) 100%);
     box-shadow:
@@ -775,17 +674,13 @@ html {
         0 0 30px rgba(99, 102, 241, 0.04);
 }
 
-/* ==========================================
-   Scrollbar personalizado - Global
-   ========================================== */
 
-/* Firefox */
+
 * {
     scrollbar-width: thin;
     scrollbar-color: rgba(99, 102, 241, 0.5) transparent;
 }
 
-/* Chrome, Edge, Safari */
 *::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -813,7 +708,6 @@ html {
     background: transparent;
 }
 
-/* Tema claro */
 [data-theme="light"] * {
     scrollbar-color: rgba(99, 102, 241, 0.6) rgba(99, 102, 241, 0.1);
 }

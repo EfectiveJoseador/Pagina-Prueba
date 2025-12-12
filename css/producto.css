@@ -211,9 +211,7 @@
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-main);
-    /* Default color, overwritten if sale/old price exists or manually set */
     color: #a855f7;
-    /* Force purple as requested for matching catalog style */
 
     position: relative;
     display: inline-block;
@@ -465,8 +463,6 @@
 }
 
 
-/* Contenedor de flechas debajo del carrusel (nuevo) */
-/* Contenedor de flechas debajo del carrusel (nuevo) */
 .carousel-arrows {
     display: flex;
     justify-content: center;
@@ -477,7 +473,7 @@
 
 .carousel-arrow {
     position: relative;
-    /* Cambiado de absolute */
+    position: relative;
     top: auto;
     bottom: auto;
     left: auto;
@@ -503,7 +499,7 @@
     color: var(--primary);
     border-color: var(--primary);
     transform: scale(1.15);
-    /* Efecto scale igual que home */
+    transform: scale(1.15);
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(99, 102, 241, 0.15);
 }
 
@@ -513,7 +509,6 @@
     pointer-events: none;
 }
 
-/* Eliminamos estilos antiguos de posicionamiento absoluto */
 .carousel-arrow-left,
 .carousel-arrow-right {
     position: static;

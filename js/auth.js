@@ -161,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 const idTokenResult = await user.getIdTokenResult(true);
                 if (idTokenResult.claims.admin === true) {
-                    console.log('✅ Usuario es admin - redirigiendo a panel de administración');
                     window.location.href = '/pages/admin.html';
                 } else {
                     window.location.href = '/pages/perfil.html';

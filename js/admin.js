@@ -2,7 +2,7 @@
 
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { ref, onValue, update, get, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { ref, onValue, update, get, remove, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { convertToAvailable } from './points.js';
 let isAdmin = false;
 let allOrders = [];
@@ -15,7 +15,6 @@ const authLoading = document.getElementById('auth-loading');
 const adminPanel = document.getElementById('admin-panel');
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        console.log('❌ No user - redirecting to login');
         redirectToHome('No has iniciado sesión');
         return;
     }
@@ -23,10 +22,7 @@ onAuthStateChanged(auth, async (user) => {
         const idTokenResult = await user.getIdTokenResult(true);
         const claims = idTokenResult.claims;
 
-        console.log('🔍 Checking admin claim:', claims.admin);
-
         if (claims.admin !== true) {
-            console.log('❌ User is not admin - redirecting');
             redirectToHome('No tienes permisos de administrador');
             return;
         }
@@ -40,7 +36,6 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 function redirectToHome(reason) {
-    console.log('Redirecting to home:', reason);
     authLoading.innerHTML = `
         <div style="text-align: center;">
             <i class="fas fa-shield-alt" style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;"></i>
@@ -495,9 +490,6 @@ function loadPromoCodes() {
         renderPromoCodes();
     }, (error) => {
         console.error('Error loading promo codes:', error);
-        if (error.code === 'PERMISSION_DENIED') {
-            console.log('Permission denied for promo codes');
-        }
     });
 }
 
