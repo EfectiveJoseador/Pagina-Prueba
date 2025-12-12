@@ -866,6 +866,762 @@ const products = [
         temporada: "25/26",
         tipo: "visitante",
         tallas: "S-4XL"
+    },
+    {
+        id: 388938,
+        name: "Real Betis 25/26 Visitante",
+        slug: "real-betis-2526-visitante",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/211234641/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211234641/2.jpg",
+            "/assets/productos/Yupoo/211234641/3.jpg",
+            "/assets/productos/Yupoo/211234641/4.jpg",
+            "/assets/productos/Yupoo/211234641/5.jpg",
+            "/assets/productos/Yupoo/211234641/6.jpg",
+            "/assets/productos/Yupoo/211234641/7.jpg",
+            "/assets/productos/Yupoo/211234641/8.jpg"
+        ],
+        imageAlt: "Real Betis 25/26 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211234641?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "211234641"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        tallas: "S-4XL"
+    },
+    {
+        id: 105061,
+        name: "Valladolid 25/26 Visitante",
+        slug: "valladolid-2526-visitante",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/207563358/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/207563358/2.jpg",
+            "/assets/productos/Yupoo/207563358/3.jpg",
+            "/assets/productos/Yupoo/207563358/4.jpg",
+            "/assets/productos/Yupoo/207563358/5.jpg",
+            "/assets/productos/Yupoo/207563358/6.jpg",
+            "/assets/productos/Yupoo/207563358/7.jpg",
+            "/assets/productos/Yupoo/207563358/8.jpg"
+        ],
+        imageAlt: "Valladolid 25/26 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/207563358?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "207563358"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        tallas: "S-4XL"
+    },
+    {
+        id: 945475,
+        name: "Real Betis 25/26 Tercera",
+        slug: "real-betis-2526-tercera",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/207560329/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/207560329/2.jpg",
+            "/assets/productos/Yupoo/207560329/3.jpg",
+            "/assets/productos/Yupoo/207560329/4.jpg",
+            "/assets/productos/Yupoo/207560329/5.jpg",
+            "/assets/productos/Yupoo/207560329/6.jpg",
+            "/assets/productos/Yupoo/207560329/7.jpg",
+            "/assets/productos/Yupoo/207560329/8.jpg",
+            "/assets/productos/Yupoo/207560329/9.jpg",
+            "/assets/productos/Yupoo/207560329/10.jpg",
+            "/assets/productos/Yupoo/207560329/11.jpg"
+        ],
+        imageAlt: "Real Betis 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/207560329?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "207560329"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 520253,
+        name: "Deportivo La Coruna 25/26 Local",
+        slug: "deportivo-la-coruna-2526-local",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/207558615/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/207558615/2.jpg",
+            "/assets/productos/Yupoo/207558615/3.jpg",
+            "/assets/productos/Yupoo/207558615/4.jpg",
+            "/assets/productos/Yupoo/207558615/5.jpg",
+            "/assets/productos/Yupoo/207558615/6.jpg",
+            "/assets/productos/Yupoo/207558615/7.jpg",
+            "/assets/productos/Yupoo/207558615/8.jpg",
+            "/assets/productos/Yupoo/207558615/9.jpg"
+        ],
+        imageAlt: "Deportivo La Coruna 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/207558615?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "207558615"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 811678,
+        name: "Deportivo La Coruna 25/26 Tercera",
+        slug: "deportivo-la-coruna-2526-tercera",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/207558748/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/207558748/2.jpg",
+            "/assets/productos/Yupoo/207558748/3.jpg",
+            "/assets/productos/Yupoo/207558748/4.jpg",
+            "/assets/productos/Yupoo/207558748/5.jpg",
+            "/assets/productos/Yupoo/207558748/6.jpg",
+            "/assets/productos/Yupoo/207558748/7.jpg",
+            "/assets/productos/Yupoo/207558748/8.jpg"
+        ],
+        imageAlt: "Deportivo La Coruna 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/207558748?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "207558748"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 199666,
+        name: "Celta 25/26 Tercera",
+        slug: "celta-2526-tercera",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/207557734/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/207557734/2.jpg",
+            "/assets/productos/Yupoo/207557734/3.jpg",
+            "/assets/productos/Yupoo/207557734/4.jpg",
+            "/assets/productos/Yupoo/207557734/5.jpg",
+            "/assets/productos/Yupoo/207557734/6.jpg",
+            "/assets/productos/Yupoo/207557734/7.jpg",
+            "/assets/productos/Yupoo/207557734/8.jpg",
+            "/assets/productos/Yupoo/207557734/9.jpg"
+        ],
+        imageAlt: "Celta 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/207557734?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "207557734"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 987640,
+        name: "Celta 25/26 Visitante",
+        slug: "celta-2526-visitante",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/203698925/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/203698925/2.jpg",
+            "/assets/productos/Yupoo/203698925/3.jpg",
+            "/assets/productos/Yupoo/203698925/4.jpg",
+            "/assets/productos/Yupoo/203698925/5.jpg",
+            "/assets/productos/Yupoo/203698925/6.jpg",
+            "/assets/productos/Yupoo/203698925/7.jpg",
+            "/assets/productos/Yupoo/203698925/8.jpg",
+            "/assets/productos/Yupoo/203698925/9.jpg"
+        ],
+        imageAlt: "Celta 25/26 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/203698925?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "203698925"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        tallas: "S-4XL"
+    },
+    {
+        id: 951872,
+        name: "Real Madrid Local Retro",
+        slug: "real-madrid-local-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/201351646/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/201351646/2.jpg",
+            "/assets/productos/Yupoo/201351646/3.jpg",
+            "/assets/productos/Yupoo/201351646/4.jpg",
+            "/assets/productos/Yupoo/201351646/5.jpg",
+            "/assets/productos/Yupoo/201351646/6.jpg",
+            "/assets/productos/Yupoo/201351646/7.jpg",
+            "/assets/productos/Yupoo/201351646/8.jpg"
+        ],
+        imageAlt: "Real Madrid Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/201351646?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "201351646"
+        },
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 385774,
+        name: "Girona 25/26 Visitante",
+        slug: "girona-2526-visitante",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/201350059/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/201350059/2.jpg",
+            "/assets/productos/Yupoo/201350059/3.jpg",
+            "/assets/productos/Yupoo/201350059/4.jpg",
+            "/assets/productos/Yupoo/201350059/5.jpg",
+            "/assets/productos/Yupoo/201350059/6.jpg",
+            "/assets/productos/Yupoo/201350059/7.jpg",
+            "/assets/productos/Yupoo/201350059/8.jpg",
+            "/assets/productos/Yupoo/201350059/9.jpg",
+            "/assets/productos/Yupoo/201350059/10.jpg"
+        ],
+        imageAlt: "Girona 25/26 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/201350059?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "201350059"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        tallas: "S-XXL"
+    },
+    {
+        id: 126754,
+        name: "Cadiz 25/26 Local",
+        slug: "cadiz-2526-local",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/200370927/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/200370927/2.jpg",
+            "/assets/productos/Yupoo/200370927/3.jpg",
+            "/assets/productos/Yupoo/200370927/4.jpg",
+            "/assets/productos/Yupoo/200370927/5.jpg",
+            "/assets/productos/Yupoo/200370927/6.jpg",
+            "/assets/productos/Yupoo/200370927/7.jpg",
+            "/assets/productos/Yupoo/200370927/8.jpg"
+        ],
+        imageAlt: "Cadiz 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/200370927?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "200370927"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 489081,
+        name: "Zaragoza Local Retro",
+        slug: "zaragoza-local-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/199217731/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/199217731/2.jpg",
+            "/assets/productos/Yupoo/199217731/3.jpg",
+            "/assets/productos/Yupoo/199217731/4.jpg",
+            "/assets/productos/Yupoo/199217731/5.jpg",
+            "/assets/productos/Yupoo/199217731/6.jpg",
+            "/assets/productos/Yupoo/199217731/7.jpg",
+            "/assets/productos/Yupoo/199217731/8.jpg"
+        ],
+        imageAlt: "Zaragoza Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/199217731?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "199217731"
+        },
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 891737,
+        name: "Real Madrid black 25/26",
+        slug: "real-madrid-black-2526",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/197579658/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/197579658/2.jpg",
+            "/assets/productos/Yupoo/197579658/3.jpg",
+            "/assets/productos/Yupoo/197579658/4.jpg",
+            "/assets/productos/Yupoo/197579658/5.jpg",
+            "/assets/productos/Yupoo/197579658/6.jpg",
+            "/assets/productos/Yupoo/197579658/7.jpg",
+            "/assets/productos/Yupoo/197579658/8.jpg"
+        ],
+        imageAlt: "Real Madrid black 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/197579658?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "197579658"
+        },
+        temporada: "25/26",
+        tallas: "S-XXL"
+    },
+    {
+        id: 737878,
+        name: "Zaragoza 97/98 Local Retro",
+        slug: "zaragoza-9798-local-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/197575643/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/197575643/2.jpg",
+            "/assets/productos/Yupoo/197575643/3.jpg",
+            "/assets/productos/Yupoo/197575643/4.jpg",
+            "/assets/productos/Yupoo/197575643/5.jpg",
+            "/assets/productos/Yupoo/197575643/6.jpg",
+            "/assets/productos/Yupoo/197575643/7.jpg",
+            "/assets/productos/Yupoo/197575643/8.jpg"
+        ],
+        imageAlt: "Zaragoza 97/98 Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/197575643?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "197575643"
+        },
+        temporada: "97/98",
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 745212,
+        name: "Getafe 09/10 Local Retro",
+        slug: "getafe-0910-local-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/192258362/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/192258362/2.jpg",
+            "/assets/productos/Yupoo/192258362/3.jpg",
+            "/assets/productos/Yupoo/192258362/4.jpg",
+            "/assets/productos/Yupoo/192258362/5.jpg",
+            "/assets/productos/Yupoo/192258362/6.jpg",
+            "/assets/productos/Yupoo/192258362/7.jpg",
+            "/assets/productos/Yupoo/192258362/8.jpg"
+        ],
+        imageAlt: "Getafe 09/10 Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/192258362?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "192258362"
+        },
+        temporada: "09/10",
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 144708,
+        name: "Málaga CF Stadium Local Retro",
+        slug: "malaga-cf-stadium-local-retro",
+        category: "futbol",
+        league: "retro",
+        price: 0,
+        image: "/assets/productos/Yupoo/187757557/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/187757557/2.jpg",
+            "/assets/productos/Yupoo/187757557/3.jpg",
+            "/assets/productos/Yupoo/187757557/4.jpg",
+            "/assets/productos/Yupoo/187757557/5.jpg",
+            "/assets/productos/Yupoo/187757557/6.jpg",
+            "/assets/productos/Yupoo/187757557/7.jpg",
+            "/assets/productos/Yupoo/187757557/8.jpg"
+        ],
+        imageAlt: "Málaga CF Stadium Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/187757557?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "187757557"
+        },
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true
+    },
+    {
+        id: 294032,
+        name: "Italy Local",
+        slug: "italy-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/219491302/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/219491302/2.jpg"
+        ],
+        imageAlt: "Italy Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/219491302?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "219491302"
+        },
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 737806,
+        name: "England Local",
+        slug: "england-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/219490998/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/219490998/2.jpg"
+        ],
+        imageAlt: "England Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/219490998?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "219490998"
+        },
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 120417,
+        name: "Germany Local",
+        slug: "germany-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/219463186/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/219463186/2.jpg"
+        ],
+        imageAlt: "Germany Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/219463186?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "219463186"
+        },
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 905466,
+        name: "Venezuela Local",
+        slug: "venezuela-local",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/218139532/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/218139532/2.jpg"
+        ],
+        imageAlt: "Venezuela Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/218139532?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "218139532"
+        },
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 882796,
+        name: "Spain Local",
+        slug: "spain-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/218139402/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/218139402/2.jpg"
+        ],
+        imageAlt: "Spain Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/218139402?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "218139402"
+        },
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 431137,
+        name: "Costa Rica Local",
+        slug: "costa-rica-local",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/218138743/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/218138743/2.jpg"
+        ],
+        imageAlt: "Costa Rica Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/218138743?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "218138743"
+        },
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 238510,
+        name: "Atlético Mineiro 25/26 Tercera",
+        slug: "atletico-mineiro-2526-tercera",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/216807613/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216807613/2.jpg"
+        ],
+        imageAlt: "Atlético Mineiro 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216807613?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216807613"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 671227,
+        name: "Al-Hilal with white sponosr 25/26 Local",
+        slug: "al-hilal-with-white-sponosr-2526-local",
+        category: "futbol",
+        league: "ligaarabe",
+        price: 0,
+        image: "/assets/productos/Yupoo/216806586/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216806586/2.jpg"
+        ],
+        imageAlt: "Al-Hilal with white sponosr 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216806586?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216806586"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 729212,
+        name: "Al-Hilal with golden sponosr 25/26 Local",
+        slug: "al-hilal-with-golden-sponosr-2526-local",
+        category: "futbol",
+        league: "ligue1",
+        price: 0,
+        image: "/assets/productos/Yupoo/216806631/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216806631/2.jpg"
+        ],
+        imageAlt: "Al-Hilal with golden sponosr 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216806631?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216806631"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 984139,
+        name: "Al-Hilal 25/26 Tercera",
+        slug: "al-hilal-2526-tercera",
+        category: "futbol",
+        league: "ligaarabe",
+        price: 0,
+        image: "/assets/productos/Yupoo/216806537/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216806537/2.jpg"
+        ],
+        imageAlt: "Al-Hilal 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216806537?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216806537"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 144601,
+        name: "Flamengo black-red line 25/26",
+        slug: "flamengo-black-red-line-2526",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/216806071/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216806071/2.jpg"
+        ],
+        imageAlt: "Flamengo black-red line 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216806071?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216806071"
+        },
+        temporada: "25/26",
+        tallas: "S-4XL"
+    },
+    {
+        id: 666279,
+        name: "Flamengo black 25/26",
+        slug: "flamengo-black-2526",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/216806004/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216806004/2.jpg"
+        ],
+        imageAlt: "Flamengo black 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216806004?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216806004"
+        },
+        temporada: "25/26",
+        tallas: "S-4XL"
+    },
+    {
+        id: 791626,
+        name: "Mexico Local",
+        slug: "mexico-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/216441726/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216441726/2.jpg"
+        ],
+        imageAlt: "Mexico Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216441726?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216441726"
+        },
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 405261,
+        name: "Germany Visitante",
+        slug: "germany-visitante",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/216441793/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216441793/2.jpg"
+        ],
+        imageAlt: "Germany Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216441793?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216441793"
+        },
+        tipo: "visitante",
+        tallas: "S-4XL"
     }
 ];
 
