@@ -1754,7 +1754,7 @@ const products = [
     },
     {
         id: 407027,
-        name: "Atletico Mineiro 25/26",
+        name: "Atlético Mineiro 25/26",
         slug: "atletico-mineiro-2526",
         category: "futbol",
         league: "brasileirao",
@@ -1763,7 +1763,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/213836929/2.jpg"
         ],
-        imageAlt: "Atletico Mineiro 25/26 - Vista principal",
+        imageAlt: "Atlético Mineiro 25/26 - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -1802,7 +1802,7 @@ const products = [
         name: "Santa Cruz 25/26 Visitante",
         slug: "santa-cruz-2526-visitante",
         category: "futbol",
-        league: "otros",
+        league: "brasileirao",
         price: 0,
         image: "/assets/productos/Yupoo/213836701/1.jpg",
         images: [
@@ -2048,7 +2048,7 @@ const products = [
         name: "Sporting Lisbon 25/26",
         slug: "sporting-lisbon-2526",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/208905010/1.jpg",
         images: [
@@ -2075,7 +2075,7 @@ const products = [
         name: "Sporting Lisbon Green 25/26",
         slug: "sporting-lisbon-green-2526",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/216420441/1.jpg",
         images: [
@@ -2097,7 +2097,7 @@ const products = [
         name: "Sporting Lisbon cyan 25/26",
         slug: "sporting-lisbon-cyan-2526",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/216420176/1.jpg",
         images: [

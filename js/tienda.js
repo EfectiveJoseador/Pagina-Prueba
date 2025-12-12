@@ -267,26 +267,48 @@ function populateTeamFilter(league) {
 
     const leagueProducts = allProducts.filter(p => p.league === league);
 
-    const teams = [...new Set(leagueProducts.map(p => {
+    // Lista de variantes a limpiar
+    const variants = [
+        'Local', 'Visitante', 'Tercera', 'Cuarta', 'Fourth', 'Home', 'Away', 'Third',
+        'Portero', 'Goalkeeper', 'GK',
+        'Retro', 'Icon', 'Classic', 'Vintage',
+        'Especial', 'Special', 'Edici[oó]n.*', 'Limited',
+        'Black', 'Gold', 'White', 'Pink', 'Blue',
+        'Training', 'Entrenamiento', 'Pre-match', 'Warm-up',
+        'Anniversary', 'Aniversario', 'Centemary', 'Centenario',
+        'Player', 'Fan', 'Vapor', 'Authentic'
+    ];
+    const variantRegex = new RegExp(`\\b(${variants.join('|')})\\b`, 'gi');
+
+    // Usar Map para deduplicar normalizando claves
+    const teamMap = new Map();
+
+    leagueProducts.forEach(p => {
         let name = p.name;
         name = name.replace(/\d{2}\/\d{2}/, '');
         name = name.replace(/\b20\d{2}\b/, ''); // Eliminar años
-        name = name.replace(/\(.*\)/g, ''); // Eliminar paréntesis completos (Niño) etc
-        const variants = [
-            'Local', 'Visitante', 'Tercera', 'Cuarta', 'Fourth', 'Home', 'Away', 'Third',
-            'Portero', 'Goalkeeper', 'GK',
-            'Retro', 'Icon', 'Classic', 'Vintage',
-            'Especial', 'Special', 'Edici[oó]n.*', 'Limited',
-            'Black', 'Gold', 'White', 'Pink', 'Blue',
-            'Training', 'Entrenamiento', 'Pre-match', 'Warm-up',
-            'Anniversary', 'Aniversario', 'Centemary', 'Centenario',
-            'Player', 'Fan', 'Vapor', 'Authentic'
-        ];
-        // Crear regex dinámica ignorando case
-        const variantRegex = new RegExp(`\\b(${variants.join('|')})\\b`, 'gi');
+        name = name.replace(/\(.*\)/g, ''); // Eliminar paréntesis completos
         name = name.replace(variantRegex, '');
-        return name.replace(/\s+/g, ' ').trim();
-    }))].sort();
+        name = name.replace(/\s+/g, ' ').trim();
+
+        if (name) {
+            // Clave normalizada (sin tildes, minúsculas)
+            const key = normalizeString(name);
+
+            // Si no existe, guardar. Si existe, preferir la versión con tildes/formato correcto.
+            if (!teamMap.has(key)) {
+                teamMap.set(key, name);
+            } else {
+                const current = teamMap.get(key);
+                // Si el nuevo tiene caracteres no-ASCII (tildes) y el guardado no, usamos el nuevo
+                if (/[^\u0000-\u007f]/.test(name) && !/[^\u0000-\u007f]/.test(current)) {
+                    teamMap.set(key, name);
+                }
+            }
+        }
+    });
+
+    const teams = [...teamMap.values()].sort();
 
     if (teamSelect) {
         teamSelect.innerHTML = '<option value="">Todos los Equipos</option>';
