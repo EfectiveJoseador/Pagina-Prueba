@@ -296,12 +296,25 @@ function populateTeamFilter(league) {
         'sporting de lisboa': 'Sporting de Lisboa',
         'sporting lisbon': 'Sporting de Lisboa',
         'boca juniors': 'Boca Juniors',
+        'boca juniors stadium': 'Boca Juniors',
         'flamengo': 'Flamengo',
         'inter miami': 'Inter Miami',
         'miami': 'Inter Miami',
         'man utd': 'Manchester United',
         'man united': 'Manchester United',
-        'manchester united': 'Manchester United'
+        'manchester united': 'Manchester United',
+        'alaves': 'Alavés',
+        'atletico madrid': 'Atlético Madrid',
+        'atletico mineiro': 'Atlético Mineiro',
+        'sao paulo': 'São Paulo',
+        'celta': 'Celta de Vigo',
+        'celta de vigo': 'Celta de Vigo',
+        'athletic': 'Athletic Club',
+        'athletic club': 'Athletic Club',
+        'athletic bilbao': 'Athletic Club',
+        'real sociedad': 'Real Sociedad',
+        'brasil': 'Brasil',
+        'brazil': 'Brasil'
     };
 
     // Mapeo de alias a clave canónica (para agrupar variantes en la misma entrada)
@@ -313,7 +326,13 @@ function populateTeamFilter(league) {
         'miami': 'inter miami',
         'mexico': 'mexico',
         'man utd': 'manchester united',
-        'man united': 'manchester united'  // México -> mexico sin tilde
+        'man united': 'manchester united',
+        'boca juniors stadium': 'boca juniors',
+        'alaves': 'alaves',
+        'celta': 'celta de vigo',
+        'athletic': 'athletic club',
+        'athletic bilbao': 'athletic club',
+        'brazil': 'brasil'
     };
 
     // Usar Map para deduplicar normalizando claves
@@ -519,8 +538,15 @@ function applyFilters(updateURL = true) {
         'newcastle united': ['newcastle united', 'newcastle'],
         'méxico': ['mexico', 'méxico'],
         'inter miami': ['inter miami', 'miami'],
-        'boca juniors': ['boca juniors', 'boca'],
-        'manchester united': ['manchester united', 'man utd', 'man united']
+        'boca juniors': ['boca juniors', 'boca juniors stadium', 'boca'],
+        'manchester united': ['manchester united', 'man utd', 'man united'],
+        'alavés': ['alaves', 'alavés'],
+        'atlético madrid': ['atletico madrid', 'atlético madrid'],
+        'atlético mineiro': ['atletico mineiro', 'atlético mineiro'],
+        'são paulo': ['sao paulo', 'são paulo'],
+        'celta de vigo': ['celta', 'celta de vigo'],
+        'athletic club': ['athletic', 'athletic club', 'athletic bilbao'],
+        'brasil': ['brasil', 'brazil']
     };
 
     filteredProducts = allProducts.filter(product => {
