@@ -814,6 +814,58 @@ const products = [
         temporada: "25/26",
         tipo: "local",
         tallas: "S-4XL"
+    },
+    {
+        id: 948475,
+        name: "Real Murcia 25/26 Local",
+        slug: "real-murcia-2526-local",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/216806487/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216806487/2.jpg"
+        ],
+        imageAlt: "Real Murcia 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216806487?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "216806487"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 892563,
+        name: "Osasuna 25/26 Visitante",
+        slug: "osasuna-2526-visitante",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/211234491/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/211234491/2.jpg",
+            "/assets/productos/Yupoo/211234491/3.jpg",
+            "/assets/productos/Yupoo/211234491/4.jpg",
+            "/assets/productos/Yupoo/211234491/5.jpg",
+            "/assets/productos/Yupoo/211234491/6.jpg",
+            "/assets/productos/Yupoo/211234491/7.jpg",
+            "/assets/productos/Yupoo/211234491/8.jpg"
+        ],
+        imageAlt: "Osasuna 25/26 Visitante - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211234491?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "211234491"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        tallas: "S-4XL"
     }
 ];
 

@@ -160,15 +160,15 @@ function renderProducts() {
                         height="300"
                         loading="lazy"
                     >
-                    ${product.images && product.images.length > 0 ? `<img 
+                    <img 
                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%23e5e7eb' width='1' height='1'/%3E%3C/svg%3E"
-                        data-src="${product.images[0]}"
+                        data-src="${product.images && product.images.length > 0 ? product.images[0] : product.image.replace(/\/1\.(webp|jpg|png)$/, '/2.$1')}"
                         alt="${product.name} - Vista 2"
                         class="secondary-image lazy-image"
                         width="300"
                         height="300"
                         loading="lazy"
-                    >` : ''}
+                    >
                 </a>
                 <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
             </div>
