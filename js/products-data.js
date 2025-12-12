@@ -791,6 +791,29 @@ const products = [
         temporada: "25/26",
         tipo: "visitante",
         tallas: "S-4XL"
+    },
+    {
+        id: 362332,
+        name: "Alaves 25/26 Local",
+        slug: "alaves-2526-local",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/216419940/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216419940/2.jpg"
+        ],
+        imageAlt: "Alaves 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216419940?uid=1&isSubCate=false&referrercate=2962411",
+            albumId: "216419940"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
     }
 ];
 

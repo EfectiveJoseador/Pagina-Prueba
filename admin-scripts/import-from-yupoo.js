@@ -353,7 +353,8 @@ async function main() {
             separator();
             console.log(`${COLORS.bright}Elige las imágenes separadas por comas.${COLORS.reset}`);
             console.log(`${COLORS.dim}La primera será la principal, la segunda la secundaria.${COLORS.reset}`);
-            console.log(`${COLORS.dim}Ejemplo: ${bigImages.length - 2},${bigImages.length - 1}${COLORS.reset}`);
+            console.log(`${COLORS.dim}Usa "all" para incluir todas las demás imágenes.${COLORS.reset}`);
+            console.log(`${COLORS.dim}Ejemplos: 7,8  ó  4,5,all${COLORS.reset}`);
             console.log('');
 
             // Usar readline para input interactivo
@@ -376,9 +377,12 @@ async function main() {
                 process.exit(0);
             }
 
-            // Parsear índices del input
-            const selectedIndices = userInput.split(',')
-                .map(s => parseInt(s.trim(), 10))
+            // Parsear índices del input - soporta "all" para todas las demás
+            const inputParts = userInput.split(',').map(s => s.trim().toLowerCase());
+            const hasAll = inputParts.includes('all');
+            const selectedIndices = inputParts
+                .filter(s => s !== 'all')
+                .map(s => parseInt(s, 10))
                 .filter(n => !isNaN(n) && n >= 0 && n < bigImages.length);
 
             if (selectedIndices.length === 0) {
@@ -386,8 +390,19 @@ async function main() {
                 process.exit(1);
             }
 
+            // Si hay "all", añadir todos los demás índices después de los seleccionados
+            if (hasAll) {
+                const alreadySelected = new Set(selectedIndices);
+                for (let i = 0; i < bigImages.length; i++) {
+                    if (!alreadySelected.has(i)) {
+                        selectedIndices.push(i);
+                    }
+                }
+            }
+
             // Sobrescribir options para continuar con la importación
             options.imageIndices = selectedIndices;
+            options.includeAll = hasAll;
             options.write = true;
             options.dryRun = false;
             options.update = true;  // Actualizar automáticamente si ya existe
@@ -396,7 +411,11 @@ async function main() {
             options._bigImages = bigImages;
 
             console.log('');
-            success(`Seleccionadas: ${selectedIndices.join(', ')}`);
+            if (hasAll) {
+                success(`Seleccionadas: ${selectedIndices.slice(0, 2).join(', ')} + ${selectedIndices.length - 2} adicionales`);
+            } else {
+                success(`Seleccionadas: ${selectedIndices.join(', ')}`);
+            }
             console.log('');
         }
 
@@ -428,7 +447,8 @@ async function main() {
             if (selectedImages.length > 0) {
                 product.image = selectedImages[0];
                 product.images = selectedImages.slice(1);
-                info(`Usando imágenes manuales: índices ${options.imageIndices.join(', ')}`);
+                const extraCount = selectedImages.length > 2 ? ` (+${selectedImages.length - 2} más)` : '';
+                info(`Usando imágenes manuales: ${selectedImages.length} imágenes${extraCount}`);
             } else {
                 warn('Índices de imagen no válidos, usando selección automática');
             }
