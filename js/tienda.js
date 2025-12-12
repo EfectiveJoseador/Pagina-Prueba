@@ -270,10 +270,22 @@ function populateTeamFilter(league) {
     const teams = [...new Set(leagueProducts.map(p => {
         let name = p.name;
         name = name.replace(/\d{2}\/\d{2}/, '');
-        name = name.replace(/\b20\d{2}\b/, ''); // Eliminar años como 2026
-        name = name.replace(/(Local|Visitante|Tercera|Retro|Icon|Especial|Black|Edición Limitada)/ig, '');
-        name = name.replace('(Kids)', '');
-        return name.trim();
+        name = name.replace(/\b20\d{2}\b/, ''); // Eliminar años
+        name = name.replace(/\(.*\)/g, ''); // Eliminar paréntesis completos (Niño) etc
+        const variants = [
+            'Local', 'Visitante', 'Tercera', 'Cuarta', 'Fourth', 'Home', 'Away', 'Third',
+            'Portero', 'Goalkeeper', 'GK',
+            'Retro', 'Icon', 'Classic', 'Vintage',
+            'Especial', 'Special', 'Edici[oó]n.*', 'Limited',
+            'Black', 'Gold', 'White', 'Pink', 'Blue',
+            'Training', 'Entrenamiento', 'Pre-match', 'Warm-up',
+            'Anniversary', 'Aniversario', 'Centemary', 'Centenario',
+            'Player', 'Fan', 'Vapor', 'Authentic'
+        ];
+        // Crear regex dinámica ignorando case
+        const variantRegex = new RegExp(`\\b(${variants.join('|')})\\b`, 'gi');
+        name = name.replace(variantRegex, '');
+        return name.replace(/\s+/g, ' ').trim();
     }))].sort();
 
     if (teamSelect) {

@@ -81,10 +81,19 @@ const TEAM_TO_LEAGUE = {
     'levante': 'laliga',
     'oviedo': 'laliga',
     'albacete': 'laliga',
+    'albacete': 'laliga',
     'malaga': 'laliga',
+    'real murcia': 'laliga',
+    'murcia': 'laliga',
+    'deportivo': 'laliga',
+    'deportivo la coruna': 'laliga',
+    'depor': 'laliga',
+    'racing santander': 'laliga',
+    'zaragoza': 'laliga',
 
     // Premier League
     'arsenal': 'premier',
+
     'chelsea': 'premier',
     'liverpool': 'premier',
     'man united': 'premier',
@@ -474,7 +483,12 @@ const TITLE_CLEANUP_PATTERNS = [
     /white[\s-]?red(\s+line)?/gi,
     /\d+th\s+anniversary/gi,
     /special\s+edition/gi,
-    /\(.*\)/g                      // Cosas entre paréntesis
+    /edici[oó]n\s+especial/gi,
+    /edici[oó]n\s+limitada/gi,
+    /\(.*\)/g,                      // Cosas entre paréntesis
+    /\b(Training|Entrenamiento|Pre-match|Warm-up)\b/gi,
+    /\b(Black|Gold|Blue|White|Pink)\b/gi,
+    /\b(Vapor|Authentic|Fan)\b/gi
 ];
 
 /**
@@ -636,10 +650,6 @@ function detectLeague(teamName, isRetro = false) {
         return TEAM_TO_LEAGUE[teamLower];
     }
 
-    // Buscar traducciones inversas para coincidencia? 
-    // No necesario si TEAM_TO_LEAGUE tiene las claves en español o inglés comunes
-    // Mejor añadir un chequeo rápido de 'selecciones'
-
     // Heurística simple para selecciones
     const SELECCIONES = ['alemania', 'inglaterra', 'españa', 'francia', 'italia', 'portugal', 'holanda', 'bélgica', 'brasil', 'argentina', 'méxico', 'estados unidos', 'japón', 'marruecos', 'croacia', 'suiza', 'uruguay', 'colombia', 'corea del sur'];
 
@@ -647,10 +657,13 @@ function detectLeague(teamName, isRetro = false) {
         return 'selecciones';
     }
 
-    // Buscar coincidencia parcial
-    for (const [team, league] of Object.entries(TEAM_TO_LEAGUE)) {
-        if (teamLower.includes(team) || team.includes(teamLower)) {
-            return league;
+    // Buscar coincidencia parcial, priorizando las cadenas más largas
+    // Esto evita que "Atletico Mineiro" detecte "Atletico" (Madrid) por error
+    const sortedTeams = Object.keys(TEAM_TO_LEAGUE).sort((a, b) => b.length - a.length);
+
+    for (const team of sortedTeams) {
+        if (teamLower.includes(team)) {
+            return TEAM_TO_LEAGUE[team];
         }
     }
 
