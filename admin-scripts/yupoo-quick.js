@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
- * Quick Yupoo Import - Solo pega el enlace y listo
- * Uso: node yupoo-quick.js [URL]
+ * Quick Yupoo Import - Modo continuo
+ * Uso: node yupoo-quick.js
+ * Escribe 'exit' o presiona Enter sin URL para salir
  */
 
-const { spawn } = require('child_process');
+const { spawnSync } = require('child_process');
 const readline = require('readline');
 const path = require('path');
 
@@ -13,48 +14,65 @@ const COLORS = {
     bright: '\x1b[1m',
     cyan: '\x1b[36m',
     green: '\x1b[32m',
+    yellow: '\x1b[33m',
     dim: '\x1b[2m'
 };
 
+function askForUrl(rl) {
+    return new Promise(resolve => {
+        rl.question(`${COLORS.cyan}URL: ${COLORS.reset}`, answer => {
+            resolve(answer.trim());
+        });
+    });
+}
+
 async function main() {
-    let url = process.argv[2];
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
 
-    // Si no hay URL, pedirla
-    if (!url) {
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
+    console.log('');
+    console.log(`${COLORS.bright}🚀 Yupoo Quick Import - Modo Continuo${COLORS.reset}`);
+    console.log(`${COLORS.dim}Pega enlaces de Yupoo uno tras otro.${COLORS.reset}`);
+    console.log(`${COLORS.dim}Escribe 'exit' o presiona Enter vacío para salir.${COLORS.reset}`);
+    console.log('');
 
-        console.log('');
-        console.log(`${COLORS.bright}🚀 Yupoo Quick Import${COLORS.reset}`);
-        console.log(`${COLORS.dim}Pega el enlace del álbum de Yupoo:${COLORS.reset}`);
-        console.log('');
-
-        url = await new Promise(resolve => {
-            rl.question(`${COLORS.cyan}URL: ${COLORS.reset}`, answer => {
-                rl.close();
-                resolve(answer.trim());
-            });
-        });
-    }
-
-    if (!url || !url.includes('yupoo.com')) {
-        console.log('❌ URL de Yupoo no válida');
-        process.exit(1);
-    }
-
-    // Ejecutar el importador con --list-images
+    let importCount = 0;
     const importerPath = path.join(__dirname, 'import-from-yupoo.js');
 
-    const child = spawn('node', [importerPath, url, '--list-images'], {
-        stdio: 'inherit',
-        cwd: path.join(__dirname, '..')
-    });
+    while (true) {
+        const url = await askForUrl(rl);
 
-    child.on('close', (code) => {
-        process.exit(code);
-    });
+        // Salir si está vacío o es 'exit'
+        if (!url || url.toLowerCase() === 'exit' || url.toLowerCase() === 'salir') {
+            console.log('');
+            console.log(`${COLORS.green}✓ ${importCount} producto(s) importado(s). ¡Hasta luego!${COLORS.reset}`);
+            rl.close();
+            process.exit(0);
+        }
+
+        // Validar URL
+        if (!url.includes('yupoo.com')) {
+            console.log(`${COLORS.yellow}⚠ URL no válida, debe ser de yupoo.com${COLORS.reset}`);
+            continue;
+        }
+
+        // Ejecutar importador sincrónicamente
+        console.log('');
+        const result = spawnSync('node', [importerPath, url, '--list-images'], {
+            stdio: 'inherit',
+            cwd: path.join(__dirname, '..')
+        });
+
+        if (result.status === 0) {
+            importCount++;
+        }
+
+        console.log('');
+        console.log(`${COLORS.dim}─────────────────────────────────────────${COLORS.reset}`);
+        console.log(`${COLORS.bright}Siguiente URL (o 'exit' para salir):${COLORS.reset}`);
+    }
 }
 
 main().catch(console.error);
