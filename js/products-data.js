@@ -1622,6 +1622,29 @@ const products = [
         },
         tipo: "visitante",
         tallas: "S-4XL"
+    },
+    {
+        id: 613571,
+        name: "Portugal 2026 Local",
+        slug: "portugal-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/216441953/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/216441953/2.jpg"
+        ],
+        imageAlt: "Portugal 2026 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/216441953?uid=1&isSubCate=false&referrercate=545635",
+            albumId: "216441953"
+        },
+        temporada: "2026",
+        tipo: "local",
+        tallas: "S-4XL"
     }
 ];
 

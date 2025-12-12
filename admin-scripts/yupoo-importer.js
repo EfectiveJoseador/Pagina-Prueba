@@ -435,6 +435,49 @@ function normalizeText(text) {
 }
 
 /**
+ * Mapeo de traducciones de países y equipos conocidos
+ */
+const TEAM_TRANSLATIONS = {
+    'germany': 'Alemania',
+    'deutschland': 'Alemania',
+    'england': 'Inglaterra',
+    'spain': 'España',
+    'france': 'Francia',
+    'italy': 'Italia',
+    'portugal': 'Portugal',
+    'netherlands': 'Holanda',
+    'holland': 'Holanda',
+    'belgium': 'Bélgica',
+    'brazil': 'Brasil',
+    'argentina': 'Argentina',
+    'mexico': 'México',
+    'usa': 'Estados Unidos',
+    'japan': 'Japón',
+    'morocco': 'Marruecos',
+    'croatia': 'Croacia',
+    'switzerland': 'Suiza',
+    'uruguay': 'Uruguay',
+    'colombia': 'Colombia',
+    'south korea': 'Corea del Sur'
+};
+
+/**
+ * Patrones de texto para eliminar del nombre del equipo
+ */
+const TITLE_CLEANUP_PATTERNS = [
+    /with\s+\w+\s+sponsor/gi,      // with white sponsor
+    /with\s+\w+\s+sponosr/gi,      // typo common in yupoo: sponosr
+    /player\s+version/gi,
+    /fans\s+version/gi,
+    /match\s+version/gi,
+    /black[\s-]?red(\s+line)?/gi,
+    /white[\s-]?red(\s+line)?/gi,
+    /\d+th\s+anniversary/gi,
+    /special\s+edition/gi,
+    /\(.*\)/g                      // Cosas entre paréntesis
+];
+
+/**
  * Parsea el título del producto y extrae información estructurada
  * 
  * @param {string} rawTitle - Título crudo del álbum
@@ -453,37 +496,37 @@ function parseProductTitle(rawTitle) {
         isRetro: false
     };
 
-    // Detectar temporada (formato XX/XX o XXXX o 2XXX)
-    // Validación: segundo año debe ser primero+1 (ej: 25/26 válido, 20/26 inválido)
-    const seasonMatch = title.match(/(\d{2})(\d{2})\b|\b(\d{2})\/(\d{2})\b|\b(20\d{2})\b/);
-    if (seasonMatch) {
-        let year1 = null;
-        let year2 = null;
+    // Detectar temporada (formato XX/XX, 20XX, o XXYY)
+    // Prioridad: 20XX (año completo), luego formatos combinados
+    // Match 2026, 2025, etc.
+    const fullYearMatch = title.match(/\b(20\d{2})\b/);
+    const seasonPairMatch = title.match(/(\d{2})[\/-]?(\d{2})\b/);
 
-        if (seasonMatch[1] && seasonMatch[2]) {
-            // Formato XXYY (ej: 2526)
-            year1 = parseInt(seasonMatch[1]);
-            year2 = parseInt(seasonMatch[2]);
-        } else if (seasonMatch[3] && seasonMatch[4]) {
-            // Formato XX/YY (ej: 25/26)
-            year1 = parseInt(seasonMatch[3]);
-            year2 = parseInt(seasonMatch[4]);
-        } else if (seasonMatch[5]) {
-            // Formato 20XX (ej: 2025)
-            const fullYear = parseInt(seasonMatch[5]);
-            year1 = fullYear % 100;
-            year2 = (fullYear + 1) % 100;
-        }
+    if (fullYearMatch) {
+        // Año simple: 2026 -> usar 2026 tal cual si es futuro, o convertir a temporada si es pasado/presente reciente
+        // El usuario prefiere ver la fecha. Si es 2026 (Mundial), dejar 2026.
+        result.temporada = fullYearMatch[1];
 
-        // Validar que year2 = year1 + 1 (con wrap around para 99/00)
-        if (year1 !== null && year2 !== null) {
-            const expectedYear2 = (year1 + 1) % 100;
-            if (year2 === expectedYear2) {
-                result.temporada = `${year1.toString().padStart(2, '0')}/${year2.toString().padStart(2, '0')}`;
-            }
-            // Si no cuadra, temporada queda null (no es válida)
+        // Opcional: convertir a XX/YY si se prefiere estándar
+        // const year = parseInt(fullYearMatch[1]);
+        // const nextYear = (year + 1) % 100;
+        // result.temporada = `${year % 100}/${nextYear.toString().padStart(2, '0')}`;
+    } else if (seasonPairMatch) {
+        // Formato 25/26 o 2526
+        const y1 = seasonPairMatch[1];
+        const y2 = seasonPairMatch[2];
+        // Validar consecutividad simple
+        const n1 = parseInt(y1);
+        const n2 = parseInt(y2);
+        if ((n1 + 1) % 100 === n2) {
+            result.temporada = `${y1}/${y2}`;
         }
     }
+
+    // Default temporada si no se encontró y hay indicios comunes
+    if (!result.temporada && title.includes('25/26')) result.temporada = '25/26';
+    if (!result.temporada && title.includes('24/25')) result.temporada = '24/25';
+
 
     // Detectar tipo de camiseta
     const titleLower = title.toLowerCase();
@@ -509,44 +552,67 @@ function parseProductTitle(rawTitle) {
     // Detectar si es retro
     result.isRetro = /\bretro\b/i.test(titleLower);
 
-    // Extraer nombre del equipo (eliminar temporada, tipo, tallas)
-    let teamName = title
-        .replace(/\d{4}\b|\d{2}\/\d{2}\b|\d{2}\d{2}\b/g, '') // Temporada
+    // --- Extracción y Limpieza del Nombre del Equipo ---
+    let teamName = title;
+
+    // 1. Eliminar palabras clave conocidas (meta-info)
+    teamName = teamName
+        .replace(/\b(20\d{2})\b/g, '')                 // Años 20XX
+        .replace(/(\d{2})[\/-]?(\d{2})\b/g, '')        // Temporadas XX/YY o XXYY
         .replace(/\b(away|home|third|visitante|local|tercera|gk|goalkeeper|portero)\b/gi, '')
         .replace(/\b(retro|classic|vintage)\b/gi, '')
         .replace(/\b(kids?|niños?|child|children|junior)\b/gi, '')
         .replace(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL)\b/gi, '')
+        .replace(/jersey|shirt|camisa|camiseta|kit/gi, ''); // Palabras genéricas
+
+    // 2. Aplicar patrones de limpieza específicos (junk phrases)
+    TITLE_CLEANUP_PATTERNS.forEach(pattern => {
+        teamName = teamName.replace(pattern, '');
+    });
+
+    // 3. Limpieza final de espacios y caracteres
+    teamName = teamName
         .replace(/\s+/g, ' ')
+        .replace(/^\W+|\W+$/g, '') // Eliminar no-alfanuméricos extremos
         .trim();
+
+    // 4. Traducir nombre del país/equipo si existe en diccionario
+    const lowerTeam = teamName.toLowerCase();
+    if (TEAM_TRANSLATIONS[lowerTeam]) {
+        teamName = TEAM_TRANSLATIONS[lowerTeam];
+    } else {
+        // Intentar buscar palabras sueltas (ej: "Germany Home" -> "Germany" -> "Alemania")
+        // Como ya limpiamos "Home", queda "Germany".
+        // Pero si es "Team Germany", puede fallar.
+        // Hacemos una pasada de reemplazo por palabras para traducciones conocidas
+        for (const [eng, esp] of Object.entries(TEAM_TRANSLATIONS)) {
+            const regex = new RegExp(`\\b${eng}\\b`, 'yi'); // case insensitive match full word
+            if (lowerTeam === eng) { // match exacto
+                teamName = esp;
+                break;
+            }
+        }
+    }
 
     result.team = teamName;
 
-    // Generar nombre final normalizado (SIN "Camiseta" ni tallas)
-    let finalName = teamName;
+    // Generar nombre final normalizado
+    // Formato: [Equipo] [Temporada] [Tipo] [Retro?] [Niño?]
+    let finalParts = [result.team];
 
-    if (result.temporada) {
-        finalName += ` ${result.temporada}`;
-    }
+    if (result.temporada) finalParts.push(result.temporada);
 
     if (result.tipo) {
-        const tipoCapitalized = result.tipo.charAt(0).toUpperCase() + result.tipo.slice(1);
-        finalName += ` ${tipoCapitalized}`;
+        finalParts.push(result.tipo.charAt(0).toUpperCase() + result.tipo.slice(1));
     }
 
-    if (result.isRetro) {
-        finalName += ' Retro';
-    }
+    if (result.isRetro) finalParts.push('Retro');
+    if (result.isKids) finalParts.push('(Niño)');
 
-    if (result.isKids) {
-        finalName += ' (Niño)';
-    }
+    result.name = finalParts.join(' ');
 
-    // NO añadir tallas al nombre - se guarda en campo separado
-    // if (result.tallas) {
-    //     finalName += ` (${result.tallas})`;
-    // }
-
-    result.name = finalName;
+    // Fallback: si quedó vacío el nombre, usar el raw (no debería pasar)
+    if (!result.name.trim()) result.name = result.raw;
 
     return result;
 }
@@ -568,6 +634,17 @@ function detectLeague(teamName, isRetro = false) {
     // Buscar coincidencia exacta primero
     if (TEAM_TO_LEAGUE[teamLower]) {
         return TEAM_TO_LEAGUE[teamLower];
+    }
+
+    // Buscar traducciones inversas para coincidencia? 
+    // No necesario si TEAM_TO_LEAGUE tiene las claves en español o inglés comunes
+    // Mejor añadir un chequeo rápido de 'selecciones'
+
+    // Heurística simple para selecciones
+    const SELECCIONES = ['alemania', 'inglaterra', 'españa', 'francia', 'italia', 'portugal', 'holanda', 'bélgica', 'brasil', 'argentina', 'méxico', 'estados unidos', 'japón', 'marruecos', 'croacia', 'suiza', 'uruguay', 'colombia', 'corea del sur'];
+
+    if (SELECCIONES.includes(teamLower)) {
+        return 'selecciones';
     }
 
     // Buscar coincidencia parcial
