@@ -1504,9 +1504,9 @@ const products = [
     {
         id: 729212,
         name: "Al-Hilal 25/26 Local",
-        slug: "al-hilal-2526-local",
+        slug: "al-hilal-2526-local-dorado",
         category: "futbol",
-        league: "ligue1",
+        league: "ligaarabe",
         price: 0,
         image: "/assets/productos/Yupoo/216806631/1.jpg",
         images: [
@@ -2045,8 +2045,8 @@ const products = [
     },
     {
         id: 549694,
-        name: "Sporting Lisbon 25/26",
-        slug: "sporting-lisbon-2526",
+        name: "Sporting Lisboa 25/26",
+        slug: "sporting-Lisboa-2526",
         category: "futbol",
         league: "Primeira Liga",
         price: 0,
@@ -2059,7 +2059,7 @@ const products = [
             "/assets/productos/Yupoo/208905010/6.jpg",
             "/assets/productos/Yupoo/208905010/7.jpg"
         ],
-        imageAlt: "Sporting Lisbon 25/26 - Vista principal",
+        imageAlt: "Sporting Lisboa 25/26 - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -2072,8 +2072,8 @@ const products = [
     },
     {
         id: 535164,
-        name: "Sporting Lisbon Green 25/26",
-        slug: "sporting-lisbon-green-2526",
+        name: "Sporting Lisboa Green 25/26",
+        slug: "sporting-Lisboa-green-2526",
         category: "futbol",
         league: "Primeira Liga",
         price: 0,
@@ -2081,7 +2081,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216420441/2.jpg"
         ],
-        imageAlt: "Sporting Lisbon Green 25/26 - Vista principal",
+        imageAlt: "Sporting Lisboa Green 25/26 - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -2094,8 +2094,8 @@ const products = [
     },
     {
         id: 351327,
-        name: "Sporting Lisbon cyan 25/26",
-        slug: "sporting-lisbon-cyan-2526",
+        name: "Sporting Lisboa cyan 25/26",
+        slug: "sporting-Lisboa-cyan-2526",
         category: "futbol",
         league: "Primeira Liga",
         price: 0,
@@ -2103,7 +2103,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216420176/2.jpg"
         ],
-        imageAlt: "Sporting Lisbon cyan 25/26 - Vista principal",
+        imageAlt: "Sporting Lisboa cyan 25/26 - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -2116,16 +2116,16 @@ const products = [
     },
     {
         id: 316255,
-        name: "Sporting Lisbon Commemorative Edition 25/26",
-        slug: "sporting-lisbon-commemorative-edition-2526",
+        name: "Sporting Lisboa Edición Conmemorativa 25/26",
+        slug: "sporting-Lisboa-commemorative-edition-2526",
         category: "futbol",
-        league: "ligue1",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/216420592/1.jpg",
         images: [
             "/assets/productos/Yupoo/216420592/2.jpg"
         ],
-        imageAlt: "Sporting Lisbon Commemorative Edition 25/26 - Vista principal",
+        imageAlt: "Sporting Lisboa Commemorative Edition 25/26 - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -2138,16 +2138,16 @@ const products = [
     },
     {
         id: 755900,
-        name: "Columbia 2026 Visitante",
-        slug: "columbia-2026-visitante",
+        name: "Colombia 2026 Visitante",
+        slug: "colombia-2026-visitante",
         category: "futbol",
-        league: "ligue1",
+        league: "selecciones",
         price: 0,
         image: "/assets/productos/Yupoo/219490648/1.jpg",
         images: [
             "/assets/productos/Yupoo/219490648/2.jpg"
         ],
-        imageAlt: "Columbia 2026 Visitante - Vista principal",
+        imageAlt: "Colombia 2026 Visitante - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -2459,13 +2459,13 @@ const products = [
     {
         id: 320201,
         name: "Colombia 2026 Local",
-        slug: "colombia-2026-local",
+        slug: "Colombia-2026-local",
         category: "futbol",
         league: "selecciones",
         price: 0,
-        image: "/assets/productos/Yupoo/216442560/1.jpg",
+        image: "/assets/productos/Yupoo/216442560/2.jpg",
         images: [
-            "/assets/productos/Yupoo/216442560/2.jpg"
+            "/assets/productos/Yupoo/216442560/1.jpg"
         ],
         imageAlt: "Colombia 2026 Local - Vista principal",
         new: true,
@@ -2737,7 +2737,7 @@ const products = [
         name: "Sporting Gijon 25/26 Local",
         slug: "sporting-gijon-2526-local",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/207450991/1.jpg",
         images: [
@@ -3062,10 +3062,10 @@ const products = [
     },
     {
         id: 881988,
-        name: "Sporting Lisbon 25/26 Local",
-        slug: "sporting-lisbon-2526-local",
+        name: "Sporting Lisboa 25/26 Local",
+        slug: "sporting-Lisboa-2526-local",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/202779885/1.jpg",
         images: [
@@ -3074,7 +3074,7 @@ const products = [
             "/assets/productos/Yupoo/202779885/4.jpg",
             "/assets/productos/Yupoo/202779885/5.jpg"
         ],
-        imageAlt: "Sporting Lisbon 25/26 Local - Vista principal",
+        imageAlt: "Sporting Lisboa 25/26 Local - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -3169,7 +3169,7 @@ const products = [
         name: "Benfica 25/26",
         slug: "benfica-2526",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/202779248/1.jpg",
         images: [
@@ -3217,7 +3217,7 @@ const products = [
         name: "Ajax 25/26 Local",
         slug: "ajax-2526-local",
         category: "futbol",
-        league: "otros",
+        league: "Eredivise",
         price: 0,
         image: "/assets/productos/Yupoo/202778041/1.jpg",
         images: [
@@ -3344,7 +3344,7 @@ const products = [
         name: "Porto 25/26 Local",
         slug: "porto-2526-local",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/201350547/1.jpg",
         images: [
@@ -3369,7 +3369,7 @@ const products = [
         name: "Porto 25/26 Visitante",
         slug: "porto-2526-visitante",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/201350489/1.jpg",
         images: [
@@ -3394,7 +3394,7 @@ const products = [
         name: "Benfica 25/26",
         slug: "benfica-2526",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/201349762/1.jpg",
         images: [
@@ -3418,7 +3418,7 @@ const products = [
         name: "Benfica 25/26 Visitante",
         slug: "benfica-2526-visitante",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/201349635/1.jpg",
         images: [
@@ -3443,7 +3443,7 @@ const products = [
         name: "Benfica 25/26 Tercera",
         slug: "benfica-2526-tercera",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/200370613/1.jpg",
         images: [
@@ -3494,7 +3494,7 @@ const products = [
         name: "Man Utd 25/26 Tercera",
         slug: "man-utd-2526-tercera",
         category: "futbol",
-        league: "otros",
+        league: "premier",
         price: 0,
         image: "/assets/productos/Yupoo/199227576/1.jpg",
         images: [
@@ -3569,7 +3569,7 @@ const products = [
         name: "São Paulo 25/26 Visitante",
         slug: "sao-paulo-2526-visitante",
         category: "futbol",
-        league: "otros",
+        league: "brasileirao",
         price: 0,
         image: "/assets/productos/Yupoo/197477146/1.jpg",
         images: [
@@ -3591,10 +3591,10 @@ const products = [
     },
     {
         id: 875632,
-        name: "Miami Women 25/26 Visitante",
-        slug: "miami-women-2526-visitante",
+        name: "Miami 25/26 Visitante",
+        slug: "miami-2526-visitante",
         category: "futbol",
-        league: "ligue1",
+        league: "MLS",
         price: 0,
         image: "/assets/productos/Yupoo/193931028/1.jpg",
         images: [
@@ -3736,8 +3736,8 @@ const products = [
     },
     {
         id: 435415,
-        name: "Brazil Internacional 25/26 Local",
-        slug: "brazil-internacional-2526-local",
+        name: "Internacional 25/26 Local",
+        slug: "internacional-2526-local",
         category: "futbol",
         league: "brasileirao",
         price: 0,
@@ -3746,7 +3746,7 @@ const products = [
             "/assets/productos/Yupoo/192259967/2.jpg",
             "/assets/productos/Yupoo/192259967/3.jpg"
         ],
-        imageAlt: "Brazil Internacional 25/26 Local - Vista principal",
+        imageAlt: "Internacional 25/26 Local - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -4165,7 +4165,7 @@ const products = [
         name: "Burgos 25/26 Tercera",
         slug: "burgos-2526-tercera",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/213790918/1.jpg",
         images: [
@@ -4188,7 +4188,7 @@ const products = [
         name: "Burgos 25/26 Visitante",
         slug: "burgos-2526-visitante",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/213790880/1.jpg",
         images: [
@@ -4685,7 +4685,7 @@ const products = [
         name: "Feyenoord 25/26 Local",
         slug: "feyenoord-2526-local",
         category: "futbol",
-        league: "otros",
+        league: "Eredivise",
         price: 0,
         image: "/assets/productos/Yupoo/201349993/1.jpg",
         images: [
