@@ -270,7 +270,8 @@ function populateTeamFilter(league) {
     const teams = [...new Set(leagueProducts.map(p => {
         let name = p.name;
         name = name.replace(/\d{2}\/\d{2}/, '');
-        name = name.replace(/(Local|Visitante|Tercera|Retro|Icon)/, '');
+        name = name.replace(/\b20\d{2}\b/, ''); // Eliminar años como 2026
+        name = name.replace(/(Local|Visitante|Tercera|Retro|Icon|Especial|Black|Edición Limitada)/ig, '');
         name = name.replace('(Kids)', '');
         return name.trim();
     }))].sort();
